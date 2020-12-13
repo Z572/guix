@@ -844,7 +844,7 @@ $MES -e '(mescc)' module/mescc.scm -- \"$@\"
                  (copy-file "bash" (string-append bin "/sh"))
                  #t)))))))))
 
-(define tcc-boot
+(define-public tcc-boot
   ;; The final tcc.
   (package
     (inherit tcc-boot0)
@@ -855,6 +855,8 @@ $MES -e '(mescc)' module/mescc.scm -- \"$@\"
               ;; `patches' needs XZ
               ;; (patches (search-patches "tcc-boot-0.9.27.patch"))
               ))
+    (supported-systems '("armhf-linux" "aarch64-linux"
+                         "i686-linux" "x86_64-linux"))
     (build-system gnu-build-system)
     (inputs '())
     (propagated-inputs '())
@@ -888,45 +890,87 @@ $MES -e '(mescc)' module/mescc.scm -- \"$@\"
                (("s->alacarte_link = 1;" all)
                 (string-append all "
     s->static_link = 1;")))
+             (substitute* "tccelf.c"
+               (("tcc_add_support\\(s1, TCC_LIBTCC1\\);" all)
+                (string-append all "
+#if CONFIG_TCC_LIBTCC1_MES
+        tcc_add_support(s1, TCC_LIBTCC1_MES);
+#endif
+")))
+             ,@(match (%current-system)
+                 ((or "armhf-linux" "aarch64-linux")
+                  '((substitute* "libtcc.c"
+                      (("if \\(setjmp" all)
+                       (string-append "#define setjmp(x) 0\n" all)))))
+                 ((or "i686-linux" "x86_64-linux")
+                  '()))
+             (substitute* "tccgen.c"
+               (("\\*\\(double \\*\\)ptr = vtop->c.d;")
+                "*(long long *)ptr = vtop->c.d;"))
+             (substitute* "tccelf.c"
+               ;; This fixes
+               ;; "cannot execute binary file: Exec format error"
+               ;; when building on aarch64-linux for ARM
+               (("#ifdef TCC_ARM_EABI")
+                "#if defined (TCC_ARM_EABI) || BOOTSTRAP"))
              #t))
          (replace 'configure
            (lambda* (#:key outputs #:allow-other-keys)
              (let* ((out (assoc-ref %outputs "out"))
                     (tcc (assoc-ref %build-inputs "tcc"))
                     (libc (assoc-ref %build-inputs "libc"))
-                    (interpreter "/mes/loader"))
-               (invoke "sh" "configure"
-                       (string-append "--cc=tcc")
-                       (string-append "--cpu=i386")
-                       (string-append "--prefix=" out)
-                       (string-append "--elfinterp=" interpreter)
-                       (string-append "--crtprefix=" tcc "/lib")
-                       (string-append "--sysincludepaths=" tcc "/include")
-                       (string-append "--libpaths=" tcc "/lib")))))
+                    (interpreter "/mes/loader")
+                    (configure-flags
+                     (list "--cc=tcc"
+                           ,@(match (%current-system)
+                               ((or "i686-linux" "x86_64-linux") '("--cpu=i386"))
+                               ((or "armhf-linux"  "aarch64-linux") '("--cpu=arm")))
+                           (string-append "--prefix=" out)
+                           (string-append "--elfinterp=" interpreter)
+                           (string-append "--crtprefix=" tcc "/lib")
+                           (string-append "--sysincludepaths=" tcc "/include")
+                           (string-append "--libpaths=" tcc "/lib"))))
+               (format (current-error-port)
+                       "running ./configure ~a\n" (string-join configure-flags))
+               (apply invoke "sh" "configure" configure-flags))))
          (replace 'build
            (lambda* (#:key outputs #:allow-other-keys)
              (let* ((out (assoc-ref %outputs "out"))
                     (tcc (assoc-ref %build-inputs "tcc"))
                     (libc (assoc-ref %build-inputs "libc"))
-                    (interpreter "/mes/loader"))
-               (invoke
-                "tcc"
-                "-vvv"
-                "-D" "BOOTSTRAP=1"
-                "-D" "ONE_SOURCE=1"
-                "-D" "TCC_TARGET_I386=1"
-                "-D" "CONFIG_TCC_STATIC=1"
-                "-D" "CONFIG_USE_LIBGCC=1"
-                "-D" (string-append "CONFIG_TCCDIR=\"" out "/lib/tcc\"")
-                "-D" (string-append "CONFIG_TCC_CRTPREFIX=\"" out "/lib:{B}/lib:.\"")
-                "-D" (string-append "CONFIG_TCC_CRTPREFIX=\"" out "/lib:{B}/lib:.\"")
-                "-D" (string-append "CONFIG_TCC_ELFINTERP=\"" interpreter "\"")
-                "-D" (string-append "CONFIG_TCC_LIBPATHS=\"" tcc "/lib:{B}/lib:.\"")
-                "-D" (string-append "CONFIG_TCC_SYSINCLUDEPATHS=\""
-                                    tcc "/include" ":/include:{B}/include\"")
-                "-D" (string-append "TCC_LIBGCC=\"" tcc "/lib/libc.a\"")
-                "-o" "tcc"
-                "tcc.c"))))
+                    (interpreter "/mes/loader")
+                    (cppflags
+                     (list
+                      "-D" "BOOTSTRAP=1"
+                      "-D" "ONE_SOURCE=1"
+                      ,@(match (%current-system)
+                          ((or "i686-linux" "x86_64-linux")
+                           '("-D" "TCC_TARGET_I386=1"))
+                          ((or "armhf-linux"  "aarch64-linux")
+                           '("-D" "TCC_TARGET_ARM=1"
+                             "-D" "TCC_ARM_VFP=1"
+                             "-D" "CONFIG_TCC_LIBTCC1_MES=1")))
+                      "-D" "CONFIG_TCCBOOT=1"
+                      "-D" "CONFIG_TCC_STATIC=1"
+                      "-D" "CONFIG_USE_LIBGCC=1"
+                      "-D" (string-append "CONFIG_TCCDIR=\"" out "/lib/tcc\"")
+                      "-D" (string-append "CONFIG_TCC_CRTPREFIX=\"" out "/lib:{B}/lib:.\"")
+                      "-D" (string-append "CONFIG_TCC_ELFINTERP=\"" interpreter "\"")
+                      "-D" (string-append "CONFIG_TCC_LIBPATHS=\"" tcc "/lib:{B}/lib:{B}/lib/tcc:.\"")
+                      "-D" (string-append "CONFIG_TCC_SYSINCLUDEPATHS=\""
+                                          tcc "/include" ":/include:{B}/include\"")
+                      "-D" (string-append "TCC_LIBGCC=\"" tcc "/lib/libc.a\"")
+                      "-D" (string-append "TCC_LIBTCC1_MES=\"libtcc1-mes.a\"")))
+                    (files ',(match (%current-system)
+                               ((or "i686-linux" "x86_64-linux")
+                                '("tcc.c"))
+                               ((or "armhf-linux"  "aarch64-linux")
+                                '("tcc.c" "lib/armflush.c"))))
+                    (arguments (cons* "-vvv" "-g" "-o" "tcc"
+                                      (append cppflags files))))
+               (format (current-error-port)
+                       "running tcc ~a\n" (string-join arguments))
+               (apply invoke "tcc" arguments))))
          (replace 'check
            (lambda _
              ;; FIXME: add sensible check target (without depending on make)
@@ -944,11 +988,6 @@ $MES -e '(mescc)' module/mescc.scm -- \"$@\"
                                   (string-append out "/include"))
                 (copy-recursively (string-append tcc "/lib")
                                   (string-append out "/lib"))
-                (invoke "tcc" "-D" "TCC_TARGET_I386=1" "-c" "-o" "libtcc1.o" "lib/libtcc1.c")
-                (invoke "tcc" "-ar" "rc" "libtcc1.a" "libtcc1.o")
-                (copy-file "libtcc1.a" (string-append out "/lib/libtcc1.a"))
-                (delete-file (string-append out "/lib/tcc/libtcc1.a"))
-                (copy-file "libtcc1.a" (string-append out "/lib/tcc/libtcc1.a"))
                 #t)))))))))
 
 (define diffutils-mesboot
