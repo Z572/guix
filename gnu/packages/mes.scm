@@ -217,6 +217,21 @@ Guile.")
             (separator #f)
             (files '("")))))))
 
+(define-public mes-next
+  (package
+    (inherit mes)
+    (name "mes-next")
+    (version "0.22-117-g055848a8e")
+    (source (origin
+              (method url-fetch)
+              (uri (string-append "https://lilypond.org/janneke/mes/"
+                                  "mes-" version ".tar.gz"))
+              (sha256
+               (base32
+                "03wqz7z26xz9rqsvzib247sj5n8ibi5za6fb6cz53yc54z8qngxc"))))
+    (supported-systems '("armhf-linux" "aarch64-linux"
+                         "i686-linux" "x86_64-linux"))))
+
 (define-public mes-rb5
   ;; This is the Reproducible-Builds summit 5's Mes, also built on Debian
   ;; GNU/Linux and NixOS to produce the same, bit-for-bit identical result.
