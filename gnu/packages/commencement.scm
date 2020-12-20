@@ -688,7 +688,8 @@ $MES -e '(mescc)' module/mescc.scm -- \"$@\"
     (name "bzip2-mesboot")
     (version (package-version bzip2))
     (source (bootstrap-origin (package-source bzip2)))
-    (supported-systems '("i686-linux" "x86_64-linux"))
+    (supported-systems '("armhf-linux" "aarch64-linux"
+                         "i686-linux" "x86_64-linux"))
     (inputs '())
     (propagated-inputs '())
     (native-inputs (%boot-tcc0-inputs))
