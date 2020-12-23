@@ -1,0 +1,229 @@
+This patch enables building gcc-2.95.3 on armhf-linux using TCC and
+Mes C Library.
+
+  * Add include/asm/unist.h linux header.
+  * Disable libgcc2.c float and long long functions.
+
+Upstream status: Not presented upstream.
+
+--- gcc-2.95.3/gcc/libgcc2.c.orig	2020-12-23 07:40:48.730917496 +0100
++++ gcc-2.95.3/gcc/libgcc2.c	2020-12-23 07:42:25.520714866 +0100
+@@ -818,6 +781,8 @@
+ {
+   TFtype b;
+   UDItype v;
++#if !__arm__
++
+ 
+   if (a < 0)
+     return 0;
+@@ -837,6 +802,7 @@
+     v -= (USItype) (- a);
+   else
+     v += (USItype) a;
++#endif
+   return v;
+ }
+ #endif
+@@ -860,6 +826,8 @@
+ {
+   XFtype b;
+   UDItype v;
++#if !__arm__
++
+ 
+   if (a < 0)
+     return 0;
+@@ -879,6 +847,7 @@
+     v -= (USItype) (- a);
+   else
+     v += (USItype) a;
++#endif
+   return v;
+ }
+ #endif
+@@ -902,6 +871,8 @@
+ {
+   DFtype b;
+   UDItype v;
++#if !__arm__
++
+ 
+   if (a < 0)
+     return 0;
+@@ -921,6 +892,7 @@
+     v -= (USItype) (- a);
+   else
+     v += (USItype) a;
++#endif
+   return v;
+ }
+ #endif
+@@ -929,9 +901,13 @@
+ DItype
+ __fixdfdi (DFtype a)
+ {
++#if __arm__
++  return 0;
++#else
+   if (a < 0)
+     return - __fixunsdfdi (-a);
+   return __fixunsdfdi (a);
++#endif
+ }
+ #endif
+ 
+@@ -948,6 +924,8 @@
+   DFtype a = original_a;
+   DFtype b;
+   UDItype v;
++#if !__arm__
++
+ 
+   if (a < 0)
+     return 0;
+@@ -967,6 +945,7 @@
+     v -= (USItype) (- a);
+   else
+     v += (USItype) a;
++#endif
+   return v;
+ }
+ #endif
+@@ -975,9 +954,13 @@
+ DItype
+ __fixsfdi (SFtype a)
+ {
++#if __arm__
++  return 0;
++#else
+   if (a < 0)
+     return - __fixunssfdi (-a);
+   return __fixunssfdi (a);
++#endif
+ }
+ #endif
+ 
+@@ -990,12 +973,15 @@
+ __floatdixf (DItype u)
+ {
+   XFtype d;
++#if !__arm__
++
+ 
+   d = (SItype) (u >> WORD_SIZE);
+   d *= HIGH_HALFWORD_COEFF;
+   d *= HIGH_HALFWORD_COEFF;
+   d += (USItype) (u & (HIGH_WORD_COEFF - 1));
+ 
++#endif
+   return d;
+ }
+ #endif
+@@ -1009,12 +995,15 @@
+ __floatditf (DItype u)
+ {
+   TFtype d;
++#if !__arm__
++
+ 
+   d = (SItype) (u >> WORD_SIZE);
+   d *= HIGH_HALFWORD_COEFF;
+   d *= HIGH_HALFWORD_COEFF;
+   d += (USItype) (u & (HIGH_WORD_COEFF - 1));
+ 
++#endif
+   return d;
+ }
+ #endif
+@@ -1028,12 +1017,15 @@
+ __floatdidf (DItype u)
+ {
+   DFtype d;
++#if !__arm__
++
+ 
+   d = (SItype) (u >> WORD_SIZE);
+   d *= HIGH_HALFWORD_COEFF;
+   d *= HIGH_HALFWORD_COEFF;
+   d += (USItype) (u & (HIGH_WORD_COEFF - 1));
+ 
++#endif
+   return d;
+ }
+ #endif
+@@ -1079,6 +1071,8 @@
+      so that we don't lose any of the precision of the high word
+      while multiplying it.  */
+   DFtype f;
++#if !__arm__
++
+ 
+   /* Protect against double-rounding error.
+      Represent any low-order bits, that might be truncated in DFmode,
+@@ -1102,6 +1096,7 @@
+   f *= HIGH_HALFWORD_COEFF;
+   f += (USItype) (u & (HIGH_WORD_COEFF - 1));
+ 
++#endif
+   return (SFtype) f;
+ }
+ #endif
+@@ -1122,8 +1117,10 @@
+ USItype
+ __fixunsxfsi (XFtype a)
+ {
+-  if (a >= - (DFtype) LONG_MIN)
++ #if !__arm__
++ if (a >= - (DFtype) LONG_MIN)
+     return (SItype) (a + LONG_MIN) - LONG_MIN;
++#endif
+   return (SItype) a;
+ }
+ #endif
+@@ -1144,8 +1141,10 @@
+ USItype
+ __fixunsdfsi (DFtype a)
+ {
+-  if (a >= - (DFtype) LONG_MIN)
++ #if !__arm__
++ if (a >= - (DFtype) LONG_MIN)
+     return (SItype) (a + LONG_MIN) - LONG_MIN;
++#endif
+   return (SItype) a;
+ }
+ #endif
+@@ -1166,8 +1165,10 @@
+ USItype
+ __fixunssfsi (SFtype a)
+ {
++#if !__arm__
+   if (a >= - (SFtype) LONG_MIN)
+     return (SItype) (a + LONG_MIN) - LONG_MIN;
++#endif
+   return (SItype) a;
+ }
+ #endif
+--- gcc-2.95.3/include/asm/unistd.h.orig	1970-01-01 01:00:00.000000000 +0100
++++ gcc-2.95.3/include/asm/unistd.h	2020-12-23 07:49:44.156673879 +0100
+@@ -0,0 +1,9 @@
++#ifndef __ASM_UNISTD_H
++#define  __ASM_UNISTD_H
++
++#if __arm__
++#define __NR_getpid 0x14
++#define __NR_kill 0x25
++#endif
++
++#endif // __ASM_UNISTD_H
+--- gcc-2.95.3/gcc/Makefile.in.orig	2020-12-23 08:31:57.733501802 +0100
++++ gcc-2.95.3/gcc/Makefile.in	2020-12-23 08:31:49.985371208 +0100
+@@ -1260,7 +1260,7 @@
+ 	-(cd tmpcopy; chmod +w * > /dev/null 2>&1)
+ 	(cd tmpcopy; $(AR_FOR_TARGET) x ../$(LIBGCC2))
+ 	(cd tmpcopy; $(AR_FOR_TARGET) $(AR_FLAGS_FOR_TARGET) ../tmplibgcc.a *$(objext))
+-	rm -rf libgcc2.a tmpcopy
++	rm -rf tmpcopy
+ 	if $(RANLIB_TEST_FOR_TARGET) ; then \
+ 	  $(RANLIB_FOR_TARGET) tmplibgcc.a; \
+ 	else true; fi
