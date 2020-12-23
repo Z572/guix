@@ -1134,64 +1134,77 @@ $MES -e '(mescc)' module/mescc.scm -- \"$@\"
 
 (define binutils-mesboot0
   ;; The initial Binutils
-  (package
-    (inherit binutils)
-    (name "binutils-mesboot0")
-    (version "2.14")
-    (source (origin
-              (method url-fetch)
-              (uri (string-append "mirror://gnu/binutils/binutils-"
-                                  version ".tar.gz"))
-              (sha256
-               (base32
-                "1w8xp7k44bkijr974x9918i4p1sw4g2fcd5mxvspkjpg38m214ds"))))
-    (inputs '())
-    (propagated-inputs '())
-    (native-inputs (%boot-tcc-inputs))
-    (supported-systems '("i686-linux" "x86_64-linux"))
-    (arguments
-     `(#:implicit-inputs? #f
-       #:guile ,%bootstrap-guile
-       #:tests? #f                      ; runtest: command not found
-       #:parallel-build? #f
-       #:strip-binaries? #f             ; no strip yet
-       #:configure-flags
-       (let ((out (assoc-ref %outputs "out")))
-         `("--disable-nls"
-           "--disable-shared"
-           "--disable-werror"
-           "--build=i386-unknown-linux"
-           "--host=i386-unknown-linux"
-           "--target=i386-unknown-linux"
-           "--with-sysroot=/"
-           ,(string-append "--prefix=" out)))
-       #:phases
-       (modify-phases %standard-phases
-         (add-before 'configure 'setenv
-           (lambda _
-             (let* ((out (assoc-ref %outputs "out"))
-                    (bash (assoc-ref %build-inputs "bash"))
-                    (shell (string-append bash "/bin/bash")))
-               (setenv "CONFIG_SHELL" shell)
-               (setenv "SHELL" shell)
-               (setenv "AR" "tcc -ar")
-               (setenv "RANLIB" "true")
-               (setenv "CC" "tcc -D __GLIBC_MINOR__=6")
-               #t)))
-         (add-after 'unpack 'scripted-patch
-           (lambda* (#:key inputs #:allow-other-keys)
-             (substitute* "bfd/configure"
-               (("^sed -e '/SRC-POTFILES.*" all)
-                "echo -e 'all:\\n\\ttrue\\n\\ninstall:\\n\\ttrue\\n' > po/Makefile\n"))
-             #t))
-         (replace 'configure           ; needs classic invocation of configure
-           (lambda* (#:key configure-flags #:allow-other-keys)
-             (format (current-error-port)
-                     "running ./configure ~a\n" (string-join configure-flags))
-             (apply system* "./configure" configure-flags)
-             (substitute* "config.status"
-               (("[.]//dev/null") "/dev/null"))
-             (invoke "sh" "./config.status"))))))))
+  (let ((triplet (match (%current-system)
+                   ((or "armhf-linux" "aarch64-linux")
+                    "arm-unknown-linux-gnu")
+                   ((or "i686-linux" "x86_64-linux")
+                    "i386-unknown-linux-gnu"))))
+    (package
+      (inherit binutils)
+      (name "binutils-mesboot0")
+      (version "2.14")
+      (source (origin
+                (method url-fetch)
+                (uri (string-append "mirror://gnu/binutils/binutils-"
+                                    version ".tar.gz"))
+                (sha256
+                 (base32
+                  "1w8xp7k44bkijr974x9918i4p1sw4g2fcd5mxvspkjpg38m214ds"))))
+      (inputs '())
+      (propagated-inputs '())
+      (native-inputs (match (%current-system)
+                       ((or "aarch64-linux" "armhf-linux")
+                        ;; XXX TODO: configure exits prematurely
+                        `(("bash" ,%bootstrap-coreutils&co)
+                          ,@(alist-delete "bash" (%boot-tcc-inputs))))
+                       ((or "i686-linux" "x86_64-linux")
+                        (%boot-tcc-inputs))))
+      (supported-systems '("armhf-linux" "aarch64-linux"
+                           "i686-linux" "x86_64-linux"))
+      (arguments
+       `(#:implicit-inputs? #f
+         #:guile ,%bootstrap-guile
+         #:tests? #f                    ; runtest: command not found
+         #:parallel-build? #f
+         #:strip-binaries? #f           ; no strip yet
+         #:configure-flags
+         (let ((out (assoc-ref %outputs "out")))
+           (list "--disable-nls"
+                 "--disable-shared"
+                 "--disable-werror"
+                 (string-append "--build=" ,triplet)
+                 (string-append "--host=" ,triplet)
+                 (string-append "--target=" ,triplet)
+                 "--with-sysroot=/"
+                 (string-append "--prefix=" out)))
+         #:phases
+         (modify-phases %standard-phases
+           (add-before 'configure 'setenv
+             (lambda _
+               (let* ((out (assoc-ref %outputs "out"))
+                      (bash (assoc-ref %build-inputs "bash"))
+                      (shell (string-append bash "/bin/bash")))
+                 (setenv "CONFIG_SHELL" shell)
+                 (setenv "SHELL" shell)
+                 (setenv "AR" "tcc -ar")
+                 (setenv "RANLIB" "true")
+                 (setenv "CC" "tcc -D __GLIBC_MINOR__=6")
+                 (setenv "ac_cv_func_strncmp_works" "yes")
+                 #t)))
+           (add-after 'unpack 'scripted-patch
+             (lambda* (#:key inputs #:allow-other-keys)
+               (substitute* "bfd/configure"
+                 (("^sed -e '/SRC-POTFILES.*" all)
+                  "echo -e 'all:\\n\\ttrue\\n\\ninstall:\\n\\ttrue\\n' > po/Makefile\n"))
+               #t))
+           (replace 'configure         ; needs classic invocation of configure
+             (lambda* (#:key configure-flags #:allow-other-keys)
+               (format (current-error-port)
+                       "running ./configure ~a\n" (string-join configure-flags))
+               (apply system* "./configure" configure-flags)
+               (substitute* "config.status"
+                 (("[.]//dev/null") "/dev/null"))
+               (invoke "sh" "./config.status")))))))))
 
 (define gcc-core-mesboot0
   ;; Gcc-2.95.3 is the most recent GCC that is supported by what the Mes C
