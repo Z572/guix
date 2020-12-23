@@ -1090,7 +1090,8 @@ $MES -e '(mescc)' module/mescc.scm -- \"$@\"
               (sha256
                (base32
                 "1hyv7i82jd0q18xcql51ylc8jwadp3gb3irgcqlis3v61p35jsv2"))))
-    (supported-systems '("i686-linux" "x86_64-linux"))
+    (supported-systems '("armhf-linux" "aarch64-linux"
+                         "i686-linux" "x86_64-linux"))
     (inputs '())
     (propagated-inputs '())
     (native-inputs (%boot-tcc0-inputs))
