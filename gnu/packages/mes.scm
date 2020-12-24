@@ -221,14 +221,14 @@ Guile.")
   (package
     (inherit mes)
     (name "mes-next")
-    (version "0.22-117-g055848a8e")
+    (version "0.22-117-g7973c8c36")
     (source (origin
               (method url-fetch)
               (uri (string-append "https://lilypond.org/janneke/mes/"
                                   "mes-" version ".tar.gz"))
               (sha256
                (base32
-                "03wqz7z26xz9rqsvzib247sj5n8ibi5za6fb6cz53yc54z8qngxc"))))
+                "0sbh1fnn3hxcgyf0n22bvd48p46fhpdxzpyknjkbj7snjm2001nx"))))
     (supported-systems '("armhf-linux" "aarch64-linux"
                          "i686-linux" "x86_64-linux"))))
 
