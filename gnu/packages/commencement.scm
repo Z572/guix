@@ -477,7 +477,7 @@ $MES -e '(mescc)' module/mescc.scm -- \"$@\"
   (package
     (inherit tcc)
     (name "tcc-boot0")
-    (version "0.9.26-1136-g0fbeb2dd")
+    (version "0.9.26-1136-g5bba73cc")
     (source (origin
               (method url-fetch)
               (uri (string-append
@@ -485,7 +485,7 @@ $MES -e '(mescc)' module/mescc.scm -- \"$@\"
                     "/tcc-" version ".tar.gz"))
               (sha256
                (base32
-                "06yyq84rw8i174as686ql4582lvwd16c0jbaj2wrgln715pi146d"))))
+                "1y2f04qwdqg7dgxiscbf0ibybx2gclniwbbcsxpayazzii2cvji3"))))
     (build-system gnu-build-system)
     (supported-systems '("armhf-linux" "aarch64-linux"
                          "i686-linux" "x86_64-linux"))
