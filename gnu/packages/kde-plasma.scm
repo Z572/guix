@@ -4,6 +4,7 @@
 ;;; Copyright © 2019 Marius Bakke <mbakke@fastmail.com>
 ;;; Copyright © 2017, 2019, 2020 Hartmut Goebel <h.goebel@crazy-compilers.com>
 ;;; Copyright © 2019 Tobias Geerinckx-Rice <me@tobias.gr>
+;;; Copyright © 2020 Zheng Junjie <873216071@qq.com>
 ;;;
 ;;; This file is part of GNU Guix.
 ;;;
@@ -81,6 +82,31 @@
     (description "Artwork, styles and assets for the Breeze visual style for
 the Plasma Desktop.  Breeze is the default theme for the KDE Plasma desktop.")
     (license license:gpl2+)))
+
+(define-public plasma-wayland-protocols
+  (package
+    (name "plasma-wayland-protocols")
+    (version "1.1.1")
+    (source (origin
+              (method url-fetch)
+              (uri (string-append "mirror://kde/stable/plasma-wayland-protocols/"
+                                  "plasma-wayland-protocols-" version ".tar.xz"))
+
+              (sha256
+               (base32
+                "0f0xllv092aliyngyi25hhm66q38jsrj36pa6ls1q5qms61k6jf5"))))
+    (arguments
+     `(;; no target
+       #:tests? #f))
+    (native-inputs
+     `(("extra-cmake-modules" ,extra-cmake-modules)))
+    (inputs
+     `(("qtbase" ,qtbase)))
+    (build-system qt-build-system)
+    (home-page "https://kde.org/plasma-desktop/")
+    (synopsis "Plasma Specific Protocols for Wayland")
+    (description "Plasma Specific Protocols for Wayland.")
+    (license license:lgpl3)))
 
 (define-public kdecoration
   (package
