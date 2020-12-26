@@ -30,6 +30,7 @@
   #:use-module (gnu packages compression)
   #:use-module (gnu packages freedesktop)
   #:use-module (gnu packages glib)
+  #:use-module (gnu packages documentation)
   #:use-module (gnu packages kde-frameworks)
   #:use-module (gnu packages linux)
   #:use-module (gnu packages pkg-config)
@@ -108,6 +109,52 @@ the Plasma Desktop.  Breeze is the default theme for the KDE Plasma desktop.")
     (description "Plasma Specific Protocols for Wayland.")
     (license license:lgpl3)))
 
+(define-public kwayland-server
+  (package
+    (name "kwayland-server")
+    (version "5.19.5")
+    (source (origin
+              (method url-fetch)
+              (uri (string-append "mirror://kde/stable/plasma/" version
+                                  "/kwayland-server-" version ".tar.xz"))
+              (sha256
+               (base32
+                "06jlr24f3vhla8rjyygd7r51byksfv46apnh3bylslgxd2grrzah"))))
+    (build-system qt-build-system)
+    (arguments
+     `(#:tests? #f ;; TODO: pass tests
+       #:configure-flags
+       (list "-DBUILD_TESTING=OFF" "-DBUILD_QCH=ON")
+       #:phases
+       (modify-phases %standard-phases
+         (add-after 'install 'set-build-path
+           (lambda* (#:key outputs #:allow-other-keys)
+             (let* ((out (assoc-ref outputs "out"))
+                    (include (string-append out "/include")))
+               (mkdir-p (string-append include "/KF5"))
+               (symlink (string-append include "/KWaylandServer")
+                        (string-append include "/KF5/KWaylandServer")))
+             #t)))))
+    (native-inputs
+     `(("extra-cmake-modules" ,extra-cmake-modules)
+       ("pkg-config" ,pkg-config)
+       ("qttools" ,qttools)
+       ("doxygen" ,doxygen)
+       ;; test
+       ;;("weston" ,weston)
+       ("kdoctools" ,kdoctools)))
+    (inputs
+     `(("qtbase" ,qtbase)
+       ("qtwayland" ,qtwayland)
+       ("wayland" ,wayland)
+       ("wayland-protocols" ,wayland-protocols)
+       ("plasma-wayland-protocols" ,plasma-wayland-protocols)
+       ("kwayland" ,kwayland)))
+    (home-page "https://invent.kde.org/plasma/kwayland-server")
+    (synopsis "Wayland Server Components built on KDE Frameworks" )
+    (description "KWayland is a Qt-style API to interact with the wayland-client
+and wayland-server API.")
+    (license license:lgpl2.0+)))
 (define-public kdecoration
   (package
     (name "kdecoration")
