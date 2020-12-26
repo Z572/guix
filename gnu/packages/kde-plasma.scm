@@ -35,7 +35,10 @@
   #:use-module (gnu packages linux)
   #:use-module (gnu packages pkg-config)
   #:use-module (gnu packages qt)
-  #:use-module (gnu packages xorg))
+  #:use-module (gnu packages xorg)
+  #:use-module (gnu packages fontutils)
+  #:use-module (gnu packages xdisorg)
+  #:use-module (gnu packages gl))
 
 (define-public breeze
   (package
@@ -155,6 +158,97 @@ the Plasma Desktop.  Breeze is the default theme for the KDE Plasma desktop.")
     (description "KWayland is a Qt-style API to interact with the wayland-client
 and wayland-server API.")
     (license license:lgpl2.0+)))
+
+(define-public kwin
+  (package
+    (name "kwin")
+    (version "5.19.5")
+    (source (origin
+              (method url-fetch)
+              (uri (string-append "mirror://kde/stable/plasma/" version
+                                  "/kwin-" version ".tar.xz"))
+              (sha256
+               (base32 "0fwh6khbn87i6sx2krq0mlakxhvcy2hjzqzlp2yc0c9xfxxs7brn"))
+              (modules '((guix build utils)))
+              (snippet
+               '(begin
+                  (substitute* "plugins/kdecorations/aurorae/src/aurorae.cpp"
+                    (("QDirIterator::Subdirectories" all)
+                     (string-append all "| QDirIterator::FollowSymlinks")))
+                  #t))))
+    (build-system qt-build-system)
+    (arguments
+     `(#:tests? #f))
+    (native-inputs
+     `(("kdoctools" ,kdoctools)
+       ("qttools" ,qttools)
+       ("pkg-config" ,pkg-config)
+       ("extra-cmake-modules" ,extra-cmake-modules)))
+    (inputs
+     `(("qtquickcontrols" ,qtquickcontrols)
+       ("libcap" ,libcap)
+       ("kwayland-server" ,kwayland-server)
+       ("plasma-wayland-protocols" ,plasma-wayland-protocols)
+       ("breeze-icons" ,breeze-icons)
+       ("xorg-server-xwayland" ,xorg-server-xwayland)
+       ("qtmultimedia" ,qtmultimedia)
+       ("breeze" ,breeze)
+       ("freetype" ,freetype)
+       ("libxkbcommon" ,libxkbcommon)
+       ("libice" ,libice)
+       ("libsm" ,libsm)
+       ("fontconfig" ,fontconfig)
+       ("qtbase" ,qtbase)
+       ("qtscript" ,qtscript)
+       ("qtdeclarative" ,qtdeclarative)
+       ("qtsensors" ,qtsensors)
+       ("qtx11extras" ,qtx11extras)
+       ("kconfig" ,kconfig)
+       ("xcb-util" ,xcb-util)
+       ("kcoreaddons" ,kcoreaddons)
+       ("kcrash" ,kcrash)
+       ("kglobalaccel" ,kglobalaccel)
+       ("ki18n" ,ki18n)
+       ("kiconthemes" ,kiconthemes)
+       ("kidletime" ,kidletime)
+       ("kinit" ,kinit)
+       ("knotifyconfig" ,knotifyconfig)
+       ("plasma-framework" ,plasma-framework)
+       ("kcompletion" ,kcompletion)
+       ("ktexteditor" ,ktexteditor)
+       ("kxmlgui" ,kxmlgui)
+       ("kio" ,kio)
+       ("libinput" ,libinput)
+       ("knewstuff" ,knewstuff)
+       ("kdecoration" ,kdecoration)
+       ("kscreenlocker" ,kscreenlocker)
+       ("kactivities" ,kactivities)
+       ("xcb-util-wm" ,xcb-util-wm)
+       ("xcb-util-cursor" ,xcb-util-cursor)
+       ("xcb-util-keysyms" ,xcb-util-keysyms)
+       ("kirigami" ,kirigami)
+       ("libepoxy" ,libepoxy)
+       ("wayland" ,wayland)
+       ("kcmutils" ,kcmutils)
+       ("kdeclarative" ,kdeclarative)
+       ("knotifications" ,knotifications)
+       ("kconfigwidgets" ,kconfigwidgets)
+       ("kpackage" ,kpackage)
+       ("kwayland" ,kwayland)
+       ("kwidgetsaddons" ,kwidgetsaddons)
+       ("kwindowsystem" ,kwindowsystem)))
+    (home-page "https://invent.kde.org/plasma/kwin")
+    (synopsis "KDE Window Manager")
+    (description "KWin is an easy to use, but flexible, composited Window
+Manager for Xorg windowing systems (Wayland, X11) on Linux.  Its primary usage
+is in conjunction with a Desktop Shell (e.g. KDE Plasma Desktop).  KWin is
+designed to go out of the way; users should not notice that they use a window
+manager at all.  Nevertheless KWin provides a steep learning curve for advanced
+features, which are available, if they do not conflict with the primary mission.
+KWin does not have a dedicated targeted user group, but follows the targeted
+user group of the Desktop Shell using KWin as it's window manager.")
+    (license license:gpl2+)))
+
 (define-public kdecoration
   (package
     (name "kdecoration")
