@@ -34,6 +34,7 @@
   #:use-module (gnu packages kde-frameworks)
   #:use-module (gnu packages linux)
   #:use-module (gnu packages pkg-config)
+  #:use-module (gnu packages kde)
   #:use-module (gnu packages qt)
   #:use-module (gnu packages xorg)
   #:use-module (gnu packages fontutils)
@@ -248,6 +249,84 @@ features, which are available, if they do not conflict with the primary mission.
 KWin does not have a dedicated targeted user group, but follows the targeted
 user group of the Desktop Shell using KWin as it's window manager.")
     (license license:gpl2+)))
+
+
+;;; FAIL: can't start
+(define-public plasma-workspace
+  (package
+    (name "plasma-workspace")
+    (version "5.18.5")
+    (source (origin
+              (method url-fetch)
+              (uri (string-append "mirror://kde/stable/plasma/" version
+                                  "/plasma-workspace-" version ".tar.xz"))
+
+              (sha256
+               (base32
+                "0m13p64l203lr4mhjmhhldg2j4k0r3i1klvhdas4spvlpqrj1s0l"))))
+    (build-system qt-build-system)
+    (arguments
+     `(#:tests? #f ;; TODO: pass tests
+       #:configure-flags
+       (list "-DBUILD_TESTING=OFF"
+             "-DKDE_INSTALL_LIBEXECDIR=libexec"
+             "-DINSTALL_SDDM_THEME=OFF")))
+    (native-inputs
+     `(;; ("dbus" ,dbus) ;; for tests
+       ("kdoctools" ,kdoctools)
+       ("pkg-config" ,pkg-config)
+       ("extra-cmake-modules" ,extra-cmake-modules)))
+    (inputs
+     `(("qtbase" ,qtbase)
+       ("qtdeclarative" ,qtdeclarative)
+       ("krunner" ,krunner)
+       ("breeze-icons" ,breeze-icons)
+       ("libxtst" ,libxtst)
+       ("libxrender" ,libxrender)
+       ("kded" ,kded)
+       ("prison" ,prison)
+       ("kdesu" ,kdesu)
+       ("kuserfeedback" ,kuserfeedback)
+       ("kcmutils" ,kcmutils)
+       ("xcb-util" ,xcb-util)
+       ("xcb-util-image" ,xcb-util-image)
+       ("kactivities" ,kactivities)
+       ("libsm" ,libsm)
+       ("kirigami" ,kirigami)
+       ("kqtquickcharts" ,kqtquickcharts)
+       ("networkmanager-qt" ,networkmanager-qt)
+       ("kdelibs4support" ,kdelibs4support)
+       ("ki18n" ,ki18n)
+       ("kwallet" ,kwallet)
+       ("knewstuff" ,knewstuff)
+       ("libksysguard" ,libksysguard)
+       ("baloo" ,baloo)
+       ("ktexteditor" ,ktexteditor)
+       ("knotifyconfig" ,knotifyconfig)
+       ("kidletime" ,kidletime)
+       ("kactivities-stats" ,kactivities-stats)
+       ("kdeclarative" ,kdeclarative)
+       ("ktextwidgets" ,ktextwidgets)
+       ("libkscreen" ,libkscreen)
+       ("kscreenlocker" ,kscreenlocker)
+       ("kholidays" ,kholidays)
+       ("phonon" ,phonon)
+       ("qtx11extras" ,qtx11extras)
+       ("kglobalaccel" ,kglobalaccel)
+       ("kdbusaddons" ,kdbusaddons)
+       ("kwayland" ,kwayland)
+       ("kcoreaddons" ,kcoreaddons)
+       ("kpeople" ,kpeople)
+       ("kwin" ,kwin)))
+    (propagated-inputs
+     `(("xsetroot" ,xsetroot)
+       ("xprop" ,xprop)
+       ("xrdb" ,xrdb)
+       ("xmessage" ,xmessage)))
+    (home-page "https://invent.kde.org/plasma/plasma-workspace")
+    (synopsis "KDE Plasma Workspace")
+    (description "Various components needed to run a Plasma-based environment.")
+    (license license:lgpl2.0+)))
 
 (define-public kdecoration
   (package
