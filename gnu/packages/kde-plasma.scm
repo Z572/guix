@@ -328,6 +328,52 @@ user group of the Desktop Shell using KWin as it's window manager.")
     (description "Various components needed to run a Plasma-based environment.")
     (license license:lgpl2.0+)))
 
+;; FAIL: build is pass, but display:
+;; System Settings was unable to find any views, and hence has nothing to
+;; display.
+(define-public systemsettings
+  (package
+    (name "systemsettings")
+    (version "5.18.5")
+    (source (origin
+              (method url-fetch)
+              (uri (string-append "mirror://kde/stable/plasma/" version
+                                  "/systemsettings-" version ".tar.xz"))
+              (sha256
+               (base32
+                "0fvqwidh7rly2n4vjj3l8k2i8j77sg1mfxl86zwm9ahs4qabgrfd"))))
+    (build-system cmake-build-system)
+    (native-inputs
+     `(("extra-cmake-modules" ,extra-cmake-modules)
+       ("kdoctools" ,kdoctools)))
+    (inputs
+     `(("qtbase" ,qtbase)
+       ("qtdeclarative" ,qtdeclarative)
+       ("kcrash" ,kcrash)
+       ("kitemviews" ,kitemviews)
+       ("kitemmodels" ,kitemmodels)
+       ("kcmutils" ,kcmutils)
+       ("ki18n" ,ki18n)
+       ("kio" ,kio)
+       ("kservice" ,kservice)
+       ("kiconthemes" ,kiconthemes)
+       ("kwidgetsaddons" ,kwidgetsaddons)
+       ("kwindowsystem" ,kwindowsystem)
+       ("kxmlgui" ,kxmlgui)
+       ("kdbusaddons" ,kdbusaddons)
+       ("kconfig" ,kconfig)
+       ("kpackage" ,kpackage)
+       ("kdeclarative" ,kdeclarative)
+       ("kactivities" ,kactivities)
+       ("kactivities-stats" ,kactivities-stats)
+       ("kguiaddons" ,kguiaddons)
+       ("kirigami" ,kirigami)
+       ("plasma-workspace" ,plasma-workspace)))
+    (home-page "https://kde.org/workspaces/plasmadesktop")
+    (synopsis "KDE system manager for hardware, software, and workspaces")
+    (description "KDE system manager for hardware, software, and workspaces")
+    (license license:lgpl2.0+)))
+
 (define-public kdecoration
   (package
     (name "kdecoration")
