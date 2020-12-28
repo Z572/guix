@@ -170,17 +170,18 @@ and wayland-server API.")
               (uri (string-append "mirror://kde/stable/plasma/" version
                                   "/kwin-" version ".tar.xz"))
               (sha256
-               (base32 "0fwh6khbn87i6sx2krq0mlakxhvcy2hjzqzlp2yc0c9xfxxs7brn"))
-              (modules '((guix build utils)))
-              (snippet
-               '(begin
-                  (substitute* "plugins/kdecorations/aurorae/src/aurorae.cpp"
-                    (("QDirIterator::Subdirectories" all)
-                     (string-append all "| QDirIterator::FollowSymlinks")))
-                  #t))))
+               (base32 "0fwh6khbn87i6sx2krq0mlakxhvcy2hjzqzlp2yc0c9xfxxs7brn"))))
     (build-system qt-build-system)
     (arguments
-     `(#:tests? #f))
+     `(#:tests? #f
+       #:phases
+       (modify-phases %standard-phases
+         (add-after 'unpack 'patch-symlink
+           (lambda* (#:key inputs #:allow-other-keys)
+             (substitute* "plugins/kdecorations/aurorae/src/aurorae.cpp"
+               (("QDirIterator::Subdirectories" all)
+                (string-append all "| QDirIterator::FollowSymlinks")))
+             #t)))))
     (native-inputs
      `(("kdoctools" ,kdoctools)
        ("qttools" ,qttools)
