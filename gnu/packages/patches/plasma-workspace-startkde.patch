@@ -1,0 +1,94 @@
+--- plasma-workspace-5.18.5.org/startkde/startplasma-waylandsession.cpp	2020-12-27 14:43:55.727459449 +0800
++++ plasma-workspace-5.18.5/startkde/startplasma-waylandsession.cpp	2020-12-27 14:50:20.276685433 +0800
+@@ -67,7 +67,7 @@ int main(int /*argc*/, char** /*argv*/)
+     waitForKonqi();
+     out << "startplasma-waylandsession: Shutting down...\n";
+ 
+-    runSync(QStringLiteral("kdeinit5_shutdown"), {});
++    runSync(QStringLiteral("GUIX_KDEINIT5_SHUTDOWN"), {});
+ 
+     cleanupX11();
+     out << "startplasma-waylandsession: Done.\n";
+--- plasma-workspace-5.18.5.org/startkde/startplasma-x11.cpp	2020-12-27 14:43:55.727459449 +0800
++++ plasma-workspace-5.18.5/startkde/startplasma-x11.cpp	2020-12-27 14:50:20.276685433 +0800
+@@ -111,7 +111,7 @@ int main(int /*argc*/, char** /*argv*/)
+ 
+     out << "startkde: Shutting down...\n";
+ 
+-    runSync(QStringLiteral("kdeinit5_shutdown"), {});
++    runSync(QStringLiteral("GUIX_KDEINIT5_SHUTDOWN"), {});
+ 
+     cleanupPlasmaEnvironment();
+     cleanupX11();
+--- plasma-workspace-5.18.5.orig/startkde/startplasma.cpp	2020-12-27 14:43:55.727459449 +0800
++++ plasma-workspace-5.18.5/startkde/startplasma.cpp	2020-12-27 14:50:20.276685433 +0800
+@@ -34,7 +34,7 @@
+ void messageBox(const QString &text)
+ {
+     out << text;
+-    runSync(QStringLiteral("xmessage"), {QStringLiteral("-geometry"), QStringLiteral("500x100"), text});
++    runSync(QStringLiteral("GUIX_XMESSAGE"), {QStringLiteral("-geometry"), QStringLiteral("500x100"), text});
+ }
+ 
+ QStringList allServices(const QStringLiteral& prefix)
+@@ -242,15 +242,15 @@
+ //     If the user has overwritten fonts, the cursor font may be different now
+ //     so don't move this up.
+ 
+-    runSync(QStringLiteral("xsetroot"), {QStringLiteral("-cursor_name"), QStringLiteral("left_ptr")});
+-    runSync(QStringLiteral("xprop"), {QStringLiteral("-root"), QStringLiteral("-f"), QStringLiteral("KDE_FULL_SESSION"), QStringLiteral("8t"), QStringLiteral("-set"), QStringLiteral("KDE_FULL_SESSION"), QStringLiteral("true")});
+-    runSync(QStringLiteral("xprop"), {QStringLiteral("-root"), QStringLiteral("-f"), QStringLiteral("KDE_SESSION_VERSION"), QStringLiteral("32c"), QStringLiteral("-set"), QStringLiteral("KDE_SESSION_VERSION"), QStringLiteral("5")});
++    runSync(QStringLiteral("GUIX_XSETROOT"), {QStringLiteral("-cursor_name"), QStringLiteral("left_ptr")});
++    runSync(QStringLiteral("GUIX_XPROP"), {QStringLiteral("-root"), QStringLiteral("-f"), QStringLiteral("KDE_FULL_SESSION"), QStringLiteral("8t"), QStringLiteral("-set"), QStringLiteral("KDE_FULL_SESSION"), QStringLiteral("true")});
++    runSync(QStringLiteral("GUIX_XPROP"), {QStringLiteral("-root"), QStringLiteral("-f"), QStringLiteral("KDE_SESSION_VERSION"), QStringLiteral("32c"), QStringLiteral("-set"), QStringLiteral("KDE_SESSION_VERSION"), QStringLiteral("5")});
+ }
+ 
+ void cleanupX11()
+ {
+-    runSync(QStringLiteral("xprop"), { QStringLiteral("-root"), QStringLiteral("-remove"), QStringLiteral("KDE_FULL_SESSION") });
+-    runSync(QStringLiteral("xprop"), { QStringLiteral("-root"), QStringLiteral("-remove"), QStringLiteral("KDE_SESSION_VERSION") });
++    runSync(QStringLiteral("GUIX_XPROP"), { QStringLiteral("-root"), QStringLiteral("-remove"), QStringLiteral("KDE_FULL_SESSION") });
++    runSync(QStringLiteral("GUIX_XPROP"), { QStringLiteral("-root"), QStringLiteral("-remove"), QStringLiteral("KDE_SESSION_VERSION") });
+ }
+ 
+ // TODO: Check if Necessary
+@@ -267,11 +267,7 @@
+ {
+     int exitCode;
+     // At this point all environment variables are set, let's send it to the DBus session server to update the activation environment
+-    if (!QStandardPaths::findExecutable(QStringLiteral("dbus-update-activation-environment")).isEmpty()) {
+-        exitCode = runSync(QStringLiteral("dbus-update-activation-environment"), { QStringLiteral("--systemd"), QStringLiteral("--all") });
+-    } else {
+-        exitCode = runSync(QStringLiteral(CMAKE_INSTALL_FULL_LIBEXECDIR "/ksyncdbusenv"), {});
+-    }
++    exitCode = runSync(QStringLiteral("GUIX_DBUS_UPDATE_ACTIVATION_ENVIRONMENT"), { QStringLiteral("--systemd"), QStringLiteral("--all") });
+     return exitCode == 0;
+ }
+ 
+@@ -287,7 +283,7 @@
+     //TODO port to c++?
+     const QByteArray input = "Xft.dpi: " + QByteArray::number(fontsCfg.readEntry("forceFontDPI", 0));
+     QProcess p;
+-    p.start(QStringLiteral("xrdb"), { QStringLiteral("-quiet"), QStringLiteral("-merge"), QStringLiteral("-nocpp") });
++    p.start(QStringLiteral("GUIX_XRDB"), { QStringLiteral("-quiet"), QStringLiteral("-merge"), QStringLiteral("-nocpp") });
+     p.setProcessChannelMode(QProcess::ForwardedChannels);
+     p.write(input);
+     p.closeWriteChannel();
+@@ -309,7 +305,7 @@
+         KConfigGroup ksplashCfg = cfg.group("KSplash");
+         if (ksplashCfg.readEntry("Engine", QStringLiteral("KSplashQML")) == QStringLiteral("KSplashQML")) {
+             p = new QProcess;
+-            p->start(QStringLiteral("ksplashqml"), { ksplashCfg.readEntry("Theme", QStringLiteral("Breeze")) });
++            p->start(QStringLiteral(CMAKE_INSTALL_FULL_BINDIR "/ksplashqml"), { ksplashCfg.readEntry("Theme", QStringLiteral("Breeze")) });
+         }
+     }
+     return p;
+@@ -331,7 +327,7 @@
+ {
+     // We set LD_BIND_NOW to increase the efficiency of kdeinit.
+     // kdeinit unsets this variable before loading applications.
+-    const int exitCode = runSync(QStringLiteral(CMAKE_INSTALL_FULL_LIBEXECDIR_KF5 "/start_kdeinit_wrapper"), { QStringLiteral("--kded"), QStringLiteral("+kcminit_startup") }, { QStringLiteral("LD_BIND_NOW=true") });
++    const int exitCode = runSync(QStringLiteral("GUIX_START_KDEINIT_WAPPER"), { QStringLiteral("--kded"), QStringLiteral("+kcminit_startup") }, { QStringLiteral("LD_BIND_NOW=true") });
+     if (exitCode != 0) {
+         messageBox(QStringLiteral("startkde: Could not start kdeinit5. Check your installation."));
+         return false;

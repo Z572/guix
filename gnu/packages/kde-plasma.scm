@@ -27,6 +27,7 @@
   #:use-module ((guix licenses) #:prefix license:)
   #:use-module (guix build-system cmake)
   #:use-module (guix build-system qt)
+  #:use-module (gnu packages)
   #:use-module (gnu packages compression)
   #:use-module (gnu packages freedesktop)
   #:use-module (gnu packages glib)
@@ -251,7 +252,6 @@ user group of the Desktop Shell using KWin as it's window manager.")
     (license license:gpl2+)))
 
 
-;;; FAIL: can't start
 (define-public plasma-workspace
   (package
     (name "plasma-workspace")
@@ -263,21 +263,39 @@ user group of the Desktop Shell using KWin as it's window manager.")
 
               (sha256
                (base32
-                "0m13p64l203lr4mhjmhhldg2j4k0r3i1klvhdas4spvlpqrj1s0l"))))
+                "0m13p64l203lr4mhjmhhldg2j4k0r3i1klvhdas4spvlpqrj1s0l"))
+              (patches (search-patches "plasma-workspace-startkde.patch"))))
     (build-system qt-build-system)
     (arguments
      `(#:tests? #f ;; TODO: pass tests
        #:configure-flags
        (list "-DBUILD_TESTING=OFF"
-             "-DKDE_INSTALL_LIBEXECDIR=libexec"
-             "-DINSTALL_SDDM_THEME=OFF")))
+             "-DINSTALL_SDDM_THEME=OFF"
+             (string-append "-DKDE_INSTALL_DATADIR="
+                            (assoc-ref %outputs "out") "/share"))
+       #:phases
+       (modify-phases %standard-phases
+         (add-after 'unpack 'patch-paths
+           (lambda* (#:key inputs #:allow-other-keys)
+             ;; Set patched-in values:
+             (substitute* (list "startkde/startplasma-waylandsession.cpp"
+                                "startkde/startplasma-x11.cpp"
+                                "startkde/startplasma.cpp")
+               (("GUIX_XMESSAGE") (string-append (assoc-ref inputs "xmessage") "/bin/xmessage"))
+               (("GUIX_XRDB") (string-append (assoc-ref inputs "xrdb") "/bin/xrdb"))
+               (("GUIX_XSETROOT") (string-append (assoc-ref inputs "xsetroot") "/bin/xsetroot"))
+               (("GUIX_XPROP") (string-append (assoc-ref inputs "xprop") "/bin/xprop"))
+               (("GUIX_DBUS_UPDATE_ACTIVATION_ENVIRONMENT") (string-append (assoc-ref inputs "dbus") "/bin/dbus-update-activation-environment"))
+               (("GUIX_START_KDEINIT_WAPPER") (string-append (assoc-ref inputs "kinit") "/lib/libexec/kf5/start_kdeinit_wrapper"))
+               (("GUIX_KDEINIT5_SHUTDOWN") (string-append (assoc-ref inputs "kinit") "/bin/kdeinit5_shutdown")))
+             #t)))))
     (native-inputs
-     `(;; ("dbus" ,dbus) ;; for tests
-       ("kdoctools" ,kdoctools)
+     `(("kdoctools" ,kdoctools)
        ("pkg-config" ,pkg-config)
        ("extra-cmake-modules" ,extra-cmake-modules)))
     (inputs
-     `(("qtbase" ,qtbase)
+     `(("dbus" ,dbus)
+       ("qtbase" ,qtbase)
        ("qtdeclarative" ,qtdeclarative)
        ("krunner" ,krunner)
        ("breeze-icons" ,breeze-icons)
