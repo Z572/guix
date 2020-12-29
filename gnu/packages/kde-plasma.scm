@@ -288,6 +288,45 @@ user group of the Desktop Shell using KWin as it's window manager.")
     (license ;; COPYING  ;; COPYING.LIB
      (list license:gpl2+ license:lgpl2.1+))))
 
+(define-public drkonqi
+  (package
+    (name "drkonqi")
+    (version "5.18.5")
+    (source (origin
+              (method url-fetch)
+              (uri (string-append "mirror://kde/stable/plasma/" version
+                                  "/drkonqi-" version ".tar.xz"))
+
+              (sha256
+               (base32
+                "1lgsdv7pyqj79rkpg13b90bsr9kzgs1dhn9kpkwfi79gxp22d9mi"))))
+    (build-system qt-build-system)
+    (arguments
+     `(#:tests? #f  ;; need network
+       #:configure-flags
+       (list "-DBUILD_TESTING=OFF")))
+    (native-inputs
+     `(("extra-cmake-modules" ,extra-cmake-modules)))
+    (inputs
+     `(("qtbase" ,qtbase)
+       ("ki18n" ,ki18n)
+       ("kcoreaddons" ,kcoreaddons)
+       ("kservice" ,kservice)
+       ("kconfigwidgets" ,kconfigwidgets)
+       ("kjobwidgets" ,kjobwidgets)
+       ("kio" ,kio)
+       ("kcrash" ,kcrash)
+       ("kcompletion" ,kcompletion)
+       ("kwidgetsaddons" ,kwidgetsaddons)
+       ("kwallet" ,kwallet)
+       ("knotifications" ,knotifications)
+       ("kidletime" ,kidletime)
+       ("kwindowsystem" ,kwindowsystem)))
+    (home-page "https://invent.kde.org/plasma/drkonqi")
+    (synopsis "Crash handler for KDE software")
+    (description "Crash handler for KDE software.")
+    (license (list license:lgpl2.1+ license:gpl2+))))
+
 (define-public milou
   (package
     (name "milou")
