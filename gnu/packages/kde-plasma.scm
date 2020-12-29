@@ -288,6 +288,35 @@ user group of the Desktop Shell using KWin as it's window manager.")
     (license ;; COPYING  ;; COPYING.LIB
      (list license:gpl2+ license:lgpl2.1+))))
 
+(define-public milou
+  (package
+    (name "milou")
+    (version "5.18.5")
+    (source (origin
+              (method url-fetch)
+              (uri (string-append "mirror://kde/stable/plasma/" version
+                                  "/milou-" version ".tar.xz"))
+
+              (sha256
+               (base32
+                "1cl2hnfy0q26x4bnad5z91596v4b3if3qpz2s4csfnh27j1n7ivy"))))
+    (build-system qt-build-system)
+    (native-inputs
+     `(("extra-cmake-modules" ,extra-cmake-modules)
+       ("kdoctools" ,kdoctools)))
+    (inputs
+     `(("qtbase" ,qtbase)
+       ("ki18n" ,ki18n)
+       ("kdeclarative" ,kdeclarative)
+       ("kitemmodels" ,kitemmodels)
+       ("qtdeclarative" ,qtdeclarative)
+       ("krunner" ,krunner)
+       ("plasma-framework" ,plasma-framework)
+       ("kwindowsystem" ,kwindowsystem)))
+    (home-page "https://invent.kde.org/plasma/milou")
+    (synopsis "Dedicated search application built on top of Baloo")
+    (description "A dedicated search application built on top of Baloo.")
+    (license (list license:lgpl2.0+ license:gpl2+))))
 (define-public plasma-workspace
   (package
     (name "plasma-workspace")
