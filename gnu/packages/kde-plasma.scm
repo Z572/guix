@@ -31,6 +31,7 @@
   #:use-module (gnu packages compression)
   #:use-module (gnu packages freedesktop)
   #:use-module (gnu packages glib)
+  #:use-module (gnu packages gnome)
   #:use-module (gnu packages documentation)
   #:use-module (gnu packages kde-frameworks)
   #:use-module (gnu packages linux)
@@ -252,6 +253,40 @@ KWin does not have a dedicated targeted user group, but follows the targeted
 user group of the Desktop Shell using KWin as it's window manager.")
     (license license:gpl2+)))
 
+(define-public bluedevil
+  (package
+    (name "bluedevil")
+    (version "5.18.5")
+    (source (origin
+              (method url-fetch)
+              (uri (string-append "mirror://kde/stable/plasma/" version
+                                  "/bluedevil-" version ".tar.xz"))
+              (sha256
+               (base32
+                "0rlsr2gfgi4m3rnlf02mn1dd91krxfnb4sz9a7a8ziq1xsxfyl2k"))))
+    (build-system qt-build-system)
+    (native-inputs
+     `(("extra-cmake-modules" ,extra-cmake-modules)
+       ("shared-mime-info" ,shared-mime-info)))
+    (inputs
+     `(("qtbase" ,qtbase)
+       ("qtdeclarative" ,qtdeclarative)
+       ("kcoreaddons" ,kcoreaddons)
+       ("kwidgetsaddons" ,kwidgetsaddons)
+       ("kdbusaddons" ,kdbusaddons)
+       ("knotifications" ,knotifications)
+       ("kwindowsystem" ,kwindowsystem)
+       ("kiconthemes" ,kiconthemes)
+       ("plasma-framework" ,plasma-framework)
+       ("ki18n" ,ki18n)
+       ("kio" ,kio)
+       ("bluez-qt" ,bluez-qt)
+       ("kded" ,kded)))
+    (home-page "https://invent.kde.org/plasma/bluedevil")
+    (synopsis "Bluedevil adds Bluetooth capabilities to KDE Plasma")
+    (description "Bluedevil adds Bluetooth capabilities to KDE Plasma.")
+    (license ;; COPYING  ;; COPYING.LIB
+     (list license:gpl2+ license:lgpl2.1+))))
 
 (define-public plasma-workspace
   (package
