@@ -28,6 +28,7 @@
   #:use-module (guix build-system cmake)
   #:use-module (guix build-system qt)
   #:use-module (gnu packages)
+  #:use-module (gnu packages boost)
   #:use-module (gnu packages compression)
   #:use-module (gnu packages freedesktop)
   #:use-module (gnu packages glib)
@@ -287,6 +288,35 @@ user group of the Desktop Shell using KWin as it's window manager.")
     (description "Bluedevil adds Bluetooth capabilities to KDE Plasma.")
     (license ;; COPYING  ;; COPYING.LIB
      (list license:gpl2+ license:lgpl2.1+))))
+
+(define-public kactivitymanagerd
+  (package
+    (name "kactivitymanagerd")
+    (version "5.18.5")
+    (source (origin
+              (method url-fetch)
+              (uri (string-append "mirror://kde/stable/plasma/" version
+                                  "/kactivitymanagerd-" version ".tar.xz"))
+
+              (sha256
+               (base32
+                "1ivsa275dcmlizn6nkb4c9f0hlvk0lpzma885vk7whjxb2s2xwr4"))))
+    (build-system cmake-build-system)
+    (native-inputs
+     `(("extra-cmake-modules" ,extra-cmake-modules)
+       ("boost" ,boost)))
+    (inputs
+     `(("qtbase" ,qtbase)
+       ("kdbusaddons" ,kdbusaddons)
+       ("ki18n" ,ki18n)
+       ("kglobalaccel" ,kglobalaccel)
+       ("kcrash" ,kcrash)
+       ("kio" ,kio)))
+    (home-page "https://invent.kde.org/plasma/kactivitymanagerd")
+    (synopsis "Core components for the KDE Activity concept")
+    (description "System service to manage user's activities and track the usage
+patterns.")
+    (license (list license:gpl2 license:gpl3))))
 
 (define-public drkonqi
   (package
