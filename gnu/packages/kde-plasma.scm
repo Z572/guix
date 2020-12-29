@@ -450,6 +450,46 @@ user group of the Desktop Shell using KWin as it's window manager.")
     (description "Various components needed to run a Plasma-based environment.")
     (license license:lgpl2.0+)))
 
+(define-public powerdevil
+  (package
+    (name "powerdevil")
+    (version "5.18.5")
+    (source (origin
+              (method url-fetch)
+              (uri (string-append "mirror://kde/stable/plasma/" version
+                                  "/powerdevil-" version ".tar.xz"))
+              (sha256
+               (base32
+                "0j7m95glplr2zn96fqnjyk3q4v3ladipssl953z83zqvwrg1h070"))))
+    (build-system qt-build-system)
+    (native-inputs
+     `(("extra-cmake-modules" ,extra-cmake-modules)
+       ("kdoctools" ,kdoctools)))
+    (inputs
+     `(("qtbase" ,qtbase)
+       ("networkmanager-qt" ,networkmanager-qt)
+       ("qtx11extras" ,qtx11extras)
+       ("kactivities" ,kactivities)
+       ("kauth" ,kauth)
+       ("kidletime" ,kidletime)
+       ("kconfig" ,kconfig)
+       ("kdbusaddons" ,kdbusaddons)
+       ("solid" ,solid)
+       ("ki18n" ,ki18n)
+       ("kglobalaccel" ,kglobalaccel)
+       ("kio" ,kio)
+       ("knotifyconfig" ,knotifyconfig)
+       ("kwayland" ,kwayland)
+       ("kcrash" ,kcrash)
+       ("knotifications" ,knotifications)
+       ("libkscreen" ,libkscreen)
+       ("plasma-workspace" ,plasma-workspace)
+       ("bluez-qt" ,bluez-qt)
+       ("udev" ,eudev)))
+    (home-page "https://invent.kde.org/plasma/powerdevil")
+    (synopsis "Manages the power consumption settings of a Plasma shell")
+    (description "Manages the power consumption settings of a Plasma shell.")
+    (license license:gpl2+)))
 ;; FAIL: build is pass, but display:
 ;; System Settings was unable to find any views, and hence has nothing to
 ;; display.
