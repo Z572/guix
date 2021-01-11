@@ -55,6 +55,7 @@
   #:use-module (gnu packages gettext)
   #:use-module (gnu packages ghostscript)
   #:use-module (gnu packages gl)
+  #:use-module (gnu packages glib)
   #:use-module (gnu packages gnome)
   #:use-module (gnu packages graphics)
   #:use-module (gnu packages image)
@@ -78,6 +79,87 @@
   #:use-module (gnu packages xdisorg)
   #:use-module (gnu packages xml)
   #:use-module (gnu packages xorg))
+
+(define-public latte-dock
+  (package
+    (name "latte-dock")
+    (version "0.9.11")
+    (source (origin
+              (method url-fetch)
+              (uri (string-append "mirror://kde/stable/latte-dock/"
+                                  "latte-dock-" version ".tar.xz"))
+
+              (sha256
+               (base32
+                "0x7a93a7axsa0fzpbkkv1z722k9za4p51xcpzdpnh5ih1zij0csi"))))
+    (build-system qt-build-system)
+    (native-inputs
+     `(("extra-cmake-modules" ,extra-cmake-modules)
+       ("pkg-config" ,pkg-config)))
+    (inputs
+     `(("qtbase" ,qtbase)
+       ("qtdeclarative" ,qtdeclarative)
+       ("kactivities" ,kactivities)
+       ("karchive" ,karchive)
+       ("kcoreaddons" ,kcoreaddons)
+       ("kguiaddons" ,kguiaddons)
+       ("kcrash" ,kcrash)
+       ("kdbusaddons" ,kdbusaddons)
+       ("kdeclarative" ,kdeclarative)
+       ("kglobalaccel" ,kglobalaccel)
+       ("ki18n" ,ki18n)
+       ("kiconthemes" ,kiconthemes)
+       ("knewstuff" ,knewstuff)
+       ("knotifications" ,knotifications)
+       ("plasma-framework" ,plasma-framework)
+       ("kwayland" ,kwayland)
+       ("kwindowsystem" ,kwindowsystem)
+       ("kxmlgui" ,kxmlgui)
+       ("xcb-util" ,xcb-util)
+       ("qtx11extras" ,qtx11extras)
+       ("libsm" ,libsm)))
+    (home-page "")
+    (synopsis "")
+    (description "")
+    (license #f)))
+
+(define-public libqaccessibilityclient
+  (package
+    (name "libqaccessibilityclient")
+    (version "0.4.1")
+    (source (origin
+              (method url-fetch)
+              (uri (string-append "mirror://kde/stable/libqaccessibilityclient"
+                                  "/libqaccessibilityclient-" version ".tar.xz"))
+
+              (sha256
+               (base32
+                "0a9lv2jb5gyqxvrkl5xl09gjnlp05b5yfzfb0wmaxz0l8d7qnxhw"))))
+    (build-system qt-build-system)
+    (arguments
+     `(#:tests? #f ;; TODO: pass tests
+       #:configure-flags
+       (list "-DBUILD_TESTING=OFF")
+       ;; #:phases
+       ;; (modify-phases %standard-phases
+       ;;   (add-before 'check 'pre-check
+       ;;     (lambda _
+       ;;       ;; Tests require a running dbus-daemon.
+       ;;       (system "dbus-daemon &")
+       ;;       ;; For missing '/etc/machine-id'.
+       ;;       (setenv "DBUS_FATAL_WARNINGS" "0")
+       ;;       #t)))
+       ))
+    (native-inputs
+     `(("extra-cmake-modules" ,extra-cmake-modules)
+       ;; test
+       ("dbus" ,dbus)))
+    (inputs
+     `(("qtbase" ,qtbase)))
+    (home-page "")
+    (synopsis "")
+    (description "")
+    (license #f)))
 
 (define-public baloo-widgets
   (package

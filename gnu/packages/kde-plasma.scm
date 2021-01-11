@@ -484,6 +484,143 @@ patterns.")
     (description "A dedicated search application built on top of Baloo.")
     (license license:lgpl2.1+)))
 
+(define-public khotkeys
+  (package
+    (name "khotkeys")
+    (version "5.18.5")
+    (source (origin
+              (method url-fetch)
+              (uri (string-append "mirror://kde/stable/plasma/" version
+                                  "/khotkeys-" version ".tar.xz"))
+
+              (sha256
+               (base32
+                "0rp7h7nqy5797rr5rrlm070nvjif7cmzwxn20p1k3p7cpgrzs0lg"))))
+    (build-system qt-build-system)
+    (native-inputs
+     `(("extra-cmake-modules" ,extra-cmake-modules)
+       ("kdoctools" ,kdoctools)))
+    (inputs
+     `(("qtbase" ,qtbase)
+       ("kglobalaccel" ,kglobalaccel)
+       ("ki18n" ,ki18n)
+       ("kio" ,kio)
+       ("kxmlgui" ,kxmlgui)
+       ("kdelibs4support" ,kdelibs4support)
+       ("kdbusaddons" ,kdbusaddons)
+       ("kcmutils" ,kcmutils)
+       ("plasma-framework" ,plasma-framework)
+       ("plasma-workspace" ,plasma-workspace)
+       ("qtx11extras" ,qtx11extras)
+       ("kinit" ,kinit)))
+    (home-page "")
+    (synopsis "")
+    (description "")
+    (license #f)))
+
+(define-public kde-cli-tools
+  (package
+    (name "kde-cli-tools")
+    (version "5.18.5")
+    (source (origin
+              (method url-fetch)
+              (uri (string-append "mirror://kde/stable/plasma/" version
+                                  "/kde-cli-tools-" version ".tar.xz"))
+
+              (sha256
+               (base32
+                "1a5ab9z082jw21zd22navd7pzx3z3n26wykq9cl4w7qi2wd1v673"))))
+    (build-system qt-build-system)
+    (native-inputs
+     `(("kdoctools" ,kdoctools)
+       ("extra-cmake-modules" ,extra-cmake-modules)))
+    (inputs
+     `(("kactivities" ,kactivities)
+       ("qtbase" ,qtbase)
+       ("ki18n" ,ki18n)
+       ("kwindowsystem" ,kwindowsystem)
+       ("kiconthemes" ,kiconthemes)
+       ("qtdeclarative" ,qtdeclarative)
+       ("kdeclarative" ,kdeclarative)
+       ("plasma-workspace" ,plasma-workspace)
+       ("kinit" ,kinit)
+       ("kio" ,kio)
+       ("qtsvg" ,qtsvg)
+       ("kcmutils" ,kcmutils)
+       ("kdesu" ,kdesu)))
+    (arguments
+     `(#:phases
+       (modify-phases %standard-phases
+         (add-after 'unpack 'fix-test
+           (lambda _
+             (substitute* "processcore/CMakeLists.txt"
+               (("KAUTH_HELPER_INSTALL_DIR") "KDE_INSTALL_LIBEXECDIR")))))))
+    (home-page "")
+    (synopsis "")
+    (description "")
+    (license #f)))
+
+(define-public plasma-workspace-wallpapers
+  (package
+    (name "plasma-workspace-wallpapers")
+    (version "5.18.5")
+    (source (origin
+              (method url-fetch)
+              (uri (string-append "mirror://kde/stable/plasma/" version
+                                  "/plasma-workspace-wallpapers-" version ".tar.xz"))
+
+              (sha256
+               (base32
+                "0vadm2ii0y1nhcckwca6aa80i857p01h71nhkril96bsp7bkpnpq"))))
+    (build-system qt-build-system)
+    (native-inputs
+     `(("extra-cmake-modules" ,extra-cmake-modules)))
+    (inputs
+     `(("qtbase" ,qtbase)))
+    (home-page "")
+    (synopsis "")
+    (description "")
+    (license #f)))
+
+(use-modules (gnu packages cups))
+(define-public xdg-desktop-portal-kde
+  (package
+    (name "xdg-desktop-portal-kde")
+    (version "5.18.5")
+    (source (origin
+              (method url-fetch)
+              (uri (string-append "mirror://kde/stable/plasma/" version
+                                  "/xdg-desktop-portal-kde-" version ".tar.xz"))
+
+              (sha256
+               (base32
+                "0932jzrvcysp1kbi91sxmhffa7bd05zfrya33gibh603i9q54x40"))))
+    (build-system qt-build-system)
+    (native-inputs
+     `(("extra-cmake-modules" ,extra-cmake-modules)))
+    (inputs
+     `(("qtbase" ,qtbase)
+       ("libepoxy" ,libepoxy)
+       ("kirigami" ,kirigami)
+       ("qtdeclarative" ,qtdeclarative) ;; qtquick
+       ("pipewire" ,pipewire)
+       ("kcoreaddons" ,kcoreaddons)
+       ("kconfig" ,kconfig)
+       ("ki18n" ,ki18n)
+       ("kdeclarative" ,kdeclarative)
+       ("kio" ,kio)
+       ("knotifications" ,knotifications)
+       ("plasma-framework" ,plasma-framework)
+       ("kwayland" ,kwayland)
+       ("kwidgetsaddons" ,kwidgetsaddons)
+       ("kwindowsystem" ,kwindowsystem)
+
+       ("cups-minimal" ,cups-minimal)))
+    (home-page "")
+    (synopsis "")
+    (description "")
+    (license #f)))
+
 (define-public plasma-workspace
   (package
     (name "plasma-workspace")
@@ -786,6 +923,55 @@ manager which re-parents a Client window to a window decoration frame.")
 Workspaces which tries to be as magic and automatic as possible for users with
 basic needs and easy to configure for those who want special setups.")
     (license license:gpl2+)))
+
+(define-public kscreen
+  (package
+    (name "kscreen")
+    (version "5.19.5")
+    (source (origin
+              (method url-fetch)
+              (uri (string-append "mirror://kde/stable/plasma/" version
+                                  "/kscreen-" version ".tar.xz"))
+
+              (sha256
+               (base32
+                "1s2ngg86128665mf6q7dnwv953jf2d4ad25klrm8wd85lj3wcwhd"))))
+    (build-system qt-build-system)
+    (arguments
+     `(#:tests? #f
+       ;; #:phases
+       ;; (modify-phases %standard-phases
+       ;;   (add-before 'check 'check-setup
+       ;;     (lambda* (#:key inputs #:allow-other-keys)
+       ;;       (system (string-append (assoc-ref inputs "xorg-server")
+       ;;                              "/bin/Xvfb :1 -screen 0 640x480x24 &"))
+       ;;       (setenv "DISPLAY" ":1")
+       ;;       #t)))
+       ))
+    (native-inputs
+     `(("extra-cmake-modules" ,extra-cmake-modules)))
+    (inputs
+     `(("qtbase" ,qtbase)
+       ("libkscreen" ,libkscreen)
+       ("kdeclarative" ,kdeclarative)
+       ("qtgraphicaleffects" ,qtgraphicaleffects)
+       ("qtsensors" ,qtsensors)
+       ("kcmutils" ,kcmutils)
+       ("qtdeclarative" ,qtdeclarative)
+       ("kdbusaddons" ,kdbusaddons)
+       ("kdeclarative" ,kdeclarative)
+       ("kglobalaccel" ,kglobalaccel)
+       ("ki18n" ,ki18n)
+       ("kiconthemes" ,kiconthemes)
+       ("kwindowsystem" ,kwindowsystem)
+       ("plasma-framework" ,plasma-framework)
+       ("kxmlgui" ,kxmlgui)
+       ;;; test
+       ("xorg-server" ,xorg-server)))
+    (home-page "")
+    (synopsis "")
+    (description "")
+    (license #f)))
 
 (define-public libksysguard
   (package

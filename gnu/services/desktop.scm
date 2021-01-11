@@ -937,6 +937,32 @@ rules."
 and extends polkit with the actions from @code{gnome-settings-daemon}."
   (service gnome-desktop-service-type config))
 
+;; plasma desktop service
+
+(define-record-type* <plasma-desktop-configuration> plasma-desktop-configuration
+  make-plasma-desktop-configuration
+  plasma-desktop-configuration?
+  (plasma plasma-package (default plasma)))
+
+(define plasma-desktop-service-type
+  (service-type
+   (name 'plasma-desktop)
+   (extensions
+    (list ;; (service-extension polkit-service-type
+     ;;                    gnome-polkit-settings)
+     (service-extension profile-service-type
+                        (compose list
+                                 gnome-package))))
+   (default-value (plasma-desktop-configuration))
+   (description "Run the plasma desktop environment.")))
+
+(define-deprecated (plasma-desktop-service #:key (config
+                                                  (plasma-desktop-configuration)))
+  plasma-desktop-service-type
+  "Return a service that adds the @code{plasma} package to the system profile,
+and extends polkit with the actions from @code{plasma-settings-daemon}."
+  (service plasma-desktop-service-type config))
+
 ;; MATE Desktop service.
 ;; TODO: Add mate-screensaver.
 
