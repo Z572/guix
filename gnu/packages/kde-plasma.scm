@@ -42,7 +42,8 @@
   #:use-module (gnu packages xorg)
   #:use-module (gnu packages fontutils)
   #:use-module (gnu packages xdisorg)
-  #:use-module (gnu packages gl))
+  #:use-module (gnu packages gl)
+  #:use-module (gnu packages ibus))
 
 (define-public breeze
   (package
@@ -116,6 +117,100 @@ the Plasma Desktop.  Breeze is the default theme for the KDE Plasma desktop.")
     (description "Plasma Specific Protocols for Wayland.")
     (license license:lgpl3)))
 
+(define-public plasma-desktop
+  (package
+    (name "plasma-desktop")
+    (version "5.18.5")
+    (source (origin
+              (method url-fetch)
+              (uri (string-append "mirror://kde/stable/plasma/" version
+                                  "/plasma-desktop-" version ".tar.xz"))
+
+              (sha256
+               (base32
+                "17yz895jvnrhg0z25c994226m1420a44si1wiafaf3friw0hdcdf"))))
+    (build-system qt-build-system)
+    (arguments
+     `(#:tests? #f
+       #:configure-flags
+       (list "-DBUILD_TESTING=OFF")
+       #:phases
+       (modify-phases %standard-phases
+         (add-after 'unpack 'fix-hwclock
+           (lambda* (#:key inputs #:allow-other-keys)
+             (substitute* "kcms/dateandtime/helper.cpp"
+               (("static const QString exePath.*;$")
+                "")
+               (("KStandardDirs::findExe\\(QStringLiteral\\(\"hwclock\"\\), exePath\\)")
+                (string-append "QLatin1String(\"" (assoc-ref inputs "util-linux") "/sbin/hwclock" "\")")))))
+         (add-after 'unpack 'fix-tzdir
+           (lambda* (#:key inputs #:allow-other-keys)
+             (substitute* "kcms/dateandtime/helper.cpp"
+               (("QString tz =.*;$")
+                "QString tz = QString::fromLocal8Bit(qgetenv(\"TZDIR\")) + selectedzone;")
+               ))))))
+    (native-inputs
+     `(("extra-cmake-modules" ,extra-cmake-modules)
+       ("kdoctools" ,kdoctools)
+       ("pkg-config" ,pkg-config)))
+    (inputs
+     `(("qtbase" ,qtbase)
+       ("qtdeclarative" ,qtdeclarative)
+       ("qtx11extras" ,qtx11extras)
+       ("qtsvg" ,qtsvg)
+       ("kauth" ,kauth)
+       ("plasma-framework" ,plasma-framework)
+       ("ki18n" ,ki18n)
+       ("kcmutils" ,kcmutils)
+       ("knewstuff" ,knewstuff)
+
+       ("kdelibs4support" ,kdelibs4support)
+       ("knotifications" ,knotifications)
+       ("knotifyconfig" ,knotifyconfig)
+       ("attica" ,attica)
+       ("kwallet" ,kwallet)
+       ("krunner" ,krunner)
+       ("kglobalaccel" ,kglobalaccel)
+       ("kdeclarative" ,kdeclarative)
+       ("kdbusaddons" ,kdbusaddons)
+       ("kactivities" ,kactivities)
+       ("kactivities-stats" ,kactivities-stats)
+       ("kconfig" ,kconfig)
+       ("kwidgetsaddons" ,kwidgetsaddons)
+       ("kirigami" ,kirigami)
+       ("qqc2-desktop-style" ,qqc2-desktop-style)
+       ("plasma-workspace" ,plasma-workspace)
+       ("kwin" ,kwin)
+       ("kscreenlocker" ,kscreenlocker)
+       ("libksysguard" ,libksysguard)
+       ("xcb-util-image" ,xcb-util-image)
+       ("xf86-input-evdev" ,xf86-input-evdev)
+       ("xf86-input-synaptics" ,xf86-input-synaptics)
+       ("xf86-input-libinput" ,xf86-input-libinput)
+       ("xkeyboard-config" ,xkeyboard-config)
+       ("breeze" ,breeze)
+       ;;("scim" ,scim)
+       ("ibus" ,ibus)
+       ("glib" ,glib)
+       ("freetype" ,freetype)
+       ("libxkbcommon" ,libxkbcommon)
+       ("phonon" ,phonon)
+       ("libxkbfile" ,libxkbfile)
+       ("udev" ,eudev)
+       ("fontconfig" ,fontconfig)
+       ("baloo" ,baloo)
+       ("libxcb" ,libxcb)
+       ("libxft" ,libxft)
+       ("xcb-util-keysyms" ,xcb-util-keysyms)
+
+       ("kded" ,kded)
+
+       ("util-linux" ,util-linux)))
+    (home-page "")
+    (synopsis "")
+    (description "")
+    (license #f)))
+
 (define-public kwayland-server
   (package
     (name "kwayland-server")
@@ -176,6 +271,8 @@ and wayland-server API.")
     (build-system qt-build-system)
     (arguments
      `(#:tests? #f
+       #:configure-flags
+       (list "-DCMAKE_SKIP_BUILD_RPATH=OFF")
        #:phases
        (modify-phases %standard-phases
          (add-after 'unpack 'patch-symlink
@@ -360,7 +457,7 @@ patterns.")
 (define-public milou
   (package
     (name "milou")
-    (version "5.18.5")
+    (version "5.19.5")
     (source (origin
               (method url-fetch)
               (uri (string-append "mirror://kde/stable/plasma/" version
@@ -368,7 +465,7 @@ patterns.")
 
               (sha256
                (base32
-                "1cl2hnfy0q26x4bnad5z91596v4b3if3qpz2s4csfnh27j1n7ivy"))))
+                "03h4m7wfl7ffsklngx5fwxd4mj082df9j0m8mlz6z3x98v3fbipd"))))
     (build-system qt-build-system)
     (native-inputs
      `(("extra-cmake-modules" ,extra-cmake-modules)
@@ -385,7 +482,8 @@ patterns.")
     (home-page "https://invent.kde.org/plasma/milou")
     (synopsis "Dedicated search application built on top of Baloo")
     (description "A dedicated search application built on top of Baloo.")
-    (license (list license:lgpl2.0+ license:gpl2+))))
+    (license license:lgpl2.1+)))
+
 (define-public plasma-workspace
   (package
     (name "plasma-workspace")
@@ -405,8 +503,9 @@ patterns.")
        #:configure-flags
        (list "-DBUILD_TESTING=OFF"
              "-DINSTALL_SDDM_THEME=OFF"
-             (string-append "-DKDE_INSTALL_DATADIR="
-                            (assoc-ref %outputs "out") "/share"))
+             ;; (string-append "-DKDE_INSTALL_DATADIR="
+             ;;                (assoc-ref %outputs "out") "/share")
+             )
        #:phases
        (modify-phases %standard-phases
          (add-after 'unpack 'patch-paths
@@ -474,7 +573,9 @@ patterns.")
      `(("xsetroot" ,xsetroot)
        ("xprop" ,xprop)
        ("xrdb" ,xrdb)
-       ("xmessage" ,xmessage)))
+       ("xmessage" ,xmessage)
+       ;; ("milou" ,milou)
+       ))
     (home-page "https://invent.kde.org/plasma/plasma-workspace")
     (synopsis "KDE Plasma Workspace")
     (description "Various components needed to run a Plasma-based environment.")

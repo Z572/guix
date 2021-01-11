@@ -2652,7 +2652,7 @@ in applications using the KDE Frameworks.")
               ;; libs
               (patches (search-patches "kinit-kdeinit-extra_libs.patch"
                                        "kinit-kdeinit-libpath.patch"))))
-    (build-system cmake-build-system)
+    (build-system qt-build-system)
     (arguments
      `(#:phases
        (modify-phases %standard-phases
