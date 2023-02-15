@@ -4696,13 +4696,29 @@ protocol and arbitrary X extension protocol.")
             "125hn06bd3d8y97hm2pbf5j55gg4r2hpd3ifad651i4sr7m16v6j"))))
     (build-system gnu-build-system)
     (arguments
-     `(#:configure-flags '(,@(malloc0-flags) "--disable-static")))
+     `(#:configure-flags '(,@(malloc0-flags) "--disable-static")
+       ,@(if (target-riscv64?)
+             `(#:phases
+               (modify-phases %standard-phases
+                 (add-after 'unpack 'update-config-scripts
+                   (lambda* (#:key inputs native-inputs #:allow-other-keys)
+                     ;; Replace outdated config.guess and config.sub.
+                     (for-each (lambda (file)
+                                 (install-file
+                                  (search-input-file
+                                   (or native-inputs inputs)
+                                   (string-append "/bin/" file)) "."))
+                               '("config.guess" "config.sub"))))))
+             '())))
     (propagated-inputs
      (list xorgproto))
     (inputs
       (list libxext libx11))
     (native-inputs
-      (list pkg-config))
+     (append (if (target-riscv64?)
+                 (list config)
+                 '())
+             (list pkg-config)))
     (home-page "https://www.x.org/wiki/")
     (synopsis "Xorg XVideo Extension library")
     (description "Library for the X Video Extension to the X11 protocol.")
