@@ -4658,13 +4658,28 @@ cannot be adequately worked around on the client side of the wire.")
             "012jpyj7xfm653a9jcfqbzxyywdmwb2b5wr1dwylx14f3f54jma6"))))
     (build-system gnu-build-system)
     (arguments
-     '(#:configure-flags '("--disable-static")))
+     `(#:configure-flags '("--disable-static")
+       ,@(if (and (%current-target-system)
+                  (target-riscv64?))
+             `(#:phases
+               (modify-phases %standard-phases
+                 (add-after 'unpack 'update-config
+                   (lambda* (#:key native-inputs #:allow-other-keys)
+                     (install-file
+                      (search-input-file native-inputs "/bin/config.sub") ".")
+                     (install-file
+                      (search-input-file native-inputs "/bin/config.guess") ".")))))
+             '())))
     (propagated-inputs
      (list libxi xorgproto))
     (inputs
       (list libx11))
     (native-inputs
-      (list pkg-config))
+     `(,@(if (and (%current-target-system)
+                  (target-riscv64?))
+             (list config)
+             '())
+       ,pkg-config))
     (home-page "https://www.x.org/wiki/")
     (synopsis "Xorg library for Xtest and Record extensions")
     (description
