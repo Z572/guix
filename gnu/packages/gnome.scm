@@ -3793,11 +3793,12 @@ diagrams.")
                            "bugs/340047.svg"
                            "bugs/749415.svg"))))))))
     (native-inputs
-     (list pkg-config
+     (list gdk-pixbuf
+           pkg-config
            `(,glib "bin") ; glib-mkenums, etc.
            gobject-introspection)) ; g-ir-compiler, etc.
     (inputs
-     (list pango libcroco libxml2))
+     (list pango libcroco libxml2 gobject-introspection))
     (propagated-inputs
      ;; librsvg-2.0.pc refers to all of that.
      (list cairo gdk-pixbuf glib))
