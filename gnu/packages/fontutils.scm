@@ -1392,7 +1392,22 @@ resolution.")
                (base32 "0sq6g3xaxw388akws6qrllp3kp2sxgk2dv4j79k6mm52rnihrnv8"))))
     (build-system gnu-build-system)
     (native-inputs
-     (list pkg-config))
+     (append (if (%current-target-system)
+                 (list libtool
+                       autoconf automake)
+                 '())
+             (list pkg-config freetype)))
+    (arguments (if (%current-target-system)
+                   (list
+                    #:phases
+                    #~(modify-phases %standard-phases
+                        (add-after 'unpack 'fix-rpl_malloc
+                          (lambda _
+                            (substitute* "configure.ac"
+                              (("AC_FUNC_MALLOC")
+                               ""))
+                            (invoke "sh" "autogen.sh")))))
+                   '()))
     (propagated-inputs
      (list freetype))
     (home-page "https://www.nongnu.org/m17n/")
