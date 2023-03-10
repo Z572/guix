@@ -599,7 +599,9 @@ output), and Binutils.")
                    #$(string-append "-DLLVM_DEFAULT_TARGET_TRIPLE="
                                     (%current-target-system))
                    #$(string-append "-DLLVM_TARGET_ARCH="
-                                    (system->llvm-target))
+                                    (if (target-riscv64?)
+                                        "RISCV64"
+                                        (system->llvm-target)))
                    #$(string-append "-DLLVM_TARGETS_TO_BUILD="
                                     (system->llvm-target)))
                 '())
@@ -659,7 +661,9 @@ of programming tools as well as libraries with equivalent functionality.")
                    #$(string-append "-DLLVM_DEFAULT_TARGET_TRIPLE="
                                     (%current-target-system))
                    #$(string-append "-DLLVM_TARGET_ARCH="
-                                    (system->llvm-target))
+                                    (if (target-riscv64?)
+                                        "RISCV64"
+                                        (system->llvm-target)))
                    #$(string-append "-DLLVM_TARGETS_TO_BUILD="
                                     (system->llvm-target)))
                 '())
@@ -911,7 +915,9 @@ Library.")
                       #$(string-append "-DLLVM_DEFAULT_TARGET_TRIPLE="
                                        (%current-target-system))
                       #$(string-append "-DLLVM_TARGET_ARCH="
-                                       (system->llvm-target))
+                                       (if (target-riscv64?)
+                                           "RISCV64"
+                                           (system->llvm-target)))
                       #$(string-append "-DLLVM_TARGETS_TO_BUILD="
                                        (system->llvm-target)))
                    #~())
