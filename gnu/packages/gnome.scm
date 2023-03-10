@@ -12252,7 +12252,7 @@ repository and commit your work.")
      `(#:phases
        (modify-phases %standard-phases
          ;; The 'config.sub' is too old to recognise aarch64.
-         ,@(if (and=> (%current-target-system) target-aarch64?)
+         ,@(if (or (target-aarch64?) (target-riscv64?))
                `((add-after 'unpack 'replace-config.sub
                    (lambda _
                      (delete-file "config.sub")
@@ -12294,7 +12294,7 @@ repository and commit your work.")
      (list glib))
     (native-inputs
      `(("pkg-config" ,pkg-config)
-       ,@(if (and=> (%current-target-system) target-aarch64?)
+       ,@(if (or (target-aarch64?) (target-riscv64?))
              `(("config" ,config))
              '())))
     (home-page "https://people.gnome.org/~veillard/gamin/")
