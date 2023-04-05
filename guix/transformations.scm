@@ -22,6 +22,7 @@
   #:use-module (guix i18n)
   #:use-module (guix store)
   #:use-module (guix packages)
+  #:use-module ((gnu packages autotools) #:select ((config . p:config)))
   #:use-module (guix build-system)
   #:use-module (guix profiles)
   #:use-module (guix diagnostics)
@@ -52,6 +53,7 @@
   #:use-module (ice-9 vlist)
   #:export (options->transformation
             manifest-entry-with-transformations
+            transform-package-updated-config-script
 
             tunable-package?
             tuned-package
@@ -676,6 +678,64 @@ to the same package but with #:strip-binaries? #f in its 'arguments' field."
         (rewrite obj)
         obj)))
 
+(define* (package-with-updated-config-script
+          package
+          #:key
+          (config p:config)
+          (directories (list "build-aux" "aux" ".")))
+  (package/inherit package
+    (native-inputs
+     (modify-inputs (package-native-inputs package)
+       (append config)))
+    (arguments
+     (substitute-keyword-arguments (package-arguments package)
+       ((#:phases phases #~%standard-phases)
+        (let ((phases (if (gexp? phases) phases
+                          (sexp->gexp phases))))
+          #~(modify-phases #$phases
+              (add-after 'unpack 'update-config
+                (lambda* (#:key native-inputs inputs #:allow-other-keys)
+                  (for-each (lambda (i)
+                              (when (file-exists? i)
+                                (for-each
+                                 (lambda (file)
+                                   (install-file
+                                    (search-input-file
+                                     (or native-inputs inputs)
+                                     (string-append "/bin/" file)) i))
+                                 '("config.guess" "config.sub"))))
+                            (list #$@directories)))))))))))
+
+(define (transform-package-updated-config-script replacement-specs)
+  "Return a procedure that, when passed a package, changes its config.guess and config.sub or
+that of its dependencies according to REPLACEMENT-SPECS.  REPLACEMENT-SPECS is
+a list of strings like \"fftw=build-aux\" meaning that the package to
+the left of the equal sign must be built with the updated config-script to the right of
+the equal sign."
+
+  (define rewrite
+    (package-input-rewriting/spec
+     (map (lambda (spec)
+            (match (string-tokenize spec %not-equal)
+              ((spec . dir)
+               (cons spec (lambda (old)
+                            (apply package-with-updated-config-script
+                                   old
+                                   (if (null? dir)
+                                       '()
+                                       (list #:directories dir))))))
+              (_
+               (raise
+                (formatted-message
+                 (G_ "~a: invalid updated-config replacement specification")
+                 spec)))))
+          replacement-specs)))
+  (lambda (obj)
+    (if (package? obj)
+        (rewrite obj )
+        obj)))
+
+
 (define (patched-source name source patches)
   "Return a file-like object with the given NAME that applies PATCHES to
 SOURCE.  SOURCE must itself be a file-like object of any type, including
@@ -847,7 +907,8 @@ are replaced by the specified upstream version."
     (without-tests . ,transform-package-tests)
     (with-patch  . ,transform-package-patches)
     (with-latest . ,transform-package-latest)
-    (with-version . ,transform-package-version)))
+    (with-version . ,transform-package-version)
+    (with-updated-config-script . ,transform-package-updated-config-script)))
 
 (define (transformation-procedure key)
   "Return the transformation procedure associated with KEY, a symbol such as
@@ -922,6 +983,8 @@ building for ~a instead of ~a, so tuning cannot be guessed~%")
           (option '("with-version") #t #f
                   (parser 'with-version))
 
+          (option '("with-updated-config-script") #t #f
+                  (parser 'with-updated-config-script))
           (option '("help-transform") #f #f
                   (lambda _
                     (format #t
@@ -966,7 +1029,9 @@ building for ~a instead of ~a, so tuning cannot be guessed~%")
                          build PACKAGE and preserve its debug info"))
   (display (G_ "
       --without-tests=PACKAGE
-                         build PACKAGE without running its tests")))
+                         build PACKAGE without running its tests"))
+  (display (G_ "
+      --with-updated-config-script=PACKAGE[=DIRECTORY]")))
 
 (define (show-transformation-options-help)
   "Show basic help for package transformation options."
