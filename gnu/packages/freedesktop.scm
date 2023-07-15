@@ -33,6 +33,7 @@
 ;;; Copyright © 2022 Petr Hodina <phodina@protonmail.com>
 ;;; Copyright © 2022 muradm <mail@muradm.net>
 ;;; Copyright © 2023 Alex Devaure <ajadevaure@gmail.com>
+;;; Copyright © 2023 Zheng Junjie <873216071@qq.com>
 ;;;
 ;;; This file is part of GNU Guix.
 ;;;
@@ -1236,6 +1237,19 @@ protocol either in Wayland core, or some other protocol in wayland-protocols.")
      '((release-monitoring-url
         . "https://wayland.freedesktop.org/releases.html")))
     (license license:expat)))
+
+(define-public wayland-protocols-next
+  (package (inherit wayland-protocols)
+           (name "wayland-protocols")
+           (version "1.32")
+           (source (origin
+                     (method url-fetch)
+                     (uri (string-append "https://gitlab.freedesktop.org/wayland/"
+                                         name "/-/releases/" version "/downloads/"
+                                         name "-" version ".tar.xz"))
+                     (sha256
+                      (base32
+                       "04dsn79409mryxs6maq9kfhca97gvl3pr1ggjnv9d0hc6jfpjnbl"))))))
 
 (define-public wayland-utils
   (package
