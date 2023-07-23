@@ -1756,7 +1756,9 @@ the KDE Plasma 5 desktop.")
                   xkeyboard-config
                   libxkbfile
                   libxcursor
-                  libxkbcommon))
+                  libxkbcommon
+
+                  qtquickcontrols-5))
     (propagated-inputs (list iso-codes kirigami plasma-workspace))
     (arguments
      (list #:phases
