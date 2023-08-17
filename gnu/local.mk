@@ -603,6 +603,7 @@ GNU_SYSTEM_MODULES =				\
   %D%/packages/syncthing.scm			\
   %D%/packages/synergy.scm			\
   %D%/packages/syndication.scm			\
+  %D%/packages/systemd.scm			\
   %D%/packages/task-management.scm		\
   %D%/packages/task-runners.scm			\
   %D%/packages/tbb.scm				\
