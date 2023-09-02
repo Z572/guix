@@ -136,13 +136,13 @@
    (compose concatenate)
    (extend (lambda (config extra-services)
              (shepherd-configuration
-               (inherit config)
-               (services (append (shepherd-configuration-services config)
-                                 extra-services)))))
-   (extensions (list (service-extension boot-service-type
-                                        shepherd-boot-gexp)
-                     (service-extension profile-service-type
-                                        shepherd-packages)))
+              (inherit config)
+              (services (append (shepherd-configuration-services config)
+                                extra-services)))))
+   (extensions (list ;; (service-extension boot-service-type
+                ;;                    shepherd-boot-gexp)
+                (service-extension profile-service-type
+                                   shepherd-packages)))
    (default-value (shepherd-configuration))
    (description
     "Run the GNU Shepherd as PID 1---i.e., the operating system's first

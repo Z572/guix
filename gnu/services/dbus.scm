@@ -28,6 +28,7 @@
   #:use-module ((gnu packages glib) #:select (dbus))
   #:use-module (gnu packages polkit)
   #:use-module (gnu packages admin)
+  #:use-module (gnu packages systemd)
   #:use-module (guix deprecation)
   #:use-module (guix gexp)
   #:use-module ((guix packages) #:select (package-name))
@@ -80,9 +81,10 @@ all the services that may be activated by the daemon."
 
                        (mkdir #$output)
                        (for-each (lambda (file)
-                                   (symlink file
-                                            (string-append #$output "/"
-                                                           (basename file))))
+                                   (false-if-exception
+                                    (symlink file
+                                             (string-append #$output "/"
+                                                            (basename file)))))
                                  files)
                        #t))))
 

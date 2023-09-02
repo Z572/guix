@@ -8,21 +8,27 @@
 (use-modules (gnu) (guix) (srfi srfi-1))
 (use-service-modules desktop mcron networking spice ssh xorg sddm)
 (use-package-modules bootloaders certs fonts nvi
+                     file-systems linux
+                     systemd
                      package-management wget xorg)
 
 (operating-system
   (host-name "gnu")
   (timezone "Etc/UTC")
   (locale "en_US.utf8")
-  (keyboard-layout (keyboard-layout "us" "altgr-intl"))
 
   ;; Label for the GRUB boot menu.
-  (label (string-append "GNU Guix "
-                        (or (getenv "GUIX_DISPLAYED_VERSION")
-                            (package-version guix))))
 
   (firmware '())
-
+  (kernel-arguments
+   (append '(;; "systemd.log_level=debug"
+             ;; "systemd.log_target=console"
+             ;; "systemd.unit=rescue.target"
+             ;; "systemd.unit=emergency.target"
+             "systemd.debug-shell=1"
+             ;; "console=ttyS0,38400 console=tty1"
+             )
+           %default-kernel-arguments))
   ;; Below we assume /dev/vda is the VM's hard disk.
   ;; Adjust as needed.
   (bootloader (bootloader-configuration
@@ -35,6 +41,8 @@
                         (type "ext4"))
                       %base-file-systems))
 
+  (packages (cons autofs
+                  %base-packages))
   (users (cons (user-account
                 (name "guest")
                 (comment "GNU Guix Live")
@@ -50,9 +58,7 @@
 root ALL=(ALL) ALL
 %wheel ALL=NOPASSWD: ALL\n"))
 
-  (packages (append (list font-bitstream-vera nss-certs nvi wget)
-                    %base-packages))
-
+  (essential-services (systemd-default-essential-services this-operating-system))
   (services
    (append (list
 
@@ -68,29 +74,24 @@ root ALL=(ALL) ALL
             )
 
            ;; Remove some services that don't make sense in a VM.
-           (remove (lambda (service)
-                     (let ((type (service-kind service)))
-                       (or (memq type
-                                 (list gdm-service-type
-                                       sddm-service-type
-                                       wpa-supplicant-service-type
-                                       cups-pk-helper-service-type
-                                       network-manager-service-type
-                                       modem-manager-service-type))
-                           (eq? 'network-manager-applet
-                                (service-type-name type)))))
-                   (modify-services %desktop-services
-                     (login-service-type config =>
-                                         (login-configuration
-                                          (inherit config)
-                                          (motd vm-image-motd)))
-
-                     ;; Install and run the current Guix rather than an older
-                     ;; snapshot.
-                     (guix-service-type config =>
-                                        (guix-configuration
-                                         (inherit config)
-                                         (guix (current-guix))))))))
+           (modify-services (remove (lambda (service)
+                                      (let ((type (service-kind service)))
+                                        (or (memq type
+                                                  (list elogind-service-type
+                                                        gdm-service-type
+                                                        ;; sddm-service-type
+                                                        ;; login-service-type
+                                                        wpa-supplicant-service-type
+                                                        cups-pk-helper-service-type
+                                                        network-manager-service-type
+                                                        modem-manager-service-type))
+                                            (eq? 'network-manager-applet
+                                                 (service-type-name type)))))
+                                    %base-services
+                                    )
+             (udev-service-type config =>
+                                (udev-configuration (inherit config)
+                                                    (udev systemd))))))
 
   ;; Allow resolution of '.local' host names with mDNS.
   (name-service-switch %mdns-host-lookup-nss))

@@ -449,8 +449,8 @@ the /etc/skel directory for those."
                 (extensions
                  (list (service-extension activation-service-type
                                           account-activation)
-                       (service-extension shepherd-root-service-type
-                                          account-shepherd-service)
+                       ;; (service-extension shepherd-root-service-type
+                       ;;                    account-shepherd-service)
                        ;; Have 'user-processes' depend on 'user-homes' so that
                        ;; daemons start after their home directory has been
                        ;; created.

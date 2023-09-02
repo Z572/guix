@@ -3,6 +3,7 @@
   #:use-module (gnu packages password-utils)
   #:use-module (gnu packages libidn)
   #:use-module (gnu packages gnunet)
+  #:use-module (gnu packages base)
   #:use-module (gnu packages selinux)
   #:use-module (gnu packages apparmor)
   #:use-module (gnu packages gnupg)
@@ -39,9 +40,24 @@
   #:use-module (gnu packages xdisorg)
   #:use-module (gnu packages xml))
 
-(define-public systemd
+
+(define util-linux/fix
   (package
-    (name "systemd")
+    (inherit util-linux)
+    (arguments
+     (substitute-keyword-arguments (package-arguments util-linux)
+       ((#:phases phases)
+        #~(modify-phases #$phases
+            (add-after 'unpack 'fix-login
+              (lambda* (#:key inputs #:allow-other-keys)
+                (substitute* "include/pathnames.h"
+                  (("\"/bin/login\"")
+                   (string-append "\"" (search-input-file inputs "/bin/login") "\"")))))))))
+    (inputs (modify-inputs (package-inputs util-linux)
+              (append shadow)))))
+(define-public systemd-minimal
+  (package
+    (name "systemd-minimal")
     (version "254")
     (source (origin
               (method git-fetch)
@@ -49,6 +65,8 @@
                     (url "https://github.com/systemd/systemd")
                     (commit (string-append "v" version))))
               (file-name (git-file-name name version))
+              (patches (search-patches "systemd-pkg-config-derive-prefix-from-prefix.patch"
+                                       "systemd-add-rootprefix-to-lookup-dir-paths.patch"))
               (sha256
                (base32
                 "1xdw8zdayhz2pabfn89almp5ajc57v2vcqkgh9y9csbi518aqvr2"))))
@@ -61,13 +79,9 @@
                (sysconf (string-append out "/etc"))
                (rootpkglibdir (string-append out "/lib/systemd"))
                (dbuspolicy (string-append out "/etc/dbus-1/system.d"))
-               #$@(if (not (target-riscv64?))
-                      #~((kexec-tools #$(this-package-input "kexec-tools")))
-                      #~())
+               (kexec-tools #$(this-package-input "kexec-tools"))
                (shadow #$(this-package-input "shadow"))
-               #$@(if (not (target-riscv64?))
-                      #~((kexec-path (string-append kexec-tools "/sbin/kexec")))
-                      #~())
+               (kexec-path (string-append kexec-tools "/sbin/kexec"))
                (nologin-path (string-append shadow "/sbin/nologin")))
           (list
            "-Dinstall-sysconfdir=false"
@@ -78,9 +92,7 @@
            (string-append "-Dc_link_args=-Wl,-rpath=" rootpkglibdir)
            (string-append "-Dcpp_link_args=-Wl,-rpath=" rootpkglibdir)
            ;; (string-append "-Dhalt-path=" halt-path)
-           #$@(if (not (target-riscv64?))
-                  #~((string-append "-Dkexec-path=" kexec-path))
-                  #~())
+           (string-append "-Dkexec-path=" kexec-path)
            ;; (string-append "-Dpoweroff-path=" poweroff-path)
            ;; (string-append "-Dreboot-path=" reboot-path)
            "-Dsysvinit-path="
@@ -94,23 +106,66 @@
            "-Dsbat-distro-url='https://lists.gnu.org/mailman/listinfo/bug-guix'"
            "-Dbootloader=true"
            (string-append "-Dnologin-path=" nologin-path)
+           (string-append "-Dloadkeys-path=" #$(this-package-input "kbd") "/bin/loadkeys")
            ;; "-Dcgroup-controller=elogind"
            "-Dman=true"
            ;; Disable some tests.
-           "-Dslow-tests=false"))
+           "-Dslow-tests=false"
+
+           "-Dldconfig=false"))
       #:phases
       #~(modify-phases %standard-phases
-          (add-after 'unpack 'fix-pkttyagent-path
-            (lambda _
+          (add-after 'unpack 'fix
+            (lambda* (#:key inputs #:allow-other-keys)
               (substitute* "meson.build"
                 (("join_paths\\(bindir, 'pkttyagent'\\)")
-                 "'\"/run/current-system/profile/bin/pkttyagent\"'"))))
+                 "'\"/run/current-system/profile/bin/pkttyagent\"'"))
+              (substitute* "meson.build"
+                (("'HAVE_DBUS', have")
+                 "'HAVE_DBUS', false"))
+              (substitute* "src/basic/path-util.h"
+                (("^#define DEFAULT_PATH_NORMAL .*$")
+                 (string-append "#define DEFAULT_PATH_NORMAL \"" #$output "/bin:"
+                                #$coreutils-minimal "/bin" "\"\n"))
+                (("^#define DEFAULT_PATH_NORMAL_NULSTR.*$")
+                 (string-append "#define DEFAULT_PATH_NORMAL_NULSTR \"" #$output "/bin\\0\"\n"))
+                (("^#define\\ DEFAULT_PATH_COMPAT .*")
+                 "#define DEFAULT_PATH_COMPAT DEFAULT_PATH_NORMAL\n"))
+              (with-directory-excursion "units"
+                (substitute* "modprobe@.service"
+                  (("/sbin/modprobe")
+                   (search-input-file inputs "/bin/modprobe")))
+                (substitute* '("console-getty.service.in"
+                               "container-getty@.service.in"
+                               "getty@.service.in"
+                               "serial-getty@.service.in")
+                  (("/sbin/agetty")
+                   (search-input-file inputs "/sbin/agetty")))
+                (substitute* '("systemd-tmpfiles-clean.service"
+                               "systemd-tmpfiles-setup.service"
+                               "systemd-tmpfiles-setup-dev.service")
+                  (("ExecStart=systemd-tmpfiles")
+                   (string-append "ExecStart=" #$output "/bin/systemd-tmpfiles")))
+                (substitute* '("systemd-journal-catalog-update.service"
+                               "systemd-journal-flush.service")
+                  (("=journalctl")
+                   (string-append "=" #$output "/bin/journalctl")))
+                (substitute* "systemd-sysusers.service"
+                  (("=systemd-sysusers")
+                   (string-append "=" #$output "/bin/systemd-sysusers")))
+                (substitute* "systemd-firstboot.service"
+                  (("=systemd-firstboot")
+                   (string-append "=" #$output "/bin/systemd-firstboot")))
+                (substitute* "systemd-machine-id-commit.service"
+                  (("=systemd-machine-id-setup")
+                   (string-append "=" #$output "/bin/systemd-machine-id-setup"))))
+              ))
           (add-after 'unpack 'adjust-tests
             (lambda _
               ;; Skip the following test, which depends on users such as 'root'
               ;; existing in the build environment.
-              (invoke "sed" "/src\\/test\\/test-user-util.c/,+2s/^/#/g"
-                      "-i" "src/test/meson.build")
+              ;; (invoke "sed" "/src\\/test\\/test-user-util.c/,+2s/^/#/g"
+              ;;         "-i" "src/test/meson.build")
               ;; This test tries to copy some bytes from /usr/lib/os-release,
               ;; which does not exist in the build container.  Choose something
               ;; more likely to be available.
@@ -170,7 +225,11 @@
                  ""))))
           (add-after 'install 'remove-99-environment.conf
             (lambda _
-              (delete-file (string-append #$output "/lib/environment.d/99-environment.conf")))))))
+              (delete-file (string-append #$output "/lib/environment.d/99-environment.conf"))))
+          (add-after 'patch-source-shebangs 'unpatch-shebangs
+            (lambda _
+              (substitute* '("src/ukify/ukify.py" "src/kernel-install/60-ukify.install.in")
+                (("^#!.*/bin/python3") "#!/usr/bin/env python3")))))))
     (native-inputs
      (list
       docbook-xml-4.5
@@ -184,43 +243,75 @@
       python
       libxslt
       python-jinja2
+      python-pyelftools
       glib))
     (inputs
-     (append
-      (if (not (target-riscv64?))
-          (list kexec-tools)
-          '())
-      (list python-pyelftools
-            linux-pam
-            libidn2
-            cryptsetup
-            passwdqc
-            libpwquality
-            libmicrohttpd
-            libgcrypt
-            libseccomp
-            libselinux
-            libapparmor
-            libbpf
-            libcap
-            libxkbcommon
-            curl
-            pcre2
-            p11-kit
-            kmod
-            audit
-            lz4
-            xz
-            bzip2
-            (list zstd "lib")
-            qrencode
-            util-linux
-            (list util-linux "lib")
-            gnutls
-            openssl
-            shadow         ; for 'nologin'
-            acl)))         ; to add individual users to ACLs on /dev nodes
+     (list kexec-tools
+           linux-pam
+           passwdqc
+           libpwquality
+           libseccomp
+           libbpf
+           libcap
+           ;; curl
+           ;; pcre2
+           p11-kit
+           kmod
+           ;; audit
+           lz4
+           xz
+           ;; (list bzip2 "static")
+           ;; (list zstd "lib")
+           ;; qrencode
+           util-linux/fix
+           (list util-linux/fix "lib")
+           ;; gnutls
+           ;; openssl
+           shadow         ; for 'nologin'
+           ;; acl; to add individual users to ACLs on /dev nodes
+
+           kbd))
     (home-page "https://github.com/systemd/systemd")
     (synopsis "")
     (description "")
     (license license:lgpl2.1+)))
+
+(define-public dbus/systemd
+  (package
+    (inherit dbus)
+    (name "dbus-with-systemd")
+    (arguments
+     (substitute-keyword-arguments (package-arguments dbus)
+       ((#:configure-flags configure-flags ''())
+        #~(cons*
+           "--enable-systemd"
+           "--with-system-socket=/run/dbus/system_bus_socket"
+           "--enable-inotify"
+           "--with-system-pid-file=/run/dbus/pid"
+           (string-append "--with-systemdsystemunitdir=" #$output "/lib/systemd/system")
+           #$configure-flags))))
+    (inputs (modify-inputs (package-inputs dbus)
+              (append systemd-minimal)))))
+
+(define-public systemd
+  (package
+    (inherit systemd-minimal)
+    (name "systemd")
+    (inputs (modify-inputs (package-inputs systemd-minimal)
+              (append dbus/systemd
+                      (list bzip2 "static")
+                      (list zstd "lib")
+                      gnutls
+                      openssl
+                      acl
+                      libidn2
+                      cryptsetup
+                      libgcrypt
+                      libmicrohttpd
+                      libselinux
+                      libapparmor
+                      libxkbcommon
+                      qrencode
+                      curl
+                      pcre2
+                      audit)))))

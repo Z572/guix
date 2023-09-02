@@ -32,6 +32,7 @@
 ;;; along with GNU Guix.  If not, see <http://www.gnu.org/licenses/>.
 
 (define-module (gnu system)
+  #:use-module (gnu packages file-systems)
   #:use-module (guix inferior)
   #:use-module (guix store)
   #:use-module (guix memoization)
@@ -68,7 +69,9 @@
   #:use-module (gnu packages wget)
   #:use-module (gnu services)
   #:use-module (gnu services shepherd)
+  #:use-module (gnu services systemd)
   #:use-module (gnu services base)
+  #:use-module (gnu packages systemd)
   #:use-module (gnu bootloader)
   #:use-module (gnu system shadow)
   #:use-module (gnu system nss)
@@ -88,101 +91,103 @@
   #:use-module (srfi srfi-71)
   #:use-module (rnrs bytevectors)
   #:export (operating-system
-            operating-system?
-            this-operating-system
+             operating-system?
+             this-operating-system
 
-            operating-system-bootloader
-            operating-system-services
-            operating-system-essential-services
-            operating-system-default-essential-services
-            operating-system-user-services
-            operating-system-packages
-            operating-system-host-name
-            operating-system-hosts-file ;deprecated
-            operating-system-hurd
-            operating-system-kernel
-            operating-system-kernel-file
-            operating-system-kernel-arguments
-            operating-system-label
-            operating-system-default-label
-            operating-system-initrd-modules
-            operating-system-initrd
-            operating-system-users
-            operating-system-groups
-            operating-system-issue
-            operating-system-timezone
-            operating-system-locale
-            operating-system-locale-definitions
-            operating-system-locale-libcs
-            operating-system-mapped-devices
-            operating-system-file-systems
-            operating-system-store-file-system
-            operating-system-user-mapped-devices
-            operating-system-boot-mapped-devices
-            operating-system-bootloader-crypto-devices
-            operating-system-activation-script
-            operating-system-user-accounts
-            operating-system-shepherd-service-names
-            operating-system-user-kernel-arguments
-            operating-system-firmware
-            operating-system-keyboard-layout
-            operating-system-name-service-switch
-            operating-system-pam-services
-            operating-system-setuid-programs
-            operating-system-skeletons
-            operating-system-sudoers-file
-            operating-system-swap-devices
-            operating-system-kernel-loadable-modules
-            operating-system-location
+             operating-system-bootloader
+             operating-system-services
+             operating-system-essential-services
+             operating-system-default-essential-services
+             operating-system-user-services
+             operating-system-packages
+             operating-system-host-name
+             operating-system-hosts-file ;deprecated
+             operating-system-hurd
+             operating-system-kernel
+             operating-system-kernel-file
+             operating-system-kernel-arguments
+             operating-system-label
+             operating-system-default-label
+             operating-system-initrd-modules
+             operating-system-initrd
+             operating-system-users
+             operating-system-groups
+             operating-system-issue
+             operating-system-timezone
+             operating-system-locale
+             operating-system-locale-definitions
+             operating-system-locale-libcs
+             operating-system-mapped-devices
+             operating-system-file-systems
+             operating-system-store-file-system
+             operating-system-user-mapped-devices
+             operating-system-boot-mapped-devices
+             operating-system-bootloader-crypto-devices
+             operating-system-activation-script
+             operating-system-user-accounts
+             operating-system-shepherd-service-names
+             operating-system-user-kernel-arguments
+             operating-system-firmware
+             operating-system-keyboard-layout
+             operating-system-name-service-switch
+             operating-system-pam-services
+             operating-system-setuid-programs
+             operating-system-skeletons
+             operating-system-sudoers-file
+             operating-system-swap-devices
+             operating-system-kernel-loadable-modules
+             operating-system-location
 
-            operating-system-derivation
-            operating-system-profile
-            operating-system-bootcfg
-            operating-system-etc-directory
-            operating-system-locale-directory
-            operating-system-boot-script
-            operating-system-uuid
+             operating-system-derivation
+             operating-system-profile
+             operating-system-bootcfg
+             operating-system-etc-directory
+             operating-system-locale-directory
+             operating-system-boot-script
+             operating-system-uuid
 
-            system-linux-image-file-name
-            operating-system-with-gc-roots
-            operating-system-with-provenance
+             system-linux-image-file-name
+             operating-system-with-gc-roots
+             operating-system-with-provenance
 
-            hurd-default-essential-services
+             systemd-default-essential-services
 
-            boot-parameters
-            boot-parameters?
-            boot-parameters-label
-            boot-parameters-root-device
-            boot-parameters-bootloader-name
-            boot-parameters-bootloader-menu-entries
-            boot-parameters-store-crypto-devices
-            boot-parameters-store-device
-            boot-parameters-store-directory-prefix
-            boot-parameters-store-mount-point
-            boot-parameters-locale
-            boot-parameters-kernel
-            boot-parameters-kernel-arguments
-            boot-parameters-initrd
-            boot-parameters-multiboot-modules
-            boot-parameters-version
-            %boot-parameters-version
-            read-boot-parameters
-            read-boot-parameters-file
-            boot-parameters->menu-entry
+             hurd-default-essential-services
 
-            local-host-aliases                    ;deprecated
-            %root-account
-            %setuid-programs
-            %sudoers-specification
-            %base-packages
-            %base-packages-artwork
-            %base-packages-interactive
-            %base-packages-linux
-            %base-packages-networking
-            %base-packages-disk-utilities
-            %base-packages-utils
-            %base-firmware
-            %default-kernel-arguments))
+             boot-parameters
+             boot-parameters?
+             boot-parameters-label
+             boot-parameters-root-device
+             boot-parameters-bootloader-name
+             boot-parameters-bootloader-menu-entries
+             boot-parameters-store-crypto-devices
+             boot-parameters-store-device
+             boot-parameters-store-directory-prefix
+             boot-parameters-store-mount-point
+             boot-parameters-locale
+             boot-parameters-kernel
+             boot-parameters-kernel-arguments
+             boot-parameters-initrd
+             boot-parameters-multiboot-modules
+             boot-parameters-version
+             %boot-parameters-version
+             read-boot-parameters
+             read-boot-parameters-file
+             boot-parameters->menu-entry
+
+             local-host-aliases                    ;deprecated
+             %root-account
+             %setuid-programs
+             %sudoers-specification
+             %base-packages
+             %base-packages-artwork
+             %base-packages-interactive
+             %base-packages-linux
+             %base-packages-networking
+             %base-packages-disk-utilities
+             %base-packages-utils
+             %base-firmware
+             %default-kernel-arguments))
 
 ;;; Commentary:
 ;;;
@@ -754,8 +759,8 @@ bookkeeping."
     (cons* (service system-service-type entries)
            (service linux-builder-service-type
                     (linux-builder-configuration
-                      (kernel   (operating-system-kernel os))
-                      (modules  (operating-system-kernel-loadable-modules os))))
+                     (kernel   (operating-system-kernel os))
+                     (modules  (operating-system-kernel-loadable-modules os))))
            %boot-service
 
            ;; %SHEPHERD-ROOT-SERVICE must come last so that the gexp that
@@ -789,6 +794,64 @@ bookkeeping."
            (service profile-service-type
                     (operating-system-packages os))
            boot-fs non-boot-fs
+           (append mappings swaps
+
+                   ;; Add the firmware service.
+                   (list %linux-bare-metal-service
+                         (service firmware-service-type
+                                  (operating-system-firmware os)))))))
+
+(define (systemd-default-essential-services os)
+  (define known-fs
+    (map file-system-mount-point (operating-system-file-systems os)))
+
+  (let* ((mappings     (device-mapping-services os))
+         (root-fs      (root-file-system-service))
+         (boot-fs      (boot-file-system-service os))
+         (non-boot-fs  (non-boot-file-system-service os))
+         (swaps        (swap-services os))
+         ;; (procs        (service user-processes-service-type))
+         (host-name    (operating-system-host-name os))
+         (hosts-file   (%operating-system-hosts-file os))
+         (entries      (operating-system-directory-base-entries os)))
+    (cons* (service system-service-type entries)
+           (service linux-builder-service-type
+                    (linux-builder-configuration
+                     (kernel   (operating-system-kernel os))
+                     (modules  (operating-system-kernel-loadable-modules os))))
+           %boot-service
+
+           ;; %SHEPHERD-ROOT-SERVICE must come last so that the gexp that
+           ;; execs shepherd comes last in the boot script (XXX).  Likewise,
+           ;; the cleanup service must come first so that its gexp runs before
+           ;; activation code.
+           (service cleanup-service-type #f)
+           %activation-service
+           (service systemd-root-service-type)
+           (pam-root-service (operating-system-pam-services os))
+           (account-service (append (operating-system-accounts os)
+                                    (operating-system-groups os))
+                            (operating-system-skeletons os))
+           (operating-system-etc-service os)
+           ;; XXX: hosts-file is deprecated
+           (if hosts-file
+               (simple-service 'deprecated-hosts-file etc-service-type
+                               (list `("hosts" ,hosts-file)))
+               (service hosts-service-type
+                        (local-host-entries host-name)))
+           (service fstab-service-type
+                    (filter file-system-needed-for-boot?
+                            (operating-system-file-systems os)))
+           (session-environment-service
+            (operating-system-environment-variables os))
+           (service host-name-service-type host-name)
+           ;; procs
+           ;; root-fs
+           (service setuid-program-service-type
+                    (operating-system-setuid-programs os))
+           (service profile-service-type
+                    (operating-system-packages os))
+           ;; boot-fs non-boot-fs
            (append mappings swaps
 
                    ;; Add the firmware service.
@@ -902,7 +965,8 @@ of PROVENANCE-SERVICE-TYPE to its services."
         util-linux+udev
         ;; Get 'insmod' & co. from kmod, not module-init-tools, since udev
         ;; already depends on it anyway.
-        kmod eudev))
+        kmod ;; eudev
+        ))
 
 (define %base-packages-interactive
   ;; Default set of common interactive packages.
