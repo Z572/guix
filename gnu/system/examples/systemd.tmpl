@@ -5,7 +5,7 @@
 ;;   guix system reconfigure /etc/config.scm
 ;;
 
-(use-modules (gnu) (guix) (srfi srfi-1))
+(use-modules (gnu) (guix) (srfi srfi-1) (gnu system systemd-initrd))
 (use-service-modules desktop mcron networking spice ssh xorg sddm)
 (use-package-modules bootloaders certs fonts nvi
                      file-systems linux
@@ -41,8 +41,9 @@
                         (type "ext4"))
                       %base-file-systems))
 
-  (packages (cons autofs
-                  %base-packages))
+  (initrd base-initrd/systemd)
+  ;; (packages (cons* autofs
+  ;;                  %base-packages))
   (users (cons (user-account
                 (name "guest")
                 (comment "GNU Guix Live")

@@ -1,4 +1,5 @@
 (define-module (gnu packages systemd)
+  #:use-module (gnu packages display-managers)
   #:use-module (gnu packages aidc)
   #:use-module (gnu packages password-utils)
   #:use-module (gnu packages libidn)
@@ -38,6 +39,7 @@
   #:use-module (gnu packages python-xyz)
   #:use-module (gnu packages tls)
   #:use-module (gnu packages xdisorg)
+  #:use-module (gnu packages freedesktop)
   #:use-module (gnu packages xml))
 
 
@@ -55,6 +57,27 @@
                    (string-append "\"" (search-input-file inputs "/bin/login") "\"")))))))))
     (inputs (modify-inputs (package-inputs util-linux)
               (append shadow)))))
+
+(define-public sddm/systemd
+  (package
+    (inherit sddm)
+    (arguments
+     (substitute-keyword-arguments (package-arguments sddm)
+       ((#:configure-flags flags)
+        #~(delete
+           "-DNO_SYSTEMD=ON"
+           (delete "-DUSE_ELOGIND=ON"
+                   #$flags)))
+       ((#:phases phases)
+        #~(modify-phases #$phases
+            (add-after 'unpack 'service-install
+              (lambda* (#:key inputs #:allow-other-keys)
+                (substitute* "services/CMakeLists.txt"
+                  (("\\$\\{SYSTEMD_SYSTEM_UNIT_DIR\\}")
+                   (string-append #$output "/lib/systemd/system")))))))))
+    (inputs (modify-inputs (package-inputs sddm)
+              (replace "elogind" systemd)))))
+
 (define-public systemd-minimal
   (package
     (name "systemd-minimal")

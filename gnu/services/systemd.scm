@@ -68,7 +68,11 @@
         ;;        (when (zero? (logand flags FD_CLOEXEC))
         ;;          (fcntl fd F_SETFD (logior FD_CLOEXEC flags)))))
         ;;     (loop (+ fd 1))))
-        (execl #$(file-append systemd "/lib/systemd/systemd") "systemd"))))
+        (execl #$(file-append systemd "/lib/systemd/systemd") "systemd"
+               "--system"
+               "--switched-root"
+               "splash"
+               ))))
 
 (define (systemd-activation config)
   "Return the activation gexp for CONFIG."
