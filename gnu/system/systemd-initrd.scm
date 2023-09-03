@@ -328,7 +328,6 @@ loaded at boot time in the order in which they appear."
     (and (guix-module-name? module)
          (not (equal? module '(guix store deduplication)))))
 
-  (pk file-systems)
   (define builder
     ;; Do not use "guile-zlib" extension here, otherwise it would drag the
     ;; non-static "zlib" package to the initrd closure.  It is not needed

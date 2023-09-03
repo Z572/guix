@@ -734,6 +734,7 @@ GNU_SYSTEM_MODULES =				\
   %D%/system/keyboard.scm			\
   %D%/system/linux-container.scm		\
   %D%/system/linux-initrd.scm			\
+  %D%/system/systemd-initrd.scm			\
   %D%/system/locale.scm				\
   %D%/system/mapped-devices.scm			\
   %D%/system/nss.scm				\
@@ -767,6 +768,7 @@ GNU_SYSTEM_MODULES =				\
   %D%/build/linux-boot.scm			\
   %D%/build/linux-container.scm			\
   %D%/build/linux-initrd.scm			\
+  %D%/build/systemd-initrd.scm			\
   %D%/build/linux-modules.scm			\
   %D%/build/marionette.scm			\
   %D%/build/secret-service.scm			\
@@ -1969,6 +1971,8 @@ dist_patch_DATA =						\
   %D%/packages/patches/stex-copy-from-immutable-store.patch	\
   %D%/packages/patches/syslinux-gcc10.patch			\
   %D%/packages/patches/syslinux-strip-gnu-property.patch	\
+  %D%/packages/patches/systemd-add-rootprefix-to-lookup-dir-paths.patch	\
+  %D%/packages/patches/systemd-pkg-config-derive-prefix-from-prefix.patch \
   %D%/packages/patches/snappy-add-O2-flag-in-CmakeLists.txt.patch	\
   %D%/packages/patches/snappy-add-inline-for-GCC.patch		\
   %D%/packages/patches/source-highlight-gcc-compat.patch	\

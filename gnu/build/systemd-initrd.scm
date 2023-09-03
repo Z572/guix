@@ -102,6 +102,7 @@ On success, return OUTPUT."
                                #:key
                                systemd
                                (references-graphs '())
+                               (kos '())
                                (gzip "gzip"))
   (mkdir "contents")
 
@@ -110,8 +111,6 @@ On success, return OUTPUT."
                   #:deduplicate? #f)
 
   (with-directory-excursion "contents"
-    ;; Make '/init'.
-    ;; (mkdir-p "etc")
     (write-to-file "etc/os-release"
                    "\
 NAME=\"Guix System\"
@@ -126,13 +125,11 @@ BUG_REPORT_URL=\"https://lists.gnu.org/mailman/listinfo/bug-guix\"
     (mkdir-p "etc/udev")
     (symlink "etc/os-release"
              "etc/initrd-release" )
-    ;;     (write-to-file "etc/fstab"
-    ;;                    "\
-    ;; TAGjoptajej2oynju6yvboauz7pl6uj	/gnu/store	9p	trans=virtio,cache=loose,msize=104857600
-    ;; /dev/vda1	/	ext4	defaults
-    ;; proc /proc proc rw,nosuid,nodev,noexec,relatime 0 0
-    ;; devtmpfs /dev devtmpfs rw,nosuid,size=4096k,nr_inodes=4069304,mode=755,inode64 0 0"
-    ;;                    )
+    (write-to-file "etc/fstab"
+                   "\
+    /dev/vda1	/	ext4	defaults
+"
+                   )
     ;; (write-to-file "etc/udev/hwdb.bin"
     ;;                "")
     (mkdir-p "usr")
@@ -166,13 +163,12 @@ BUG_REPORT_URL=\"https://lists.gnu.org/mailman/listinfo/bug-guix\"
     (mkdir-p "run")
     (mkdir-p "var")
     (mkdir-p "dev")
-    ;; (symlink "/proc/self/fd/0" "dev/stdin")
-    ;; (symlink "/proc/self/fd/1" "dev/stdout")
-    ;; (symlink "/proc/self/fd/2" "dev/stderr")
+    (mkdir-p "proc")
+    (mkdir-p "sys")
     (symlink "/run" "var/run")
-    (mkdir-p "proc/self")
-    (symlink (string-append systemd "/lib/systemd/systemd") "proc/self/exe")
-    (readlink "proc/self/exe")
+    ;; (mkdir-p "proc/self")
+    ;; (symlink (string-append systemd "/lib/systemd/systemd") "proc/self/exe")
+    ;; (readlink "proc/self/exe")
 
     (write-cpio-archive output "." #:gzip gzip))
 
