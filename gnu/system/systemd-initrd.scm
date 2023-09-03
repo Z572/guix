@@ -266,6 +266,55 @@
 ;;   ;; This more closely matches our naming convention.
 ;;   (identifier-syntax (default-initrd-modules)))
 
+(define (flat-linux-module-directory linux modules)
+  "Return a flat directory containing the Linux kernel modules listed in
+MODULES and taken from LINUX."
+  (define imported-modules
+    (source-module-closure '((gnu build linux-modules)
+                             (guix build utils))))
+
+  (define build-exp
+    (with-imported-modules imported-modules
+      (with-extensions (list guile-zlib)
+        #~(begin
+            (use-modules (gnu build linux-modules)
+                         (guix build utils)
+                         (srfi srfi-1)
+                         (srfi srfi-26))
+
+            (define module-dir
+              (string-append #$linux "/lib/modules"))
+
+            (define modules
+              (let* ((lookup  (cut find-module-file module-dir <>))
+                     (modules (map lookup '#$modules)))
+                (append modules
+                        (recursive-module-dependencies
+                         modules
+                         #:lookup-module lookup))))
+
+            (define (maybe-uncompress file)
+              ;; If FILE is a compressed module, uncompress it, as the initrd
+              ;; is already gzipped as a whole.
+              (cond
+               ((string-contains file ".ko.gz")
+                (invoke #+(file-append gzip "/bin/gunzip") file))))
+
+            (mkdir #$output)
+            (for-each (lambda (module)
+                        (let ((out-module
+                               (string-append #$output "/"
+                                              (basename module))))
+                          (format #t "copying '~a'...~%" module)
+                          (copy-file module out-module)
+                          (maybe-uncompress out-module)))
+                      (delete-duplicates modules))
+
+            ;; Hyphen or underscore?  This database tells us.
+            (write-module-name-database #$output)))))
+
+  (computed-file "linux-modules" build-exp))
+
 (define* (base-initrd/systemd file-systems
                               #:key
                               (linux linux-libre)
@@ -276,62 +325,13 @@
                               volatile-root?
                               (extra-modules '())         ;deprecated
                               (on-error 'debug))
-  "Return as a file-like object a generic initrd, with kernel
-modules taken from LINUX.  FILE-SYSTEMS is a list of file-systems to be
-mounted by the initrd, possibly in addition to the root file system specified
-on the kernel command line via 'root'.  MAPPED-DEVICES is a list of device
-mappings to realize before FILE-SYSTEMS are mounted.
-
-When true, KEYBOARD-LAYOUT is a <keyboard-layout> record denoting the desired
-console keyboard layout.  This is done before MAPPED-DEVICES are set up and
-before FILE-SYSTEMS are mounted such that, should the user need to enter a
-passphrase or use the REPL, this happens using the intended keyboard layout.
-
-QEMU-NETWORKING? and VOLATILE-ROOT? behaves as in raw-initrd.
-
-The initrd is automatically populated with all the kernel modules necessary
-for FILE-SYSTEMS and for the given options.  Additional kernel
-modules can be listed in LINUX-MODULES.  They will be added to the initrd, and
-loaded at boot time in the order in which they appear."
-  ;; (define linux-modules*
-  ;;   ;; Modules added to the initrd and loaded from the initrd.
-  ;;   `(,@linux-modules
-  ;;     ,@(file-system-modules file-systems)
-  ;;     ,@(if volatile-root?
-  ;;           '("overlay")
-  ;;           '())
-  ;;     ,@extra-modules))
-
-  ;; (define helper-packages
-  ;;   (append (file-system-packages file-systems
-  ;;                                 #:volatile-root? volatile-root?)
-  ;;           (if keyboard-layout
-  ;;               (list loadkeys-static)
-  ;;               '())))
-
-  ;; (raw-initrd file-systems
-  ;;             #:linux linux
-  ;;             #:linux-modules linux-modules*
-  ;;             #:mapped-devices mapped-devices
-  ;;             #:helper-packages helper-packages
-  ;;             #:keyboard-layout keyboard-layout
-  ;;             #:qemu-networking? qemu-networking?
-  ;;             #:volatile-root? volatile-root?
-  ;;             #:on-error on-error)
-  ;; (expression->initrd
-  ;;  #:name "systemd-initrd")
   (define systemd systemd-minimal)
   (define (import-module? module)
-    ;; Since we don't use deduplication support in 'populate-store', don't
-    ;; import (guix store deduplication) and its dependencies, which includes
-    ;; Guile-Gcrypt.  That way we can run tests with '--bootstrap'.
     (and (guix-module-name? module)
          (not (equal? module '(guix store deduplication)))))
+  (define kodir (flat-linux-module-directory linux linux-modules))
 
   (define builder
-    ;; Do not use "guile-zlib" extension here, otherwise it would drag the
-    ;; non-static "zlib" package to the initrd closure.  It is not needed
-    ;; anyway because the modules are stored uncompressed within the initrd.
     (with-imported-modules (source-module-closure
                             '((gnu build systemd-initrd))
                             #:select? import-module?)
@@ -339,15 +339,6 @@ loaded at boot time in the order in which they appear."
           (use-modules (gnu build systemd-initrd))
 
           (mkdir #$output)
-
-          ;; The guile used in the initrd must be present in the store, so
-          ;; that module loading works once the root is switched.
-          ;;
-          ;; To ensure that is the case, add an explicit reference to the
-          ;; guile package used in the initrd to the output.
-          ;;
-          ;; This fixes guix-patches bug #28399, "Fix mysql activation, and
-          ;; add a basic test".
           (call-with-output-file (string-append #$output "/references")
             (lambda (port)
               (simple-format port "~A\n" #$systemd)))
@@ -355,11 +346,12 @@ loaded at boot time in the order in which they appear."
           (build-initrd/systemd
            (string-append #$output "/initrd.cpio.gz")
            #:systemd #$systemd
-           ;; Copy everything INIT refers to into the initrd.
-           #:references-graphs '("closure")
+           #:kodir '#$kodir
+           #:references-graphs '("closure" "kodir")
            #:gzip (string-append #+gzip "/bin/gzip")))))
 
   (file-append (computed-file "systemd-initrd" builder
                               #:options
-                              `(#:references-graphs (("closure" ,systemd))))
+                              `(#:references-graphs (("closure" ,systemd)
+                                                     ("kodir" ,kodir))))
                "/initrd.cpio.gz"))

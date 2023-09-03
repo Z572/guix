@@ -102,7 +102,7 @@ On success, return OUTPUT."
                                #:key
                                systemd
                                (references-graphs '())
-                               (kos '())
+                               (kodir '())
                                (gzip "gzip"))
   (mkdir "contents")
 
@@ -127,7 +127,8 @@ BUG_REPORT_URL=\"https://lists.gnu.org/mailman/listinfo/bug-guix\"
              "etc/initrd-release" )
     (write-to-file "etc/fstab"
                    "\
-    /dev/vda1	/	ext4	defaults
+UUID=4efbd36d-f6b1-2062-f518-a2b34efbd36d	/	ext4	defaults
+
 "
                    )
     ;; (write-to-file "etc/udev/hwdb.bin"
@@ -154,18 +155,25 @@ BUG_REPORT_URL=\"https://lists.gnu.org/mailman/listinfo/bug-guix\"
     ;; (mkdir-p "sbin")
     ;; (symlink (string-append systemd "/lib/systemd/systemd") "sbin/init")
     (mkdir-p "lib/systemd/system/")
+    (mkdir-p "etc/systemd/system/")
 
     ;; (copy-recursively (string-append systemd "/lib/systemd/system/")
     ;;                   "lib/systemd/system/")
     ;; (delete-file "lib/systemd/system/default.target")
-    ;; (symlink
-    ;;  (string-append systemd "/lib/systemd/system/initrd.target") "lib/systemd/system/default.target")
+    (symlink
+     (string-append systemd "/lib/systemd/system/initrd.target")
+     "lib/systemd/system/initrd.target")
+    (symlink
+     "lib/systemd/system/initrd.target"
+     "etc/systemd/system/default.target")
+
     (mkdir-p "run")
     (mkdir-p "var")
     (mkdir-p "dev")
     (mkdir-p "proc")
     (mkdir-p "sys")
     (symlink "/run" "var/run")
+    (symlink kodir "lib/modules")
     ;; (mkdir-p "proc/self")
     ;; (symlink (string-append systemd "/lib/systemd/systemd") "proc/self/exe")
     ;; (readlink "proc/self/exe")
