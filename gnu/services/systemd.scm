@@ -31,7 +31,7 @@
             systemd-root-service-type))
 
 (define list-of-shepherd-service?
-  (list-of shepherd-service?))
+  (list-of (@@ (gnu services shepherd) shepherd-service?)))
 
 (define-configuration/no-serialization systemd-configuration
   (package
@@ -43,36 +43,14 @@
 
 (define (systemd-boot-gexp config)
   "Return a gexp starting the systemd service."
-  (let ((systemd (systemd-configuration-package config)))
+  (let ((systemd (systemd-configuration-package config))
+        (services (systemd-configuration-services config)))
+    ;; (pk 'services services)
     #~(begin
-        ;; Keep track of the booted system.
-
         (false-if-exception (delete-file "/run/booted-system"))
-        ;; systemd require
-
-        ;; Make /run/booted-system, an indirect GC root, point to the store item
-        ;; /run/current-system points to.  Use 'canonicalize-path' rather than
-        ;; 'readlink' to make sure we get the store item.
-        (symlink (canonicalize-path "/run/current-system")
-                 "/run/booted-system")
         (mkdir-p "/run/systemd")
-        ;; (mkdir-p "/run/systemd/generator")
-
-        ;; (invoke #$(file-append systemd "/lib/systemd/system-generators/systemd-fstab-generator")
-        ;;         "/run/systemd/generator")
         (mkdir-p "/var/log/journal")
-        ;; (let loop ((fd 3))
-        ;;   (when (< fd 1024)
-        ;;     (false-if-exception
-        ;;      (let ((flags (fcntl fd F_GETFD)))
-        ;;        (when (zero? (logand flags FD_CLOEXEC))
-        ;;          (fcntl fd F_SETFD (logior FD_CLOEXEC flags)))))
-        ;;     (loop (+ fd 1))))
-        (execl #$(file-append systemd "/lib/systemd/systemd") "systemd"
-               "--system"
-               "--switched-root"
-               "splash"
-               ))))
+        (execl #$(file-append systemd "/lib/systemd/systemd") "systemd"))))
 
 (define (systemd-activation config)
   "Return the activation gexp for CONFIG."
@@ -97,15 +75,23 @@
                                         (lambda (c) (list autofs
                                                           (systemd-configuration-package c))))
                      (service-extension
-                      etc-service-type
+                      special-files-service-type
                       (lambda (config)
                         (let ((systemd (systemd-configuration-package config)))
-                          (list `("systemd" ,(file-append dbus/systemd
+                          `(("/lib/systemd" ,(file-append dbus/systemd
                                                           "/lib/systemd"))
-                                `("tmpfiles.d" ,(file-append dbus/systemd
-                                                             "/lib/tmpfiles.d"))
-                                ;; `("dbus-1" ,(file-append systemd "/etc/dbus-1"))
-                                ))))
+                            ("/lib/tmpfiles.d" ,(file-append dbus/systemd
+                                                             "/lib/tmpfiles.d"))))))
+                     ;; (service-extension
+                     ;;  etc-service-type
+                     ;;  (lambda (config)
+                     ;;    (let ((systemd (systemd-configuration-package config)))
+                     ;;      (list `("systemd" ,(file-append dbus/systemd
+                     ;;                                      "/lib/systemd"))
+                     ;;            `("tmpfiles.d" ,(file-append dbus/systemd
+                     ;;                                         "/lib/tmpfiles.d"))
+                     ;;            ;; `("dbus-1" ,(file-append systemd "/etc/dbus-1"))
+                     ;;            ))))
                      ;; (service-extension activation-service-type
                      ;;                    systemd-activation)
                      ))

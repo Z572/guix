@@ -6,12 +6,37 @@
 ;;
 
 (use-modules (gnu) (guix) (srfi srfi-1) (gnu system systemd-initrd))
-(use-service-modules desktop mcron networking spice ssh xorg sddm)
+(use-service-modules desktop mcron networking spice ssh xorg sddm shepherd systemd)
 (use-package-modules bootloaders certs fonts nvi
                      file-systems linux
                      systemd
                      package-management wget xorg)
 
+(define (replace-shepherd-to-systemd a)
+  (let* ((kind (service-kind a))
+         (shepherd-extenion (find (lambda (x)
+                                    (equal? shepherd-root-service-type
+                                            (service-extension-target x)))
+                                  (service-type-extensions kind))))
+
+    (if shepherd-extenion
+        (service
+         (service-type
+          (inherit kind)
+          (name (service-type-name kind))
+          (compose    (service-type-compose kind))
+          (extend     (service-type-extend kind))
+          (default-value (service-type-default-value kind))
+          (description  (service-type-description kind))
+          (extensions (cons (service-extension
+                             systemd-root-service-type
+                             (service-extension-compute shepherd-extenion))
+                            (delete shepherd-extenion
+                                    (service-type-extensions kind))))
+          )
+         (service-value a)
+         )
+        a)))
 (operating-system
   (host-name "gnu")
   (timezone "Etc/UTC")
@@ -41,7 +66,7 @@
                         (type "ext4"))
                       %base-file-systems))
 
-  (initrd base-initrd/systemd)
+  ;; (initrd base-initrd/systemd)
   ;; (packages (cons* autofs
   ;;                  %base-packages))
   (users (cons (user-account
@@ -61,38 +86,40 @@ root ALL=(ALL) ALL
 
   (essential-services (systemd-default-essential-services this-operating-system))
   (services
-   (append (list
+   (map replace-shepherd-to-systemd
+        ;; identity
+        (append (list
 
-            ;; Choose SLiM, which is lighter than the default GDM.
+                 ;; Choose SLiM, which is lighter than the default GDM.
 
 
-            ;; Uncomment the line below to add an SSH server.
-            ;;(service openssh-service-type)
+                 ;; Uncomment the line below to add an SSH server.
+                 ;;(service openssh-service-type)
 
-            ;; Add support for the SPICE protocol, which enables dynamic
-            ;; resizing of the guest screen resolution, clipboard
-            ;; integration with the host, etc.
-            )
+                 ;; Add support for the SPICE protocol, which enables dynamic
+                 ;; resizing of the guest screen resolution, clipboard
+                 ;; integration with the host, etc.
+                 )
 
-           ;; Remove some services that don't make sense in a VM.
-           (modify-services (remove (lambda (service)
-                                      (let ((type (service-kind service)))
-                                        (or (memq type
-                                                  (list elogind-service-type
-                                                        gdm-service-type
-                                                        ;; sddm-service-type
-                                                        ;; login-service-type
-                                                        wpa-supplicant-service-type
-                                                        cups-pk-helper-service-type
-                                                        network-manager-service-type
-                                                        modem-manager-service-type))
-                                            (eq? 'network-manager-applet
-                                                 (service-type-name type)))))
-                                    %base-services
-                                    )
-             (udev-service-type config =>
-                                (udev-configuration (inherit config)
-                                                    (udev systemd))))))
+                ;; Remove some services that don't make sense in a VM.
+                (modify-services (remove (lambda (service)
+                                           (let ((type (service-kind service)))
+                                             (or (memq type
+                                                       (list elogind-service-type
+                                                             gdm-service-type
+                                                             ;; sddm-service-type
+                                                             ;; login-service-type
+                                                             wpa-supplicant-service-type
+                                                             cups-pk-helper-service-type
+                                                             network-manager-service-type
+                                                             modem-manager-service-type))
+                                                 (eq? 'network-manager-applet
+                                                      (service-type-name type)))))
+                                         %base-services
+                                         )
+                  (udev-service-type config =>
+                                     (udev-configuration (inherit config)
+                                                         (udev systemd)))))))
 
   ;; Allow resolution of '.local' host names with mDNS.
   (name-service-switch %mdns-host-lookup-nss))
