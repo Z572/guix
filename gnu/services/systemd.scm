@@ -158,15 +158,25 @@
     ;; (pk 'services services)
     #~(begin
         (false-if-exception (delete-file "/run/booted-system"))
+        (mkdir-p "/etc/systemd/system")
         (mkdir-p "/run/systemd")
         (mkdir-p "/var/log/journal")
         (execl #$(file-append systemd "/lib/systemd/systemd") "systemd"))))
 
 (define (systemd-activation config)
   "Return the activation gexp for CONFIG."
-  (let* ((systemd (systemd-configuration-package config)))
-    #~(execl #$(file-append systemd "/bin/systemctl") "systemctl"
-             '("daemon-reload"))))
+  (let* ((systemd (systemd-configuration-package config))
+         (units (systemd-configuration-upstream-units config)))
+    #~(begin
+        (rmdir "/etc/systemd/system")
+        (mkdir-p "/etc/systemd/system")
+        (map
+         (lambda (x) (copy-file (string-append #$systemd "/lib/systemd/system/" x )
+                                (string-append "/etc/systemd/system/" x)))
+         (list #$@units))
+        ;; (execl #$(file-append systemd "/bin/systemctl") "systemctl"
+        ;;        "daemon-reload")
+        )))
 
 (define systemd-root-service-type
   (service-type
@@ -202,8 +212,8 @@
                      ;;                                         "/lib/tmpfiles.d"))
                      ;;            ;; `("dbus-1" ,(file-append systemd "/etc/dbus-1"))
                      ;;            ))))
-                     ;; (service-extension activation-service-type
-                     ;;                    systemd-activation)
+                     (service-extension activation-service-type
+                                        systemd-activation)
                      ))
    (default-value (systemd-configuration))
    (description
