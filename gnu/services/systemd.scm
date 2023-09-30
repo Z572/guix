@@ -27,6 +27,7 @@
             systemd-configuration-package
             systemd-configuration?
             systemd-configuration-services
+            systemd-configuration-upstream-units
 
             systemd-root-service-type))
 
@@ -39,7 +40,116 @@
     "The SYSTEMD package.")
   (services
    (list-of-shepherd-service '())
-   "The services."))
+   "The services.")
+  (upstream-units
+   (list-of-strings
+    '("basic.target"
+      "sysinit.target"
+      "sockets.target"
+      "exit.target"
+      "graphical.target"
+      "multi-user.target"
+      "network.target"
+      "network-pre.target"
+      "network-online.target"
+      "nss-lookup.target"
+      "nss-user-lookup.target"
+      "time-sync.target"
+
+      "sigpwr.target"
+      "timers.target"
+      "paths.target"
+      "rpcbind.target"
+
+      "rescue.target"
+      "rescue.service"
+
+      "systemd-udevd-control.socket"
+      "systemd-udevd-kernel.socket"
+      "systemd-udevd.service"
+      "systemd-udev-settle.service"
+
+      "getty.target"
+      "getty-pre.target"
+      "getty@.service"
+      "serial-getty@.service"
+      "console-getty.service"
+      "container-getty@.service"
+      "systemd-vconsole-setup.service"
+
+
+      "sound.target"
+      "bluetooth.target"
+      "printer.target"
+      "smartcard.target"
+
+
+      "systemd-modules-load.service"
+      "kmod-static-nodes.service"
+      "modprobe@.service"
+
+      "systemd-fsck@.service"
+      "systemd-fsck-root.service"
+      "systemd-growfs@.service"
+      "systemd-growfs-root.service"
+      "systemd-remount-fs.service"
+      "systemd-pstore.service"
+      "local-fs.target"
+      "local-fs-pre.target"
+      "remote-fs.target"
+      "remote-fs-pre.target"
+      "swap.target"
+      "dev-hugepages.mount"
+      "dev-mqueue.mount"
+      "sys-fs-fuse-connections.mount"
+
+      "sys-kernel-config.mount"
+
+      "systemd-random-seed.service"
+      "systemd-backlight@.service"
+      "systemd-rfkill.service"
+      "systemd-rfkill.socket"
+
+      "hibernate.target"
+      "suspend.target"
+      "suspend-then-hibernate.target"
+      "sleep.target"
+      "hybrid-sleep.target"
+      "systemd-hibernate.service"
+      "systemd-hybrid-sleep.service"
+      "systemd-suspend.service"
+      "systemd-suspend-then-hibernate.service"
+
+      "reboot.target"
+      "systemd-reboot.service"
+      "poweroff.target"
+      "systemd-poweroff.service"
+      "halt.target"
+      "systemd-halt.service"
+      "shutdown.target"
+      "umount.target"
+      "final.target"
+      "kexec.target"
+      "systemd-kexec.service"
+
+      "systemd-ask-password-console.path"
+      "systemd-ask-password-console.service"
+      "systemd-ask-password-wall.path"
+      "systemd-ask-password-wall.service"
+
+      "slices.target"
+
+      "machine.slice"
+      "machines.target"
+      "systemd-machined.service"
+
+      "systemd-nspawn@.service"
+
+      "systemd-sysctl.service"
+
+      "systemd-exit.service"
+      "systemd-update-done.service"))
+   "upstream units"))
 
 (define (systemd-boot-gexp config)
   "Return a gexp starting the systemd service."
