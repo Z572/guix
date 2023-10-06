@@ -76,7 +76,12 @@
 
   (unless (file-exists? (scope "sys"))
     (mkdir (scope "sys")))
-  (mount "none" (scope "sys") "sysfs"))
+  (mount "none" (scope "sys") "sysfs")
+
+  ;; we mount /run as tmpfs, make sure systemd not override /run.
+  (unless (file-exists? (scope "run"))
+    (mkdir (scope "run")))
+  (mount "none" (scope "run") "tmpfs"))
 
 (define (move-essential-file-systems root)
   "Move currently mounted essential file systems to ROOT."
@@ -85,7 +90,7 @@
                 (unless (file-exists? target)
                   (mkdir target))
                 (mount dir target "" MS_MOVE)))
-            '("/dev" "/proc" "/sys")))
+            '("/dev" "/proc" "/sys" "/run")))
 
 (define (linux-command-line)
   "Return the Linux kernel command line as a list of strings."

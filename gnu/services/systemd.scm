@@ -277,6 +277,8 @@ Options=~{~a~^,~}
         ;; (mkdir-p "/etc/systemd/system")
         ;; (mkdir-p "/run/systemd")
         (mkdir-p "/var/log/journal")
+        (symlink (canonicalize-path "/run/current-system")
+                 "/run/booted-system")
         (execl #$(file-append systemd "/lib/systemd/systemd") "systemd"))))
 
 (define (systemd-etc config)
