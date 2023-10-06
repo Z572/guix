@@ -33,6 +33,7 @@
 
 (define-module (gnu system)
   #:use-module (gnu packages file-systems)
+  #:use-module (gnu packages systemd)
   #:use-module (guix inferior)
   #:use-module (guix store)
   #:use-module (guix memoization)
@@ -69,6 +70,7 @@
   #:use-module (gnu packages wget)
   #:use-module (gnu services)
   #:use-module (gnu services shepherd)
+  #:use-module (gnu services dbus)
   #:use-module (gnu services systemd)
   #:use-module (gnu services base)
   #:use-module (gnu packages systemd)
@@ -827,7 +829,12 @@ bookkeeping."
            ;; activation code.
            (service cleanup-service-type #f)
            %activation-service
+
+           (service dbus-root-service-type
+                    (dbus-configuration (dbus dbus/systemd)))
            (service systemd-root-service-type)
+           (simple-service 'systemd-dbus dbus-root-service-type
+                           (list systemd))
            (pam-root-service (operating-system-pam-services os))
            (account-service (append (operating-system-accounts os)
                                     (operating-system-groups os))

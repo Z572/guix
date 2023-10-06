@@ -693,12 +693,12 @@ ACTIVATION-SCRIPT-TYPE."
                       ;; Make sure the user accounting database exists.  If it
                       ;; does not exist, 'setutxent' does not create it and
                       ;; thus there is no accounting at all.
-                      (close-port (open-file "/var/run/utmpx" "a0"))
+                      ;; (close-port (open-file "/var/run/utmpx" "a0"))
 
                       ;; Same for 'wtmp', which is populated by mingetty et
                       ;; al.
                       (mkdir-p "/var/log")
-                      (close-port (open-file "/var/log/wtmp" "a0"))
+                      ;; (close-port (open-file "/var/log/wtmp" "a0"))
 
                       ;; Set up /run/current-system.  Among other things this
                       ;; sets up locales, which the activation snippets

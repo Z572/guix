@@ -14,12 +14,12 @@
 
 (define (replace-shepherd-to-systemd a)
   (let* ((kind (service-kind a))
-         (shepherd-extenion (find (lambda (x)
-                                    (equal? shepherd-root-service-type
-                                            (service-extension-target x)))
-                                  (service-type-extensions kind))))
+         (extenion (find (lambda (x)
+                           (equal? shepherd-root-service-type
+                                   (service-extension-target x)))
+                         (service-type-extensions kind))))
 
-    (if shepherd-extenion
+    (if extenion
         (service
          (service-type
           (inherit kind)
@@ -30,8 +30,10 @@
           (description  (service-type-description kind))
           (extensions (cons (service-extension
                              systemd-root-service-type
-                             (service-extension-compute shepherd-extenion))
-                            (delete shepherd-extenion
+                             (lambda (c)
+                               (systemd-configuration
+                                (services ((service-extension-compute extenion) c)))))
+                            (delete extenion
                                     (service-type-extensions kind))))
           )
          (service-value a)

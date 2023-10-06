@@ -28,7 +28,9 @@
   #:use-module ((gnu packages glib) #:select (dbus))
   #:use-module (gnu packages polkit)
   #:use-module (gnu packages admin)
-  #:use-module (gnu packages systemd)
+  #:use-module (gnu services systemd)
+  ;; (systemd-root-service-type systemd-configuration)
+
   #:use-module (guix deprecation)
   #:use-module (guix gexp)
   #:use-module ((guix packages) #:select (package-name))
@@ -215,19 +217,29 @@ includes the @code{etc/dbus-1/system.d} directories of each package listed in
                       #:pid-file "/var/run/dbus/pid"))
             (stop #~(make-kill-destructor)))))))
 
+(define dbus-systemd-service
+  (match-lambda
+    (($ <dbus-configuration> dbus _)
+     (systemd-configuration
+      (unit-files (list
+                   (file-append dbus "/lib/systemd/system/dbus.service")
+                   (file-append dbus "/lib/systemd/system/dbus.socket")))))))
+
 (define dbus-root-service-type
   (service-type (name 'dbus)
                 (extensions
-                 (list (service-extension shepherd-root-service-type
-                                          dbus-shepherd-service)
-                       (service-extension activation-service-type
-                                          dbus-activation)
-                       (service-extension etc-service-type
-                                          dbus-etc-files)
-                       (service-extension account-service-type
-                                          (const %dbus-accounts))
-                       (service-extension setuid-program-service-type
-                                          dbus-setuid-programs)))
+                 (list ;; (service-extension shepherd-root-service-type
+                  ;;                    dbus-shepherd-service)
+                  (service-extension systemd-root-service-type
+                                     dbus-systemd-service)
+                  (service-extension activation-service-type
+                                     dbus-activation)
+                  (service-extension etc-service-type
+                                     dbus-etc-files)
+                  (service-extension account-service-type
+                                     (const %dbus-accounts))
+                  (service-extension setuid-program-service-type
+                                     dbus-setuid-programs)))
 
                 ;; Extensions consist of lists of packages (representing D-Bus
                 ;; services) that we just concatenate.

@@ -7,7 +7,7 @@
   #:use-module (guix packages)
   #:use-module (guix utils)
   #:use-module (gnu services configuration)
-  #:use-module (gnu services dbus)
+
   #:use-module (gnu packages systemd)
   #:use-module (gnu packages base)
   #:use-module ((guix diagnostics)
@@ -27,12 +27,68 @@
             systemd-configuration-package
             systemd-configuration?
             systemd-configuration-services
-            systemd-configuration-upstream-units
+            systemd-configuration-upstream-unit-files
+            systemd-configuration-upstream-unit-files
 
             systemd-root-service-type))
 
 (define list-of-shepherd-service?
   (list-of (@@ (gnu services shepherd) shepherd-service?)))
+
+(define list-of-file-likes?
+  (list-of file-like?))
+
+(define-record-type* <systemd-unit>
+  systemd-unit make-systemd-unit
+  systemd-unit?
+  (description systemd-unit-description
+               (default #f))
+  (documentation systemd-unit-documentation
+                 (default #f))
+  (before systemd-unit--before
+          (default '()))
+  (after systemd-unit-after
+         (default '()))
+  (wants systemd-unit-wants
+         (default '()))
+  ;; conflicts
+  (extra-config systemd-unit-extra-config
+                (default '()))
+
+  )
+
+(define-record-type* <systemd-service>
+  systemd-service make-systemd-service
+  systemd-service?
+  (unit systemd-service-unit
+        (default #f))
+  (type systemd-service-type
+        (default #f))
+  (exec-start systemd-service-exec-start
+              (default #f))
+  (exec-reload systemd-service-exec-reload
+               (default #f))
+  (restart systemd-service-restart
+           (default #f))
+  (extra-config systemd-service-extra-config
+                (default '())))
+
+(define-record-type* <systemd-socket>
+  systemd-socket make-systemd-socket
+  systemd-socket?
+  (name systemd-socket-name)
+  (unit systemd-socket-unit
+        (default #f))
+  (listen-stream systemd-socket-listen-stream
+                 (default #f))
+  (extra-config systemd-service-extra-config
+                (default '())))
+
+;; (define (unit->string unit)
+;;   (match-record
+;;       unit <systemd-unit>
+;;       (description documentation extra-config)
+;;     ()))
 
 (define-configuration/no-serialization systemd-configuration
   (package
@@ -41,7 +97,10 @@
   (services
    (list-of-shepherd-service '())
    "The services.")
-  (upstream-units
+  (unit-files
+   (list-of-file-likes '())
+   "upstream units")
+  (upstream-unit-files
    (list-of-strings
     '("basic.target"
       "sysinit.target"
@@ -158,62 +217,96 @@
     ;; (pk 'services services)
     #~(begin
         (false-if-exception (delete-file "/run/booted-system"))
-        (mkdir-p "/etc/systemd/system")
-        (mkdir-p "/run/systemd")
+        ;; (mkdir-p "/etc/systemd/system")
+        ;; (mkdir-p "/run/systemd")
         (mkdir-p "/var/log/journal")
         (execl #$(file-append systemd "/lib/systemd/systemd") "systemd"))))
 
-(define (systemd-activation config)
+(define (systemd-etc config)
   "Return the activation gexp for CONFIG."
-  (let* ((systemd (systemd-configuration-package config))
-         (units (systemd-configuration-upstream-units config)))
-    #~(begin
-        (rmdir "/etc/systemd/system")
-        (mkdir-p "/etc/systemd/system")
-        (map
-         (lambda (x) (copy-file (string-append #$systemd "/lib/systemd/system/" x )
-                                (string-append "/etc/systemd/system/" x)))
-         (list #$@units))
-        ;; (execl #$(file-append systemd "/bin/systemctl") "systemctl"
-        ;;        "daemon-reload")
-        )))
+  (let
+      ((systemd (systemd-configuration-package config))
+       (upstream-unit-files (systemd-configuration-upstream-unit-files config))
+       (unit-files (systemd-configuration-unit-files config)))
+    (define build
+      (with-imported-modules '((guix build utils))
+        #~(begin
+            (use-modules (guix build utils))
+            (mkdir-p #$output)
+            (define upstream-unit-files
+              (map
+               (lambda (x)
+                 (let ((o (string-append #$systemd "/lib/systemd/system/" x )))
+                   (if (file-exists? o)
+                       o
+                       (error x))))
+               (list #$@upstream-unit-files)))
+            (define other-units (pk 'oth (list #$@unit-files)))
+            (map (lambda (f)
+                   (install-file f #$output)
+                   (if (file-exists? (string-append f ".wants"))
+                       (copy-recursively
+                        (string-append f ".wants")
+                        (string-append #$output "/" (basename (string-append f ".wants"))))))
+                 (append other-units upstream-unit-files)))))
+    `(("systemd"
+       ,(file-union "systemd"
+                    `(("system"
+                       ,(computed-file "systemd-etc" build))))))))
+
+(define (systemd-configuration-merge a b)
+  (systemd-configuration
+   (inherit a)
+   (services (append (systemd-configuration-services a)
+                     (systemd-configuration-services b)
+                     ))
+   (unit-files (append (systemd-configuration-unit-files a)
+                       (systemd-configuration-unit-files b)))))
+
 
 (define systemd-root-service-type
   (service-type
    (name 'systemd-root)
-   (compose concatenate)
-   (extend (lambda (config extra-services)
-             (systemd-configuration
-              (inherit config)
-              (services (append (systemd-configuration-services config)
-                                extra-services)))))
+   (compose (lambda (args) (fold systemd-configuration-merge (systemd-configuration) args)))
+   (extend systemd-configuration-merge
+           ;; (lambda (config other-config)
+           ;;   (systemd-configuration
+           ;;    (inherit config)
+           ;;    (services (append (systemd-configuration-services config)
+           ;;                      (systemd-configuration-services other-config)))
+           ;;    (unit-files (append (systemd-configuration-unit-files config)
+           ;;                        (systemd-configuration-unit-files other-config)))
+           ;;    )
+           ;;   )
+           )
    (extensions (list (service-extension boot-service-type
                                         systemd-boot-gexp)
-                     (service-extension dbus-root-service-type
-                                        (const (list systemd)))
+                     ;; (service-extension dbus-root-service-type
+                     ;;                    (const (list systemd)))
                      (service-extension profile-service-type
-                                        (lambda (c) (list autofs
-                                                          (systemd-configuration-package c))))
-                     (service-extension
-                      special-files-service-type
-                      (lambda (config)
-                        (let ((systemd (systemd-configuration-package config)))
-                          `(("/lib/systemd" ,(file-append dbus/systemd
-                                                          "/lib/systemd"))
-                            ("/lib/tmpfiles.d" ,(file-append dbus/systemd
-                                                             "/lib/tmpfiles.d"))))))
+                                        (lambda (c)
+                                          (list (systemd-configuration-package c)))
+                                        )
+                     ;; (service-extension
+                     ;;  special-files-service-type
+                     ;;  (lambda (config)
+                     ;;    (let ((systemd (systemd-configuration-package config)))
+                     ;;      `(("/lib/systemd" ,(file-append dbus/systemd
+                     ;;                                      "/lib/systemd"))
+                     ;;        ("/lib/tmpfiles.d" ,(file-append dbus/systemd
+                     ;;                                         "/lib/tmpfiles.d"))))))
                      ;; (service-extension
                      ;;  etc-service-type
                      ;;  (lambda (config)
                      ;;    (let ((systemd (systemd-configuration-package config)))
-                     ;;      (list `("systemd" ,(file-append dbus/systemd
-                     ;;                                      "/lib/systemd"))
-                     ;;            `("tmpfiles.d" ,(file-append dbus/systemd
-                     ;;                                         "/lib/tmpfiles.d"))
-                     ;;            ;; `("dbus-1" ,(file-append systemd "/etc/dbus-1"))
-                     ;;            ))))
-                     (service-extension activation-service-type
-                                        systemd-activation)
+                     ;;      (list ;; `("systemd" ,(file-append dbus/systemd
+                     ;;       ;;                           "/lib/systemd"))
+                     ;;       ;; `("tmpfiles.d" ,(file-append dbus/systemd
+                     ;;       ;;                              "/lib/tmpfiles.d"))
+                     ;;       ;; `("dbus-1" ,(file-append systemd "/etc/dbus-1"))
+                     ;;       ))))
+                     (service-extension etc-service-type
+                                        systemd-etc)
                      ))
    (default-value (systemd-configuration))
    (description
