@@ -18,6 +18,7 @@
   #:use-module (gnu packages admin)
   #:use-module (gnu packages file-systems)
   #:use-module (ice-9 match)
+  #:use-module (ice-9 format)
   #:use-module (ice-9 vlist)
   #:use-module (srfi srfi-1)
   #:use-module (srfi srfi-26)
@@ -44,7 +45,7 @@
   (description systemd-unit-description
                (default #f))
   (documentation systemd-unit-documentation
-                 (default #f))
+                 (default '()))
   (before systemd-unit--before
           (default '()))
   (after systemd-unit-after
@@ -70,6 +71,8 @@
                (default #f))
   (restart systemd-service-restart
            (default #f))
+  (environment-variables systemd-service-environment-variables
+                         (default '()))
   (extra-config systemd-service-extra-config
                 (default '())))
 
@@ -80,9 +83,63 @@
   (unit systemd-socket-unit
         (default #f))
   (listen-stream systemd-socket-listen-stream
-                 (default #f))
+                 (default '()))
+  (listen-data-grams systemd-socket-listen-data-grams
+                     (default '()))
   (extra-config systemd-service-extra-config
                 (default '())))
+
+(define-record-type* <systemd-mount>
+  systemd-mount make-systemd-mount
+  systemd-mount?
+  (name systemd-mount-name)
+  (unit systemd-mount-unit
+        (default #f))
+  (what systemd-mount-what)
+  (where systemd-mount-where)
+  (type systemd-mount-type)
+  (options systemd-mount-options
+           (default '()))
+  (extra-config systemd-mount-extra-config
+                (default '())))
+
+(define (systemd-unit->string unit)
+  (match-record unit <systemd-unit>
+                (description documentation before after wants extra-config)
+    (format #f "
+[Unit]
+~@[Description=~s~%~]\
+~{~@[Documentation=~a~%~]~}\
+~{~@[Before=~a~%~]~}\
+~{~@[After=~a~%~]~}\
+~{~@[Wants=~a~%~]~}\
+~:{~a=~a~^~%~}
+"
+            description
+            documentation
+            before
+            after
+            wants
+            extra-config)))
+(define (systemd-mount->string mount)
+  (match-record mount <systemd-mount>
+                (unit what where type options extra-config)
+    (string-append
+     (systemd-unit->string unit)
+     (format #f "\
+[Mount]
+What=~a
+Where=~a
+Type=~a
+Options=~{~a~^,~}
+~:{~a=~a~^~%~}
+"
+             what
+             where
+             type
+             options
+             extra-config))))
+
 
 ;; (define (unit->string unit)
 ;;   (match-record
@@ -216,7 +273,7 @@
         (services (systemd-configuration-services config)))
     ;; (pk 'services services)
     #~(begin
-        (false-if-exception (delete-file "/run/booted-system"))
+        ;; (false-if-exception (delete-file "/run/booted-system"))
         ;; (mkdir-p "/etc/systemd/system")
         ;; (mkdir-p "/run/systemd")
         (mkdir-p "/var/log/journal")
@@ -244,10 +301,11 @@
             (define other-units (pk 'oth (list #$@unit-files)))
             (map (lambda (f)
                    (install-file f #$output)
-                   (if (file-exists? (string-append f ".wants"))
-                       (copy-recursively
-                        (string-append f ".wants")
-                        (string-append #$output "/" (basename (string-append f ".wants"))))))
+                   ;; (if (file-exists? (string-append f ".wants"))
+                   ;;     (copy-recursively
+                   ;;      (string-append f ".wants")
+                   ;;      (string-append #$output "/" (basename (string-append f ".wants")))))
+                   )
                  (append other-units upstream-unit-files)))))
     `(("systemd"
        ,(file-union "systemd"
