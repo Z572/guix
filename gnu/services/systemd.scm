@@ -63,8 +63,7 @@
   systemd-service?
   (unit systemd-service-unit
         (default #f))
-  (type systemd-service-type
-        (default #f))
+  (type systemd-service-type)
   (exec-start systemd-service-exec-start
               (default #f))
   (exec-reload systemd-service-exec-reload
@@ -121,6 +120,30 @@
             after
             wants
             extra-config)))
+
+(define (systemd-service->string service)
+  (match-record service <systemd-service>
+                (unit type exec-start exec-reload
+                      restart environment-variables
+                      extra-config)
+    (string-append
+     (systemd-unit->string unit)
+     (format #f "\
+[Service]
+~{~@[Type=~a~%~]~}\
+~{~@[ExecStart=~a~%~]~}\
+~{~@[ExecReload=~a~%~]~}\
+~{~@[Restart=~a~%~]~}\
+Environment=~{'~a'~^ ~}\
+~:{~a=~a~^~%~}
+"
+             type
+             exec-start
+             exec-reload
+             restart
+             environment-variables
+             extra-config))))
+
 (define (systemd-mount->string mount)
   (match-record mount <systemd-mount>
                 (unit what where type options extra-config)
