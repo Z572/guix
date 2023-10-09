@@ -290,7 +290,6 @@ application-centers for distributions.")
            gobject-introspection
            gtk-doc/stable
            libtool
-           libxml2                      ;for XML_CATALOG_FILES
            libxslt
            perl
            pkg-config
@@ -896,7 +895,6 @@ the freedesktop.org XDG Base Directory specification.")
            docbook-xsl
            gettext-minimal
            gperf
-           libxml2                      ;for XML_CATALOG_FILES
            m4
            pkg-config
            python
@@ -1127,7 +1125,6 @@ with localed.  This package is extracted from the broader systemd package.")
            gettext-minimal
            `(,glib "bin")
            gobject-introspection
-           libxml2                      ;for XML_CATALOG_FILES
            libxslt
            pkg-config
            python-wrapper
@@ -1352,7 +1349,7 @@ Python.")
           (list pkg-config-for-build
                 this-package)           ;for wayland-scanner
           '())))
-    (inputs (list expat libxml2))       ;for XML_CATALOG_FILES
+    (inputs (list expat libxml2))
     (propagated-inputs (list libffi))
     (home-page "https://wayland.freedesktop.org/")
     (synopsis "Core Wayland window system code and protocol")
@@ -1861,7 +1858,6 @@ message bus.")
            glibc-locales                    ;for tests
            gobject-introspection
            gtk-doc
-           libxml2                      ;for XML_CATALOG_FILES
            libxslt
            pkg-config
            vala
@@ -2727,7 +2723,6 @@ Its features include:
     (native-inputs
      (list gettext-minimal
            pkg-config
-           libxml2                      ;for XML_CATALOG_FILES
            libxslt
            docbook-xsl
            docbook-xml))
