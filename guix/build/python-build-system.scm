@@ -29,9 +29,11 @@
 
 (define-module (guix build python-build-system)
   #:use-module ((guix build gnu-build-system) #:prefix gnu:)
+  #:use-module (ice-9 popen)
   #:use-module (guix build utils)
   #:use-module (ice-9 match)
   #:use-module (ice-9 ftw)
+  #:use-module (ice-9 rdelim)
   #:use-module (ice-9 format)
   #:use-module (srfi srfi-1)
   #:use-module (srfi srfi-26)
@@ -134,19 +136,20 @@
              (apply invoke "python" "./setup.py" command params)))
       (error "no setup.py found")))
 
-(define* (sanity-check #:key tests? inputs outputs #:allow-other-keys)
+(define* (sanity-check #:key target tests? inputs outputs #:allow-other-keys)
   "Ensure packages depending on this package via setuptools work properly,
 their advertised endpoints work and their top level modules are importable
 without errors."
-  (let ((sanity-check.py (assoc-ref inputs "sanity-check.py")))
-    ;; Make sure the working directory is empty (i.e. no Python modules in it)
-    (with-directory-excursion "/tmp"
-      (invoke "python" sanity-check.py (site-packages inputs outputs)))))
+  (if target
+      (format #t "cross-compiling to `~a', skip sanity-check.~%" target)
+      (let ((sanity-check.py (assoc-ref inputs "sanity-check.py")))
+        ;; Make sure the working directory is empty (i.e. no Python modules in it)
+        (with-directory-excursion "/tmp"
+          (invoke "python" sanity-check.py (site-packages inputs outputs))))))
 
-(define* (build #:key use-setuptools? #:allow-other-keys)
+(define* (build #:key use-setuptools? target #:allow-other-keys)
   "Build a given Python package."
-  (call-setuppy "build" '() use-setuptools?)
-  #t)
+  (call-setuppy "build" '() use-setuptools?))
 
 (define* (check #:key tests? test-target use-setuptools? #:allow-other-keys)
   "Run the test suite of a given Python package."
@@ -186,9 +189,9 @@ running checks after installing the package."
   (setenv "GUIX_PYTHONPATH" (string-append (site-packages inputs outputs) ":"
                                            (getenv "GUIX_PYTHONPATH"))))
 
-(define* (add-install-to-pythonpath #:key inputs outputs #:allow-other-keys)
+(define* (add-install-to-pythonpath #:key native-inputs inputs outputs #:allow-other-keys)
   "A phase that just wraps the 'add-installed-pythonpath' procedure."
-  (add-installed-pythonpath inputs outputs))
+  (add-installed-pythonpath (or native-inputs inputs) outputs))
 
 (define* (add-install-to-path #:key outputs #:allow-other-keys)
   "Adding Python scripts to PATH is also often useful in tests."
@@ -196,11 +199,11 @@ running checks after installing the package."
                                 "/bin:"
                                 (getenv "PATH"))))
 
-(define* (install #:key inputs outputs (configure-flags '()) use-setuptools?
+(define* (install #:key native-inputs inputs outputs (configure-flags '()) use-setuptools?
                   #:allow-other-keys)
   "Install a given Python package."
   (let* ((out (python-output outputs))
-         (python (assoc-ref inputs "python"))
+         (python (assoc-ref (or native-inputs inputs) "python"))
          (major-minor (map string->number
                            (take (string-split (python-version python) #\.) 2)))
          (<3.7? (match major-minor
@@ -250,13 +253,13 @@ running checks after installing the package."
                             files)))
               bindirs)))
 
-(define* (rename-pth-file #:key name inputs outputs #:allow-other-keys)
+(define* (rename-pth-file #:key name native-inputs inputs outputs #:allow-other-keys)
   "Rename easy-install.pth to NAME.pth to avoid conflicts between packages
 installed with setuptools."
   ;; Even if the "easy-install.pth" is not longer created, we kept this phase.
   ;; There still may be packages creating an "easy-install.pth" manually for
   ;; some good reason.
-  (let* ((site-packages (site-packages inputs outputs))
+  (let* ((site-packages (site-packages (or native-inputs inputs) outputs))
          (easy-install-pth (string-append site-packages "/easy-install.pth"))
          (new-pth (string-append site-packages "/" name ".pth")))
     (when (file-exists? easy-install-pth)

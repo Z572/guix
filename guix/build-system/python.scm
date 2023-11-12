@@ -139,6 +139,25 @@ pre-defined variants."
   (package/inherit p
     (properties (alist-delete 'python2-variant (package-properties p)))))
 
+(define (make-sysconfigdata python target)
+  (define raw-python
+    (if (string= (package-name python) "python-wrapper")
+        (car (assoc-ref (package-transitive-target-inputs python) "python"))
+        python))
+  (computed-file
+   "sysconfigdata"
+   (with-imported-modules %python-build-system-modules
+     #~(begin
+         (use-modules (guix build python-build-system)
+                      (guix build utils))
+         (mkdir-p #$output)
+         (install-file (string-append
+                        #$raw-python
+                        "/lib/python"
+                        (python-version #$raw-python)
+                        "/" (format #f "_sysconfigdata__linux_~a.py" #$target))
+                       #$output)))))
+
 (define* (lower name
                 #:key source inputs native-inputs outputs system target
                 (python (default-python))
@@ -146,25 +165,37 @@ pre-defined variants."
                 #:rest arguments)
   "Return a bag for NAME."
   (define private-keywords
-    '(#:target #:python #:inputs #:native-inputs))
+    `(#:python #:inputs #:native-inputs
+      ,@(if target
+            '()
+            '(#:target))))
 
-  (and (not target)                               ;XXX: no cross-compilation
-       (bag
-         (name name)
-         (system system)
-         (host-inputs `(,@(if source
-                              `(("source" ,source))
-                              '())
-                        ,@inputs
-
-                        ;; Keep the standard inputs of 'gnu-build-system'.
-                        ,@(standard-packages)))
-         (build-inputs `(("python" ,python)
-                         ("sanity-check.py" ,(local-file sanity-check.py))
-                         ,@native-inputs))
-         (outputs outputs)
-         (build python-build)
-         (arguments (strip-keyword-arguments private-keywords arguments)))))
+  (bag
+    (name name)
+    (system system)
+    (target target)
+    (host-inputs `(,@(if source
+                         `(("source" ,source))
+                         '())
+                   ,@(if target `(("sysconfigdata-for-target"
+                                   ,(make-sysconfigdata python target)))
+                         '())
+                   ,@(if target inputs '())))
+    (build-inputs `(("python" ,python)
+                    ("sanity-check.py" ,(local-file sanity-check.py))
+                    ,@native-inputs
+                    ,@(if target '() inputs)
+                    ;; Keep the standard inputs of 'gnu-build-system'.
+                    ,@(if target
+                          (standard-cross-packages target 'host)
+                          '())
+                    ,@(standard-packages)))
+    (target-inputs (if target
+                       (standard-cross-packages target 'target)
+                       '()))
+    (outputs outputs)
+    (build (if target python-cross-build python-build))
+    (arguments (strip-keyword-arguments private-keywords arguments))))
 
 (define* (python-build name inputs
                        #:key source
@@ -211,6 +242,100 @@ provides a 'setup.py' file as its build system."
                       #:system system
                       #:graft? #f                 ;consistent with 'gnu-build'
                       #:target #f
+                      #:guile-for-build guile)))
+
+(define* (python-cross-build name
+                             #:key target
+                             build-inputs host-inputs target-inputs
+                             source
+                             (tests? #f)
+                             (test-target "test")
+                             (use-setuptools? #t)
+                             (configure-flags ''())
+                             (phases '%standard-phases)
+                             (outputs '("out"))
+                             (search-paths '())
+                             (native-search-paths '())
+                             (system (%current-system))
+                             (guile #f)
+                             (imported-modules %python-build-system-modules)
+                             (modules '((guix build python-build-system)
+                                        (guix build utils))))
+  "Build SOURCE using PYTHON, and with INPUTS.  This assumes that SOURCE
+provides a 'setup.py' file as its build system."
+  (define inputs
+    (if (null? target-inputs)
+        (input-tuples->gexp host-inputs)
+        #~(append #$(input-tuples->gexp host-inputs)
+                  #+(input-tuples->gexp target-inputs))))
+  (define python (car (assoc-ref build-inputs "python")))
+  (define build
+    (with-imported-modules imported-modules
+      #~(begin
+          (use-modules #$@(sexp->gexp modules))
+
+          (define %build-host-inputs
+            #+(input-tuples->gexp build-inputs))
+
+          (define %build-target-inputs
+            (append #$(input-tuples->gexp host-inputs)
+                    #+(input-tuples->gexp target-inputs)))
+
+          (define %outputs
+            #$(outputs->gexp outputs))
+
+          (define %build-inputs
+            (append %build-host-inputs %build-target-inputs))
+
+          (define build-phases
+            #$(let ((phases (if (pair? phases) (sexp->gexp phases) phases)))
+                #~(modify-phases #$phases
+                    (add-before 'build 'set-python-cross-compile-env
+                      (lambda* (#:key native-inputs inputs #:allow-other-keys)
+                        ;; TODO: hurd
+                        (setenv "_PYTHON_HOST_PLATFORM"
+                                #$(string-append
+                                   "linux-"
+                                   (car (string-split target #\-))))
+                        (setenv "_PYTHON_SYSCONFIGDATA_NAME"
+                                #$(format #f "_sysconfigdata__linux_~a" target))
+                        ;; FIXME: __import__ no care GUIX_PYTHONPATH
+                        (setenv "PYTHONPATH"
+                                (assoc-ref
+                                 inputs
+                                 "sysconfigdata-for-target"))))
+                    (add-after 'install 'unset-python-cross-compile-env
+                      (lambda* (#:key native-inputs inputs #:allow-other-keys)
+                        ;; (unsetenv "_PYTHON_HOST_PLATFORM")
+                        ;; (unsetenv "_PYTHON_SYSCONFIGDATA_NAME")
+                        (unsetenv "PYTHONPATH"))))))
+          (python-build #:name #$name
+                        #:source #+source
+                        #:configure-flags #$configure-flags
+                        #:use-setuptools? #$use-setuptools?
+                        #:system #$system
+                        #:build #$(nix-system->gnu-triplet system)
+                        #:target #$target
+                        #:test-target #$test-target
+                        #:tests? #$tests?
+                        #:phases build-phases
+                        #:outputs %outputs
+                        #:search-paths '#$(sexp->gexp
+                                           (map search-path-specification->sexp
+                                                search-paths))
+                        #:native-search-paths '#$(sexp->gexp
+                                                  (map search-path-specification->sexp
+                                                       native-search-paths))
+                        #:native-inputs #+(input-tuples->gexp build-inputs)
+                        #:inputs #$inputs))))
+
+
+  (mlet %store-monad ((guile (package->derivation (or guile (default-guile))
+                                                  system #:graft? #f)))
+    (gexp->derivation name build
+                      #:system system
+                      #:target target
+                      #:graft? #f                 ;consistent with 'gnu-build'
                       #:guile-for-build guile)))
 
 (define python-build-system
