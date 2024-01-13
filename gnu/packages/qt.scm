@@ -1748,13 +1748,13 @@ Vulkan, OpenGL and other main graphic APIs.")
 (define-public qtmultimedia
   (package
     (name "qtmultimedia")
-    (version "6.5.2")
+    (version "6.6.2")
     (source (origin
               (method url-fetch)
               (uri (qt-url name version))
               (sha256
                (base32
-                "0xc9k4mlncscxqbp8q46yjd89k4jb8j0ggbi5ad874lycym013wl"))
+                "1v0430jnv97ws6cizn9mi8zr9hcg7rixd0jg7smhdq8apacjb572"))
               (modules '((guix build utils)))
               (snippet
                '(begin
@@ -1779,7 +1779,10 @@ Vulkan, OpenGL and other main graphic APIs.")
               ;; session bus, which requires an X11 server, and then is still
               ;; unhappy).
               (substitute* "tests/auto/CMakeLists.txt"
-                (("add_subdirectory\\(integration)") ""))))
+                (("add_subdirectory\\(integration)") ""))
+              ;; fail on offscreen rendering
+              (substitute* "tests/auto/unit/multimedia/CMakeLists.txt"
+                (("add_subdirectory\\(qvideoframecolormanagement\\)") ""))))
           (add-before 'check 'prepare-for-tests
             (lambda _
               (setenv "QT_QPA_PLATFORM" "offscreen")))
