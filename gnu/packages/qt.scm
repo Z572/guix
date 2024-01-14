@@ -2580,6 +2580,38 @@ the end-user is driving and cannot attend the incoming messages on the phone.
 In such a scenario, the messaging application can read out the incoming
 message.")))
 
+(define-public qtspeech
+  (package
+    (inherit qtspeech-5)
+    (name "qtspeech")
+    (version "6.6.2")
+    (source (origin
+              (method url-fetch)
+              (uri (qt-url name version))
+              (sha256
+               (base32
+                "1qvf3p2p1pc5fw40d8zq0iawaaqkc0dp5yx85b1dnw1j809bn8y0"))))
+    (build-system qt-build-system)
+    (arguments
+     (list #:phases
+           #~(modify-phases %standard-phases
+               (delete 'check)               ;move after the install phase
+               (add-after 'install 'check
+                 (assoc-ref %standard-phases 'check))
+               (add-before 'check 'prepare-for-tests
+                 (lambda* (#:key outputs #:allow-other-keys)
+                   (setenv "QML2_IMPORT_PATH"
+                           (string-append (assoc-ref outputs "out")
+                                          "/lib/qt6/qml:"
+                                          (getenv "QML2_IMPORT_PATH")))))
+               (add-after 'install 'delete-installed-tests
+                 (lambda _
+                   (delete-file-recursively
+                    (string-append #$output "/tests")))))))
+    (native-inputs '())
+    (propagated-inputs (list qtmultimedia))
+    (inputs (list qtbase qtdeclarative))))
+
 (define-public qtvirtualkeyboard-5
   (package
     (inherit qtsvg-5)
