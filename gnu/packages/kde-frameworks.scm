@@ -695,6 +695,35 @@ menu which lets you select a color.  The popup features a color dialog button
 which can be used to add custom colors to the popup menu.")
     (license license:lgpl3+)))
 
+(define-public kcolorscheme
+  (package
+    (name "kcolorscheme")
+    (version "6.0.0")
+    (source (origin
+              (method url-fetch)
+              (uri (string-append
+                    "mirror://kde/stable/frameworks/"
+                    (version-major+minor version) "/"
+                    name "-" version ".tar.xz"))
+
+              (sha256
+               (base32
+                "03i61bbr33z2dbba9hkr8n9b947znrycpgxfnydf6nvm64j84ify"))))
+    (native-inputs (list extra-cmake-modules))
+    (propagated-inputs (list kconfig-6))
+    (inputs (list kguiaddons-6 ki18n-6
+                  qtbase qtdeclarative))
+    (build-system qt-build-system)
+    (home-page "https://invent.kde.org/frameworks/kcolorscheme")
+    (synopsis "Classes to read and interact with KColorScheme")
+    (description "This package provide a Classes to read and interact with
+KColorScheme.")
+    (license (list license:cc0
+                   license:lgpl2.0+
+                   license:lgpl2.1
+                   license:bsd-2
+                   license:lgpl3))))
+
 (define-public kconfig
   (package
     (name "kconfig")
