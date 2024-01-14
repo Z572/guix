@@ -3249,7 +3249,7 @@ library.")
            kwidgetsaddons
            kwindowsystem
            qtbase-5
-           qtspeech))
+           qtspeech-5))
     (home-page "https://community.kde.org/Frameworks")
     (synopsis "Text editing widgets")
     (description "KTextWidgets provides widgets for displaying and editing text.
