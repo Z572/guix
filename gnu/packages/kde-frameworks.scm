@@ -1923,10 +1923,11 @@ provides uniform access to generation of barcodes with data.")
                (base32
                 "0rfh1qawf2bxh26p5xr03z2zizpnfw8k9ycwhmmqac11rx765jnq"))))
     (build-system cmake-build-system)
+    (arguments (list #:configure-flags #~(list "-DBUILD_WITH_QT6=ON")))
     (native-inputs
      (list extra-cmake-modules pkg-config))
     (inputs
-     (list glib pulseaudio qtdeclarative-5 qtbase-5))
+     (list glib pulseaudio qtdeclarative qtbase))
     (home-page "https://invent.kde.org/libraries/pulseaudio-qt/")
     (synopsis "Qt bindings for PulseAudio")
     (description
