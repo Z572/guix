@@ -936,14 +936,14 @@ used in KDE development tools Kompare and KDevelop.")
 (define-public qca
   (package
     (name "qca")
-    (version "2.3.7")
+    (version "2.3.8")
     (source
       (origin
         (method url-fetch)
         (uri (string-append "mirror://kde/stable/qca/" version
                             "/qca-" version ".tar.xz"))
         (sha256
-         (base32 "0hrzmzvzsgzn4nvplgg2wmxaql7fjvi3rcqgwgimnzb8ahxk9qpy"))))
+         (base32 "0r42d9wqj0pwp4qw1lzy41yvphqc70s639lbj0flc0h2dal9qxa8"))))
     (build-system cmake-build-system)
     (native-inputs
      (list pkg-config))
