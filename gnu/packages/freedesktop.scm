@@ -1870,6 +1870,7 @@ message bus.")
            coreutils-minimal
            dbus
            elogind
+           libxcrypt
            shadow))
     (propagated-inputs
      ;; accountsservice.pc 'Requires' these:
