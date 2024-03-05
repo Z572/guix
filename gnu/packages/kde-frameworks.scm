@@ -764,8 +764,42 @@ many more.")
     (inputs
      (list qtbase-5))))
 
+(define-public kdbusaddons-6
+  (package
+    (name "kdbusaddons")
+    (version "6.0.0")
+    (source (origin
+              (method url-fetch)
+              (uri (string-append
+                    "mirror://kde/stable/frameworks/"
+                    (version-major+minor version) "/"
+                    name "-" version ".tar.xz"))
+              (sha256
+               (base32
+                "12g91amlvwagysj06w67an07955smsadn76rca4q3g9rf860vrqi"))))
+    (build-system qt-build-system)
+    (native-inputs
+     (list extra-cmake-modules dbus qttools))
+    (inputs (list libxkbcommon))
+    (arguments
+     (list #:qtbase qtbase
+           #:phases
+           #~(modify-phases %standard-phases
+               (replace 'check
+                 (lambda* (#:key tests? #:allow-other-keys)
+                   (when tests?
+                     (invoke "dbus-launch" "ctest")))))))
+    (home-page "https://community.kde.org/Frameworks")
+    (synopsis "Convenience classes for DBus")
+    (description "KDBusAddons provides convenience classes on top of QtDBus,
+as well as an API to create KDED modules.")
+    ;; Some source files mention lgpl2.0+, but the included license is
+    ;; the lgpl2.1. Some source files are under non-copyleft licenses.
+    (license license:lgpl2.1+)))
+
 (define-public kdbusaddons
   (package
+    (inherit kdbusaddons-6)
     (name "kdbusaddons")
     (version "5.114.0")
     (source (origin
@@ -800,14 +834,7 @@ many more.")
                  (lambda* (#:key tests? #:allow-other-keys)
                    (when tests?
                      (setenv "DBUS_FATAL_WARNINGS" "0")
-                     (invoke "dbus-launch" "ctest")))))))
-    (home-page "https://community.kde.org/Frameworks")
-    (synopsis "Convenience classes for DBus")
-    (description "KDBusAddons provides convenience classes on top of QtDBus,
-as well as an API to create KDED modules.")
-    ;; Some source files mention lgpl2.0+, but the included license is
-    ;; the lgpl2.1. Some source files are under non-copyleft licenses.
-    (license license:lgpl2.1+)))
+                     (invoke "dbus-launch" "ctest")))))))))
 
 (define-public kdnssd
   (package
