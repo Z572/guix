@@ -1180,8 +1180,33 @@ model to observers
 @end enumerate")
     (license license:lgpl2.1+)))
 
+(define-public kitemviews-6
+  (package
+    (name "kitemviews")
+    (version "6.0.0")
+    (source (origin
+              (method url-fetch)
+              (uri (string-append
+                    "mirror://kde/stable/frameworks/"
+                    (version-major+minor version) "/"
+                    name "-" version ".tar.xz"))
+              (sha256
+               (base32
+                "0hsjyd6qgfcijnih8kch36sq6iyp2yhss71s1zlw6syng2ppdvdd"))))
+    (build-system qt-build-system)
+    (native-inputs
+     (list extra-cmake-modules qttools))
+    (arguments (list #:qtbase qtbase))
+    (home-page "https://community.kde.org/Frameworks")
+    (synopsis "Set of item views extending the Qt model-view framework")
+    (description "KItemViews includes a set of views, which can be used with
+item models.  It includes views for categorizing lists and to add search filters
+to flat and hierarchical lists.")
+    (license (list license:gpl2+ license:lgpl2.1+))))
+
 (define-public kitemviews
   (package
+    (inherit kitemviews-6)
     (name "kitemviews")
     (version "5.114.0")
     (source (origin
@@ -1193,17 +1218,9 @@ model to observers
               (sha256
                (base32
                 "00vl2ck0pq0sqcxvhlr2pimgr27hd9v7y9dz6w4arb5smi5q1ixg"))))
-    (build-system qt-build-system)
     (native-inputs
      (list extra-cmake-modules qttools-5))
-    (inputs
-     (list qtbase-5))
-    (home-page "https://community.kde.org/Frameworks")
-    (synopsis "Set of item views extending the Qt model-view framework")
-    (description "KItemViews includes a set of views, which can be used with
-item models.  It includes views for categorizing lists and to add search filters
-to flat and hierarchical lists.")
-    (license (list license:gpl2+ license:lgpl2.1+))))
+    (arguments '())))
 
 (define-public kplotting
   (package
