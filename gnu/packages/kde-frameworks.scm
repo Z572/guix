@@ -1070,6 +1070,31 @@ but also for getting notified upon idle time events, such as custom timeouts,
 or user activity.")
     (license (list license:gpl2+ license:lgpl2.1+))))
 
+(define-public kidletime-6
+  (package
+    (inherit kidletime)
+    (name "kidletime")
+    (version "6.0.0")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (string-append "mirror://kde/stable/frameworks/"
+                           (version-major+minor version) "/"
+                           name "-" version ".tar.xz"))
+       (sha256
+        (base32 "1cx7pn7qma7gzi0dxg330dmpdx7w71b547qd6n2d0j5wzi66p15a"))))
+    (native-inputs
+     (list extra-cmake-modules pkg-config
+           ;; for wayland-scanner
+           wayland))
+    (inputs
+     (list qtbase
+           qtwayland
+           wayland
+           plasma-wayland-protocols
+           wayland-protocols
+           libxkbcommon))))
+
 (define-public kirigami
   ;; Kirigami is listed as tier 1 framework, but optionally includes
   ;; plasma-framework which is tier 3.
