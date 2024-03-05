@@ -310,10 +310,10 @@ Phonon-GStreamer is a backend based on the GStreamer multimedia library.")
 ;; Tier 1 frameworks depend only on Qt (and possibly a small number of other
 ;; third-party libraries), so can easily be used by an Qt-based project.
 
-(define-public attica
+(define-public attica-6
   (package
     (name "attica")
-    (version "5.114.0")
+    (version "6.0.0")
     (source (origin
               (method url-fetch)
               (uri (string-append
@@ -322,8 +322,11 @@ Phonon-GStreamer is a backend based on the GStreamer multimedia library.")
                     name "-" version ".tar.xz"))
               (sha256
                (base32
-                "0gkdsm1vyyyxxyl4rni9s2bdz5w6zphzjl58fddjl899da06hqfq"))))
+                "08rx09y1nqrv956lwjqng6lh50y3x78f1ps0ddxpbr7agbjxh8gg"))))
     (build-system cmake-build-system)
+    (native-inputs
+     (list extra-cmake-modules))
+    (inputs (list qtbase))
     (arguments
      (list
       #:phases
@@ -333,10 +336,6 @@ Phonon-GStreamer is a backend based on the GStreamer multimedia library.")
               ;; These tests require network access.
               (substitute* "autotests/CMakeLists.txt"
                 ((".*providertest.cpp") "")))))))
-    (native-inputs
-     (list extra-cmake-modules))
-    (inputs
-     (list qtbase-5))
     (home-page "https://community.kde.org/Frameworks")
     (synopsis "Open Collaboration Service client library")
     (description "Attica is a Qt library that implements the Open
@@ -350,6 +349,22 @@ kdebase.
 The REST API is defined here:
 http://freedesktop.org/wiki/Specifications/open-collaboration-services/")
     (license (list license:lgpl2.1+ license:lgpl3+))))
+
+(define-public attica
+  (package
+    (inherit attica-6)
+    (name "attica")
+    (version "5.114.0")
+    (source (origin
+              (method url-fetch)
+              (uri (string-append
+                    "mirror://kde/stable/frameworks/"
+                    (version-major+minor version) "/"
+                    name "-" version ".tar.xz"))
+              (sha256
+               (base32
+                "0gkdsm1vyyyxxyl4rni9s2bdz5w6zphzjl58fddjl899da06hqfq"))))
+    (inputs (list qtbase-5))))
 
 (define-public bluez-qt
   (package
