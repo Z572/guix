@@ -1041,8 +1041,41 @@ translation scripting.")
     (inputs
      (list qtbase-5 qtdeclarative-5 qtscript iso-codes))))
 
+(define-public kidletime-6
+  (package
+    (name "kidletime")
+    (version "6.0.0")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (string-append "mirror://kde/stable/frameworks/"
+                           (version-major+minor version) "/"
+                           name "-" version ".tar.xz"))
+       (sha256
+        (base32 "1cx7pn7qma7gzi0dxg330dmpdx7w71b547qd6n2d0j5wzi66p15a"))))
+    (build-system cmake-build-system)
+    (native-inputs
+     (list extra-cmake-modules pkg-config
+           ;; for wayland-scanner
+           wayland))
+    (inputs
+     (list qtbase
+           qtwayland
+           wayland
+           plasma-wayland-protocols
+           wayland-protocols
+           libxkbcommon))
+    (home-page "https://community.kde.org/Frameworks")
+    (synopsis "Reporting of idle time of user and system")
+    (description "KIdleTime is a singleton reporting information on idle time.
+It is useful not only for finding out about the current idle time of the PC,
+but also for getting notified upon idle time events, such as custom timeouts,
+or user activity.")
+    (license (list license:gpl2+ license:lgpl2.1+))))
+
 (define-public kidletime
   (package
+    (inherit kidletime-6)
     (name "kidletime")
     (version "5.114.0")
     (source (origin
@@ -1054,19 +1087,11 @@ translation scripting.")
               (sha256
                (base32
                 "06sc9w54g4n7s5gjkqz08rgcz6v3pr0bdgx3gbjgzass6l4m8w7p"))))
-    (build-system cmake-build-system)
     (native-inputs
      (list extra-cmake-modules pkg-config))
     (inputs
      (list libxscrnsaver ; X-Screensaver based poller, fallback mode
-           qtbase-5 qtx11extras))
-    (home-page "https://community.kde.org/Frameworks")
-    (synopsis "Reporting of idle time of user and system")
-    (description "KIdleTime is a singleton reporting information on idle time.
-It is useful not only for finding out about the current idle time of the PC,
-but also for getting notified upon idle time events, such as custom timeouts,
-or user activity.")
-    (license (list license:gpl2+ license:lgpl2.1+))))
+           qtbase-5 qtx11extras))))
 
 (define-public kirigami
   ;; Kirigami is listed as tier 1 framework, but optionally includes
