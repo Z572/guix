@@ -1013,6 +1013,36 @@ translated text.  This includes argument capturing, customizable markup, and
 translation scripting.")
     (license license:lgpl2.1+)))
 
+(define-public ki18n-6
+  (package
+    (inherit ki18n)
+    (name "ki18n")
+    (version "6.0.0")
+    (source (origin
+              (method url-fetch)
+              (uri (string-append
+                    "mirror://kde/stable/frameworks/"
+                    (version-major+minor version) "/"
+                    name "-" version ".tar.xz"))
+              (sha256
+               (base32
+                "0m63pi8lhj9q7n20rnxlwixs4vn8m7kbcmb743b58f8xxxrzpjqm"))))
+    (propagated-inputs
+     (list gettext-minimal))
+    (native-inputs
+     (list extra-cmake-modules python-minimal tzdata-for-tests))
+    (inputs
+     (list qtbase qtdeclarative iso-codes))
+    (arguments
+     (list #:phases
+           #~(modify-phases %standard-phases
+               (add-before 'check 'check-setup
+                 (lambda* (#:key inputs tests? #:allow-other-keys)
+                   (when tests?
+                     (with-output-to-file "autotests/BLACKLIST"
+                       (lambda _ (display "[testLookup]\n*\n")))
+                     (setenv "HOME" (getcwd))))))))))
+
 (define-public kidletime
   (package
     (name "kidletime")
