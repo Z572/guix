@@ -1270,6 +1270,24 @@ data being plotted.  KPlotWidget automatically converts everything to screen
 pixel units.")
     (license license:lgpl2.1+)))
 
+(define-public kplotting-6
+  (package
+    (inherit kplotting)
+    (name "kplotting")
+    (version "6.0.0")
+    (source (origin
+              (method url-fetch)
+              (uri (string-append
+                    "mirror://kde/stable/frameworks/"
+                    (version-major+minor version) "/"
+                    name "-" version ".tar.xz"))
+              (sha256
+               (base32
+                "1zv338sf2zd4bnzkl69hjbg3qah5s5yslm6p2ga4nd1jfr5n8hyw"))))
+    (native-inputs
+     (list extra-cmake-modules qttools))
+    (inputs (list qtbase))))
+
 (define-public ksyntaxhighlighting
   (package
     (name "ksyntaxhighlighting")
