@@ -932,6 +932,24 @@ replace the other outdated Graphviz tools.")
 interfaces in the areas of colors, fonts, text, images, keyboard input.")
     (license (list license:gpl2+ license:lgpl2.1+))))
 
+(define-public kguiaddons-6
+  (package
+    (inherit kguiaddons)
+    (name "kguiaddons")
+    (version "6.0.0")
+    (source (origin
+              (method url-fetch)
+              (uri (string-append
+                    "mirror://kde/stable/frameworks/"
+                    (version-major+minor version) "/"
+                    name "-" version ".tar.xz"))
+              (sha256
+               (base32
+                "0qma9s1sbys4mcimcncikwfjzwk7r3q4mmybkbq9vacycfmmibr0"))))
+    (native-inputs (list extra-cmake-modules pkg-config))
+    (inputs
+     (list libxkbcommon qtbase qtwayland plasma-wayland-protocols wayland))))
+
 (define-public kholidays
   (package
     (name "kholidays")
