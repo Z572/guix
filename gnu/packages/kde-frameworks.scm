@@ -219,6 +219,23 @@ used from QtQuick applications for both simple display of data as well as
 continuous display of high-volume data.")
     (license (list license:lgpl2.1 license:lgpl3))))
 
+(define-public kquickcharts-6
+  (package
+    (inherit kquickcharts)
+    (name "kquickcharts")
+    (version "6.0.0")
+    (source (origin
+              (method url-fetch)
+              (uri (string-append "mirror://kde/stable/frameworks/"
+                                  (version-major+minor version)
+                                  "/" name "-" version ".tar.xz"))
+              (sha256
+               (base32
+                "19d6fr04hcs1wbvl95iqps1p53v9ga289nah5yhp43mq07ssingb"))))
+    (build-system qt-build-system)
+    (arguments '())
+    (inputs (list qtbase qtdeclarative qtshadertools))))
+
 (define-public phonon
   (package
     (name "phonon")
