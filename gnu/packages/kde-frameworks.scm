@@ -700,10 +700,10 @@ propagate their changes to their respective configuration files.")
                    license:lgpl3+ license:gpl1 ; licende:mit-olif
                    license:bsd-2 license:bsd-3))))
 
-(define-public kcoreaddons
+(define-public kcoreaddons-6
   (package
     (name "kcoreaddons")
-    (version "5.114.0")
+    (version "6.0.0")
     (source (origin
               (method url-fetch)
               (uri (string-append
@@ -712,13 +712,10 @@ propagate their changes to their respective configuration files.")
                     name "-" version ".tar.xz"))
               (sha256
                (base32
-                "1wv3s3xsiii96k17nzs2fb0ih2lyg52krf58v44nlk9wfi4wmnqx"))))
-    (build-system cmake-build-system)
-    (native-inputs
-     (list extra-cmake-modules qttools-5 shared-mime-info))
-    ;; TODO: FAM: File alteration notification http://oss.sgi.com/projects/fam
-    (inputs
-     (list qtbase-5))
+                "1vr6lmklr9kks1kfk6mffpr5f8yni5726kgn2b29ib253ch3if7a"))))
+    (build-system qt-build-system)
+    (native-inputs (list extra-cmake-modules qttools shared-mime-info))
+    (inputs (list qtbase qtdeclarative))
     (arguments
      (list
       #:phases
@@ -745,6 +742,27 @@ creating backup files, generating random sequences, performing text
 manipulations such as macro replacement, accessing user information and
 many more.")
     (license (list license:lgpl2.0+ license:lgpl2.1+))))
+
+(define-public kcoreaddons
+  (package
+    (inherit kcoreaddons-6)
+    (name "kcoreaddons")
+    (version "5.114.0")
+    (source (origin
+              (method url-fetch)
+              (uri (string-append
+                    "mirror://kde/stable/frameworks/"
+                    (version-major+minor version) "/"
+                    name "-" version ".tar.xz"))
+              (sha256
+               (base32
+                "1wv3s3xsiii96k17nzs2fb0ih2lyg52krf58v44nlk9wfi4wmnqx"))))
+    (build-system cmake-build-system)
+    (native-inputs
+     (list extra-cmake-modules qttools-5 shared-mime-info))
+    ;; TODO: FAM: File alteration notification http://oss.sgi.com/projects/fam
+    (inputs
+     (list qtbase-5))))
 
 (define-public kdbusaddons
   (package
