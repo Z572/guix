@@ -742,6 +742,24 @@ manipulations such as macro replacement, accessing user information and
 many more.")
     (license (list license:lgpl2.0+ license:lgpl2.1+))))
 
+(define-public kcoreaddons-6
+  (package
+    (inherit kcoreaddons)
+    (name "kcoreaddons")
+    (version "6.0.0")
+    (source (origin
+              (method url-fetch)
+              (uri (string-append
+                    "mirror://kde/stable/frameworks/"
+                    (version-major+minor version) "/"
+                    name "-" version ".tar.xz"))
+              (sha256
+               (base32
+                "1vr6lmklr9kks1kfk6mffpr5f8yni5726kgn2b29ib253ch3if7a"))))
+    (build-system qt-build-system)
+    (native-inputs (list extra-cmake-modules qttools shared-mime-info))
+    (inputs (list qtbase qtdeclarative))))
+
 (define-public kdbusaddons
   (package
     (name "kdbusaddons")
