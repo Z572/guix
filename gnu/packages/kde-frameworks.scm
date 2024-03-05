@@ -593,6 +593,23 @@ Internet).")
                    license:lgpl2.1 license:lgpl2.1+ license:expat
                    license:lgpl3+ license:mpl1.1))))
 
+(define-public kcodecs-6
+  (package
+    (inherit kcodecs)
+    (name "kcodecs")
+    (version "6.0.0")
+    (source (origin
+              (method url-fetch)
+              (uri (string-append
+                    "mirror://kde/stable/frameworks/"
+                    (version-major+minor version) "/"
+                    name "-" version ".tar.xz"))
+              (sha256
+               (base32
+                "1gjs74i83rxc593i0ixfqa6ayxnq3497vdvcplxl8795vkf49fnf"))))
+    (native-inputs (list extra-cmake-modules gperf qttools))
+    (inputs (list qtbase))))
+
 (define-public kcolorpicker
   (package
     (name "kcolorpicker")
