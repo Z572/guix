@@ -565,10 +565,10 @@ that calendar information via well known calendar formats iCalendar (or iCal)
 and the older vCalendar.")
     (license (list license:lgpl3+ license:bsd-2))))
 
-(define-public kcodecs
+(define-public kcodecs-6
   (package
     (name "kcodecs")
-    (version "5.114.0")
+    (version "6.0.0")
     (source (origin
               (method url-fetch)
               (uri (string-append
@@ -577,10 +577,10 @@ and the older vCalendar.")
                     name "-" version ".tar.xz"))
               (sha256
                (base32
-                "080zvcqd8iq05p5x3qaf3rryx75lg2l2j1dr18sp50ir50zfwh2w"))))
+                "1gjs74i83rxc593i0ixfqa6ayxnq3497vdvcplxl8795vkf49fnf"))))
     (build-system cmake-build-system)
-    (native-inputs (list extra-cmake-modules gperf qttools-5))
-    (inputs (list qtbase-5))
+    (native-inputs (list extra-cmake-modules gperf qttools))
+    (inputs (list qtbase))
     (home-page "https://community.kde.org/Frameworks")
     (synopsis "String encoding and manipulating library")
     (description "KCodecs provide a collection of methods to manipulate
@@ -596,6 +596,23 @@ Internet).")
     (license (list license:gpl2 license:gpl2+ license:bsd-2
                    license:lgpl2.1 license:lgpl2.1+ license:expat
                    license:lgpl3+ license:mpl1.1))))
+
+(define-public kcodecs
+  (package
+    (inherit kcodecs-6)
+    (name "kcodecs")
+    (version "5.114.0")
+    (source (origin
+              (method url-fetch)
+              (uri (string-append
+                    "mirror://kde/stable/frameworks/"
+                    (version-major+minor version) "/"
+                    name "-" version ".tar.xz"))
+              (sha256
+               (base32
+                "080zvcqd8iq05p5x3qaf3rryx75lg2l2j1dr18sp50ir50zfwh2w"))))
+    (native-inputs (list extra-cmake-modules gperf qttools-5))
+    (inputs (list qtbase-5))))
 
 (define-public kcolorpicker
   (package
