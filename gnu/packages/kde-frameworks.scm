@@ -1441,6 +1441,38 @@ dates and times, or MIME types, as well as platform-aware dialogs for
 configuration pages, message boxes, and password requests.")
     (license (list license:gpl2+ license:lgpl2.1+))))
 
+(define-public kwidgetsaddons-6
+  (package
+    (inherit kwidgetsaddons)
+    (name "kwidgetsaddons")
+    (version "6.0.0")
+    (source (origin
+              (method url-fetch)
+              (uri (string-append
+                    "mirror://kde/stable/frameworks/"
+                    (version-major+minor version) "/"
+                    name "-" version ".tar.xz"))
+              (sha256
+               (base32
+                "0qvbd9zb2mrbvv2cyz4wi4ilg9sv0qfdckd6bc8ah88a6691qxx7"))))
+    (native-inputs
+     (list extra-cmake-modules qttools))
+    (inputs (list qtbase))
+    (arguments
+     (list
+      #:phases
+      #~(modify-phases %standard-phases
+          (replace 'check
+            (lambda* (#:key tests? parallel-tests? #:allow-other-keys)
+              (when tests?
+                ;; hideLaterShouldHideAfterDelay function time: 300000ms, total time: 300009ms
+                (invoke "ctest" "-E"
+                        "(ktooltipwidgettest)"
+                        "-j"
+                        (if parallel-tests?
+                            (number->string (parallel-job-count))
+                            "1"))))))))))
+
 (define-public kwindowsystem
   (package
     (name "kwindowsystem")
