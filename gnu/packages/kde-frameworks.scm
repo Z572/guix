@@ -1407,8 +1407,48 @@ are adjusted to be what a Qt developer expects - two arguments of int are
 represented by a QPoint or a QSize.")
     (license license:lgpl2.1+)))
 
+(define-public kwidgetsaddons-6
+  (package
+    (name "kwidgetsaddons")
+    (version "6.0.0")
+    (source (origin
+              (method url-fetch)
+              (uri (string-append
+                    "mirror://kde/stable/frameworks/"
+                    (version-major+minor version) "/"
+                    name "-" version ".tar.xz"))
+              (sha256
+               (base32
+                "0qvbd9zb2mrbvv2cyz4wi4ilg9sv0qfdckd6bc8ah88a6691qxx7"))))
+    (build-system qt-build-system)
+    (native-inputs
+     (list extra-cmake-modules qttools))
+    (arguments
+     (list
+      #:qtbase qtbase
+      #:phases
+      #~(modify-phases %standard-phases
+          (replace 'check
+            (lambda* (#:key tests? parallel-tests? #:allow-other-keys)
+              (when tests?
+                ;; hideLaterShouldHideAfterDelay function time: 300000ms, total time: 300009ms
+                (invoke "ctest" "-E"
+                        "(ktooltipwidgettest)"
+                        "-j"
+                        (if parallel-tests?
+                            (number->string (parallel-job-count))
+                            "1"))))))))
+    (home-page "https://community.kde.org/Frameworks")
+    (synopsis "Large set of desktop widgets")
+    (description "Provided are action classes that can be added to toolbars or
+menus, a wide range of widgets for selecting characters, fonts, colors, actions,
+dates and times, or MIME types, as well as platform-aware dialogs for
+configuration pages, message boxes, and password requests.")
+    (license (list license:gpl2+ license:lgpl2.1+))))
+
 (define-public kwidgetsaddons
   (package
+    (inherit kwidgetsaddons-6)
     (name "kwidgetsaddons")
     (version "5.114.0")
     (source (origin
@@ -1420,11 +1460,8 @@ represented by a QPoint or a QSize.")
               (sha256
                (base32
                 "1cc8lsk9v0cp2wiy1q26mlkf8np0yj01sq8a7w13ga5s6hv4sh2n"))))
-    (build-system qt-build-system)
     (native-inputs
      (list extra-cmake-modules qttools-5 xorg-server-for-tests))
-    (inputs
-     (list qtbase-5))
     (arguments
      (list
       #:phases
@@ -1435,14 +1472,7 @@ represented by a QPoint or a QSize.")
                 (setenv "XDG_CACHE_HOME" "/tmp/xdg-cache")
                 (invoke "ctest" "-E"
                         "(ksqueezedtextlabelautotest|\
-kwidgetsaddons-kcolumnresizertest)")))))))
-    (home-page "https://community.kde.org/Frameworks")
-    (synopsis "Large set of desktop widgets")
-    (description "Provided are action classes that can be added to toolbars or
-menus, a wide range of widgets for selecting characters, fonts, colors, actions,
-dates and times, or MIME types, as well as platform-aware dialogs for
-configuration pages, message boxes, and password requests.")
-    (license (list license:gpl2+ license:lgpl2.1+))))
+kwidgetsaddons-kcolumnresizertest)")))))))))
 
 (define-public kwindowsystem
   (package
