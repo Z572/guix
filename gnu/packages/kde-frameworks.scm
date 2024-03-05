@@ -186,8 +186,32 @@ modules provided by CMake to find common software.  In addition, it provides
 common build settings used in software produced by the KDE community.")
     (license license:bsd-3)))
 
+(define-public kquickcharts-6
+  (package
+    (name "kquickcharts")
+    (version "6.0.0")
+    (source (origin
+              (method url-fetch)
+              (uri (string-append "mirror://kde/stable/frameworks/"
+                                  (version-major+minor version)
+                                  "/" name "-" version ".tar.xz"))
+              (sha256
+               (base32
+                "19d6fr04hcs1wbvl95iqps1p53v9ga289nah5yhp43mq07ssingb"))))
+    (build-system qt-build-system)
+    (native-inputs (list extra-cmake-modules glslang pkg-config))
+    (inputs (list qtbase qtdeclarative qtshadertools))
+    (home-page "https://api.kde.org/frameworks/kquickcharts/html/index.html")
+    (synopsis "QtQuick plugin providing high-performance charts")
+    (description
+     "The Quick Charts module provides a set of charts that can be
+used from QtQuick applications for both simple display of data as well as
+continuous display of high-volume data.")
+    (license (list license:lgpl2.1 license:lgpl3))))
+
 (define-public kquickcharts
   (package
+    (inherit kquickcharts-6)
     (name "kquickcharts")
     (version "5.114.0")
     (source (origin
@@ -209,15 +233,7 @@ common build settings used in software produced by the KDE community.")
                               (setenv "QT_QPA_PLATFORM" "offscreen")
                               (invoke "ctest")))))))
     (inputs (list qtbase-5 qtdeclarative-5 qtquickcontrols2-5
-                  xorg-server-for-tests))
-    (native-inputs (list extra-cmake-modules glslang pkg-config))
-    (home-page "https://api.kde.org/frameworks/kquickcharts/html/index.html")
-    (synopsis "QtQuick plugin providing high-performance charts")
-    (description
-     "The Quick Charts module provides a set of charts that can be
-used from QtQuick applications for both simple display of data as well as
-continuous display of high-volume data.")
-    (license (list license:lgpl2.1 license:lgpl3))))
+                  xorg-server-for-tests))))
 
 (define-public phonon
   (package
