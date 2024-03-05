@@ -955,6 +955,22 @@ interfaces in the areas of colors, fonts, text, images, keyboard input.")
 other special events for a geographical region.")
     (license license:lgpl2.0+)))
 
+(define-public kholidays-6
+  (package
+    (inherit kholidays)
+    (name "kholidays")
+    (version "6.0.0")
+    (source (origin
+              (method url-fetch)
+              (uri (string-append
+                    "mirror://kde/stable/frameworks/"
+                    (version-major+minor version) "/"
+                    name "-" version ".tar.xz"))
+              (sha256
+               (base32 "0zwv1n1jk2xpxhssk8wjzis4viw072ns0iddgfv66sjkzrsn6bs8"))))
+    (native-inputs (list extra-cmake-modules qttools))
+    (inputs (list qtbase qtdeclarative))))
+
 (define-public ki18n
   (package
     (name "ki18n")
