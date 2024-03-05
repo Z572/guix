@@ -805,6 +805,32 @@ as well as an API to create KDED modules.")
     ;; the lgpl2.1. Some source files are under non-copyleft licenses.
     (license license:lgpl2.1+)))
 
+(define-public kdbusaddons-6
+  (package
+    (inherit kdbusaddons)
+    (name "kdbusaddons")
+    (version "6.0.0")
+    (source (origin
+              (method url-fetch)
+              (uri (string-append
+                    "mirror://kde/stable/frameworks/"
+                    (version-major+minor version) "/"
+                    name "-" version ".tar.xz"))
+              (sha256
+               (base32
+                "12g91amlvwagysj06w67an07955smsadn76rca4q3g9rf860vrqi"))))
+    (build-system qt-build-system)
+    (native-inputs
+     (list extra-cmake-modules dbus qttools))
+    (inputs (list qtbase libxkbcommon))
+    (arguments
+     (list #:phases
+           #~(modify-phases %standard-phases
+               (replace 'check
+                 (lambda* (#:key tests? #:allow-other-keys)
+                   (when tests?
+                     (invoke "dbus-launch" "ctest")))))))))
+
 (define-public kdnssd
   (package
     (name "kdnssd")
