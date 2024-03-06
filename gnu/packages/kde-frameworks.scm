@@ -1187,10 +1187,10 @@ and feeling well on both mobile and desktop devices.  They ease the creation
 of applications that follow the Kirigami Human Interface Guidelines.")
     (license license:lgpl2.1+)))
 
-(define-public kitemmodels
+(define-public kitemmodels-6
   (package
     (name "kitemmodels")
-    (version "5.114.0")
+    (version "6.0.0")
     (source (origin
               (method url-fetch)
               (uri (string-append
@@ -1199,12 +1199,12 @@ of applications that follow the Kirigami Human Interface Guidelines.")
                     name "-" version ".tar.xz"))
               (sha256
                (base32
-                "1bfmcrbcbrvp2rcaf32vzvarqwp41gn6s4xpf56hnxbwf9kgk1fl"))))
+                "0fjvhdxdk3hmd4ilbrbqz927j890i096a5xs3f8im0i22yc7kf49"))))
     (build-system qt-build-system)
     (native-inputs
      (list extra-cmake-modules))
-    (inputs
-     (list qtbase-5 qtdeclarative-5))
+    (inputs (list qtdeclarative))
+    (arguments (list #:qtbase qtbase))
     (home-page "https://community.kde.org/Frameworks")
     (synopsis "Set of item models extending the Qt model-view framework")
     (description "KItemModels provides the following models:
@@ -1236,6 +1236,26 @@ model.
 model to observers
 @end enumerate")
     (license license:lgpl2.1+)))
+
+(define-public kitemmodels
+  (package
+    (inherit kitemmodels-6)
+    (name "kitemmodels")
+    (version "5.114.0")
+    (source (origin
+              (method url-fetch)
+              (uri (string-append
+                    "mirror://kde/stable/frameworks/"
+                    (version-major+minor version) "/"
+                    name "-" version ".tar.xz"))
+              (sha256
+               (base32
+                "1bfmcrbcbrvp2rcaf32vzvarqwp41gn6s4xpf56hnxbwf9kgk1fl"))))
+    (native-inputs
+     (list extra-cmake-modules))
+    (inputs
+     (list qtdeclarative-5))
+    (arguments '())))
 
 (define-public kitemviews-6
   (package
