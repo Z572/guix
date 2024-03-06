@@ -1383,6 +1383,25 @@ integration with a custom editor as well as a ready-to-use
     (properties `((upstream-name . "syntax-highlighting")))
     (license license:lgpl2.1+)))
 
+(define-public ksyntaxhighlighting-6
+  (package
+    (inherit ksyntaxhighlighting)
+    (name "ksyntaxhighlighting")
+    (version "6.0.0")
+    (source (origin
+              (method url-fetch)
+              (uri (string-append
+                    "mirror://kde/stable/frameworks/"
+                    (version-major+minor version) "/"
+                    "syntax-highlighting-" version ".tar.xz"))
+              (sha256
+               (base32
+                "0lx629y1sr87qis3aps8dkz5c1hw6gx8lqm3yij3wm5qmswfdy9f"))))
+    (native-inputs
+     (list extra-cmake-modules perl qttools))
+    (inputs
+     (list qtbase qtdeclarative))))
+
 (define-public plasma-wayland-protocols
   (package
     (name "plasma-wayland-protocols")
