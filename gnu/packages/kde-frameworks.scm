@@ -696,6 +696,42 @@ propagate their changes to their respective configuration files.")
                    license:lgpl3+ license:gpl1 ; licende:mit-olif
                    license:bsd-2 license:bsd-3))))
 
+(define-public kconfig-6
+  (package
+    (inherit kconfig)
+    (name "kconfig")
+    (version "6.0.0")
+    (source (origin
+              (method url-fetch)
+              (uri (string-append
+                    "mirror://kde/stable/frameworks/"
+                    (version-major+minor version) "/"
+                    name "-" version ".tar.xz"))
+              (sha256
+               (base32
+                "0l60a302a0msixk491hmkff2il0xmnjh3vzvcwyspx4d0imiwz1z"))))
+    (native-inputs
+     (list dbus extra-cmake-modules inetutils qttools))
+    (propagated-inputs (list qtdeclarative))
+    (inputs (list qtbase))
+    (arguments
+     (list #:phases
+           #~(modify-phases %standard-phases
+               (add-before 'check 'check-setup
+                 (lambda* (#:key tests? #:allow-other-keys)
+                   (when tests? ;; kconfigcore-kconfigtest fails inconsistently!!
+                     (with-output-to-file "autotests/BLACKLIST"
+                       (lambda _
+                         (for-each
+                          (lambda (name) (display (string-append "[" name "]\n*\n")))
+                          (list "testNotifyIllegalObjectPath"
+                                "testLocalDeletion"
+                                "testNotify"
+                                "testSignal"
+                                "testDataUpdated"))))
+                     (setenv "HOME" (getcwd))
+                     (setenv "QT_QPA_PLATFORM" "offscreen")))))))))
+
 (define-public kcoreaddons
   (package
     (name "kcoreaddons")
