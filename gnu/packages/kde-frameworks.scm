@@ -1343,8 +1343,50 @@ pixel units.")
      (list extra-cmake-modules qttools-5))
     (arguments '())))
 
+(define-public ksyntaxhighlighting-6
+  (package
+    (name "ksyntaxhighlighting")
+    (version "6.0.0")
+    (source (origin
+              (method url-fetch)
+              (uri (string-append
+                    "mirror://kde/stable/frameworks/"
+                    (version-major+minor version) "/"
+                    "syntax-highlighting-" version ".tar.xz"))
+              (sha256
+               (base32
+                "0lx629y1sr87qis3aps8dkz5c1hw6gx8lqm3yij3wm5qmswfdy9f"))))
+    (build-system cmake-build-system)
+    (native-inputs
+     (list extra-cmake-modules perl qttools))
+    (inputs
+     (list qtbase qtdeclarative))
+    (arguments
+     (list #:phases
+           #~(modify-phases %standard-phases
+               (add-after 'patch-source-shebangs 'unpatch-source-shebang
+                 (lambda _
+                   ;; revert the patch-shebang phase on scripts which are
+                   ;; in fact test data
+                   (substitute* '("autotests/input/highlight.sh"
+                                  "autotests/folding/highlight.sh.fold")
+                     (((which "sh")) " /bin/sh")) ;; space in front!
+                   (substitute* '("autotests/input/highlight.pl"
+                                  "autotests/folding/highlight.pl.fold")
+                     (((which "perl")) "/usr/bin/perl")))))))
+    (home-page "https://community.kde.org/Frameworks")
+    (synopsis "Syntax highlighting engine for Kate syntax definitions")
+    (description "This is a stand-alone implementation of the Kate syntax
+highlighting engine.  It's meant as a building block for text editors as well
+as for simple highlighted text rendering (e.g. as HTML), supporting both
+integration with a custom editor as well as a ready-to-use
+@code{QSyntaxHighlighter} sub-class.")
+    (properties `((upstream-name . "syntax-highlighting")))
+    (license license:lgpl2.1+)))
+
 (define-public ksyntaxhighlighting
   (package
+    (inherit ksyntaxhighlighting-6)
     (name "ksyntaxhighlighting")
     (version "5.114.0")
     (source (origin
@@ -1356,35 +1398,12 @@ pixel units.")
               (sha256
                (base32
                 "1skblg2m0sar63qrgkjsg0w9scixggm5qj7lp4gzjn4hwq6m3n63"))))
-    (build-system cmake-build-system)
     (native-inputs
      (list extra-cmake-modules perl qttools-5
            ;; Optional, for compile-time validation of syntax definition files:
            qtxmlpatterns))
     (inputs
-     (list qtbase-5))
-    (arguments
-     `(#:phases
-       (modify-phases %standard-phases
-         (add-after 'patch-source-shebangs 'unpatch-source-shebang
-           (lambda _
-             ;; revert the patch-shebang phase on scripts which are
-             ;; in fact test data
-             (substitute* '("autotests/input/highlight.sh"
-                            "autotests/folding/highlight.sh.fold")
-               (((which "sh")) " /bin/sh")) ;; space in front!
-             (substitute* '("autotests/input/highlight.pl"
-                            "autotests/folding/highlight.pl.fold")
-               (((which "perl")) "/usr/bin/perl")))))))
-    (home-page "https://community.kde.org/Frameworks")
-    (synopsis "Syntax highlighting engine for Kate syntax definitions")
-    (description "This is a stand-alone implementation of the Kate syntax
-highlighting engine.  It's meant as a building block for text editors as well
-as for simple highlighted text rendering (e.g. as HTML), supporting both
-integration with a custom editor as well as a ready-to-use
-@code{QSyntaxHighlighter} sub-class.")
-    (properties `((upstream-name . "syntax-highlighting")))
-    (license license:lgpl2.1+)))
+     (list qtbase-5))))
 
 (define-public plasma-wayland-protocols
   (package
