@@ -1236,6 +1236,22 @@ model to observers
 @end enumerate")
     (license license:lgpl2.1+)))
 
+(define-public kitemmodels-6
+  (package
+    (inherit kitemmodels)
+    (name "kitemmodels")
+    (version "6.0.0")
+    (source (origin
+              (method url-fetch)
+              (uri (string-append
+                    "mirror://kde/stable/frameworks/"
+                    (version-major+minor version) "/"
+                    name "-" version ".tar.xz"))
+              (sha256
+               (base32
+                "0fjvhdxdk3hmd4ilbrbqz927j890i096a5xs3f8im0i22yc7kf49"))))
+    (inputs (list qtbase qtdeclarative))))
+
 (define-public kitemviews
   (package
     (name "kitemviews")
