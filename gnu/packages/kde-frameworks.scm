@@ -640,10 +640,10 @@ menu which lets you select a color.  The popup features a color dialog button
 which can be used to add custom colors to the popup menu.")
     (license license:lgpl3+)))
 
-(define-public kconfig
+(define-public kconfig-6
   (package
     (name "kconfig")
-    (version "5.114.0")
+    (version "6.0.0")
     (source (origin
               (method url-fetch)
               (uri (string-append
@@ -652,23 +652,31 @@ which can be used to add custom colors to the popup menu.")
                     name "-" version ".tar.xz"))
               (sha256
                (base32
-                "0hghdh4p6cq9ckp4g5jdgd8w47pdsxxvzimrdfjrs71lmy8ydiy2"))))
-    (build-system cmake-build-system)
+                "0l60a302a0msixk491hmkff2il0xmnjh3vzvcwyspx4d0imiwz1z"))))
+    (build-system qt-build-system)
     (native-inputs
-     (list dbus extra-cmake-modules inetutils qttools-5
-           xorg-server-for-tests))
-    (inputs
-     (list qtbase-5 qtdeclarative-5))
+     (list dbus extra-cmake-modules inetutils qttools))
+    (propagated-inputs (list qtdeclarative))
     (arguments
-     `(#:phases
-       (modify-phases %standard-phases
-         (replace 'check
-           (lambda* (#:key tests? #:allow-other-keys)
-             (when tests? ;; kconfigcore-kconfigtest fails inconsistently!!
-               (setenv "HOME" (getcwd))
-               (setenv "QT_QPA_PLATFORM" "offscreen")
-               (invoke "ctest" "-E" "(kconfigcore-kconfigtest|\
-kconfiggui-kstandardshortcutwatchertest)")))))))
+     (list
+      #:qtbase qtbase
+      #:phases
+      #~(modify-phases %standard-phases
+          (add-before 'check 'check-setup
+            (lambda* (#:key tests? #:allow-other-keys)
+              (when tests?
+                (with-output-to-file "autotests/BLACKLIST"
+                  (lambda _
+                    (for-each
+                     (lambda (name)
+                       (display (string-append "[" name "]\n*\n")))
+                     (list "testNotifyIllegalObjectPath"
+                           "testLocalDeletion"
+                           "testNotify"
+                           "testSignal"
+                           "testDataUpdated"))))
+                (setenv "HOME" (getcwd))
+                (setenv "QT_QPA_PLATFORM" "offscreen")))))))
     (home-page "https://community.kde.org/Frameworks")
     (synopsis "Kconfiguration settings framework for Qt")
     (description "KConfig provides an advanced configuration system.
@@ -699,6 +707,38 @@ propagate their changes to their respective configuration files.")
     (license (list license:lgpl2.1 license:lgpl2.1+ license:expat
                    license:lgpl3+ license:gpl1 ; licende:mit-olif
                    license:bsd-2 license:bsd-3))))
+
+(define-public kconfig
+  (package
+    (inherit kconfig-6)
+    (name "kconfig")
+    (version "5.114.0")
+    (source (origin
+              (method url-fetch)
+              (uri (string-append
+                    "mirror://kde/stable/frameworks/"
+                    (version-major+minor version) "/"
+                    name "-" version ".tar.xz"))
+              (sha256
+               (base32
+                "0hghdh4p6cq9ckp4g5jdgd8w47pdsxxvzimrdfjrs71lmy8ydiy2"))))
+    (build-system cmake-build-system)
+    (native-inputs
+     (list dbus extra-cmake-modules inetutils qttools-5
+           xorg-server-for-tests))
+    (inputs
+     (list qtbase-5 qtdeclarative-5))
+    (propagated-inputs '())
+    (arguments
+     (list #:phases
+           #~(modify-phases %standard-phases
+               (replace 'check
+                 (lambda* (#:key tests? #:allow-other-keys)
+                   (when tests? ;; kconfigcore-kconfigtest fails inconsistently!!
+                     (setenv "HOME" (getcwd))
+                     (setenv "QT_QPA_PLATFORM" "offscreen")
+                     (invoke "ctest" "-E" "(kconfigcore-kconfigtest|\
+kconfiggui-kstandardshortcutwatchertest)")))))))))
 
 (define-public kcoreaddons-6
   (package
