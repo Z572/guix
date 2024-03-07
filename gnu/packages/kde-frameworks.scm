@@ -536,8 +536,60 @@ GZip format, via a subclass of QIODevice.")
      (list bzip2 qtbase-5 xz zlib `(,zstd "lib")))
     (synopsis "Qt 5 addon providing access to numerous types of archives")))
 
+(define-public kcalendarcore-6
+  (package
+    (name "kcalendarcore")
+    (version "6.0.0")
+    (source (origin
+              (method url-fetch)
+              (uri (string-append
+                    "mirror://kde/stable/frameworks/"
+                    (version-major+minor version) "/"
+                    name "-" version ".tar.xz"))
+              (sha256
+               (base32
+                "1hmp1rzapm15r5rgc7wx8f708lxz54jzms3w6a3m46kc52n5c4v4"))))
+    (build-system cmake-build-system)
+    (native-inputs
+     (list extra-cmake-modules perl tzdata-for-tests))
+    (inputs (list libical qtbase))
+    (arguments
+     (list
+      #:phases
+      #~(modify-phases %standard-phases
+          (add-before 'check 'check-setup
+            (lambda* (#:key inputs #:allow-other-keys)
+              (setenv "QT_QPA_PLATFORM" "offscreen")
+              (setenv "TZ" "Europe/Prague")
+              (setenv "TZDIR"
+                      (search-input-directory inputs
+                                              "share/zoneinfo"))))
+          (replace 'check
+            (lambda* (#:key tests? parallel-tests? #:allow-other-keys)
+              (when tests?
+                ;; alse fail in upstream
+                (invoke "ctest" "-E"
+                        "(testicaltimezones|\
+Compat-AppleICal_1.5.ics|Compat-KOrganizer_3.1a.ics|Compat-Mozilla_1.0.ics)"
+                        "-j"
+                        (if parallel-tests?
+                            (number->string (parallel-job-count))
+                            "1"))))))))
+    (home-page "https://community.kde.org/Frameworks")
+    (synopsis "Library for interfacing with calendars")
+    (description "This library provides access to and handling of calendar
+data.  It supports the standard formats iCalendar and vCalendar and the group
+scheduling standard iTIP.
+
+A calendar contains information like incidences (events, to-dos, journals),
+alarms, time zones, and other useful information.  This API provides access to
+that calendar information via well known calendar formats iCalendar (or iCal)
+and the older vCalendar.")
+    (license (list license:lgpl3+ license:bsd-2))))
+
 (define-public kcalendarcore
   (package
+    (inherit kcalendarcore-6)
     (name "kcalendarcore")
     (version "5.114.0")
     (source (origin
@@ -549,7 +601,6 @@ GZip format, via a subclass of QIODevice.")
               (sha256
                (base32
                 "0aimda01zqw4fz5ldvz4vh767bi10r00kvm62n89nxhsq46wlk7p"))))
-    (build-system cmake-build-system)
     (native-inputs
      (list extra-cmake-modules perl tzdata-for-tests))
     (inputs
@@ -570,18 +621,7 @@ GZip format, via a subclass of QIODevice.")
               (setenv "TZ" "Europe/Prague")
               (setenv "TZDIR"
                       (search-input-directory inputs
-                                              "share/zoneinfo")))))))
-    (home-page "https://community.kde.org/Frameworks")
-    (synopsis "Library for interfacing with calendars")
-    (description "This library provides access to and handling of calendar
-data.  It supports the standard formats iCalendar and vCalendar and the group
-scheduling standard iTIP.
-
-A calendar contains information like incidences (events, to-dos, journals),
-alarms, time zones, and other useful information.  This API provides access to
-that calendar information via well known calendar formats iCalendar (or iCal)
-and the older vCalendar.")
-    (license (list license:lgpl3+ license:bsd-2))))
+                                              "share/zoneinfo")))))))))
 
 (define-public kcodecs-6
   (package
