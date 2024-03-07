@@ -1611,10 +1611,10 @@ configuration pages, message boxes, and password requests.")
                         "(ksqueezedtextlabelautotest|\
 kwidgetsaddons-kcolumnresizertest)")))))))))
 
-(define-public kwindowsystem
+(define-public kwindowsystem-6
   (package
     (name "kwindowsystem")
-    (version "5.114.0")
+    (version "6.0.0")
     (source (origin
               (method url-fetch)
               (uri (string-append
@@ -1623,19 +1623,24 @@ kwidgetsaddons-kcolumnresizertest)")))))))))
                     name "-" version ".tar.xz"))
               (sha256
                (base32
-                "03xbsf1pmswd2kpn3pdszp4vndclsh7j02fp22npxaxllmfr4va9"))))
+                "153a7601yppd470mz76hqrphbai5kzcwi8vq9l6gqn3x7fjwl1hr"))))
     (build-system cmake-build-system)
     (native-inputs
      (list extra-cmake-modules
            pkg-config
+           wayland; for wayland-scanner
            dbus ; for the tests
-           openbox ; for the tests
-           qttools-5
+           openbox ; for the test
+           qttools
            xorg-server-for-tests)) ; for the tests
     (inputs
-     (list libxrender
-           qtbase-5
-           qtx11extras
+     (list qtbase
+           qtdeclarative
+           qtwayland
+           wayland-protocols
+           plasma-wayland-protocols
+           libxkbcommon
+           wayland
            xcb-util-keysyms
            xcb-util-wm))
     (arguments
@@ -1667,6 +1672,34 @@ lower level classes for interaction with the X Windowing System.")
     ;; Some source files mention lgpl2.0+, but the included license is
     ;; the lgpl2.1. Some source files are under non-copyleft licenses.
     (license license:lgpl2.1+)))
+
+(define-public kwindowsystem
+  (package
+    (inherit kwindowsystem-6)
+    (name "kwindowsystem")
+    (version "5.114.0")
+    (source (origin
+              (method url-fetch)
+              (uri (string-append
+                    "mirror://kde/stable/frameworks/"
+                    (version-major+minor version) "/"
+                    name "-" version ".tar.xz"))
+              (sha256
+               (base32
+                "03xbsf1pmswd2kpn3pdszp4vndclsh7j02fp22npxaxllmfr4va9"))))
+    (native-inputs
+     (list extra-cmake-modules
+           pkg-config
+           dbus ; for the tests
+           openbox ; for the tests
+           qttools-5
+           xorg-server-for-tests)) ; for the tests
+    (inputs
+     (list libxrender
+           qtbase-5
+           qtx11extras
+           xcb-util-keysyms
+           xcb-util-wm))))
 
 (define-public modemmanager-qt
   (package
