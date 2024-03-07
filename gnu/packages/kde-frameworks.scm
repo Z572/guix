@@ -2497,10 +2497,10 @@ of non binary content such as scripted extensions or graphic assets, as if they
 were traditional plugins.")
     (license (list license:gpl2+ license:lgpl2.1+))))
 
-(define-public kpty
+(define-public kpty-6
   (package
     (name "kpty")
-    (version "5.114.0")
+    (version "6.0.0")
     (source (origin
               (method url-fetch)
               (uri (string-append
@@ -2509,14 +2509,13 @@ were traditional plugins.")
                     name "-" version ".tar.xz"))
               (sha256
                (base32
-                "0fm7bfp89kvg1a64q8piiyal71p6vjnqcm13zak6r9fbfwcm0gs9"))))
+                "0wgi1n72gq5fvwqvd47r05vmhgkszyawvcyfys9kawy1vxx3bpy5"))))
     (build-system cmake-build-system)
     (native-inputs
      (list extra-cmake-modules))
     (inputs
-     (list kcoreaddons ki18n
-           ;; TODO: utempter, for managing UTMP entries
-           qtbase-5))
+     ;; TODO: utempter, for managing UTMP entries
+     (list kcoreaddons-6 ki18n-6 qtbase))
     (arguments
      (list #:tests? #f ; FIXME: 1/1 tests fail.
            #:phases #~(modify-phases %standard-phases
@@ -2531,6 +2530,26 @@ were traditional plugins.")
 terminal devices as well as a KProcess derived class for running child processes
 and communicating with them using a pty.")
     (license (list license:gpl2+ license:lgpl2.1+))))
+
+(define-public kpty
+  (package
+    (inherit kpty-6)
+    (name "kpty")
+    (version "5.114.0")
+    (source (origin
+              (method url-fetch)
+              (uri (string-append
+                    "mirror://kde/stable/frameworks/"
+                    (version-major+minor version) "/"
+                    name "-" version ".tar.xz"))
+              (sha256
+               (base32
+                "0fm7bfp89kvg1a64q8piiyal71p6vjnqcm13zak6r9fbfwcm0gs9"))))
+    (native-inputs
+     (list extra-cmake-modules))
+    (inputs
+     (list kcoreaddons ki18n
+           qtbase-5))))
 
 (define-public kunitconversion
   (package
