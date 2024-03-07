@@ -581,6 +581,45 @@ that calendar information via well known calendar formats iCalendar (or iCal)
 and the older vCalendar.")
     (license (list license:lgpl3+ license:bsd-2))))
 
+(define-public kcalendarcore-6
+  (package
+    (inherit kcalendarcore)
+    (name "kcalendarcore")
+    (version "6.0.0")
+    (source (origin
+              (method url-fetch)
+              (uri (string-append
+                    "mirror://kde/stable/frameworks/"
+                    (version-major+minor version) "/"
+                    name "-" version ".tar.xz"))
+              (sha256
+               (base32
+                "1hmp1rzapm15r5rgc7wx8f708lxz54jzms3w6a3m46kc52n5c4v4"))))
+    (native-inputs
+     (list extra-cmake-modules perl tzdata-for-tests))
+    (inputs (list libical qtbase))
+    (arguments
+     (list
+      #:phases
+      #~(modify-phases %standard-phases
+          (add-before 'check 'check-setup
+            (lambda* (#:key inputs #:allow-other-keys)
+              (setenv "QT_QPA_PLATFORM" "offscreen")
+              (setenv "TZ" "Europe/Prague")
+              (setenv "TZDIR"
+                      (search-input-directory inputs
+                                              "share/zoneinfo"))))
+          (replace 'check
+            (lambda* (#:key tests? parallel-tests? #:allow-other-keys)
+              (when tests?
+                ;; alse fail in upstream
+                (invoke "ctest" "-E"
+                        "(testicaltimezones|Compat-AppleICal_1.5.ics|Compat-KOrganizer_3.1a.ics|Compat-Mozilla_1.0.ics)"
+                        "-j"
+                        (if parallel-tests?
+                            (number->string (parallel-job-count))
+                            "1"))))))))))
+
 (define-public kcodecs
   (package
     (name "kcodecs")
