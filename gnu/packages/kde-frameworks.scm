@@ -2070,6 +2070,25 @@ applications.  It provides a set of completion-ready widgets, or can be
 integrated it into your application's other widgets.")
     (license license:lgpl2.1+)))
 
+(define-public kcompletion-6
+  (package
+    (inherit kcompletion)
+    (name "kcompletion")
+    (version "6.0.0")
+    (source (origin
+              (method url-fetch)
+              (uri (string-append
+                    "mirror://kde/stable/frameworks/"
+                    (version-major+minor version) "/"
+                    name "-" version ".tar.xz"))
+              (sha256
+               (base32
+                "0ng5xsw1ia00kzk2369n85bbdyhcjaigf7vdj12nb6wpwwa40hzn"))))
+    (native-inputs
+     (list extra-cmake-modules qttools))
+    (inputs
+     (list kcodecs-6 kconfig-6 kwidgetsaddons-6 qtbase))))
+
 (define-public kcontacts
   (package
     (name "kcontacts")
