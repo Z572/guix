@@ -2053,8 +2053,35 @@ actions that need to be performed as a privileged user to small set of helper
 utilities.")
     (license license:lgpl2.1+)))
 
+(define-public kcompletion-6
+  (package
+    (name "kcompletion")
+    (version "6.0.0")
+    (source (origin
+              (method url-fetch)
+              (uri (string-append
+                    "mirror://kde/stable/frameworks/"
+                    (version-major+minor version) "/"
+                    name "-" version ".tar.xz"))
+              (sha256
+               (base32
+                "0ng5xsw1ia00kzk2369n85bbdyhcjaigf7vdj12nb6wpwwa40hzn"))))
+    (build-system qt-build-system)
+    (native-inputs
+     (list extra-cmake-modules qttools))
+    (inputs
+     (list kcodecs-6 kconfig-6 kwidgetsaddons-6))
+    (arguments (list #:qtbase qtbase))
+    (home-page "https://community.kde.org/Frameworks")
+    (synopsis "Powerful autocompletion framework and widgets")
+    (description "This framework helps implement autocompletion in Qt-based
+applications.  It provides a set of completion-ready widgets, or can be
+integrated it into your application's other widgets.")
+    (license license:lgpl2.1+)))
+
 (define-public kcompletion
   (package
+    (inherit kcompletion-6)
     (name "kcompletion")
     (version "5.114.0")
     (source (origin
@@ -2066,17 +2093,11 @@ utilities.")
               (sha256
                (base32
                 "0qvdxqlh1dklkbmqfjg5gc3dkdicgzn6q5lgvyf8cv46dinj6mwc"))))
-    (build-system qt-build-system)
     (native-inputs
      (list extra-cmake-modules qttools-5))
     (inputs
-     (list kconfig kwidgetsaddons qtbase-5))
-    (home-page "https://community.kde.org/Frameworks")
-    (synopsis "Powerful autocompletion framework and widgets")
-    (description "This framework helps implement autocompletion in Qt-based
-applications.  It provides a set of completion-ready widgets, or can be
-integrated it into your application's other widgets.")
-    (license license:lgpl2.1+)))
+     (list kconfig kwidgetsaddons))
+    (arguments '())))
 
 (define-public kcontacts
   (package
