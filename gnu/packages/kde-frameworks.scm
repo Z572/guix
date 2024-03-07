@@ -481,8 +481,45 @@ documentation.")
     ;; This list is taken from http://packaging.neon.kde.org/cgit/
     (license (list license:bsd-2 license:expat))))
 
+(define-public karchive-6
+  (package
+    (name "karchive")
+    (version "6.0.0")
+    (source (origin
+              (method url-fetch)
+              (uri (string-append "mirror://kde/stable/frameworks/"
+                                  (version-major+minor version)
+                                  "/" name "-" version ".tar.xz"))
+              (sha256
+               (base32
+                "0l2fn1inw80rxfmqzvzcj82n4zrfi3rycx39ha3fn9l0ckcr39bm"))))
+    (build-system cmake-build-system)
+    (arguments
+     (list #:phases #~(modify-phases %standard-phases
+                        (replace 'check
+                          (lambda* (#:key tests? #:allow-other-keys)
+                            (when tests?
+                              (invoke "ctest" "-E" "karchivetest")))))))
+    (native-inputs
+     (list extra-cmake-modules pkg-config qttools))
+    (inputs (list bzip2 qtbase xz zlib `(,zstd "lib")))
+    (synopsis "Qt 6 addon providing access to numerous types of archives")
+    (description
+     "KArchive provides classes for easy reading, creation and
+manipulation of @code{archive} formats like ZIP and TAR.
+
+It also provides transparent compression and decompression of data, like the
+GZip format, via a subclass of QIODevice.")
+    (home-page "https://community.kde.org/Frameworks")
+    ;; The included licenses is are gpl2 and lgpl2.1, but the sources are
+    ;; under a variety of licenses.
+    ;; This list is taken from http://packaging.neon.kde.org/cgit/
+    (license (list license:lgpl2.1 license:lgpl2.1+
+                   license:lgpl3+ license:bsd-2))))
+
 (define-public karchive
   (package
+    (inherit karchive-6)
     (name "karchive")
     (version "5.114.0")
     (source (origin
@@ -493,30 +530,11 @@ documentation.")
               (sha256
                (base32
                 "015gc1zarny8r478p7g9m6r67l5dk3r0vcp28ilmfmznxy0k0hda"))))
-    (build-system cmake-build-system)
-    (arguments
-     (list #:phases #~(modify-phases %standard-phases
-                        (replace 'check
-                          (lambda* (#:key tests? #:allow-other-keys)
-                            (when tests?
-                              (invoke "ctest" "-E" "karchivetest")))))))
     (native-inputs
      (list extra-cmake-modules pkg-config qttools-5))
     (inputs
      (list bzip2 qtbase-5 xz zlib `(,zstd "lib")))
-    (home-page "https://community.kde.org/Frameworks")
-    (synopsis "Qt 5 addon providing access to numerous types of archives")
-    (description
-     "KArchive provides classes for easy reading, creation and
-manipulation of @code{archive} formats like ZIP and TAR.
-
-It also provides transparent compression and decompression of data, like the
-GZip format, via a subclass of QIODevice.")
-    ;; The included licenses is are gpl2 and lgpl2.1, but the sources are
-    ;; under a variety of licenses.
-    ;; This list is taken from http://packaging.neon.kde.org/cgit/
-    (license (list license:lgpl2.1 license:lgpl2.1+
-                   license:lgpl3+ license:bsd-2))))
+    (synopsis "Qt 5 addon providing access to numerous types of archives")))
 
 (define-public kcalendarcore
   (package
