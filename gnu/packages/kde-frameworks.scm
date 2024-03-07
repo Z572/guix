@@ -2519,6 +2519,25 @@ terminal devices as well as a KProcess derived class for running child processes
 and communicating with them using a pty.")
     (license (list license:gpl2+ license:lgpl2.1+))))
 
+(define-public kpty-6
+  (package
+    (inherit kpty)
+    (name "kpty")
+    (version "6.0.0")
+    (source (origin
+              (method url-fetch)
+              (uri (string-append
+                    "mirror://kde/stable/frameworks/"
+                    (version-major+minor version) "/"
+                    name "-" version ".tar.xz"))
+              (sha256
+               (base32
+                "0wgi1n72gq5fvwqvd47r05vmhgkszyawvcyfys9kawy1vxx3bpy5"))))
+    (native-inputs
+     (list extra-cmake-modules))
+    (inputs
+     (list kcoreaddons-6 ki18n-6 qtbase))))
+
 (define-public kunitconversion
   (package
     (name "kunitconversion")
