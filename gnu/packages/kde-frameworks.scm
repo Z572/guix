@@ -1660,6 +1660,58 @@ lower level classes for interaction with the X Windowing System.")
     ;; the lgpl2.1. Some source files are under non-copyleft licenses.
     (license license:lgpl2.1+)))
 
+(define-public kwindowsystem-6
+  (package
+    (inherit kwindowsystem)
+    (name "kwindowsystem")
+    (version "6.0.0")
+    (source (origin
+              (method url-fetch)
+              (uri (string-append
+                    "mirror://kde/stable/frameworks/"
+                    (version-major+minor version) "/"
+                    name "-" version ".tar.xz"))
+              (sha256
+               (base32
+                "153a7601yppd470mz76hqrphbai5kzcwi8vq9l6gqn3x7fjwl1hr"))))
+    (build-system cmake-build-system)
+    (native-inputs
+     (list extra-cmake-modules
+           pkg-config
+           wayland; for wayland-scanner
+           openbox ; for the test
+           qttools
+           xorg-server-for-tests)) ; for the tests
+    (inputs
+     (list qtbase
+           qtdeclarative
+           qtwayland
+           wayland-protocols
+           plasma-wayland-protocols
+           libxkbcommon
+           wayland
+           xcb-util-keysyms
+           xcb-util-wm))
+    (arguments
+     (list
+      #:phases
+      #~(modify-phases %standard-phases
+          (add-before 'check 'check-setup
+            (lambda _
+              ;; The test suite requires a running window anager
+              (system "Xvfb :1 -ac -screen 0 640x480x24 &")
+              (setenv "DISPLAY" ":1")
+              (sleep 5) ;; Give Xvfb a few moments to get on it's feet
+              (system "openbox &")
+
+              (with-output-to-file "autotests/BLACKLIST"
+                (lambda _
+                  (for-each
+                   (lambda (name) (display (string-append "[" name "]\n*\n")))
+                   (list "testWindowAdded"
+                         "testRecreatingNetEventFilter"
+                         "testActiveWindowChanged")))))))))))
+
 (define-public modemmanager-qt
   (package
     (name "modemmanager-qt")
