@@ -2249,6 +2249,47 @@ actions that need to be performed as a privileged user to small set of helper
 utilities.")
     (license license:lgpl2.1+)))
 
+(define-public kauth-6
+  (package
+    (inherit kauth)
+    (name "kauth")
+    (version "6.0.0")
+    (source (origin
+              (method url-fetch)
+              (uri (string-append
+                    "mirror://kde/stable/frameworks/"
+                    (version-major+minor version) "/"
+                    name "-" version ".tar.xz"))
+              (sha256
+               (base32
+                "0s670cyjhsfdx4xj718g5a4bgy69n84chvks77ar4ijqsac6c136"))))
+    (build-system cmake-build-system)
+    (native-inputs
+     (list dbus extra-cmake-modules qttools))
+    (propagated-inputs (list kcoreaddons-6))
+    (inputs
+     (list kwindowsystem-6 polkit-qt6 qtbase))
+    (arguments
+     (list
+      #:phases
+      #~(modify-phases %standard-phases
+          (add-after 'unpack 'fix-cmake-install-directories
+            (lambda _
+              ;; Make packages using kauth put their policy files and helpers
+              ;; into their own prefix.
+              (substitute* "KF6AuthConfig.cmake.in"
+                (("@KAUTH_POLICY_FILES_INSTALL_DIR@")
+                 "${KDE_INSTALL_DATADIR}/polkit-1/actions")
+                (("@KAUTH_HELPER_INSTALL_DIR@")
+                 "${KDE_INSTALL_LIBEXECDIR}")
+                (("@KAUTH_HELPER_INSTALL_ABSOLUTE_DIR@")
+                 "${KDE_INSTALL_LIBEXECDIR}"))))
+          (replace 'check
+            (lambda* (#:key tests? #:allow-other-keys)
+              (when tests?
+                (setenv "DBUS_FATAL_WARNINGS" "0")
+                (invoke "dbus-launch" "ctest")))))))))
+
 (define-public kcompletion
   (package
     (name "kcompletion")
