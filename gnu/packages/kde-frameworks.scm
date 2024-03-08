@@ -1830,6 +1830,27 @@ which are used in DBus communication.")
     (license license:lgpl3+)
     (properties '((upstream-name . "oxygen-icons5")))))
 
+(define-public oxygen-icons-6
+  (package
+    (inherit oxygen-icons)
+    (name "oxygen-icons")
+    (version "6.0.0")
+    (source (origin
+              (method url-fetch)
+              (uri (string-append
+                    "mirror://kde/stable/oxygen-icons/"
+                    "/" name "-" version ".tar.xz"))
+              (sha256
+               (base32
+                "0x2piq03gj72p5qlhi8zdx3r58va088ysp7lg295vhfwfll1iv18"))))
+    (build-system cmake-build-system)
+    (native-inputs
+     (list extra-cmake-modules
+           ;; for test
+           fdupes))
+    (inputs (list qtbase))
+    (properties '())))
+
 (define-public prison
   (package
     (name "prison")
