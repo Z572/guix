@@ -1785,6 +1785,27 @@ your network devices and also provides a library for parsing connection settings
 which are used in DBus communication.")
     (license license:lgpl2.1+)))
 
+(define-public networkmanager-qt-6
+  (package
+    (inherit networkmanager-qt)
+    (name "networkmanager-qt")
+    (version "6.0.0")
+    (source (origin
+              (method url-fetch)
+              (uri (string-append
+                    "mirror://kde/stable/frameworks/"
+                    (version-major+minor version) "/"
+                    name "-" version ".tar.xz"))
+              (sha256
+               (base32
+                "005pmcfp12swf7sj42w5rk90lbs5qzknp99crs3ndl0i9vscjpr2"))))
+    (propagated-inputs
+     ;; Headers contain #include <NetworkManager.h> and
+     ;;                 #include <libnm/NetworkManager.h>
+     (list network-manager
+           qtdeclarative))
+    (inputs (list qtbase))))
+
 (define-public oxygen-icons
   (package
     (name "oxygen-icons")
