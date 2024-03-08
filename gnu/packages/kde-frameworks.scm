@@ -1874,6 +1874,25 @@ which are used in DBus communication.")
 provides uniform access to generation of barcodes with data.")
     (license license:lgpl2.1+)))
 
+(define-public prison-6
+  (package
+    (inherit prison)
+    (name "prison")
+    (version "6.0.0")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (string-append "mirror://kde/stable/frameworks/"
+                           (version-major+minor version) "/"
+                           name "-" version ".tar.xz"))
+       (sha256
+        (base32 "0npcldy4s0n6s38wk6pln6rygwjv5l14x425xrr10n1qzk3gpxbg"))))
+    (build-system cmake-build-system)
+    (native-inputs
+     (list extra-cmake-modules))
+    (inputs
+     (list libdmtx zxing-cpp qrencode qtbase qtdeclarative qtmultimedia))))
+
 (define-public pulseaudio-qt
   (package
     (name "pulseaudio-qt")
