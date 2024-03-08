@@ -1988,6 +1988,30 @@ querying and interacting with hardware independently of the underlying operating
 system.")
     (license license:lgpl2.1+)))
 
+(define-public solid-6
+  (package
+    (inherit solid)
+    (name "solid")
+    (version "6.0.0")
+    (source (origin
+              (method url-fetch)
+              (uri (string-append
+                    "mirror://kde/stable/frameworks/"
+                    (version-major+minor version) "/"
+                    name "-" version ".tar.xz"))
+              (sha256
+               (base32
+                "1lxdbanpvd4mfw7csgkpix2z2b3ayzpjpqxhbk1igfffxrad5ibm"))))
+    (build-system cmake-build-system)
+    (arguments '())
+    (native-inputs
+     (list bison dbus extra-cmake-modules flex qttools))
+    (inputs
+     (list `(,util-linux "lib") ;; Optional, for libmount
+           libxkbcommon ;; Optional
+           vulkan-headers ;; Optional
+           qtbase qtdeclarative eudev))))
+
 (define-public sonnet
   (package
     (name "sonnet")
