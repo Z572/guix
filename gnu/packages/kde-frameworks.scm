@@ -1797,8 +1797,32 @@ which are used in DBus communication.")
     (inputs
      (list qtbase-5))))
 
+(define-public oxygen-icons-6
+  (package
+    (name "oxygen-icons")
+    (version "6.0.0")
+    (source (origin
+              (method url-fetch)
+              (uri (string-append
+                    "mirror://kde/stable/oxygen-icons/"
+                    "/" name "-" version ".tar.xz"))
+              (sha256
+               (base32
+                "0x2piq03gj72p5qlhi8zdx3r58va088ysp7lg295vhfwfll1iv18"))))
+    (build-system cmake-build-system)
+    (native-inputs
+     (list extra-cmake-modules
+           ;; for test
+           fdupes))
+    (inputs (list qtbase))
+    (home-page "https://community.kde.org/Frameworks")
+    (synopsis "Oxygen provides the standard icon theme for the KDE desktop")
+    (description "Oxygen icon theme for the KDE desktop")
+    (license license:lgpl3+)))
+
 (define-public oxygen-icons
   (package
+    (inherit oxygen-icons-6)
     (name "oxygen-icons")
     (version "5.112.0")
     (source (origin
@@ -1810,15 +1834,10 @@ which are used in DBus communication.")
               (sha256
                (base32
                 "0yw2mixy5p8pw9866rfr0wcjhvilznakd0h6934svv0dk3lv054a"))))
-    (build-system cmake-build-system)
     (native-inputs
      (list extra-cmake-modules fdupes))
     (inputs
      (list qtbase-5))
-    (home-page "https://community.kde.org/Frameworks")
-    (synopsis "Oxygen provides the standard icon theme for the KDE desktop")
-    (description "Oxygen icon theme for the KDE desktop")
-    (license license:lgpl3+)
     (properties '((upstream-name . "oxygen-icons5")))))
 
 (define-public prison
