@@ -2353,8 +2353,32 @@ localized country name to ISO 3166-1 alpha 2 code mapping and vice verca.
               (system "Xvfb +extension GLX :1 -screen 0 640x480x24 &")
               (setenv "DISPLAY" ":1"))))))))
 
+(define-public kcrash-6
+  (package
+    (name "kcrash")
+    (version "6.0.0")
+    (source (origin
+              (method url-fetch)
+              (uri (string-append
+                    "mirror://kde/stable/frameworks/"
+                    (version-major+minor version) "/"
+                    name "-" version ".tar.xz"))
+              (sha256
+               (base32
+                "1ycn8aj1fdq5y82ggw5qdiyd1pfl39wr8kvf0jvifi299va1wvzm"))))
+    (build-system qt-build-system)
+    (native-inputs (list extra-cmake-modules))
+    (inputs (list kcoreaddons-6 kwindowsystem-6))
+    (arguments (list #:qtbase qtbase))
+    (home-page "https://community.kde.org/Frameworks")
+    (synopsis "Graceful handling of application crashes")
+    (description "KCrash provides support for intercepting and handling
+application crashes.")
+    (license license:lgpl2.1+)))
+
 (define-public kcrash
   (package
+    (inherit kcrash-6)
     (name "kcrash")
     (version "5.114.0")
     (source (origin
@@ -2366,16 +2390,11 @@ localized country name to ISO 3166-1 alpha 2 code mapping and vice verca.
               (sha256
                (base32
                 "1avi4yd3kpjqxrvci1nicxbh9mjafj1w2vgfmqanq66b76s4kxj1"))))
-    (build-system qt-build-system)
     (native-inputs
      (list extra-cmake-modules))
     (inputs
-     (list kcoreaddons kwindowsystem qtbase-5 qtx11extras))
-    (home-page "https://community.kde.org/Frameworks")
-    (synopsis "Graceful handling of application crashes")
-    (description "KCrash provides support for intercepting and handling
-application crashes.")
-    (license license:lgpl2.1+)))
+     (list kcoreaddons kwindowsystem qtx11extras))
+    (arguments '())))
 
 (define-public kdoctools-6
   (package
