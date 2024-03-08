@@ -2730,8 +2730,56 @@ covers feedback and persistent events.")
                               (setenv "DBUS_FATAL_WARNINGS" "0")
                               (invoke "dbus-launch" "ctest")))))))))
 
+(define-public kpackage-6
+  (package
+    (name "kpackage")
+    (version "6.0.0")
+    (source (origin
+              (method url-fetch)
+              (uri (string-append
+                    "mirror://kde/stable/frameworks/"
+                    (version-major+minor version) "/"
+                    name "-" version ".tar.xz"))
+              (sha256
+               (base32
+                "1dyix4im5gq7a7vrv659cf1canfaskr4cg60mj9ixdzz1pgw7bnj"))))
+    (build-system cmake-build-system)
+    (native-inputs
+     (list extra-cmake-modules))
+    (propagated-inputs (list kcoreaddons-6))
+    (inputs
+     (list karchive-6
+           kconfig-6
+           kdoctools-6
+           ki18n-6
+           qtbase))
+    (arguments
+     (list
+      ;; The `plasma-querytest' test is known to fail when tests are run in parallel:
+      ;; <https://sources.debian.org/src/kpackage/5.107.0-1/debian/changelog/#L92>
+      #:parallel-tests? #f
+      #:phases
+      #~(modify-phases %standard-phases
+          (add-after 'unpack 'patch
+            (lambda _
+              (substitute* "src/kpackage/package.cpp"
+                (("bool externalPaths = false;")
+                 "bool externalPaths = true;"))
+              (substitute* '("src/kpackage/packageloader.cpp")
+                (("QDirIterator::Subdirectories")
+                 "QDirIterator::Subdirectories | QDirIterator::FollowSymlinks"))))
+          (add-before 'check 'check-setup
+            (lambda _ (setenv "HOME" (getcwd)))))))
+    (home-page "https://community.kde.org/Frameworks")
+    (synopsis "Installation and loading of additional content as packages")
+    (description "The Package framework lets the user install and load packages
+of non binary content such as scripted extensions or graphic assets, as if they
+were traditional plugins.")
+    (license (list license:gpl2+ license:lgpl2.1+))))
+
 (define-public kpackage
   (package
+    (inherit kpackage-6)
     (name "kpackage")
     (version "5.114.0")
     (source (origin
@@ -2743,7 +2791,6 @@ covers feedback and persistent events.")
               (sha256
                (base32
                 "0v165az3k5lfszxy0kl2464573y0dcq92fyfiklwnkkcjsvba69d"))))
-    (build-system cmake-build-system)
     (native-inputs
      (list extra-cmake-modules))
     (inputs
@@ -2753,6 +2800,7 @@ covers feedback and persistent events.")
            kdoctools
            ki18n
            qtbase-5))
+    (propagated-inputs '())
     (arguments
      (list
       #:phases
@@ -2790,13 +2838,7 @@ covers feedback and persistent events.")
                  ""))))
           (add-before 'check 'check-setup
             (lambda _
-              (setenv "HOME" (getcwd)))))))
-    (home-page "https://community.kde.org/Frameworks")
-    (synopsis "Installation and loading of additional content as packages")
-    (description "The Package framework lets the user install and load packages
-of non binary content such as scripted extensions or graphic assets, as if they
-were traditional plugins.")
-    (license (list license:gpl2+ license:lgpl2.1+))))
+              (setenv "HOME" (getcwd)))))))))
 
 (define-public kpty-6
   (package
