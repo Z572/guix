@@ -2663,8 +2663,33 @@ but may be a runtime requirement for Qt-based software to support certain image
 formats.")
     (license license:lgpl2.1+)))
 
+(define-public kjobwidgets-6
+  (package
+    (name "kjobwidgets")
+    (version "6.0.0")
+    (source (origin
+              (method url-fetch)
+              (uri (string-append
+                    "mirror://kde/stable/frameworks/"
+                    (version-major+minor version) "/"
+                    name "-" version ".tar.xz"))
+              (sha256
+               (base32
+                "1gl4rgdhib42i51j6ydb8c597zxvxv76z0ar5fb8q4gqgbad0faj"))))
+    (build-system cmake-build-system)
+    (native-inputs
+     (list extra-cmake-modules qttools))
+    (inputs
+     (list libxkbcommon kcoreaddons-6 knotifications-6 kwidgetsaddons-6 qtbase))
+    (home-page "https://community.kde.org/Frameworks")
+    (synopsis "Widgets for showing progress of asynchronous jobs")
+    (description "KJobWIdgets provides widgets for showing progress of
+asynchronous jobs.")
+    (license license:lgpl2.1+)))
+
 (define-public kjobwidgets
   (package
+    (inherit kjobwidgets-6)
     (name "kjobwidgets")
     (version "5.114.0")
     (source (origin
@@ -2676,16 +2701,10 @@ formats.")
               (sha256
                (base32
                 "1ymlqi5cqcs79nj1vff8pqwgvy0dxj5vv7l529w3a3n315hkrny8"))))
-    (build-system cmake-build-system)
     (native-inputs
      (list extra-cmake-modules qttools-5))
     (inputs
-     (list kcoreaddons kwidgetsaddons qtbase-5 qtx11extras))
-    (home-page "https://community.kde.org/Frameworks")
-    (synopsis "Widgets for showing progress of asynchronous jobs")
-    (description "KJobWIdgets provides widgets for showing progress of
-asynchronous jobs.")
-    (license license:lgpl2.1+)))
+     (list kcoreaddons kwidgetsaddons qtbase-5 qtx11extras))))
 
 (define-public knotifications-6
   (package
