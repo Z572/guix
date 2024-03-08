@@ -2718,6 +2718,31 @@ asynchronous jobs.")
 covers feedback and persistent events.")
     (license license:lgpl2.1+)))
 
+(define-public knotifications-6
+  (package
+    (inherit knotifications)
+    (name "knotifications")
+    (version "6.0.0")
+    (source (origin
+              (method url-fetch)
+              (uri (string-append
+                    "mirror://kde/stable/frameworks/"
+                    (version-major+minor version) "/"
+                    name "-" version ".tar.xz"))
+              (sha256
+               (base32
+                "1s0k8yc83v1zgw9q2ybvjwir1zqy5ldm26y0if0bwjsrzh9xizim"))))
+    (build-system cmake-build-system)
+    (arguments '())
+    (native-inputs
+     (list extra-cmake-modules pkg-config qttools))
+    (propagated-inputs (list qtdeclarative))
+    (inputs
+     (list kconfig-6
+           kcoreaddons-6
+           libcanberra
+           qtbase))))
+
 (define-public kpackage
   (package
     (name "kpackage")
