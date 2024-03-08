@@ -2975,6 +2975,26 @@ on the parsed feed, so that the using application does not need to distinguish
 between feed formats.")
     (license license:lgpl2.1+)))
 
+(define-public syndication-6
+  (package
+    (inherit syndication)
+    (name "syndication")
+    (version "6.0.0")
+    (source (origin
+              (method url-fetch)
+              (uri (string-append
+                    "mirror://kde/stable/frameworks/"
+                    (version-major+minor version) "/"
+                    name "-" version ".tar.xz"))
+              (sha256
+               (base32
+                "1bab57kvhj15dhqj35960y6dx582q9qa6vl8i49gpxpqzj4m2ppz"))))
+    (build-system cmake-build-system)
+    (native-inputs
+     (list extra-cmake-modules))
+    (inputs
+     (list kcodecs-6 qtbase))))
+
 
 ;; Tier 3
 ;;
