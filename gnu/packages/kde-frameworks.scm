@@ -2930,6 +2930,25 @@ mega, giga) as well as converting between different unit systems (e.g. liters,
 gallons).")
     (license license:lgpl2.1+)))
 
+(define-public kunitconversion-6
+  (package
+    (inherit kunitconversion)
+    (name "kunitconversion")
+    (version "6.0.0")
+    (source (origin
+              (method url-fetch)
+              (uri (string-append
+                    "mirror://kde/stable/frameworks/"
+                    (version-major+minor version) "/"
+                    name "-" version ".tar.xz"))
+              (sha256
+               (base32
+                "0pldjvlm39mcx6nq6a4x9sjfvy608km1j4cspk35vhkii6n99168"))))
+    (native-inputs
+     (list extra-cmake-modules))
+    (inputs
+     (list ki18n-6 qtbase))))
+
 (define-public syndication
   (package
     (name "syndication")
