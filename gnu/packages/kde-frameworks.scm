@@ -2048,8 +2048,31 @@ ASpell and HUNSPELL.")
            hunspell
            qtdeclarative-5))))
 
+(define-public threadweaver-6
+  (package
+    (name "threadweaver")
+    (version "6.0.0")
+    (source (origin
+              (method url-fetch)
+              (uri (string-append
+                    "mirror://kde/stable/frameworks/"
+                    (version-major+minor version) "/"
+                    name "-" version ".tar.xz"))
+              (sha256
+               (base32
+                "1cyxd2k5cqzx2vlvr06j83iya0wlsnk4cjpprhmdqzv9w33ax7ds"))))
+    (build-system cmake-build-system)
+    (native-inputs (list extra-cmake-modules))
+    (inputs (list qtbase))
+    (home-page "https://community.kde.org/Frameworks")
+    (synopsis "Helper for multithreaded programming")
+    (description "ThreadWeaver is a helper for multithreaded programming.  It
+uses a job-based interface to queue tasks and execute them in an efficient way.")
+    (license license:lgpl2.1+)))
+
 (define-public threadweaver
   (package
+    (inherit threadweaver-6)
     (name "threadweaver")
     (version "5.114.0")
     (source (origin
@@ -2061,16 +2084,10 @@ ASpell and HUNSPELL.")
               (sha256
                (base32
                 "1y07g58w6z3i11y3djg3aaxanhp9hzaciq61l4dn1gqwghn09xgh"))))
-    (build-system cmake-build-system)
     (native-inputs
      (list extra-cmake-modules))
     (inputs
-     (list qtbase-5))
-    (home-page "https://community.kde.org/Frameworks")
-    (synopsis "Helper for multithreaded programming")
-    (description "ThreadWeaver is a helper for multithreaded programming.  It
-uses a job-based interface to queue tasks and execute them in an efficient way.")
-    (license license:lgpl2.1+)))
+     (list qtbase-5))))
 
 (define-public libkdcraw
   (package
