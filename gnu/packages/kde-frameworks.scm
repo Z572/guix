@@ -1840,8 +1840,32 @@ which are used in DBus communication.")
      (list qtbase-5))
     (properties '((upstream-name . "oxygen-icons5")))))
 
+(define-public prison-6
+  (package
+    (name "prison")
+    (version "6.0.0")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (string-append "mirror://kde/stable/frameworks/"
+                           (version-major+minor version) "/"
+                           name "-" version ".tar.xz"))
+       (sha256
+        (base32 "0npcldy4s0n6s38wk6pln6rygwjv5l14x425xrr10n1qzk3gpxbg"))))
+    (build-system cmake-build-system)
+    (native-inputs
+     (list extra-cmake-modules))
+    (inputs
+     (list libdmtx zxing-cpp qrencode qtbase qtdeclarative qtmultimedia))
+    (home-page "https://api.kde.org/frameworks/prison/html/index.html")
+    (synopsis "Barcode generation abstraction layer")
+    (description "Prison is a Qt-based barcode abstraction layer/library and
+provides uniform access to generation of barcodes with data.")
+    (license license:lgpl2.1+)))
+
 (define-public prison
   (package
+    (inherit prison-6)
     (name "prison")
     (version "5.114.0")
     (source
@@ -1852,16 +1876,10 @@ which are used in DBus communication.")
                            name "-" version ".tar.xz"))
        (sha256
         (base32 "1wbr1lryxmrx65ilq1bhqsdhhikrih977nhpb02fq0cqnvv7v9i7"))))
-    (build-system cmake-build-system)
     (native-inputs
      (list extra-cmake-modules))
     (inputs
-     (list libdmtx qrencode qtbase-5)) ;; TODO: rethink: nix propagates this
-    (home-page "https://api.kde.org/frameworks/prison/html/index.html")
-    (synopsis "Barcode generation abstraction layer")
-    (description "Prison is a Qt-based barcode abstraction layer/library and
-provides uniform access to generation of barcodes with data.")
-    (license license:lgpl2.1+)))
+     (list libdmtx qrencode qtbase-5))))  ;; TODO: rethink: nix propagates this
 
 (define-public pulseaudio-qt
   (package
