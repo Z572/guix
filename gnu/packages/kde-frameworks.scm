@@ -2282,8 +2282,46 @@ integrated it into your application's other widgets.")
      (list kconfig kwidgetsaddons))
     (arguments '())))
 
+(define-public kcontacts-6
+  (package
+    (name "kcontacts")
+    (version "6.0.0")
+    (source (origin
+              (method url-fetch)
+              (uri (string-append
+                    "mirror://kde/stable/frameworks/"
+                    (version-major+minor version) "/"
+                    name "-" version ".tar.xz"))
+              (patches
+               (search-patches "kcontacts-incorrect-country-name.patch"))
+              (sha256
+               (base32
+                "1i0f4dyp5jb64c0ymw7aynfa04yybqb9njran0lc1iamwm46g70p"))))
+    (build-system qt-build-system)
+    (native-inputs (list extra-cmake-modules
+                         ;; for test
+                         iso-codes))
+    (inputs (list qtbase qtdeclarative))
+    (propagated-inputs
+     (list ;; As required by KF6ContactsConfig.cmake.
+      kcodecs-6 kconfig-6 kcoreaddons-6 ki18n-6))
+    (arguments
+     (list
+      #:phases
+      #~(modify-phases %standard-phases
+          (add-before 'check 'check-setup
+            (lambda _ (setenv "HOME" (getcwd)))))))
+    (home-page "https://community.kde.org/Frameworks")
+    (synopsis "API for contacts/address book data following the vCard standard")
+    (description "This library provides a vCard data model, vCard
+input/output, contact group management, locale-aware address formatting, and
+localized country name to ISO 3166-1 alpha 2 code mapping and vice verca.
+")
+    (license license:lgpl2.1+)))
+
 (define-public kcontacts
   (package
+    (inherit kcontacts-6)
     (name "kcontacts")
     (version "5.114.0")
     (source (origin
@@ -2313,14 +2351,7 @@ integrated it into your application's other widgets.")
             (lambda _
               (setenv "HOME" (getcwd))
               (system "Xvfb +extension GLX :1 -screen 0 640x480x24 &")
-              (setenv "DISPLAY" ":1"))))))
-    (home-page "https://community.kde.org/Frameworks")
-    (synopsis "API for contacts/address book data following the vCard standard")
-    (description "This library provides a vCard data model, vCard
-input/output, contact group management, locale-aware address formatting, and
-localized country name to ISO 3166-1 alpha 2 code mapping and vice verca.
-")
-    (license license:lgpl2.1+)))
+              (setenv "DISPLAY" ":1"))))))))
 
 (define-public kcrash
   (package
