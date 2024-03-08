@@ -2333,6 +2333,37 @@ localized country name to ISO 3166-1 alpha 2 code mapping and vice verca.
 ")
     (license license:lgpl2.1+)))
 
+(define-public kcontacts-6
+  (package
+    (inherit kcontacts)
+    (name "kcontacts")
+    (version "6.0.0")
+    (source (origin
+              (method url-fetch)
+              (uri (string-append
+                    "mirror://kde/stable/frameworks/"
+                    (version-major+minor version) "/"
+                    name "-" version ".tar.xz"))
+              (patches
+               (search-patches "kcontacts-incorrect-country-name.patch"))
+              (sha256
+               (base32
+                "1i0f4dyp5jb64c0ymw7aynfa04yybqb9njran0lc1iamwm46g70p"))))
+    (build-system qt-build-system)
+    (native-inputs (list extra-cmake-modules
+                         ;; for test
+                         iso-codes))
+    (inputs (list qtbase qtdeclarative))
+    (propagated-inputs
+     (list ;; As required by KF6ContactsConfig.cmake.
+      kcodecs-6 kconfig-6 kcoreaddons-6 ki18n-6))
+    (arguments
+     (list
+      #:phases
+      #~(modify-phases %standard-phases
+          (add-before 'check 'check-setup
+            (lambda _ (setenv "HOME" (getcwd)))))))))
+
 (define-public kcrash
   (package
     (name "kcrash")
