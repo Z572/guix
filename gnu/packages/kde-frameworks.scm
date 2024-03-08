@@ -2716,6 +2716,25 @@ formats.")
 asynchronous jobs.")
     (license license:lgpl2.1+)))
 
+(define-public kjobwidgets-6
+  (package
+    (inherit kjobwidgets)
+    (name "kjobwidgets")
+    (version "6.0.0")
+    (source (origin
+              (method url-fetch)
+              (uri (string-append
+                    "mirror://kde/stable/frameworks/"
+                    (version-major+minor version) "/"
+                    name "-" version ".tar.xz"))
+              (sha256
+               (base32
+                "1gl4rgdhib42i51j6ydb8c597zxvxv76z0ar5fb8q4gqgbad0faj"))))
+    (native-inputs
+     (list extra-cmake-modules qttools))
+    (inputs
+     (list libxkbcommon kcoreaddons-6 knotifications-6 kwidgetsaddons-6 qtbase))))
+
 (define-public knotifications
   (package
     (name "knotifications")
