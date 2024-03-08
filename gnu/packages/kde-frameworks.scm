@@ -2346,8 +2346,58 @@ localized country name to ISO 3166-1 alpha 2 code mapping and vice verca.
 application crashes.")
     (license license:lgpl2.1+)))
 
+(define-public kdoctools-6
+  (package
+    (name "kdoctools")
+    (version "6.0.0")
+    (source (origin
+              (method url-fetch)
+              (uri (string-append
+                    "mirror://kde/stable/frameworks/"
+                    (version-major+minor version) "/"
+                    name "-" version ".tar.xz"))
+              (sha256
+               (base32
+                "1c684ahqslaa7sqaxgmpizjd2i1rf9y8bqhp5b7n238gy169m6ap"))))
+    (build-system cmake-build-system)
+    (native-inputs
+     (list extra-cmake-modules))
+    (inputs
+     (list docbook-xml-4.5
+           docbook-xsl
+           gettext-minimal
+           karchive-6
+           ki18n-6
+           libxml2
+           libxslt
+           perl
+           perl-uri
+           qtbase))
+    (arguments
+     (list
+      #:phases
+      #~(modify-phases %standard-phases
+          (add-after 'unpack 'cmake-find-docbook
+            (lambda* (#:key inputs #:allow-other-keys)
+              (substitute* (find-files "cmake" "\\.cmake$")
+                (("CMAKE_SYSTEM_PREFIX_PATH") "CMAKE_PREFIX_PATH"))
+              (substitute* "cmake/FindDocBookXML4.cmake"
+                (("^.*xml/docbook/schema/dtd.*$")
+                 "xml/dtd/docbook\n"))
+              (substitute* "cmake/FindDocBookXSL.cmake"
+                (("^.*xml/docbook/stylesheet.*$")
+                 (string-append "xml/xsl/docbook-xsl-"
+                                #$(package-version (this-package-input "docbook-xsl"))
+                                "\n"))))))))
+    (home-page "https://community.kde.org/Frameworks")
+    (synopsis "Create documentation from DocBook")
+    (description "Provides tools to generate documentation in various format
+from DocBook files.")
+    (license license:lgpl2.1+)))
+
 (define-public kdoctools
   (package
+    (inherit kdoctools-6)
     (name "kdoctools")
     (version "5.114.0")
     (source (origin
@@ -2359,7 +2409,6 @@ application crashes.")
               (sha256
                (base32
                 "15s58r2zvdckw30x9q9ir8h1i8q2ncfgjn9h4jnmylwm79z3z27v"))))
-    (build-system cmake-build-system)
     (native-inputs
      (list extra-cmake-modules))
     (inputs
@@ -2396,12 +2445,7 @@ application crashes.")
               (let ((xsl (string-append (assoc-ref outputs "out")
                                         "/share/kf5/kdoctools/customization/xsl/")))
                 (symlink (string-append xsl "pt_br.xml")
-                         (string-append xsl "pt-BR.xml"))))))))
-    (home-page "https://community.kde.org/Frameworks")
-    (synopsis "Create documentation from DocBook")
-    (description "Provides tools to generate documentation in various format
-from DocBook files.")
-    (license license:lgpl2.1+)))
+                         (string-append xsl "pt-BR.xml"))))))))))
 
 (define-public kfilemetadata
   (package
