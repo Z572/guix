@@ -2807,6 +2807,48 @@ of non binary content such as scripted extensions or graphic assets, as if they
 were traditional plugins.")
     (license (list license:gpl2+ license:lgpl2.1+))))
 
+(define-public kpackage-6
+  (package
+    (inherit kpackage)
+    (name "kpackage")
+    (version "6.0.0")
+    (source (origin
+              (method url-fetch)
+              (uri (string-append
+                    "mirror://kde/stable/frameworks/"
+                    (version-major+minor version) "/"
+                    name "-" version ".tar.xz"))
+              (sha256
+               (base32
+                "1dyix4im5gq7a7vrv659cf1canfaskr4cg60mj9ixdzz1pgw7bnj"))))
+    (build-system cmake-build-system)
+    (native-inputs
+     (list extra-cmake-modules))
+    (propagated-inputs (list kcoreaddons-6))
+    (inputs
+     (list karchive-6
+           kconfig-6
+           kdoctools-6
+           ki18n-6
+           qtbase))
+    (arguments
+     (list
+      ;; The `plasma-querytest' test is known to fail when tests are run in parallel:
+      ;; <https://sources.debian.org/src/kpackage/5.107.0-1/debian/changelog/#L92>
+      #:parallel-tests? #f
+      #:phases
+      #~(modify-phases %standard-phases
+          (add-after 'unpack 'patch
+            (lambda _
+              (substitute* "src/kpackage/package.cpp"
+                (("bool externalPaths = false;")
+                 "bool externalPaths = true;"))
+              (substitute* '("src/kpackage/packageloader.cpp")
+                (("QDirIterator::Subdirectories")
+                 "QDirIterator::Subdirectories | QDirIterator::FollowSymlinks"))))
+          (add-before 'check 'check-setup
+            (lambda _ (setenv "HOME" (getcwd)))))))))
+
 (define-public kpty
   (package
     (name "kpty")
