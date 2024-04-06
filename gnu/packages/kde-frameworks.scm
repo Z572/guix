@@ -909,8 +909,36 @@ infrastructure.")
 replace the other outdated Graphviz tools.")
     (license license:gpl2+)))
 
+(define-public kguiaddons-6
+  (package
+    (name "kguiaddons")
+    (version "6.0.0")
+    (source (origin
+              (method url-fetch)
+              (uri (string-append
+                    "mirror://kde/stable/frameworks/"
+                    (version-major+minor version) "/"
+                    name "-" version ".tar.xz"))
+              (sha256
+               (base32
+                "0qma9s1sbys4mcimcncikwfjzwk7r3q4mmybkbq9vacycfmmibr0"))))
+    (build-system qt-build-system)
+    ;; TODO: Build packages for the Python bindings.  Ideally this will be
+    ;; done for all versions of python guix supports.  Requires python,
+    ;; python-sip, clang-python, libclang.  Requires python-2 in all cases for
+    ;; clang-python.
+    (native-inputs (list extra-cmake-modules pkg-config))
+    (inputs
+     (list libxkbcommon qtbase qtwayland plasma-wayland-protocols wayland))
+    (home-page "https://community.kde.org/Frameworks")
+    (synopsis "Utilities for graphical user interfaces")
+    (description "The KDE GUI addons provide utilities for graphical user
+interfaces in the areas of colors, fonts, text, images, keyboard input.")
+    (license (list license:gpl2+ license:lgpl2.1+))))
+
 (define-public kguiaddons
   (package
+    (inherit kguiaddons-6)
     (name "kguiaddons")
     (version "5.114.0")
     (source (origin
@@ -922,20 +950,9 @@ replace the other outdated Graphviz tools.")
               (sha256
                (base32
                 "0riya9plcz9c1ndhdbsradssndshbm12705swn7vf7am17n7f947"))))
-    (build-system qt-build-system)
-    ;; TODO: Build packages for the Python bindings.  Ideally this will be
-    ;; done for all versions of python guix supports.  Requires python,
-    ;; python-sip, clang-python, libclang.  Requires python-2 in all cases for
-    ;; clang-python.
-    (native-inputs
-     (list extra-cmake-modules pkg-config))
+    (native-inputs (list extra-cmake-modules pkg-config))
     (inputs
-     (list qtbase-5 qtwayland-5 qtx11extras plasma-wayland-protocols wayland))
-    (home-page "https://community.kde.org/Frameworks")
-    (synopsis "Utilities for graphical user interfaces")
-    (description "The KDE GUI addons provide utilities for graphical user
-interfaces in the areas of colors, fonts, text, images, keyboard input.")
-    (license (list license:gpl2+ license:lgpl2.1+))))
+     (list qtbase-5 qtwayland-5 qtx11extras plasma-wayland-protocols wayland))))
 
 (define-public kholidays-6
   (package
