@@ -3450,8 +3450,40 @@ emoticons coming from different providers.")
     ;; dual licensed, image files are licensed under cc-by-sa4.0
     (license (list license:gpl2+ license:lgpl2.1+ license:cc-by-sa4.0))))
 
+(define-public kglobalaccel-6
+  (package
+    (name "kglobalaccel")
+    (version "6.0.0")
+    (source (origin
+              (method url-fetch)
+              (uri (string-append
+                    "mirror://kde/stable/frameworks/"
+                    (version-major+minor version) "/"
+                    name "-" version ".tar.xz"))
+              (sha256
+               (base32
+                "0jbibdz31y2x8qz7l7c45jbnwxgk57lnm25h1kf9635ps2q9w02q"))))
+    (build-system qt-build-system)
+    (native-inputs
+     (list extra-cmake-modules pkg-config qttools))
+    (inputs
+     (list kconfig-6
+           kcrash-6
+           kcoreaddons-6
+           kdbusaddons-6
+           kwindowsystem-6
+           qtdeclarative))
+    (arguments (list #:qtbase qtbase))
+    (home-page "https://community.kde.org/Frameworks")
+    (synopsis "Global desktop keyboard shortcuts")
+    (description "KGlobalAccel allows you to have global accelerators that are
+independent of the focused window.  Unlike regular shortcuts, the application's
+window does not need focus for them to be activated.")
+    (license license:lgpl2.1+)))
+
 (define-public kglobalaccel
   (package
+    (inherit kglobalaccel-6)
     (name "kglobalaccel")
     (version "5.114.0")
     (source (origin
@@ -3463,7 +3495,6 @@ emoticons coming from different providers.")
               (sha256
                (base32
                 "19mmav055fnzyl760fyhf0pdvaidd5i1h04l2hcnpin4p1jnpfap"))))
-    (build-system qt-build-system)
     (native-inputs
      (list extra-cmake-modules pkg-config qttools-5))
     (inputs
@@ -3472,16 +3503,10 @@ emoticons coming from different providers.")
            kcoreaddons
            kdbusaddons
            kwindowsystem
-           qtbase-5
            qtx11extras
            qtdeclarative-5
            xcb-util-keysyms))
-    (home-page "https://community.kde.org/Frameworks")
-    (synopsis "Global desktop keyboard shortcuts")
-    (description "KGlobalAccel allows you to have global accelerators that are
-independent of the focused window.  Unlike regular shortcuts, the application's
-window does not need focus for them to be activated.")
-    (license license:lgpl2.1+)))
+    (arguments '())))
 
 (define-public kiconthemes
   (package
