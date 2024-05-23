@@ -128,7 +128,8 @@ as \"x86_64-linux\"."
              ("x86_64"      => "X86_64")
              ("i686"        => "X86")
              ("i586"        => "X86")
-             ("avr"         => "AVR"))))
+             ("avr"         => "AVR")
+             ("loongarch64" => "loongarch"))))
 
 (define (llvm-uri component version)
   ;; LLVM release candidate file names are formatted 'tool-A.B.C-rcN/tool-A.B.CrcN.src.tar.xz'
