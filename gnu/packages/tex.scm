@@ -15696,6 +15696,7 @@ logo.")
               "0lnpq6rfdb6dg543cmbsm817ziim6arxnzxzbn0wn8i8aw681idr")))
     (outputs '("out" "doc"))
     (build-system texlive-build-system)
+    (propagated-inputs (list texlive-gregoriotex-bin))
     (home-page "https://ctan.org/pkg/gregoriotex")
     (synopsis "Engraving gregorian chant scores")
     (description
@@ -15704,6 +15705,52 @@ on a computer.  Gregorio's main job is to convert a gabc file (simple text
 representation of a score) into a GregorioTeX file, which makes TeX able to
 create a PDF of your score.")
     (license license:gpl3)))
+
+(define-public texlive-gregoriotex-bin
+  (package
+    (inherit texlive-bin)
+    (name "texlive-gregoriotex-bin")
+    (source
+     (origin
+       (inherit texlive-source)
+       (modules '((guix build utils)
+                  (ice-9 ftw)))
+       (snippet
+        #~(let ((delete-other-directories
+                 (lambda (root dirs)
+                   (with-directory-excursion root
+                     (for-each
+                      delete-file-recursively
+                      (scandir "."
+                               (lambda (file)
+                                 (and (not (member file (append '("." "..") dirs)))
+                                      (eq? 'directory (stat:type (stat file)))))))))))
+            (delete-other-directories "libs" '())
+            (delete-other-directories "utils" '())
+            (delete-other-directories "texk" '("gregorio"))))))
+    (arguments
+     (substitute-keyword-arguments (package-arguments texlive-bin)
+       ((#:configure-flags flags)
+        #~(cons "--enable-gregorio" (delete "--enable-web2c" #$flags)))
+       ((#:phases phases)
+        #~(modify-phases #$phases
+            (replace 'check
+              (lambda* (#:key tests? #:allow-other-keys)
+                (when tests?
+                  (with-directory-excursion "texk/gregorio"
+                    (invoke "make" "check")))))
+            (replace 'install
+              (lambda _
+                (with-directory-excursion "texk/gregorio"
+                  (invoke "make" "install"))))))))
+    (native-inputs (list pkg-config))
+    (inputs (list texlive-libkpathsea))
+    (propagated-inputs '())
+    (home-page (package-home-page texlive-gregoriotex))
+    (synopsis "Binary for @code{texlive-gregoriotex}")
+    (description
+     "This package provides the binary for @code{texlive-gregoriotex}.")
+    (license (package-license texlive-gregoriotex))))
 
 (define-public texlive-grotesq
   (package
