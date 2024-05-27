@@ -47722,6 +47722,7 @@ definition files for Greek text font encodings for use with @code{fontenc}.")
               "1qlac704qbm7kq762z0b887wfncprpcm8zj2lb4nag0wzdrrjdq5")))
     (outputs '("out" "doc"))
     (build-system texlive-build-system)
+    (propagated-inputs (list texlive-gsftopk-bin))
     (home-page "https://ctan.org/pkg/gsftopk")
     (synopsis "Convert Ghostscript fonts to PK files")
     (description
@@ -47730,6 +47731,52 @@ converts Adobe Type 1 fonts to PK bitmap format.  It should not ordinarily be
 much used nowadays, since both its target applications are now capable of
 dealing with Type 1 fonts, direct.")
     (license license:gpl3+)))
+
+(define-public texlive-gsftopk-bin
+  (package
+    (inherit texlive-bin)
+    (name "texlive-gsftopk-bin")
+    (source
+     (origin
+       (inherit texlive-source)
+       (modules '((guix build utils)
+                  (ice-9 ftw)))
+       (snippet
+        #~(let ((delete-other-directories
+                 (lambda (root dirs)
+                   (with-directory-excursion root
+                     (for-each
+                      delete-file-recursively
+                      (scandir "."
+                               (lambda (file)
+                                 (and (not (member file (append '("." "..") dirs)))
+                                      (eq? 'directory (stat:type (stat file)))))))))))
+            (delete-other-directories "libs" '())
+            (delete-other-directories "utils" '())
+            (delete-other-directories "texk" '("gsftopk"))))))
+    (arguments
+     (substitute-keyword-arguments (package-arguments texlive-bin)
+       ((#:configure-flags flags)
+        #~(cons "--enable-gsftopk" (delete "--enable-web2c" #$flags)))
+       ((#:phases phases)
+        #~(modify-phases #$phases
+            (replace 'check
+              (lambda* (#:key tests? #:allow-other-keys)
+                (when tests?
+                  (with-directory-excursion "texk/gsftopk"
+                    (invoke "make" "check")))))
+            (replace 'install
+              (lambda _
+                (with-directory-excursion "texk/gsftopk"
+                  (invoke "make" "install"))))))))
+    (native-inputs (list pkg-config))
+    (inputs (list texlive-libkpathsea))
+    (propagated-inputs '())
+    (home-page (package-home-page texlive-gsftopk))
+    (synopsis "Binary for @code{texlive-gsftopk}")
+    (description
+     "This package provides the binary for @code{texlive-gsftopk}.")
+    (license (package-license texlive-gsftopk))))
 
 (define-public texlive-hycolor
   (package
