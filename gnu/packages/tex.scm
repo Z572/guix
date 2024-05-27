@@ -74787,6 +74787,7 @@ itself may be shipped out to the DVI file.")
               "1iidl3876vyi9k2dyfwd73q5kb53kwckivfyvvxh953n4axbqmi4")))
     (outputs '("out" "doc"))
     (build-system texlive-build-system)
+    (propagated-inputs (list texlive-xdvi-bin))
     (home-page "https://ctan.org/pkg/xdvi")
     (synopsis "DVI previewer for the X Window System")
     (description
@@ -74795,6 +74796,53 @@ based systems.  The distribution has been integrated with that of Xdvik, so
 that it will build with web2c out of the box.")
     ;; Xdvi is under MIT terms, whereas Xdvik extensions use BS2-2.
     (license (list license:expat license:bsd-2))))
+
+(define-public texlive-xdvi-bin
+  (package
+    (inherit texlive-bin)
+    (name "texlive-xdvi-bin")
+    (source
+     (origin
+       (inherit texlive-source)
+       (modules '((guix build utils)
+                  (ice-9 ftw)))
+       (snippet
+        #~(let ((delete-other-directories
+                 (lambda (root dirs)
+                   (with-directory-excursion root
+                     (for-each
+                      delete-file-recursively
+                      (scandir "."
+                               (lambda (file)
+                                 (and (not (member file (append '("." "..") dirs)))
+                                      (eq? 'directory (stat:type (stat file)))))))))))
+            (delete-other-directories "libs" '())
+            (delete-other-directories "utils" '())
+            (delete-other-directories "texk" '("xdvik"))))))
+    (arguments
+     (substitute-keyword-arguments (package-arguments texlive-bin)
+       ((#:configure-flags flags)
+        #~(cons "--enable-xdvik" (delete "--enable-web2c" #$flags)))
+       ((#:phases phases)
+        #~(modify-phases #$phases
+            (replace 'check
+              (lambda* (#:key tests? #:allow-other-keys)
+                (when tests?
+                  (with-directory-excursion "texk/xdvik"
+                    (invoke "make" "check")))))
+            (replace 'install
+              (lambda* (#:key inputs native-inputs #:allow-other-keys)
+                (mkdir-p (string-append #$output "/bin"))
+                (with-directory-excursion "texk/xdvik"
+                  (invoke "make" "install"))))))))
+    (native-inputs (list pkg-config))
+    (inputs (list freetype ghostscript libxaw texlive-libkpathsea))
+    (propagated-inputs '())
+    (home-page (package-home-page texlive-xdvi))
+    (synopsis "Binaries for @code{texlive-xdvi}}")
+    (description
+     "This package provides the binaries for @code{texlive-xdvi}}.")
+    (license (package-license texlive-xdvi))))
 
 (define-public texlive-xetexconfig
   (package
