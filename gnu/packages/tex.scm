@@ -45924,13 +45924,67 @@ emulates the macro, using TikZ.")
               "1yfr3yic0bx73imxhmxhnhjc1mpwy9f55sh3p430p2f2yvxwm0cs")))
     (outputs '("out" "doc"))
     (build-system texlive-build-system)
+    (propagated-inputs (list texlive-ttfutils-bin))
     (home-page "https://ctan.org/pkg/ttfutils")
     (synopsis "Convert TrueType to TFM and PK fonts")
+    ;; XXX: "ttf2afm" is actually provided by PDFTeX, through "texlive-bin".
     (description
      "This package provides utilities to convert TrueType to TFM and PK fonts:
 @command{ttf2afm}, @command{ttf2pk}, @command{ttf2tfm}, and
 @command{ttfdump}.")
     (license license:gpl2+)))
+
+(define-public texlive-ttfutils-bin
+  (package
+    (inherit texlive-bin)
+    (name "texlive-ttfutils-bin")
+    (source
+     (origin
+       (inherit texlive-source)
+       (modules '((guix build utils)
+                  (ice-9 ftw)))
+       (snippet
+        #~(let ((delete-other-directories
+                 (lambda (root dirs)
+                   (with-directory-excursion root
+                     (for-each
+                      delete-file-recursively
+                      (scandir "."
+                               (lambda (file)
+                                 (and (not (member file (append '("." "..") dirs)))
+                                      (eq? 'directory (stat:type (stat file)))))))))))
+            (delete-other-directories "libs" '())
+            (delete-other-directories "utils" '())
+            (delete-other-directories "texk" '("ttfdump" "ttf2pk2"))))))
+    (arguments
+     (substitute-keyword-arguments (package-arguments texlive-bin)
+       ((#:configure-flags flags)
+        #~(cons* "--enable-ttfdump"
+                 "--enable-ttf2pk2"
+                 (delete "--enable-web2c" #$flags)))
+       ((#:phases phases)
+        #~(modify-phases #$phases
+            (replace 'check
+              (lambda* (#:key tests? #:allow-other-keys)
+                (when tests?
+                  (with-directory-excursion "texk/ttfdump"
+                    (invoke "make" "check"))
+                  (with-directory-excursion "texk/ttf2pk2"
+                    (invoke "make" "check")))))
+            (replace 'install
+              (lambda _
+                (with-directory-excursion "texk/ttfdump"
+                  (invoke "make" "install"))
+                (with-directory-excursion "texk/ttf2pk2"
+                  (invoke "make" "install"))))))))
+    (native-inputs (list pkg-config))
+    (inputs (list freetype texlive-libkpathsea))
+    (propagated-inputs '())
+    (home-page (package-home-page texlive-ttfutils))
+    (synopsis "Binaries for @code{texlive-ttfutils}")
+    (description
+     "This package provides the binaries for @code{texlive-ttfutils}.")
+    (license (package-license texlive-ttfutils))))
 
 (define-public texlive-twemojis
   (package
