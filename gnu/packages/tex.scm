@@ -4203,6 +4203,7 @@ computer-generated long formulae with many terms.")
               "16szmbffp9pwzv7zq3l4yvnsfk4m7w57wib7pqpgv1v5fzhlaahs")))
     (outputs '("out" "doc"))
     (build-system texlive-build-system)
+    (propagated-inputs (list texlive-autosp-bin))
     (home-page "https://ctan.org/pkg/autosp")
     (synopsis
      "Preprocessor generating note-spacing commands for MusiXTeX scores")
@@ -4215,6 +4216,53 @@ coding for an entire measure can be entered one part at a time, without
 concern for note-spacing changes within the part or spacing requirements of
 other parts.")
     (license license:gpl2+)))
+
+(define-public texlive-autosp-bin
+  (package
+    (inherit texlive-bin)
+    (name "texlive-autosp-bin")
+    (source
+     (origin
+       (inherit texlive-source)
+       (modules '((guix build utils)
+                  (ice-9 ftw)))
+       (snippet
+        #~(let ((delete-other-directories
+                 (lambda (root dirs)
+                   (with-directory-excursion root
+                     (for-each
+                      delete-file-recursively
+                      (scandir "."
+                               (lambda (file)
+                                 (and (not (member file (append '("." "..") dirs)))
+                                      (eq? 'directory (stat:type (stat file)))))))))))
+            (delete-other-directories "libs" '())
+            (delete-other-directories "utils" '("autosp"))
+            (delete-other-directories "texk" '())))))
+    (arguments
+     (substitute-keyword-arguments (package-arguments texlive-bin)
+       ((#:configure-flags flags)
+        #~(cons "--enable-autosp" (delete "--enable-web2c" #$flags)))
+       ((#:phases phases)
+        #~(modify-phases #$phases
+            (replace 'check
+              (lambda* (#:key tests? #:allow-other-keys)
+                (when tests?
+                  (with-directory-excursion "utils/autosp"
+                    (invoke "make" "check")))))
+            (replace 'install
+              (lambda* (#:key inputs native-inputs #:allow-other-keys)
+                (with-directory-excursion "utils/autosp"
+                  (invoke "make" "install"))))))))
+    (native-inputs '())
+    (inputs '())
+    (propagated-inputs '())
+    (home-page (package-home-page texlive-autosp))
+    (synopsis "Binaries for @code{texlive-autosp}")
+    (description
+     "This package provides binaries for @code{texlive-autosp}.")
+    (license (package-license texlive-autosp))))
+
 
 (define-public texlive-axodraw2
   (package
