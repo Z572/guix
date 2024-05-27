@@ -1891,6 +1891,7 @@ the TeX Gyre bundle do not need this support.")
               "19llzzr4kmmyf7l18ngx1rhaqaqvgm3md924m4dxcv7nmrvga2b2")))
     (outputs '("out" "doc"))
     (build-system texlive-build-system)
+    (propagated-inputs (list texlive-afm2pl-bin))
     (home-page "https://ctan.org/pkg/afm2pl")
     (synopsis "Convert AFM to TeX property list (@file{.pl}) metrics")
     (description
@@ -1899,6 +1900,51 @@ a @file{.pl} (Property List) file, which in its turn can be converted to
 a @file{.tfm} (TeX Font Metric) file.  It normally preserves kerns and
 ligatures, but also offers additional control over them.")
     (license license:gpl2)))
+
+(define-public texlive-afm2pl-bin
+  (package
+    (inherit texlive-bin)
+    (name "texlive-afm2pl-bin")
+    (source
+     (origin
+       (inherit texlive-source)
+       (modules '((guix build utils)
+                  (ice-9 ftw)))
+       (snippet
+        #~(let ((delete-other-directories
+                 (lambda (root dirs)
+                   (with-directory-excursion root
+                     (for-each
+                      delete-file-recursively
+                      (scandir "."
+                               (lambda (file)
+                                 (and (not (member file (append '("." "..") dirs)))
+                                      (eq? 'directory (stat:type (stat file)))))))))))
+            (delete-other-directories "libs" '())
+            (delete-other-directories "utils" '())
+            (delete-other-directories "texk" '("afm2pl"))))))
+    (arguments
+     (substitute-keyword-arguments (package-arguments texlive-bin)
+       ((#:configure-flags flags)
+        #~(cons "--enable-afm2pl" (delete "--enable-web2c" #$flags)))
+       ((#:phases phases)
+        #~(modify-phases #$phases
+            (replace 'check
+              (lambda* (#:key tests? #:allow-other-keys)
+                (when tests?
+                  (with-directory-excursion "texk/afm2pl"
+                    (invoke "make" "check")))))
+            (replace 'install
+              (lambda _
+                (with-directory-excursion "texk/afm2pl"
+                  (invoke "make" "install"))))))))
+    (native-inputs (list pkg-config))
+    (inputs (list texlive-libkpathsea))
+    (propagated-inputs '())
+    (synopsis "Binary for @code{texlive-afm2pl}")
+    (description
+     "This package provides the binary for @code{texlive-afm2pl}.")
+    (license (package-license texlive-afm2pl))))
 
 (define-public texlive-afparticle
   (package
