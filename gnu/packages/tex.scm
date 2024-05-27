@@ -43719,19 +43719,7 @@ for use in planning a class.")
               "1svmivc272xj9fzy5p055lp7g9vcqs75jp4x54682yrq0qizv03c")))
     (outputs '("out" "doc"))
     (build-system texlive-build-system)
-    (arguments
-     (list #:link-scripts
-           #~(list "ht.sh"
-                   "htcontext.sh"
-                   "htlatex.sh"
-                   "htmex.sh"
-                   "httex.sh"
-                   "httexi.sh"
-                   "htxelatex.sh"
-                   "htxetex.sh"
-                   "mk4ht.pl"
-                   "xhlatex.sh")))
-    (inputs (list perl))
+    (propagated-inputs (list texlive-tex4ht-bin))
     (home-page "https://ctan.org/pkg/tex4ht")
     (synopsis "Convert (La)TeX to HTML/XML")
     (description
@@ -43745,6 +43733,52 @@ produce a helper DVI file that it can then process.  This technique allows
 TeX4ht to approach the robustness characteristic of restricted-syntax systems
 such as @code{gellmu}.")
     (license license:lppl)))
+
+(define-public texlive-tex4ht-bin
+  (package
+    (inherit texlive-bin)
+    (name "texlive-tex4ht-bin")
+    (source
+     (origin
+       (inherit texlive-source)
+       (modules '((guix build utils)
+                  (ice-9 ftw)))
+       (snippet
+        #~(let ((delete-other-directories
+                 (lambda (root dirs)
+                   (with-directory-excursion root
+                     (for-each
+                      delete-file-recursively
+                      (scandir "."
+                               (lambda (file)
+                                 (and (not (member file (append '("." "..") dirs)))
+                                      (eq? 'directory (stat:type (stat file)))))))))))
+            (delete-other-directories "libs" '())
+            (delete-other-directories "utils" '())
+            (delete-other-directories "texk" '("tex4htk"))))))
+    (arguments
+     (substitute-keyword-arguments (package-arguments texlive-bin)
+       ((#:configure-flags flags)
+        #~(cons "--enable-tex4htk" (delete "--enable-web2c" #$flags)))
+       ((#:phases phases)
+        #~(modify-phases #$phases
+            (replace 'check
+              (lambda* (#:key tests? #:allow-other-keys)
+                (when tests?
+                  (with-directory-excursion "texk/tex4htk"
+                    (invoke "make" "check")))))
+            (replace 'install
+              (lambda _
+                (with-directory-excursion "texk/tex4htk"
+                  (invoke "make" "install"))))))))
+    (native-inputs (list pkg-config))
+    (inputs (list perl texlive-libkpathsea))
+    (propagated-inputs '())
+    (home-page (package-home-page texlive-tex4ht))
+    (synopsis "Binaries for @code{texlive-tex4ht}")
+    (description
+     "This package provides the binaries for @code{texlive-tex4ht}.")
+    (license (package-license texlive-tex4ht))))
 
 (define-public texlive-tex4ebook
   (package
