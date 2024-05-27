@@ -33705,6 +33705,7 @@ Japanese, for XeLaTeX.")
               "1ywv5rdk08dnrqr09pnjzff37x2c9m5i1wjzfsjnvm068is58c7s")))
     (outputs '("out" "doc"))
     (build-system texlive-build-system)
+    (propagated-inputs (list texlive-bibtex8-bin))
     (home-page "https://ctan.org/pkg/bibtex8")
     (synopsis "BibTeX variant supporting 8-bit encodings")
     (description
@@ -33713,6 +33714,78 @@ conversion to larger (32-bit) capacity, addition of run-time selectable
 capacity and 8-bit support extensions.  National character set and sorting
 order are controlled by an external configuration file.")
     (license license:gpl3+)))
+
+(define-public texlive-bibtex8-bin
+  (package
+    (inherit texlive-bin)
+    (name "texlive-bibtex8-bin")
+    (source
+     (origin
+       (inherit texlive-source)
+       (modules '((guix build utils)
+                  (ice-9 ftw)))
+       (snippet
+        #~(let ((delete-other-directories
+                 (lambda (root dirs with-files?)
+                   (with-directory-excursion root
+                     (for-each
+                      delete-file-recursively
+                      (scandir
+                       "."
+                       (lambda (file)
+                         (and (not (member file (append '("." "..") dirs)))
+                              (or with-files?
+                                  (eq? 'directory (stat:type (stat file))))))))))))
+            (delete-other-directories "libs" '() #f)
+            (delete-other-directories "utils" '() #f)
+            ;; Tests require "texmf.cnf" to be present in the tree.  Also test
+            ;; data is spread across multiple directories, which need to be
+            ;; preserved.
+            (delete-other-directories "texk" '("bibtex-x" "kpathsea" "tests" "web2c") #f)
+            (delete-other-directories "texk/web2c" '("tests") #t)
+            (with-directory-excursion "texk/kpathsea"
+              (for-each
+               delete-file-recursively
+               (scandir "." (lambda (f)
+                              (not (member f '("." ".." "texmf.cnf")))))))))))
+    (arguments
+     (substitute-keyword-arguments (package-arguments texlive-bin)
+       ((#:configure-flags flags)
+        #~(cons* "--enable-bibtex-x"
+                 "--enable-bibtex8"
+                 "--disable-bibtexu"
+                 (delete "--enable-web2c" #$flags)))
+       ((#:phases phases)
+        #~(modify-phases #$phases
+            (add-after 'unpack 'locate-libkpathsea
+              (lambda _
+                (let ((kpathsea #$(this-package-input "texlive-libkpathsea")))
+                  (substitute* "texk/bibtex-x/Makefile.in"
+                    (("(KPATHSEA_LIBS =).*" _ lead)
+                     (format #f "~a \"-L~a/lib -lkpathsea\"\n" lead kpathsea))))))
+            (add-after 'unpack 'skip-bibtexu-test
+              ;; This package does not build "bibtexu" binary; the test below
+              ;; is therefore bound to fail.  Skip that part.
+              (lambda _
+                (substitute* "texk/bibtex-x/tests/bibtex8u-mem.test"
+                  (("\\./bibtexu .*") "exit 0\n"))))
+            (replace 'check
+              (lambda* (#:key tests? #:allow-other-keys)
+                (when tests?
+                  (with-directory-excursion "texk/bibtex-x"
+                    (invoke "make" "check")))))
+            (replace 'install
+              (lambda _
+                (with-directory-excursion "texk/bibtex-x"
+                  (invoke "make" "install"))))))))
+    (native-inputs (list pkg-config))
+    (inputs (list texlive-libkpathsea))
+    (propagated-inputs '())
+    (home-page (package-home-page texlive-bibtex8))
+    (synopsis "Binary for @code{texlive-bibtex8}")
+    (description
+     "This package provides the binary for @code{texlive-bibtex8}.")
+    (license (package-license texlive-bibtex8))))
 
 (define-public texlive-bibtexu
   (package
