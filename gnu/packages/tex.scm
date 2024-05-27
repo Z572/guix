@@ -32498,7 +32498,7 @@ style).")
     (outputs '("out" "doc"))
     (build-system texlive-build-system)
     (native-inputs (list texlive-metafont))
-    (propagated-inputs (list texlive-xetex-devanagari))
+    (propagated-inputs (list texlive-velthuis-bin texlive-xetex-devanagari))
     (home-page "https://ctan.org/pkg/devanagari")
     (synopsis "Typeset Devanagari")
     (description
@@ -32508,6 +32508,52 @@ provide features that support Sanskrit, Hindi, Marathi, Nepali, and other
 languages typically printed in the Devanagari script.  The package provides
 fonts, in both Metafont and Type 1 formats.")
     (license license:gpl3+)))
+
+(define-public texlive-velthuis-bin
+  (package
+    (inherit texlive-bin)
+    (name "texlive-velthuis-bin")
+    (source
+     (origin
+       (inherit texlive-source)
+       (modules '((guix build utils)
+                  (ice-9 ftw)))
+       (snippet
+        #~(let ((delete-other-directories
+                 (lambda (root dirs)
+                   (with-directory-excursion root
+                     (for-each
+                      delete-file-recursively
+                      (scandir "."
+                               (lambda (file)
+                                 (and (not (member file (append '("." "..") dirs)))
+                                      (eq? 'directory (stat:type (stat file)))))))))))
+            (delete-other-directories "libs" '())
+            (delete-other-directories "utils" '("devnag"))
+            (delete-other-directories "texk" '())))))
+    (arguments
+     (substitute-keyword-arguments (package-arguments texlive-bin)
+       ((#:configure-flags flags)
+        #~(cons "--enable-devnag" (delete "--enable-web2c" #$flags)))
+       ((#:phases phases)
+        #~(modify-phases #$phases
+            (replace 'check
+              (lambda* (#:key tests? #:allow-other-keys)
+                (when tests?
+                  (with-directory-excursion "utils/devnag"
+                    (invoke "make" "check")))))
+            (replace 'install
+              (lambda _
+                (with-directory-excursion "utils/devnag"
+                  (invoke "make" "install"))))))))
+    (native-inputs '())
+    (inputs '())
+    (propagated-inputs '())
+    (home-page (package-home-page texlive-velthuis))
+    (synopsis "Binary for @code{texlive-velthuis}")
+    (description
+     "This package provide the binary for @code{texlive-velthuis}.")
+    (license (package-license texlive-velthuis))))
 
 (define-public texlive-venn
   (package
@@ -32599,6 +32645,46 @@ fonts, in LaTeX, is also provided.")
 strong on layout, from simple alternate-line indentation to the @code{Mouse's
 tale} from @emph{Alice in Wonderland}.")
     (license license:lppl)))
+
+(define texlive-vlna-bin
+  (package
+    (inherit texlive-bin)
+    (name "texlive-vlna-bin")
+    (source
+     (origin
+       (inherit texlive-source)
+       (modules '((guix build utils)
+                  (ice-9 ftw)))
+       (snippet
+        #~(let ((delete-other-directories
+                 (lambda (root dirs)
+                   (with-directory-excursion root
+                     (for-each
+                      delete-file-recursively
+                      (scandir "."
+                               (lambda (file)
+                                 (and (not (member file (append '("." "..") dirs)))
+                                      (eq? 'directory (stat:type (stat file)))))))))))
+            (delete-other-directories "libs" '())
+            (delete-other-directories "utils" '("vlna"))
+            (delete-other-directories "texk" '())))))
+    (arguments
+     (substitute-keyword-arguments (package-arguments texlive-bin)
+       ((#:configure-flags flags)
+        #~(cons* "--enable-vlna" (delete "--enable-web2c" #$flags)))
+       ((#:phases _)
+        #~(modify-phases %standard-phases
+            (replace 'check
+              (lambda* (#:key tests? #:allow-other-keys)
+                (when tests?
+                  (with-directory-excursion "utils/vlna"
+                    (invoke "make" "check")))))
+            (replace 'install
+              (lambda _
+                (with-directory-excursion "utils/vlna"
+                  (invoke "make" "install"))))))))
+    (native-inputs '())
+    (inputs '())))
 
 (define-public texlive-vlna
   (package
