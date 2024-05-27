@@ -42659,9 +42659,7 @@ documents generated that use Type 1 fonts.")
               "0ba514lz3pc03ll0kb9apdx62mi2yiyd7bnargkp2bbf62dq79cc")))
     (outputs '("out" "doc"))
     (build-system texlive-build-system)
-    (arguments
-     (list #:link-scripts #~(list "extractres.pl" "includeres.pl" "psjoin.pl")))
-    (inputs (list perl))
+    (propagated-inputs (list texlive-psutils-bin))
     (home-page "https://ctan.org/pkg/psutils")
     (synopsis "PostScript utilities")
     (description
@@ -42674,6 +42672,70 @@ printing.  Utilities include @command{psbook}, @command{psselect},
      (list license:lgpl2.1+
            (license:fsf-free
             "https://tug.org/svn/texlive/trunk/Build/source/texk/psutils/psutils-src/LICENSE?revision=57915&view=markup")))))
+
+(define-public texlive-psutils-bin
+  (package
+    (inherit texlive-bin)
+    (name "texlive-psutils-bin")
+    (source
+     (origin
+       (inherit texlive-source)
+       (modules '((guix build utils)
+                  (ice-9 ftw)))
+       (snippet
+        #~(let ((delete-other-directories
+                 (lambda (root keep)
+                   (with-directory-excursion root
+                     (for-each
+                      delete-file-recursively
+                      (scandir
+                       "."
+                       (lambda (file)
+                         (and (not (member file (append keep '("." ".."))))
+                              (eq? 'directory (stat:type (stat file)))))))))))
+            (delete-other-directories "libs" '())
+            (delete-other-directories "utils" '())
+            (delete-other-directories "texk" '("psutils"))))))
+    (arguments
+     (substitute-keyword-arguments (package-arguments texlive-bin)
+       ((#:configure-flags flags)
+        #~(cons "--enable-psutils" (delete "--enable-web2c" #$flags)))
+       ((#:phases phases)
+        #~(modify-phases #$phases
+            (add-after 'unpack 'patch-psutils-tests
+              (lambda _
+                ;; This test fails due to a rounding difference with libpaper
+                ;; 1.2: <https://github.com/rrthomas/libpaper/issues/23>.
+                ;;
+                ;; Adjust the expected outcome to account for the minute
+                ;; difference.
+                (substitute* "texk/psutils/tests/playres.ps"
+                  (("844\\.647799") "844.647797"))
+                ;; Test suite also fails because it expects to find
+                ;; "texmf.cnf" in "../kpathsea/" directory, but we removed it
+                ;; in a snippet.  Point to the real "texmf.cnf".
+                (let ((kpathsea #$(this-package-input "texlive-libkpathsea")))
+                  (substitute* "texk/psutils/psutils.test"
+                    (("(TEXMFCNF=).+?;" _ var)
+                     (string-append var
+                                    kpathsea
+                                    "/share/texmf-dist/web2c;"))))))
+            (replace 'check
+              (lambda* (#:key tests? #:allow-other-keys)
+                (when tests?
+                  (with-directory-excursion "texk/psutils"
+                    (invoke "make" "check")))))
+            (replace 'install
+              (lambda _
+                (with-directory-excursion "texk/psutils"
+                  (invoke "make" "install"))))))))
+    (native-inputs (list pkg-config))
+    (inputs (list libpaper perl texlive-libkpathsea))
+    (propagated-inputs '())
+    (synopsis "Binaries for @code{texlive-psutils}")
+    (description
+     "This package provides the binaries for @code{texlive-psutils}.")
+    (license (package-license texlive-psutils))))
 
 (define-public texlive-ptolemaicastronomy
   (package
