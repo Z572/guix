@@ -33799,12 +33799,41 @@ order are controlled by an external configuration file.")
               "19bp8wn0ssz7gczxp0imbpgi1zwz9x3ya67f072rjzg2zmfpphqg")))
     (outputs '("out" "doc"))
     (build-system texlive-build-system)
+    (propagated-inputs (list texlive-bibtexu-bin))
     (home-page "https://ctan.org/pkg/bibtexu")
     (synopsis "BibTeX variant supporting Unicode (UTF-8), via ICU")
     (description
      "BibTeXu is an enhanced, portable C version of BibTeX.  Unicode is
 supported via the ICU library.")
     (license license:gpl3+)))
+
+(define-public texlive-bibtexu-bin
+  (package
+    (inherit texlive-bibtex8-bin)
+    (name "texlive-bibtexu-bin")
+    (arguments
+     (substitute-keyword-arguments (package-arguments texlive-bibtex8-bin)
+       ((#:configure-flags flags)
+        #~(cons* "--enable-bibtexu"
+                 "--disable-bibtex8"
+                 (delete "--enable-bibtex8"
+                         (delete "--disable-bibtexu" #$flags))))
+       ((#:phases phases)
+        #~(modify-phases #$phases
+            (delete 'skip-bibtexu-test)
+            (add-after 'unpack 'skip-bibtex8-test
+              ;; This package does not build "bibtex8" binary; the test below
+              ;; is therefore bound to fail.  Skip that part.
+              (lambda _
+                (substitute* "texk/bibtex-x/tests/bibtex8u-mem.test"
+                  (("\\./bibtex8 .*") "exit 0\n"))))))))
+    (native-inputs (list pkg-config))
+    (inputs (list icu4c texlive-libkpathsea))
+    (home-page (package-home-page texlive-bibtexu))
+    (synopsis "Binary for @code{texlive-bibtexu}")
+    (description
+     "This package provides the binary for @code{texlive-bibtexu}.")
+    (license (package-license texlive-bibtexu))))
 
 (define-public texlive-bundledoc
   (package
