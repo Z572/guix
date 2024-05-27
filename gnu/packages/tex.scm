@@ -45787,12 +45787,59 @@ is planned.")
               "02nf2fg4xzh8lbbddvm44qyvcvfn5b7kzcyg729a58l29gd88pbs")))
     (outputs '("out" "doc"))
     (build-system texlive-build-system)
+    (propagated-inputs (list texlive-tpic2pdftex-bin))
     (home-page "https://ctan.org/pkg/tpic2pdftex")
     (synopsis "Use @code{tpic} commands in pdfTeX")
     (description
      "The Awk script converts Pic language, embedded inline (delimited by
 @code{.PS} and @code{.PE} markers), to @code{\\pdfliteral} commands.")
     (license license:gpl3+)))
+
+(define-public texlive-tpic2pdftex-bin
+  (package
+    (inherit texlive-bin)
+    (name "texlive-tpic2pdftex-bin")
+    (source
+     (origin
+       (inherit texlive-source)
+       (modules '((guix build utils)
+                  (ice-9 ftw)))
+       (snippet
+        #~(let ((delete-other-directories
+                 (lambda (root dirs)
+                   (with-directory-excursion root
+                     (for-each
+                      delete-file-recursively
+                      (scandir "."
+                               (lambda (file)
+                                 (and (not (member file (append '("." "..") dirs)))
+                                      (eq? 'directory (stat:type (stat file)))))))))))
+            (delete-other-directories "libs" '())
+            (delete-other-directories "utils" '("tpic2pdftex"))
+            (delete-other-directories "texk" '())))))
+    (arguments
+     (substitute-keyword-arguments (package-arguments texlive-bin)
+       ((#:configure-flags flags)
+        #~(cons* "--enable-tpic2pdftex" (delete "--enable-web2c" #$flags)))
+       ((#:phases phases)
+        #~(modify-phases #$phases
+            (replace 'check
+              (lambda* (#:key tests? #:allow-other-keys)
+                (when tests?
+                  (with-directory-excursion "utils/tpic2pdftex"
+                    (invoke "make" "check")))))
+            (replace 'install
+              (lambda _
+                (with-directory-excursion "utils/tpic2pdftex"
+                  (invoke "make" "install"))))))))
+    (native-inputs '())
+    (inputs '())
+    (propagated-inputs '())
+    (home-page (package-home-page texlive-tpic2pdftex))
+    (synopsis "Binary for @code{texlive-tpic2pdftex}")
+    (description
+     "This package provides the binary for @code{texlive-tpic2pdftex}.")
+    (license (package-license texlive-tpic2pdftex))))
 
 (define-public texlive-tqft
   (package
