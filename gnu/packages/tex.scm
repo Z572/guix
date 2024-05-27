@@ -25655,6 +25655,7 @@ is recommended.")
               "1p9js9izv50vg7qqqmyg5jz4am4phhscqdfnn4nszlyfv3zkg7p3")))
     (outputs '("out" "doc"))
     (build-system texlive-build-system)
+    (propagated-inputs (list texlive-pmx-bin))
     (home-page "https://ctan.org/pkg/pmx")
     (synopsis "Preprocessor for MusiXTeX")
     (description
@@ -25666,6 +25667,52 @@ of MusiXTeX.  For proof-listening, @command{pmxab} will make a MIDI file of
 your score.  @command{scor2prt} is an auxiliary program that makes parts from
 a score.")
     (license license:gpl2)))
+
+(define-public texlive-pmx-bin
+  (package
+    (inherit texlive-bin)
+    (name "texlive-pmx-bin")
+    (source
+     (origin
+       (inherit texlive-source)
+       (modules '((guix build utils)
+                  (ice-9 ftw)))
+       (snippet
+        #~(let ((delete-other-directories
+                 (lambda (root dirs)
+                   (with-directory-excursion root
+                     (for-each
+                      delete-file-recursively
+                      (scandir "."
+                               (lambda (file)
+                                 (and (not (member file (append '("." "..") dirs)))
+                                      (eq? 'directory (stat:type (stat file)))))))))))
+            (delete-other-directories "libs" '())
+            (delete-other-directories "utils" '("pmx"))
+            (delete-other-directories "texk" '())))))
+    (arguments
+     (substitute-keyword-arguments (package-arguments texlive-bin)
+       ((#:configure-flags flags)
+        #~(cons "--enable-pmx" (delete "--enable-web2c" #$flags)))
+       ((#:phases phases)
+        #~(modify-phases #$phases
+            (replace 'check
+              (lambda* (#:key tests? #:allow-other-keys)
+                (when tests?
+                  (with-directory-excursion "utils/pmx"
+                    (invoke "make" "check")))))
+            (replace 'install
+              (lambda _
+                (with-directory-excursion "utils/pmx"
+                  (invoke "make" "install"))))))))
+    (native-inputs '())
+    (inputs '())
+    (propagated-inputs '())
+    (home-page (package-home-page texlive-pmx))
+    (synopsis "Binaries for @code{texlive-pmx}")
+    (description
+     "This package provides the binaries for @code{texlive-pmx}.")
+    (license (package-license texlive-pmx))))
 
 (define-public texlive-pmxchords
   (package
