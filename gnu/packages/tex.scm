@@ -20986,6 +20986,7 @@ files.")
     (outputs '("out" "doc"))
     (build-system texlive-build-system)
     (arguments (list #:link-scripts #~(list "m-tx.lua")))
+    (propagated-inputs (list texlive-m-tx-bin))
     (home-page "https://ctan.org/pkg/m-tx")
     (synopsis "Preprocessor for @command{pmx}")
     (description
@@ -20995,6 +20996,52 @@ development of M-Tx was to provide lyrics for music to be typeset.  In fact,
 @command{pmx} now provides a lyrics interface, but M-Tx continues in use by
 those who prefer its language.")
     (license license:expat)))
+
+(define-public texlive-m-tx-bin
+  (package
+    (inherit texlive-bin)
+    (name "texlive-m-tx-bin")
+    (source
+     (origin
+       (inherit texlive-source)
+       (modules '((guix build utils)
+                  (ice-9 ftw)))
+       (snippet
+        #~(let ((delete-other-directories
+                 (lambda (root dirs)
+                   (with-directory-excursion root
+                     (for-each
+                      delete-file-recursively
+                      (scandir "."
+                               (lambda (file)
+                                 (and (not (member file (append '("." "..") dirs)))
+                                      (eq? 'directory (stat:type (stat file)))))))))))
+            (delete-other-directories "libs" '())
+            (delete-other-directories "utils" '("m-tx"))
+            (delete-other-directories "texk" '())))))
+    (arguments
+     (substitute-keyword-arguments (package-arguments texlive-bin)
+       ((#:configure-flags flags)
+        #~(cons "--enable-m-tx" (delete "--enable-web2c" #$flags)))
+       ((#:phases phases)
+        #~(modify-phases #$phases
+            (replace 'check
+              (lambda* (#:key tests? #:allow-other-keys)
+                (when tests?
+                  (with-directory-excursion "utils/m-tx"
+                    (invoke "make" "check")))))
+            (replace 'install
+              (lambda _
+                (with-directory-excursion "utils/m-tx"
+                  (invoke "make" "install"))))))))
+    (native-inputs '())
+    (inputs '())
+    (propagated-inputs '())
+    (home-page (package-home-page texlive-m-tx))
+    (synopsis "Binary for @code{texlive-m-tx}")
+    (description
+     "This package provides the binary for @code{texlive-m-tx}.")
+    (license (package-license texlive-m-tx))))
 
 (define-public texlive-macros2e
   (package
