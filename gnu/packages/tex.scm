@@ -39011,7 +39011,35 @@ does pdfTeX.")
      "This package provides the binaries for @code{texlive-dvipdfmx}.")
     (license (package-license texlive-dvipdfmx))))
 
-(define texlive-dvips-bin
+(define-public texlive-dvips
+  (package
+    (name "texlive-dvips")
+    (version (number->string %texlive-revision))
+    (source (texlive-origin
+             name version
+             (list "doc/dvips/"
+                   "doc/info/dvips.info"
+                   "doc/man/man1/afm2tfm.1"
+                   "doc/man/man1/afm2tfm.man1.pdf"
+                   "doc/man/man1/dvips.1"
+                   "doc/man/man1/dvips.man1.pdf"
+                   "dvips/base/"
+                   "dvips/config/"
+                   "fonts/enc/dvips/base/"
+                   "tex/generic/dvips/")
+             (base32
+              "0x11wx9p16z4nxhlbfqlgi5svnr96j1hnvdl9fpv1sr3n1j8m79g")))
+    (outputs '("out" "doc"))
+    (build-system texlive-build-system)
+    (propagated-inputs (list texlive-dvips-bin))
+    (home-page "https://ctan.org/pkg/dvips")
+    (synopsis "DVI to PostScript drivers")
+    (description
+     "This package provides files needed for converting DVI files to
+PostScript.")
+    (license license:lppl)))
+
+(define-public texlive-dvips-bin
   (package
     (inherit texlive-bin)
     (name "texlive-dvips-bin")
@@ -39042,9 +39070,9 @@ does pdfTeX.")
     (arguments
      (substitute-keyword-arguments (package-arguments texlive-bin)
        ((#:configure-flags flags)
-        #~(cons* "--enable-dvipsk" (delete "--enable-web2c" #$flags)))
-       ((#:phases _)
-        #~(modify-phases %standard-phases
+        #~(cons "--enable-dvipsk" (delete "--enable-web2c" #$flags)))
+       ((#:phases phases)
+        #~(modify-phases #$phases
             (replace 'check
               (lambda* (#:key tests? #:allow-other-keys)
                 (when tests?
@@ -39054,34 +39082,14 @@ does pdfTeX.")
               (lambda _
                 (with-directory-excursion "texk/dvipsk"
                   (invoke "make" "install"))))))))
-    (inputs '())))
-
-(define-public texlive-dvips
-  (package
-    (name "texlive-dvips")
-    (version (number->string %texlive-revision))
-    (source (texlive-origin
-             name version
-             (list "doc/dvips/"
-                   "doc/info/dvips.info"
-                   "doc/man/man1/afm2tfm.1"
-                   "doc/man/man1/afm2tfm.man1.pdf"
-                   "doc/man/man1/dvips.1"
-                   "doc/man/man1/dvips.man1.pdf"
-                   "dvips/base/"
-                   "dvips/config/"
-                   "fonts/enc/dvips/base/"
-                   "tex/generic/dvips/")
-             (base32
-              "0x11wx9p16z4nxhlbfqlgi5svnr96j1hnvdl9fpv1sr3n1j8m79g")))
-    (outputs '("out" "doc"))
-    (build-system texlive-build-system)
-    (home-page "https://ctan.org/pkg/dvips")
-    (synopsis "DVI to PostScript drivers")
+    (native-inputs (list perl pkg-config))
+    (inputs (list texlive-libkpathsea))
+    (propagated-inputs '())
+    (home-page (package-home-page texlive-dvips))
+    (synopsis "Binaries for @code{texlive-dvips}")
     (description
-     "This package provides files needed for converting DVI files to
-PostScript.")
-    (license license:lppl)))
+     "This package provides the binaries for @code{texlive-dvips}.")
+    (license (package-license texlive-dvips))))
 
 (define-public texlive-ketcindy
   (package
