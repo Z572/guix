@@ -34924,6 +34924,7 @@ file.  It also supports XeTeX XDV format.")
               "03pi78c8ghy2gghzk1ffrvf5x7h8c1r0pv5pcspwxz365x2rsbjw")))
     (outputs '("out" "doc"))
     (build-system texlive-build-system)
+    (propagated-inputs (list texlive-dviljk-bin))
     (home-page "https://ctan.org/pkg/dviljk")
     (synopsis "DVI to Laserjet output")
     (description
@@ -34931,20 +34932,92 @@ file.  It also supports XeTeX XDV format.")
 @command{kpathsea} recursive file searching.")
     (license license:gpl3+)))
 
+(define-public texlive-dviljk-bin
+  (package
+    (inherit texlive-bin)
+    (name "texlive-dviljk-bin")
+    (source
+     (origin
+       (inherit texlive-source)
+       (modules '((guix build utils)
+                  (ice-9 ftw)))
+       (snippet
+        #~(let ((delete-other-directories
+                 (lambda (root keep)
+                   (with-directory-excursion root
+                     (for-each
+                      delete-file-recursively
+                      (scandir
+                       "."
+                       (lambda (file)
+                         (and (not (member file (append keep '("." ".."))))
+                              (eq? 'directory (stat:type (stat file)))))))))))
+            (delete-other-directories "libs" '())
+            (delete-other-directories "utils" '())
+            (delete-other-directories "texk" '("dviljk"))))))
+    (arguments
+     (substitute-keyword-arguments (package-arguments texlive-bin)
+       ((#:configure-flags flags)
+        #~(cons "--enable-dviljk" (delete "--enable-web2c" #$flags)))
+       ((#:phases phases)
+        #~(modify-phases #$phases
+            (replace 'check
+              (lambda* (#:key tests? #:allow-other-keys)
+                (when tests?
+                  (with-directory-excursion "texk/dviljk"
+                    (invoke "make" "check")))))
+            (replace 'install
+              (lambda _
+                (with-directory-excursion "texk/dviljk"
+                  (invoke "make" "install"))))))))
+    (native-inputs (list pkg-config))
+    (inputs (list texlive-libkpathsea))
+    (propagated-inputs '())
+    (home-page (package-home-page texlive-dviljk))
+    (synopsis "Binary for @code{texlive-dviljk}")
+    (description
+     "This package provides the binary for @code{texlive-dviljk}.")
+    (license (package-license texlive-dviljk))))
+
 (define-public texlive-dviout-util
   (package
+    (inherit texlive-bin)
     (name "texlive-dviout-util")
-    (version (number->string %texlive-revision))
-    (source (texlive-origin
-             name version
-             (list "doc/man/man1/chkdvifont.1"
-                   "doc/man/man1/chkdvifont.man1.pdf"
-                   "doc/man/man1/dvispc.1"
-                   "doc/man/man1/dvispc.man1.pdf")
-             (base32
-              "098pksgf2iamq96rmzg5fw7i9dlpvdksficsz1bf8k8z4djnbk8n")))
-    (outputs '("out" "doc"))
-    (build-system texlive-build-system)
+    (source
+     (origin
+       (inherit texlive-source)
+       (modules '((guix build utils)
+                  (ice-9 ftw)))
+       (snippet
+        #~(let ((delete-other-directories
+                 (lambda (root keep)
+                   (with-directory-excursion root
+                     (for-each
+                      delete-file-recursively
+                      (scandir
+                       "."
+                       (lambda (file)
+                         (and (not (member file (append keep '("." ".."))))
+                              (eq? 'directory (stat:type (stat file)))))))))))
+            (delete-other-directories "libs" '())
+            (delete-other-directories "utils" '())
+            (delete-other-directories "texk" '("dviout-util" "tests"))))))
+    (arguments
+     (substitute-keyword-arguments (package-arguments texlive-bin)
+       ((#:configure-flags flags)
+        #~(cons* "--enable-dviout-util" (delete "--enable-web2c" #$flags)))
+       ((#:phases _)
+        #~(modify-phases %standard-phases
+            (replace 'check
+              (lambda* (#:key tests? #:allow-other-keys)
+                (when tests?
+                  (with-directory-excursion "texk/dviout-util"
+                    (invoke "make" "check")))))
+            (replace 'install
+              (lambda _
+                (with-directory-excursion "texk/dviout-util"
+                  (invoke "make" "install"))))))))
+    (inputs (list texlive-libptexenc))
     (home-page "https://www.tug.org/texlive/")
     (synopsis "Utilities from the @code{dviout} package")
     (description
