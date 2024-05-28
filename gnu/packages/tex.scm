@@ -44320,6 +44320,7 @@ known as railroad diagrams.")
               "0hdk57179nn57wnmvr3jasjavkvmrn6ryph6jvjhsfqprn7bhf1y")))
     (outputs '("out" "doc"))
     (build-system texlive-build-system)
+    (propagated-inputs (list texlive-t1utils-bin))
     (home-page "https://ctan.org/pkg/t1utils")
     (synopsis "Simple Type 1 font manipulation programs")
     (description
@@ -44336,6 +44337,52 @@ and -editable format;
 @item @command{t1mac}: generate a Macintosh font from a Type 1 font.
 @end itemize")
     (license license:public-domain)))
+
+(define-public texlive-t1utils-bin
+  (package
+    (inherit texlive-bin)
+    (name "texlive-t1utils-bin")
+    (source
+     (origin
+       (inherit texlive-source)
+       (modules '((guix build utils)
+                  (ice-9 ftw)))
+       (snippet
+        #~(let ((delete-other-directories
+                 (lambda (root dirs)
+                   (with-directory-excursion root
+                     (for-each
+                      delete-file-recursively
+                      (scandir "."
+                               (lambda (file)
+                                 (and (not (member file (append '("." "..") dirs)))
+                                      (eq? 'directory (stat:type (stat file)))))))))))
+            (delete-other-directories "libs" '())
+            (delete-other-directories "texk" '())
+            (delete-other-directories "utils" '("t1utils"))))))
+    (arguments
+     (substitute-keyword-arguments (package-arguments texlive-bin)
+       ((#:configure-flags flags)
+        #~(cons "--enable-t1utils" (delete "--enable-web2c" #$flags)))
+       ((#:phases phases)
+        #~(modify-phases #$phases
+            (replace 'check
+              (lambda* (#:key tests? #:allow-other-keys)
+                (when tests?
+                  (with-directory-excursion "utils/t1utils"
+                    (invoke "make" "check")))))
+            (replace 'install
+              (lambda _
+                (with-directory-excursion "utils/t1utils"
+                  (invoke "make" "install"))))))))
+    (native-inputs '())
+    (inputs '())
+    (propagated-inputs '())
+    (home-page (package-home-page texlive-t1utils))
+    (synopsis "Binaries for @code{texlive-t1utils}")
+    (description
+     "This package provides the binaries for @code{texlive-t1utils}.")
+    (license (package-license texlive-t1utils))))
 
 (define-public texlive-table-fct
   (package
