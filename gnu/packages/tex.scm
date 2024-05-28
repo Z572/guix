@@ -38803,7 +38803,7 @@ TeX.")
               "0yjbc6rsf8c62qa1lyi9kjyjy2p0xlps19llnvly3xyhla08j76f")))
     (outputs '("out" "doc"))
     (build-system texlive-build-system)
-    (propagated-inputs (list texlive-glyphlist))
+    (propagated-inputs (list texlive-glyphlist texlive-lcdftypetools-bin))
     (home-page "https://ctan.org/pkg/lcdf-typetools")
     (synopsis "Bundle of outline font manipulation tools")
     (description
@@ -38837,6 +38837,52 @@ with one you specify;
 a Type 1 font.
 @end itemize")
     (license license:gpl3+)))
+
+(define-public texlive-lcdftypetools-bin
+  (package
+    (inherit texlive-bin)
+    (name "texlive-lcdftypetools-bin")
+    (source
+     (origin
+       (inherit texlive-source)
+       (modules '((guix build utils)
+                  (ice-9 ftw)))
+       (snippet
+        #~(let ((delete-other-directories
+                 (lambda (root dirs)
+                   (with-directory-excursion root
+                     (for-each
+                      delete-file-recursively
+                      (scandir "."
+                               (lambda (file)
+                                 (and (not (member file (append '("." "..") dirs)))
+                                      (eq? 'directory (stat:type (stat file)))))))))))
+            (delete-other-directories "libs" '())
+            (delete-other-directories "utils" '())
+            (delete-other-directories "texk" '("lcdf-typetools"))))))
+    (arguments
+     (substitute-keyword-arguments (package-arguments texlive-bin)
+       ((#:configure-flags flags)
+        #~(cons "--enable-lcdf-typetools" (delete "--enable-web2c" #$flags)))
+       ((#:phases phases)
+        #~(modify-phases #$phases
+            (replace 'check
+              (lambda* (#:key tests? #:allow-other-keys)
+                (when tests?
+                  (with-directory-excursion "texk/lcdf-typetools"
+                    (invoke "make" "check")))))
+            (replace 'install
+              (lambda _
+                (with-directory-excursion "texk/lcdf-typetools"
+                  (invoke "make" "install"))))))))
+    (native-inputs (list pkg-config))
+    (inputs (list texlive-libkpathsea))
+    (propagated-inputs '())
+    (home-page (package-home-page texlive-lcdftypetools))
+    (synopsis "Binaries for @code{texlive-lcdftypetools}")
+    (description
+     "This package provides the binaries for @code{texlive-lcdftypetools}.")
+    (license (package-license texlive-lcdftypetools))))
 
 (define-public texlive-latex
   (package
