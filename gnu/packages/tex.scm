@@ -34823,6 +34823,7 @@ drivers (much like DVItype).")
               "1w153rqm7nlmcf6162glxz282nbb6b6hjf5h0p7mbzr0j1357sxj")))
     (outputs '("out" "doc"))
     (build-system texlive-build-system)
+    (propagated-inputs (list texlive-dvidvi-bin))
     (home-page "https://ctan.org/pkg/dvidvi")
     (synopsis "Convert one DVI file into another")
     (description
@@ -34833,6 +34834,53 @@ exclusions.")
     ;; Its author stated the program is to be used under the GPL.  See
     ;; <https://metadata.ftp-master.debian.org/changelogs//main/d/dvidvi/dvidvi_1.0-8.2_copyright>.
     (license license:gpl3)))
+
+(define-public texlive-dvidvi-bin
+  (package
+    (inherit texlive-bin)
+    (name "texlive-dvidvi-bin")
+    (source
+     (origin
+       (inherit texlive-source)
+       (modules '((guix build utils)
+                  (ice-9 ftw)))
+       (snippet
+        #~(let ((delete-other-directories
+                 (lambda (root keep)
+                   (with-directory-excursion root
+                     (for-each
+                      delete-file-recursively
+                      (scandir
+                       "."
+                       (lambda (file)
+                         (and (not (member file (append keep '("." ".."))))
+                              (eq? 'directory (stat:type (stat file)))))))))))
+            (delete-other-directories "libs" '())
+            (delete-other-directories "utils" '())
+            (delete-other-directories "texk" '("dvidvi"))))))
+    (arguments
+     (substitute-keyword-arguments (package-arguments texlive-bin)
+       ((#:configure-flags flags)
+        #~(cons "--enable-dvidvi" (delete "--enable-web2c" #$flags)))
+       ((#:phases phases)
+        #~(modify-phases #$phases
+            (replace 'check
+              (lambda* (#:key tests? #:allow-other-keys)
+                (when tests?
+                  (with-directory-excursion "texk/dvidvi"
+                    (invoke "make" "check")))))
+            (replace 'install
+              (lambda _
+                (with-directory-excursion "texk/dvidvi"
+                  (invoke "make" "install"))))))))
+    (native-inputs (list pkg-config))
+    (inputs (list texlive-libkpathsea))
+    (propagated-inputs '())
+    (home-page (package-home-page texlive-dvidvi))
+    (synopsis "Binary for @code{texlive-dvidvi}")
+    (description
+     "This package provides the binary for @code{texlive-dvidvi}.")
+    (license (package-license texlive-dvidvi))))
 
 (define-public texlive-dviinfox
   (package
