@@ -34688,12 +34688,59 @@ homebrewed classes and package files.")
               "108y0qxh13x0iivgsvkk4370f471p03nyl4x9nn7lng1wrsafp6h")))
     (outputs '("out" "doc"))
     (build-system texlive-build-system)
+    (propagated-inputs (list texlive-dvi2tty-bin))
     (home-page "https://ctan.org/pkg/dvi2tty")
     (synopsis "Produce ASCII from DVI")
     (description
      "This package provides a DVI driver to produce an ASCII representation of
 the document.")
     (license license:gpl2)))
+
+(define-public texlive-dvi2tty-bin
+  (package
+    (inherit texlive-bin)
+    (name "texlive-dvi2tty-bin")
+    (source
+     (origin
+       (inherit texlive-source)
+       (modules '((guix build utils)
+                  (ice-9 ftw)))
+       (snippet
+        #~(let ((delete-other-directories
+                 (lambda (root dirs)
+                   (with-directory-excursion root
+                     (for-each
+                      delete-file-recursively
+                      (scandir "."
+                               (lambda (file)
+                                 (and (not (member file (append '("." "..") dirs)))
+                                      (eq? 'directory (stat:type (stat file)))))))))))
+            (delete-other-directories "libs" '())
+            (delete-other-directories "utils" '())
+            (delete-other-directories "texk" '("dvi2tty"))))))
+    (arguments
+     (substitute-keyword-arguments (package-arguments texlive-bin)
+       ((#:configure-flags flags)
+        #~(cons "--enable-dvi2tty" (delete "--enable-web2c" #$flags)))
+       ((#:phases phases)
+        #~(modify-phases #$phases
+            (replace 'check
+              (lambda* (#:key tests? #:allow-other-keys)
+                (when tests?
+                  (with-directory-excursion "texk/dvi2tty"
+                    (invoke "make" "check")))))
+            (replace 'install
+              (lambda _
+                (with-directory-excursion "texk/dvi2tty"
+                  (invoke "make" "install"))))))))
+    (native-inputs (list pkg-config))
+    (inputs (list texlive-libkpathsea texlive-libptexenc))
+    (propagated-inputs '())
+    (home-page (package-home-page texlive-dvi2tty))
+    (synopsis "Binaries for @code{texlive-dvi2tty}")
+    (description
+     "This package provides the binaries for @code{texlive-dvi2tty}.")
+    (license (package-license texlive-dvi2tty))))
 
 (define-public texlive-dviasm
   (package
