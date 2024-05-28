@@ -47851,6 +47851,7 @@ replacement for the @code{inputenc} package.")
                    (format #false "PATH=\"~{~a:~}$PATH\"; export PATH~%~a"
                            dirs m)))))))))
     (inputs (list sed gawk))
+    (propagated-inputs (list texlive-libkpathsea)) ;for the executables
     (home-page "https://ctan.org/pkg/kpathsea")
     (synopsis "Files related to the path searching library for TeX")
     (description
@@ -65822,7 +65823,7 @@ The macros were designed for use within other macros.")
     (propagated-inputs
      (list texlive-amsfonts
            texlive-bibtex
-           texlive-bin                  ;set GUIX_TEXMF and engines
+           texlive-bin                  ;for the TeX engine
            texlive-cm
            texlive-colorprofiles
            texlive-dvipdfmx
