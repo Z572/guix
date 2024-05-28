@@ -22917,34 +22917,7 @@ the older (Type 1 fonts only) bundle @code{musixtex-t1fonts} obsolete.")
               "0z1rfscla1hiibd0gs3lgf8x5yx19pmwdsbzvx2vvz0ikwgjglm9")))
     (outputs '("out" "doc"))
     (build-system texlive-build-system)
-    (arguments
-     (list
-      #:tests? #true
-      #:modules '((guix build texlive-build-system)
-                  ((guix build gnu-build-system) #:prefix gnu:)
-                  (guix build utils)
-                  (srfi srfi-1))
-      #:phases
-      #~(modify-phases %standard-phases
-          (add-after 'unpack 'unpack-musixtnt-source
-            (lambda _
-              (mkdir-p "build")
-              (with-directory-excursion "build"
-                (invoke "tar" "xvf"
-                        ;; Tarball includes a release date that we ignore.
-                        (first (find-files ".." "^musixtnt-.*\\.tar.gz"))
-                        "--strip-components=1"))))
-          (add-after 'build 'build-msxlint
-            (lambda args
-              (with-directory-excursion "build"
-                (for-each (lambda (phase)
-                            (apply (assoc-ref gnu:%standard-phases phase) args))
-                          '(configure
-                            build
-                            check
-                            install
-                            compress-documentation))))))))
-    (propagated-inputs (list texlive-musixtex))
+    (propagated-inputs (list texlive-musixtex texlive-musixtnt-bin))
     (home-page "https://ctan.org/pkg/musixtnt")
     (synopsis
      "MusiXTeX extension library enabling transformations of the effect of
@@ -22963,6 +22936,53 @@ example is extracting single-instrument parts from a multi-instrument score.
 @command{msxlint} detects incorrectly formatted notes lines in a MusiXTeX
 source file.  This should be used before using @code{\\TransformNotes}.")
     (license license:gpl2)))
+
+(define-public texlive-musixtnt-bin
+  (package
+    (inherit texlive-bin)
+    (name "texlive-musixtnt-bin")
+    (source
+     (origin
+       (inherit texlive-source)
+       (modules '((guix build utils)
+                  (ice-9 ftw)))
+       (snippet
+        #~(let ((delete-other-directories
+                 (lambda (root keep)
+                   (with-directory-excursion root
+                     (for-each
+                      delete-file-recursively
+                      (scandir
+                       "."
+                       (lambda (file)
+                         (and (not (member file (append keep '("." ".."))))
+                              (eq? 'directory (stat:type (stat file)))))))))))
+            (delete-other-directories "libs" '())
+            (delete-other-directories "utils" '())
+            (delete-other-directories "texk" '("musixtnt"))))))
+    (arguments
+     (substitute-keyword-arguments (package-arguments texlive-bin)
+       ((#:configure-flags flags)
+        #~(cons "--enable-musixtnt" (delete "--enable-web2c" #$flags)))
+       ((#:phases phases)
+        #~(modify-phases #$phases
+            (replace 'check
+              (lambda* (#:key tests? #:allow-other-keys)
+                (when tests?
+                  (with-directory-excursion "texk/musixtnt"
+                    (invoke "make" "check")))))
+            (replace 'install
+              (lambda _
+                (with-directory-excursion "texk/musixtnt"
+                  (invoke "make" "install"))))))))
+    (native-inputs (list pkg-config))
+    (inputs (list texlive-libkpathsea))
+    (propagated-inputs '())
+    (home-page (package-home-page texlive-musixtnt))
+    (synopsis "Binary for @code{texlive-musixtnt}")
+    (description
+     "This package provides the binary for @code{texlive-musixtnt}.")
+    (license (package-license texlive-musixtnt))))
 
 (define-public texlive-musuos
   (package
@@ -73292,31 +73312,43 @@ handle complex tests.")
     ;; Texmf tree in TeX Live is incomplete, as it doesn't include
     ;; "xindy.mem", so it is not possible to use `texlive-origin'.  This file
     ;; isn't build by default by `texlive-bin' either.  Build it specially
-    ;; from `texlive-bin' source instead.
-    (inherit texlive-libkpathsea)
+    ;; from TEXLIVE-SOURCE instead.
+    (inherit texlive-bin)
     (name "texlive-xindy")
-    (version (number->string %texlive-revision))
-    (outputs '("out" "doc"))
-    (build-system gnu-build-system)
+    (source
+     (origin
+       (inherit texlive-source)
+       (modules '((guix build utils)
+                  (ice-9 ftw)))
+       (snippet
+        #~(let ((delete-other-directories
+                 (lambda (root dirs)
+                   (with-directory-excursion root
+                     (for-each
+                      delete-file-recursively
+                      (scandir "."
+                               (lambda (file)
+                                 (and (not (member file (append '("." "..") dirs)))
+                                      (eq? 'directory (stat:type (stat file)))))))))))
+            (delete-other-directories "libs/" '())
+            (delete-other-directories "utils/" '("xindy"))
+            (delete-other-directories "texk/" '())))))
     (arguments
-     (substitute-keyword-arguments (package-arguments texlive-libkpathsea)
-       ((#:out-of-source? _ #t) #t)
+     (substitute-keyword-arguments (package-arguments texlive-bin)
        ((#:configure-flags flags)
-        #~(cons "--enable-xindy" (delete "--enable-kpathsea" #$flags)))
+        #~(cons "--enable-xindy" (delete "--enable-web2c" #$flags)))
        ((#:phases _)
         #~(modify-phases %standard-phases
-            (replace 'install
+            ;; Building documentation require to generate font metrics, but
+            ;; HOME and therefore TEXMFVAR are unavailable.  Use a local
+            ;; TEXMFVAR instead.
+            (add-before 'build 'set-texmfvar
               (lambda _
-                (with-directory-excursion "utils/xindy/"
-                  (invoke "make")
-                  (mkdir-p (string-append #$output "/bin"))
-                  (invoke "make" "install")
-                  (let ((out (string-append #$output "/share"))
-                        (doc (string-append #$output:doc "/share/texmf-dist")))
-                    (mkdir-p doc)
-                    (with-directory-excursion doc
-                      (rename-file (string-append out "/texmf-dist/doc") "doc")
-                      (rename-file (string-append out "/man") "doc/man"))))))
+                (setenv "TEXMFVAR" (string-append (getcwd) "/texmf-var"))))
+            ;; XXX: Install process does not create this directory.
+            (add-before 'install 'create-missing-directory
+              (lambda _
+                (mkdir-p (string-append #$output "/bin"))))
             (add-after 'install 'patch-clisp-location
               (lambda* (#:key inputs #:allow-other-keys)
                 ;; The scripts are encoded in ISO-8859-1 (or iso-latin-1).
