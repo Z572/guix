@@ -48743,12 +48743,59 @@ correctly; and define two extra commands: @code{\\vfrac} and
               "1d3ralqh0b71scd59b4hmm707yfrz1rj28ni2lzkhbb1ql73bvah")))
     (outputs '("out" "doc"))
     (build-system texlive-build-system)
+    (propagated-inputs (list texlive-xml2pmx-bin))
     (home-page "https://ctan.org/pkg/xml2pmx")
     (synopsis "Convert MusicXML to PMX and MusiXTeX")
     (description
      "This program translates MusicXML files to input suitable for PMX and
 MusiXTeX processing.")
     (license license:gpl3+)))
+
+(define-public texlive-xml2pmx-bin
+  (package
+    (inherit texlive-bin)
+    (name "texlive-xml2pmx-bin")
+    (source
+     (origin
+       (inherit texlive-source)
+       (modules '((guix build utils)
+                  (ice-9 ftw)))
+       (snippet
+        #~(let ((delete-other-directories
+                 (lambda (root dirs)
+                   (with-directory-excursion root
+                     (for-each
+                      delete-file-recursively
+                      (scandir "."
+                               (lambda (file)
+                                 (and (not (member file (append '("." "..") dirs)))
+                                      (eq? 'directory (stat:type (stat file)))))))))))
+            (delete-other-directories "libs" '())
+            (delete-other-directories "utils" '("xml2pmx"))
+            (delete-other-directories "texk" '())))))
+    (arguments
+     (substitute-keyword-arguments (package-arguments texlive-bin)
+       ((#:configure-flags flags)
+        #~(cons "--enable-xml2pmx" (delete "--enable-web2c" #$flags)))
+       ((#:phases phases)
+        #~(modify-phases #$phases
+            (replace 'check
+              (lambda* (#:key tests? #:allow-other-keys)
+                (when tests?
+                  (with-directory-excursion "utils/xml2pmx"
+                    (invoke "make" "check")))))
+            (replace 'install
+              (lambda _
+                (with-directory-excursion "utils/xml2pmx"
+                  (invoke "make" "install"))))))))
+    (native-inputs '())
+    (inputs '())
+    (propagated-inputs '())
+    (home-page (package-home-page texlive-xml2pmx))
+    (synopsis "Binary for @code{texlive-xml2pmx}")
+    (description
+     "This package provides the binary for @code{texlive-xml2pmx}.")
+    (license (package-license texlive-xml2pmx))))
 
 (define-public texlive-xmltexconfig
   (package
