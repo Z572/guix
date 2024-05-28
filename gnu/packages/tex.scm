@@ -54681,12 +54681,59 @@ always (re)defines a command.  There is also @code{\\makeenvironment} and
               "0m01m0x1kf10yvzxgrkvpic0amsr0g6q2r2wsg5f4ngybq4y9gyi")))
     (outputs '("out" "doc"))
     (build-system texlive-build-system)
+    (propagated-inputs (list texlive-makeindex-bin))
     (home-page "https://ctan.org/pkg/makeindexk")
     (synopsis "Makeindex development sources")
     (description
      "The package contains the development sources of MakeIndex.")
     (license
      (license:fsf-free "https://mirrors.ctan.org/indexing/makeindex/COPYING"))))
+
+(define-public texlive-makeindex-bin
+  (package
+    (inherit texlive-bin)
+    (name "texlive-makeindex-bin")
+    (source
+     (origin
+       (inherit texlive-source)
+       (modules '((guix build utils)
+                  (ice-9 ftw)))
+       (snippet
+        #~(let ((delete-other-directories
+                 (lambda (root dirs)
+                   (with-directory-excursion root
+                     (for-each
+                      delete-file-recursively
+                      (scandir "."
+                               (lambda (file)
+                                 (and (not (member file (append '("." "..") dirs)))
+                                      (eq? 'directory (stat:type (stat file)))))))))))
+            (delete-other-directories "libs" '())
+            (delete-other-directories "texk" '("makeindexk" "tests"))
+            (delete-other-directories "utils" '())))))
+    (arguments
+     (substitute-keyword-arguments (package-arguments texlive-bin)
+       ((#:configure-flags flags)
+        #~(cons "--enable-makeindexk" (delete "--enable-web2c" #$flags)))
+       ((#:phases phases)
+        #~(modify-phases #$phases
+            (replace 'check
+              (lambda* (#:key tests? #:allow-other-keys)
+                (when tests?
+                  (with-directory-excursion "texk/makeindexk"
+                    (invoke "make" "check")))))
+            (replace 'install
+              (lambda _
+                (with-directory-excursion "texk/makeindexk"
+                  (invoke "make" "install"))))))))
+    (native-inputs (list perl pkg-config))
+    (inputs (list texlive-libkpathsea))
+    (propagated-inputs '())
+    (home-page (package-home-page texlive-makeindex))
+    (synopsis "Binary for @code{texlive-makeindex}")
+    (description
+     "This package provides the binary for @code{texlive-makeindex}.")
+    (license (package-license texlive-makeindex))))
 
 (define-public texlive-marginfix
   (package
