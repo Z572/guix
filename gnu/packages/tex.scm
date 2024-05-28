@@ -113,36 +113,36 @@
 
 ;;; Commentary:
 ;;;
-;;; This module aims at being as faithful as possible to TeX Live
-;;; distribution.  Yet, some of the packages in this module are Guix specific.
-;;; The following paragraphs describe them.
-;;;
 ;;; Guix provides two different TeX Live systems: one monolithic, the TEXLIVE
-;;; package, and the other modular.  Both are built from TEXLIVE-LIBKPATHSEA,
-;;; which is therefore the starting of any TeX Live update.  Both also rely on
-;;; TEXLIVE-SCRIPTS, which contains core scripts and related files---although
-;;; monolithic TeX Live only makes use of its source.  At that point, both
-;;; systems diverge.
+;;; package, and the other modular.  This module is about the latter.  It aims
+;;; at being as faithful as possible to TeX Live distribution.  Yet, some of
+;;; the packages defined here are Guix specific.  The following paragraphs
+;;; describe them.
 ;;;
-;;; On the one hand, the monolithic TeX Live merges TEXLIVE-BIN-FULL and
-;;; TEXLIVE-TEXMF in order to create TEXLIVE.
+;;; Source for all TeX Live binaries is located in TEXLIVE-SOURCE, which is
+;;; therefore the starting point of any TeX Live update.  This is first used
+;;; to build TEXLIVE-LIBKPATHSEA and TEXLIVE-LIBPTEXENC.
 ;;;
-;;; On the other hand, modular TeX Live relies on TEXLIVE-BIN, which is
-;;; provided as a mandatory native input in the texlive build system.  Unlike
-;;; TEXLIVE-BIN-FULL, it doesn't provide any script (but still include all the
-;;; binaries; this might change in the future).  Then the system builds its
-;;; way towards regular `texlive-latex-bin' package, which is a convenient
-;;; native input (that can be ignored) for most TeX Live packages.  Those
-;;; earlier in the build chain need the TEXLIVE-DOCSTRIP package to still be
-;;; able to generate their runfiles.
+;;; Both TEXLIVE-SOURCE and TEXLIVE-LIBKPATHSEA---which takes care of creating
+;;; a search path for GUIX_TEXMF environment variable---are used to compile
+;;; TEXLIVE-BIN.  In turn, TEXLIVE-BIN propagates TEXLIVE-SCRIPTS, which
+;;; contains core scripts and related files, including "texlive.tldb"
+;;; database.  TEXLIVE-BIN is a mandatory native input in the `texlive' build
+;;; system.
 ;;;
-;;; Default font map files are updated in a profile hook (see
-;;; `texlive-font-maps' in "profiles.scm").  However, this option is not
-;;; available when building documentation for a package.  Consequently, this
-;;; module also provides TEXLIVE-UPDMAP.CFG function, which creates a TeX Live
-;;; tree with font map files updates.  It should be used exclusively for
-;;; package definitions, as a native input.  It is possible to augment that
-;;; tree, in particular with additional font packages.
+;;; Then, the system builds its way towards regular TEXLIVE-LATEX-BIN package,
+;;; which is a convenient native input---that can be ignored using
+;;; `texlive-latex-bin?' keyword argument---for most TeX Live packages.  For
+;;; obvious reasons, packages used to build TEXLIVE-LATEX-BIN must be set it
+;;; to `#f'.
+;;;
+;;; The TEXLIVE-BIN package provides a few Web2C tools, Metafont and some TeX
+;;; engines---i.e, TeX, pdfLaTeX, LuaTeX and LuaHBTeX.  The rest of the
+;;; binaries are built in separate packages, from TEXLIVE-SOURCE, and possibly
+;;; with the help of TEXLIVE-LIBKPATHSEA and TEXLIVE-LIBPTEXENC.  Those
+;;; packages inherit their phases from TEXLIVE-BIN.  As a convention, the
+;;; package named "texlive-NAME-bin" provides binaries for "texlive-NAME",
+;;; TEXLIVE-LATEX-BIN being the obvious exception to this scheme.
 ;;;
 ;;; Unlike font map files, TeX formats are not built from a profile hook, as
 ;;; the process would be too time-consuming, e.g., when invoking "guix shell".
@@ -153,8 +153,39 @@
 ;;; TEXLIVE-HYPHEN-COMPLETE, and all formats, being built with it, include all
 ;;; rules right from the start.
 ;;;
-;;; Any other "texlive-name" package matches the "name" TeX Live package, as
-;;; defined in the "texlive.tlpdb" file.
+;;; Any other "texlive-NAME" package matches "NAME" TeX Live package, as
+;;; defined in the "texlive.tlpdb" database.
+;;;
+;;; The following piece of art illustrates the bootstrap process of the
+;;; modular Guix TeX Live distribution.  All "texlive-" prefixes have been
+;;; dropped for brevity.
+;;;
+;;;
+;;;           ,-- libptexenc-----------------------.
+;;;           |                                    |
+;;;           |                                    |
+;;;  source --|                    ,-- all "*-bin" minus latex-bin
+;;;    |      |                    |   ___________________________
+;;;    |      |                    |               |
+;;;    |      `-- libkpathsea --.  |               |
+;;;    |                        |--|    (inherit phases from bin)
+;;;    `------------------------’  |
+;;;                                |
+;;;                                |
+;;;                                `-- bin -- hyphen-complete, etc. -- latex-bin
+;;;                                     |     _____________________
+;;;  scripts --------(propagated)-------’               |
+;;;                                                     |
+;;;                                          (#:texlive-latex-bin? #f)
+;;;
+;;;
+;;; Default font map files are updated in a profile hook (see
+;;; `texlive-font-maps' in "profiles.scm").  However, this option is not
+;;; available when building documentation for a package.  Consequently, this
+;;; module also provides TEXLIVE-UPDMAP.CFG function, which creates a TeX Live
+;;; tree with font map files updates.  It should be used exclusively for
+;;; package definitions, as a native input.  It is possible to augment that
+;;; tree, in particular with additional font packages.
 ;;;
 ;;; Code:
 
