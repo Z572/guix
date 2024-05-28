@@ -99,6 +99,7 @@
   #:use-module (gnu packages ruby)
   #:use-module (gnu packages shells)
   #:use-module (gnu packages tcl)
+  #:use-module (gnu packages tls)
   #:use-module (gnu packages base)
   #:use-module (gnu packages gawk)
   #:use-module (gnu packages web)
@@ -35190,6 +35191,7 @@ paper feed errors!")
               "1fz3sa7p9wk2g1v0bpy87vz7nxwrh5bsfl4m734n6lhsh1bkj6fb")))
     (outputs '("out" "doc"))
     (build-system texlive-build-system)
+    (propagated-inputs (list texlive-dvisvgm-bin))
     (home-page "https://ctan.org/pkg/dvisvgm")
     (synopsis
      "Convert DVI, EPS, and PDF files to Scalable Vector Graphics format (SVG)")
@@ -35202,6 +35204,71 @@ to always create lossless scalable output.  The embedded SVG fonts can
 optionally be replaced with graphics paths so that applications that do not
 support SVG fonts are enabled to render the graphics properly.")
     (license license:gpl3+)))
+
+(define-public texlive-dvisvgm-bin
+  (package
+    (inherit texlive-bin)
+    (name "texlive-dvisvgm-bin")
+    (source
+     (origin
+       (inherit texlive-source)
+       (modules '((guix build utils)
+                  (ice-9 ftw)))
+       (snippet
+        #~(let ((delete-other-directories
+                 (lambda (root keep)
+                   (with-directory-excursion root
+                     (for-each
+                      delete-file-recursively
+                      (scandir
+                       "."
+                       (lambda (file)
+                         (and (not (member file (append keep '("." ".."))))
+                              (eq? 'directory (stat:type (stat file)))))))))))
+            (delete-other-directories "libs" '())
+            (delete-other-directories "utils" '())
+            ;; TODO: Unbundle stuff in texk/dvisvgm/dvisvgm-src/libs too.
+            (delete-other-directories "texk" '("dvisvgm"))))))
+    (arguments
+     (substitute-keyword-arguments (package-arguments texlive-bin)
+       ((#:configure-flags flags)
+        #~(cons "--enable-dvisvgm" (delete "--enable-web2c" #$flags)))
+       ((#:phases phases)
+        #~(modify-phases #$phases
+            ;; XXX: Ghostscript is detected, but HAVE_LIBGS is never set, so
+            ;; the appropriate linker flags are not added.
+            (add-after 'unpack 'patch-dvisvgm-build-files
+              (lambda _
+                (substitute* "texk/dvisvgm/configure"
+                  (("^have_libgs=yes" all)
+                   (string-append all "\nHAVE_LIBGS=1")))))
+            (replace 'check
+              (lambda* (#:key tests? #:allow-other-keys)
+                (when tests?
+                  (with-directory-excursion "texk/dvisvgm"
+                    (invoke "make" "check")))))
+            (replace 'install
+              (lambda _
+                (with-directory-excursion "texk/dvisvgm"
+                  (invoke "make" "install"))))))))
+    (native-inputs (list pkg-config))
+    (inputs
+     (list brotli
+           clipper
+           freetype
+           ghostscript
+           openssl
+           potrace
+           texlive-libkpathsea
+           woff2
+           xxhash
+           zlib))
+    (propagated-inputs '())
+    (home-page (package-home-page texlive-dvisvgm))
+    (synopsis "Binary for @code{texlive-dvisvgm}")
+    (description
+     "This package provides the binary for @code{texlive-dvisvgm}.")
+    (license (package-license texlive-dvisvgm))))
 
 (define-public texlive-ebong
   (package
