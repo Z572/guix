@@ -34436,6 +34436,7 @@ within the document, or in the document's private package file.")
               "08d017wn7a67pmp9b5yhnfg1x2q6f48qaa5ma4bplz9a782icwjy")))
     (outputs '("out" "doc"))
     (build-system texlive-build-system)
+    (propagated-inputs (list texlive-detex-bin))
     (home-page "https://ctan.org/pkg/detex")
     (synopsis "Strip TeX from a source file")
     (description
@@ -34446,6 +34447,53 @@ this case, it also recognizes the @code{\\include} and @code{\\includeonly}
 commands.  The author now considers this program to be obsolete and Piotr
 Kubowicz's OpenDetex as its successor.")
     (license license:bsd-3)))
+
+(define-public texlive-detex-bin
+  (package
+    (inherit texlive-bin)
+    (name "texlive-detex-bin")
+    (source
+     (origin
+       (inherit texlive-source)
+       (modules '((guix build utils)
+                  (ice-9 ftw)))
+       (snippet
+        #~(let ((delete-other-directories
+                 (lambda (root keep)
+                   (with-directory-excursion root
+                     (for-each
+                      delete-file-recursively
+                      (scandir
+                       "."
+                       (lambda (file)
+                         (and (not (member file (append keep '("." ".."))))
+                              (eq? 'directory (stat:type (stat file)))))))))))
+            (delete-other-directories "libs" '())
+            (delete-other-directories "utils" '())
+            (delete-other-directories "texk" '("detex"))))))
+    (arguments
+     (substitute-keyword-arguments (package-arguments texlive-bin)
+       ((#:configure-flags flags)
+        #~(cons "--enable-detex" (delete "--enable-web2c" #$flags)))
+       ((#:phases phases)
+        #~(modify-phases #$phases
+            (replace 'check
+              (lambda* (#:key tests? #:allow-other-keys)
+                (when tests?
+                  (with-directory-excursion "texk/detex"
+                    (invoke "make" "check")))))
+            (replace 'install
+              (lambda _
+                (with-directory-excursion "texk/detex"
+                  (invoke "make" "install"))))))))
+    (native-inputs (list pkg-config))
+    (inputs (list texlive-libkpathsea))
+    (propagated-inputs '())
+    (home-page (package-home-page texlive-detex))
+    (synopsis "Binary for @code{texlive-detex}")
+    (description
+     "This package provides the binary for @code{texlive-detex}.")
+    (license (package-license texlive-detex))))
 
 (define-public texlive-digestif
   (package
