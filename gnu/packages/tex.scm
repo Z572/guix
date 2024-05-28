@@ -57843,7 +57843,7 @@ The package contains both the original TrueType font and the derived Type
               "0i6mjq59n7vll81m7r2k83x0q6xx7cg6qcia46298zqc0b0l3qb0")))
     (outputs '("out" "doc"))
     (build-system texlive-build-system)
-    (propagated-inputs (list texlive-kpathsea))
+    (propagated-inputs (list texlive-kpathsea texlive-metapost-bin))
     (home-page "https://ctan.org/pkg/metapost")
     (synopsis "Create scalable illustrations")
     (description
@@ -57851,6 +57851,34 @@ The package contains both the original TrueType font and the derived Type
 technical illustrations.  Its output is scalable PostScript or SVG, rather
 than the bitmaps Metafont creates.")
     (license license:lppl)))
+
+(define-public texlive-metapost-bin
+  (package
+    (inherit texlive-bin)
+    (name "texlive-metapost-bin")
+    (arguments
+     (substitute-keyword-arguments (package-arguments texlive-bin)
+       ((#:configure-flags flags)
+        #~(delete "--enable-web2c" #$flags))
+       ((#:phases phases)
+        #~(modify-phases #$phases
+            (replace 'install
+              (lambda _
+                (let ((bin (string-append #$output "/bin")))
+                  (with-directory-excursion "texk/web2c"
+                    (invoke "make" "mpost")
+                    (install-file "mpost" bin))
+                  (with-directory-excursion bin
+                    (for-each (lambda (link) (symlink "mpost" link))
+                              '("dvitomp" "mfplain" "r-mpost"))))))))))
+    (native-inputs (list pkg-config))
+    (inputs (modify-inputs (package-inputs texlive-bin)
+              (append cairo mpfr)))
+    (home-page (package-home-page texlive-metapost))
+    (synopsis "Binary for @code{texlive-metapost}")
+    (description
+     "This package provides the binary for @code{texlive-metapost}.")
+    (license (package-license texlive-metapost))))
 
 (define-public texlive-acmart
   (package
