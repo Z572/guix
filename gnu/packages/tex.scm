@@ -34578,6 +34578,7 @@ information on creating packages and documentation.")
               "0kvnsr8nxrys99rp74wlxnisfripx6jpjjkqy38d3d4gw13cvb5g")))
     (outputs '("out" "doc"))
     (build-system texlive-build-system)
+    (propagated-inputs (list texlive-dtl-bin))
     (home-page "https://ctan.org/pkg/dtl")
     (synopsis "Tools to dis-assemble and re-assemble DVI files")
     (description
@@ -34586,6 +34587,53 @@ which is readily readable by humans.  The DTL bundle contains an assembler
 @command{dt2dv}, which produces DVI files from DTL files, and a disassembler
 @command{dv2dt}, which produces DTL files from DVI files.")
     (license license:public-domain)))
+
+(define-public texlive-dtl-bin
+  (package
+    (inherit texlive-bin)
+    (name "texlive-dtl-bin")
+    (source
+     (origin
+       (inherit texlive-source)
+       (modules '((guix build utils)
+                  (ice-9 ftw)))
+       (snippet
+        #~(let ((delete-other-directories
+                 (lambda (root keep)
+                   (with-directory-excursion root
+                     (for-each
+                      delete-file-recursively
+                      (scandir
+                       "."
+                       (lambda (file)
+                         (and (not (member file (append keep '("." ".."))))
+                              (eq? 'directory (stat:type (stat file)))))))))))
+            (delete-other-directories "libs" '())
+            (delete-other-directories "utils" '())
+            (delete-other-directories "texk" '("dtl"))))))
+    (arguments
+     (substitute-keyword-arguments (package-arguments texlive-bin)
+       ((#:configure-flags flags)
+        #~(cons "--enable-dtl" (delete "--enable-web2c" #$flags)))
+       ((#:phases phases)
+        #~(modify-phases #$phases
+            (replace 'check
+              (lambda* (#:key tests? #:allow-other-keys)
+                (when tests?
+                  (with-directory-excursion "texk/dtl"
+                    (invoke "make" "check")))))
+            (replace 'install
+              (lambda _
+                (with-directory-excursion "texk/dtl"
+                  (invoke "make" "install"))))))))
+    (native-inputs (list pkg-config))
+    (inputs (list texlive-libkpathsea))
+    (propagated-inputs '())
+    (home-page (package-home-page texlive-dtl))
+    (synopsis "Binaries for @code{texlive-dtl}")
+    (description
+     "This package provides the binaries for @code{texlive-dtl}.")
+    (license (package-license texlive-dtl))))
 
 (define-public texlive-dtxgen
   (package
