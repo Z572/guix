@@ -9446,6 +9446,7 @@ adjust locations and kerning of CJK punctuation marks.")
               "0by2g05xv5dndnd78jz9y73fyswqhfvcbzcw8rzhvpvd6inrcdq8")))
     (outputs '("out" "doc"))
     (build-system texlive-build-system)
+    (propagated-inputs (list texlive-cjkutils-bin))
     (home-page "https://ctan.org/pkg/cjk")
     (synopsis "CJK language support")
     (description
@@ -9457,6 +9458,52 @@ simultaneous, easy-to-use support to a bunch of other scripts in addition to
 the above --- Cyrillic, Greek, Latin-based scripts, Russian and Vietnamese are
 supported.")
     (license license:gpl2)))
+
+(define-public texlive-cjkutils-bin
+  (package
+    (inherit texlive-bin)
+    (name "texlive-cjkutils-bin")
+    (source
+     (origin
+       (inherit texlive-source)
+       (modules '((guix build utils)
+                  (ice-9 ftw)))
+       (snippet
+        #~(let ((delete-other-directories
+                 (lambda (root dirs)
+                   (with-directory-excursion root
+                     (for-each
+                      delete-file-recursively
+                      (scandir "."
+                               (lambda (file)
+                                 (and (not (member file (append '("." "..") dirs)))
+                                      (eq? 'directory (stat:type (stat file)))))))))))
+            (delete-other-directories "libs/" '())
+            (delete-other-directories "utils/" '())
+            (delete-other-directories "texk/" '("cjkutils"))))))
+    (arguments
+     (substitute-keyword-arguments (package-arguments texlive-bin)
+       ((#:configure-flags flags)
+        #~(cons "--enable-cjkutils-x" (delete "--enable-web2c" #$flags)))
+       ((#:phases phases)
+        #~(modify-phases #$phases
+            (replace 'check
+              (lambda* (#:key tests? #:allow-other-keys)
+                (when tests?
+                  (with-directory-excursion "texk/cjkutils"
+                    (invoke "make" "check")))))
+            (replace 'install
+              (lambda _
+                (with-directory-excursion "texk/cjkutils"
+                  (invoke "make" "install"))))))))
+    (native-inputs (list pkg-config))
+    (inputs (list texlive-libkpathsea))
+    (propagated-inputs '())
+    (home-page (package-home-page texlive-cjkutils))
+    (synopsis "Binaries for @code{texlive-cjkutils}")
+    (description
+     "This package provides the binaries for @code{texlive-cjkutils}.")
+    (license (package-license texlive-cjkutils))))
 
 (define-public texlive-clara
   (package
