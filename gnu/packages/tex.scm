@@ -35135,8 +35135,30 @@ not read the postamble, so it can be started before TeX finishes.")
 
 (define-public texlive-dvipos
   (package
-    (inherit texlive-bin)
     (name "texlive-dvipos")
+    (version (number->string %texlive-revision))
+    (source (texlive-origin
+             name version
+             (list "doc/man/man1/dvipos.1"
+                   "doc/man/man1/dvipos.man1.pdf")
+             (base32
+              "0dmaas4m9y4px53vlg0jr73xviki338fm2n176l8ldwqj0vvq1b8")))
+    (outputs '("out" "doc"))
+    (build-system texlive-build-system)
+    (propagated-inputs (list texlive-dvipos-bin))
+    (home-page "https://www.tug.org/texlive/")
+    (synopsis "Support DVI @samp{pos:} specials used by ConTeXt DVI output")
+    (description
+     "@command{dvipos} parses a DVI file looking for @samp{pos:} specials.
+It then outputs the information from those specials along with information
+that only a DVI postprocessor could determine, such as the current @samp{x}
+and @samp{y} location.")
+    (license license:gpl2+)))
+
+(define-public texlive-dvipos-bin
+  (package
+    (inherit texlive-bin)
+    (name "texlive-dvipos-bin")
     (source
      (origin
        (inherit texlive-source)
@@ -35159,9 +35181,9 @@ not read the postamble, so it can be started before TeX finishes.")
     (arguments
      (substitute-keyword-arguments (package-arguments texlive-bin)
        ((#:configure-flags flags)
-        #~(cons* "--enable-dvipos" (delete "--enable-web2c" #$flags)))
-       ((#:phases _)
-        #~(modify-phases %standard-phases
+        #~(cons "--enable-dvipos" (delete "--enable-web2c" #$flags)))
+       ((#:phases phases)
+        #~(modify-phases #$phases
             (replace 'check
               (lambda* (#:key tests? #:allow-other-keys)
                 (when tests?
@@ -35171,14 +35193,14 @@ not read the postamble, so it can be started before TeX finishes.")
               (lambda _
                 (with-directory-excursion "texk/dvipos"
                   (invoke "make" "install"))))))))
-    (home-page "https://www.tug.org/texlive/")
-    (synopsis "Support DVI @samp{pos:} specials used by ConTeXt DVI output")
+    (home-page (package-home-page texlive-dvipos))
+    (native-inputs (list pkg-config))
+    (inputs (list texlive-libkpathsea))
+    (propagated-inputs '())
+    (synopsis "Binary for @code{texlive-dvipos}")
     (description
-     "@command{dvipos} parses a DVI file looking for @samp{pos:} specials.
-It then outputs the information from those specials along with information
-that only a DVI postprocessor could determine, such as the current @samp{x}
-and @samp{y} location.")
-    (license license:gpl2+)))
+     "This package provides the binary for @code{texlive-dvipos}.")
+    (license (package-license texlive-dvipos))))
 
 (define-public texlive-dvipsconfig
   (package
