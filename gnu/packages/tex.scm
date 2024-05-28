@@ -35043,6 +35043,7 @@ transforms between a DVI file and a text file.")
               "0r001q4p5569dagayds1c56y10ls6f6v7mmywiw81l995q16apxi")))
     (outputs '("out" "doc"))
     (build-system texlive-build-system)
+    (propagated-inputs (list texlive-dvipng-bin))
     (home-page "https://ctan.org/pkg/dvipng")
     (synopsis "DVI to PNG/GIF converter")
     (description
@@ -35053,18 +35054,99 @@ on-the-fly, as needed in @code{preview-latex}, WeBWorK and others.  It does
 not read the postamble, so it can be started before TeX finishes.")
     (license license:lgpl3)))
 
+(define-public texlive-dvipng-bin
+  (package
+    (inherit texlive-bin)
+    (name "texlive-dvipng-bin")
+    (source
+     (origin
+       (inherit texlive-source)
+       (modules '((guix build utils)
+                  (ice-9 ftw)))
+       (snippet
+        #~(let ((delete-other-directories
+                 (lambda (root dirs)
+                   (with-directory-excursion root
+                     (for-each
+                      delete-file-recursively
+                      (scandir "."
+                               (lambda (file)
+                                 (and (not (member file (append '("." "..") dirs)))
+                                      (eq? 'directory (stat:type (stat file)))))))))))
+            (delete-other-directories "libs" '("xpdf"))
+            (delete-other-directories "utils" '())
+            (delete-other-directories "texk" '("dvipng"))))))
+    (arguments
+     (substitute-keyword-arguments (package-arguments texlive-bin)
+       ((#:configure-flags flags)
+        #~(cons "--enable-dvipng" (delete "--disable-web2c" #$flags)))
+       ((#:phases phases)
+        #~(modify-phases #$phases
+            (replace 'check
+              (lambda* (#:key tests? #:allow-other-keys)
+                (when tests?
+                  (with-directory-excursion "texk/dvipng"
+                    (invoke "make" "check")))))
+            (replace 'install
+              (lambda _
+                (with-directory-excursion "texk/dvipng"
+                  (invoke "make" "install"))))))))
+    (native-inputs (list pkg-config))
+    (inputs
+     (list freetype
+           gd
+           graphite2
+           harfbuzz
+           icu4c
+           libpng
+           potrace
+           texlive-libkpathsea
+           zziplib))
+    (propagated-inputs '())
+    (home-page (package-home-page texlive-dvipng))
+    (synopsis "Binaries for @code{texlive-dvipng}")
+    (description
+     "This package provides the binaries for @code{texlive-dvipng}.")
+    (license (package-license texlive-dvipng))))
+
 (define-public texlive-dvipos
   (package
+    (inherit texlive-bin)
     (name "texlive-dvipos")
-    (version (number->string %texlive-revision))
-    (source (texlive-origin
-             name version
-             (list "doc/man/man1/dvipos.1"
-                   "doc/man/man1/dvipos.man1.pdf")
-             (base32
-              "0dmaas4m9y4px53vlg0jr73xviki338fm2n176l8ldwqj0vvq1b8")))
-    (outputs '("out" "doc"))
-    (build-system texlive-build-system)
+    (source
+     (origin
+       (inherit texlive-source)
+       (modules '((guix build utils)
+                  (ice-9 ftw)))
+       (snippet
+        #~(let ((delete-other-directories
+                 (lambda (root keep)
+                   (with-directory-excursion root
+                     (for-each
+                      delete-file-recursively
+                      (scandir
+                       "."
+                       (lambda (file)
+                         (and (not (member file (append keep '("." ".."))))
+                              (eq? 'directory (stat:type (stat file)))))))))))
+            (delete-other-directories "libs" '())
+            (delete-other-directories "utils" '())
+            (delete-other-directories "texk" '("dvipos"))))))
+    (arguments
+     (substitute-keyword-arguments (package-arguments texlive-bin)
+       ((#:configure-flags flags)
+        #~(cons* "--enable-dvipos" (delete "--enable-web2c" #$flags)))
+       ((#:phases _)
+        #~(modify-phases %standard-phases
+            (replace 'check
+              (lambda* (#:key tests? #:allow-other-keys)
+                (when tests?
+                  (with-directory-excursion "texk/dvipos"
+                    (invoke "make" "check")))))
+            (replace 'install
+              (lambda _
+                (with-directory-excursion "texk/dvipos"
+                  (invoke "make" "install"))))))))
     (home-page "https://www.tug.org/texlive/")
     (synopsis "Support DVI @samp{pos:} specials used by ConTeXt DVI output")
     (description
