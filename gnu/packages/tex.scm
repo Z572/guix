@@ -73331,12 +73331,38 @@ handle complex tests.")
 
 (define-public texlive-xindy
   (package
-    ;; Texmf tree in TeX Live is incomplete, as it doesn't include
-    ;; "xindy.mem", so it is not possible to use `texlive-origin'.  This file
-    ;; isn't build by default by `texlive-bin' either.  Build it specially
-    ;; from TEXLIVE-SOURCE instead.
-    (inherit texlive-bin)
     (name "texlive-xindy")
+    (version (number->string %texlive-revision))
+    (source
+     (texlive-origin name version
+                     (list "doc/man/man1/tex2xindy.1"
+                           "doc/man/man1/tex2xindy.man1.pdf"
+                           "doc/man/man1/texindy.1"
+                           "doc/man/man1/texindy.man1.pdf"
+                           "doc/man/man1/xindy.1"
+                           "doc/man/man1/xindy.man1.pdf"
+                           "doc/xindy/"
+                           "scripts/xindy/"
+                           "xindy/")
+                     (base32
+                      "12j2bi0wwp1hyxr1427hhigqmhsd1fyg90bvghxkm1qck85r24vf")))
+    (outputs '("out" "doc"))
+    (build-system texlive-build-system)
+    (propagated-inputs (list texlive-xindy-bin))
+    (home-page "https://ctan.org/pkg/xindy")
+    (synopsis "General-purpose index processor")
+    (description
+     "Xindy was developed after an impasse had been encountered in the attempt
+to complete internationalisation of @command{makeindex}.  Xindy can be used to
+process indexes for documents marked up using (La)TeX, Nroff family and
+SGML-based languages.  Xindy is highly configurable, both in markup terms and
+in terms of the collating order of the text being processed.")
+    (license license:gpl2+)))
+
+(define-public texlive-xindy-bin
+  (package
+    (inherit texlive-bin)
+    (name "texlive-xindy-bin")
     (source
      (origin
        (inherit texlive-source)
@@ -73359,16 +73385,16 @@ handle complex tests.")
      (substitute-keyword-arguments (package-arguments texlive-bin)
        ((#:configure-flags flags)
         #~(cons "--enable-xindy" (delete "--enable-web2c" #$flags)))
-       ((#:phases _)
-        #~(modify-phases %standard-phases
-            ;; Building documentation require to generate font metrics, but
-            ;; HOME and therefore TEXMFVAR are unavailable.  Use a local
-            ;; TEXMFVAR instead.
+       ((#:phases phases)
+        #~(modify-phases #$phases
             (add-before 'build 'set-texmfvar
+              ;; Building documentation require to generate font metrics, but
+              ;; HOME and therefore TEXMFVAR are unavailable.  Use a local
+              ;; TEXMFVAR instead.
               (lambda _
                 (setenv "TEXMFVAR" (string-append (getcwd) "/texmf-var"))))
-            ;; XXX: Install process does not create this directory.
             (add-before 'install 'create-missing-directory
+              ;; XXX: Install process does not create this directory.
               (lambda _
                 (mkdir-p (string-append #$output "/bin"))))
             (add-after 'install 'patch-clisp-location
@@ -73380,23 +73406,19 @@ handle complex tests.")
                      (format #f "our $clisp = ~s;~%"
                              (search-input-file inputs "/bin/clisp")))))))))))
     (native-inputs
-     (list clisp
-           (texlive-updmap.cfg
+     (list (texlive-updmap.cfg
             (list texlive-cbfonts-fd
                   texlive-cyrillic
                   texlive-greek-fontenc
                   texlive-lh))))
     (inputs (list clisp perl))
+    (propagated-inputs '())
     (native-search-paths '())
-    (home-page "https://ctan.org/pkg/xindy")
-    (synopsis "General-purpose index processor")
+    (home-page (package-home-page texlive-xindy))
+    (synopsis "Binary for @code{texlive-xindy}")
     (description
-     "Xindy was developed after an impasse had been encountered in the attempt
-to complete internationalisation of @command{makeindex}.  Xindy can be used to
-process indexes for documents marked up using (La)TeX, Nroff family and
-SGML-based languages.  Xindy is highly configurable, both in markup terms and
-in terms of the collating order of the text being processed.")
-    (license license:gpl2+)))
+     "This package provides the binary for @code{texlive-xindy}.")
+    (license (package-license texlive-xindy))))
 
 (define-public texlive-xindy-persian
   (package
