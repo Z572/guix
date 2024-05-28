@@ -39699,11 +39699,58 @@ generated code can be included in any LaTeX document.")
               "1hhx65yd800bl3y2sq20lix60wd2b2j3k7n9s788mlsn8b0p7yq3")))
     (outputs '("out" "doc"))
     (build-system texlive-build-system)
+    (propagated-inputs (list texlive-lacheck-bin))
     (home-page "https://ctan.org/pkg/lacheck")
     (synopsis "LaTeX checker")
     (description
      "Lacheck is a tool for finding common mistakes in LaTeX documents.")
     (license license:gpl3+)))
+
+(define-public texlive-lacheck-bin
+  (package
+    (inherit texlive-bin)
+    (name "texlive-lacheck-bin")
+    (source
+     (origin
+       (inherit texlive-source)
+       (modules '((guix build utils)
+                  (ice-9 ftw)))
+       (snippet
+        #~(let ((delete-other-directories
+                 (lambda (root dirs)
+                   (with-directory-excursion root
+                     (for-each
+                      delete-file-recursively
+                      (scandir "."
+                               (lambda (file)
+                                 (and (not (member file (append '("." "..") dirs)))
+                                      (eq? 'directory (stat:type (stat file)))))))))))
+            (delete-other-directories "libs" '())
+            (delete-other-directories "utils" '("lacheck"))
+            (delete-other-directories "texk" '())))))
+    (arguments
+     (substitute-keyword-arguments (package-arguments texlive-bin)
+       ((#:configure-flags flags)
+        #~(cons "--enable-lacheck" (delete "--enable-web2c" #$flags)))
+       ((#:phases phases)
+        #~(modify-phases #$phases
+            (replace 'check
+              (lambda* (#:key tests? #:allow-other-keys)
+                (when tests?
+                  (with-directory-excursion "utils/lacheck"
+                    (invoke "make" "check")))))
+            (replace 'install
+              (lambda _
+                (with-directory-excursion "utils/lacheck"
+                  (invoke "make" "install"))))))))
+    (native-inputs '())
+    (inputs '())
+    (propagated-inputs '())
+    (home-page (package-home-page texlive-lacheck))
+    (synopsis "Binary for @code{texlive-lacheck}")
+    (description
+     "This package provides the binary for @code{texlive-lacheck}.")
+    (license (package-license texlive-lacheck))))
 
 (define-public texlive-latex-git-log
   (package
