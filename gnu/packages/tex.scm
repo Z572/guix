@@ -32646,7 +32646,28 @@ strong on layout, from simple alternate-line indentation to the @code{Mouse's
 tale} from @emph{Alice in Wonderland}.")
     (license license:lppl)))
 
-(define texlive-vlna-bin
+(define-public texlive-vlna
+  (package
+    (name "texlive-vlna")
+    (version (number->string %texlive-revision))
+    (source (texlive-origin
+             name version
+             (list "doc/man/man1/vlna.1"
+                   "doc/man/man1/vlna.man1.pdf" "doc/vlna/")
+             (base32
+              "0nfb7mj6y9d4n89z59ppi96grfylwky97mxcv9rjflr5kpqlpga2")))
+    (outputs '("out" "doc"))
+    (build-system texlive-build-system)
+    (propagated-inputs (list texlive-vlna-bin))
+    (home-page "https://ctan.org/pkg/vlna")
+    (synopsis "Add @samp{~} after non-syllabic preposition, for Czech/Slovak")
+    (description
+     "This package provides a preprocessor for TeX source implementing the
+Czech/Slovak typographical rule forbidding a non-syllabic preposition alone at
+the end of a line.")
+    (license license:knuth)))
+
+(define-public texlive-vlna-bin
   (package
     (inherit texlive-bin)
     (name "texlive-vlna-bin")
@@ -32671,9 +32692,9 @@ tale} from @emph{Alice in Wonderland}.")
     (arguments
      (substitute-keyword-arguments (package-arguments texlive-bin)
        ((#:configure-flags flags)
-        #~(cons* "--enable-vlna" (delete "--enable-web2c" #$flags)))
-       ((#:phases _)
-        #~(modify-phases %standard-phases
+        #~(cons "--enable-vlna" (delete "--enable-web2c" #$flags)))
+       ((#:phases phases)
+        #~(modify-phases #$phases
             (replace 'check
               (lambda* (#:key tests? #:allow-other-keys)
                 (when tests?
@@ -32684,27 +32705,13 @@ tale} from @emph{Alice in Wonderland}.")
                 (with-directory-excursion "utils/vlna"
                   (invoke "make" "install"))))))))
     (native-inputs '())
-    (inputs '())))
-
-(define-public texlive-vlna
-  (package
-    (name "texlive-vlna")
-    (version (number->string %texlive-revision))
-    (source (texlive-origin
-             name version
-             (list "doc/man/man1/vlna.1"
-                   "doc/man/man1/vlna.man1.pdf" "doc/vlna/")
-             (base32
-              "0nfb7mj6y9d4n89z59ppi96grfylwky97mxcv9rjflr5kpqlpga2")))
-    (outputs '("out" "doc"))
-    (build-system texlive-build-system)
-    (home-page "https://ctan.org/pkg/vlna")
-    (synopsis "Add @samp{~} after non-syllabic preposition, for Czech/Slovak")
+    (inputs '())
+    (propagated-inputs '())
+    (home-page (package-home-page texlive-vlna))
+    (synopsis "Binary for @code{texlive-vlna}")
     (description
-     "This package provides a preprocessor for TeX source implementing the
-Czech/Slovak typographical rule forbidding a non-syllabic preposition alone at
-the end of a line.")
-    (license license:knuth)))
+     "This package provides the binary for @code{texlive-vlna}.")
+    (license (package-license texlive-vlna))))
 
 (define-public texlive-vntex
   (package
