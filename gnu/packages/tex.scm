@@ -47218,6 +47218,7 @@ integer (given as a string) as a Cistercian numeral.")
               "130wvaypfrg9sav0pdcdy1g10fll8pqcsqsy70fxlzzr937glsh1")))
     (outputs '("out" "doc"))
     (build-system texlive-build-system)
+    (propagated-inputs (list texlive-xpdfopen-bin))
     (home-page "https://ctan.org/pkg/xpdfopen")
     (synopsis "Commands to control PDF readers, under X11")
     (description
@@ -47226,6 +47227,52 @@ you to control the X Window System version of Adobe's Acrobat Reader from the
 command line or from within a (shell) script.  The programs work with
 @command{xpdf} and @command{evince}.")
     (license license:public-domain)))
+
+(define-public texlive-xpdfopen-bin
+  (package
+    (inherit texlive-bin)
+    (name "texlive-xpdfopen-bin")
+    (source
+     (origin
+       (inherit texlive-source)
+       (modules '((guix build utils)
+                  (ice-9 ftw)))
+       (snippet
+        #~(let ((delete-other-directories
+                 (lambda (root dirs)
+                   (with-directory-excursion root
+                     (for-each
+                      delete-file-recursively
+                      (scandir "."
+                               (lambda (file)
+                                 (and (not (member file (append '("." "..") dirs)))
+                                      (eq? 'directory (stat:type (stat file)))))))))))
+            (delete-other-directories "libs" '())
+            (delete-other-directories "utils" '("xpdfopen"))
+            (delete-other-directories "texk" '())))))
+    (arguments
+     (substitute-keyword-arguments (package-arguments texlive-bin)
+       ((#:configure-flags flags)
+        #~(cons "--enable-xpdfopen" (delete "--enable-web2c" #$flags)))
+       ((#:phases phases)
+        #~(modify-phases #$phases
+            (replace 'check
+              (lambda* (#:key tests? #:allow-other-keys)
+                (when tests?
+                  (with-directory-excursion "utils/xpdfopen"
+                    (invoke "make" "check")))))
+            (replace 'install
+              (lambda _
+                (with-directory-excursion "utils/xpdfopen"
+                  (invoke "make" "install"))))))))
+    (native-inputs (list pkg-config))
+    (inputs (list libxt))
+    (propagated-inputs '())
+    (home-page (package-home-page texlive-xpdfopen))
+    (synopsis "Binaries for @code{texlive-xpdfopen}")
+    (description
+     "This package provides the binaries for @code{texlive-xpdfopen}.")
+    (license (package-license texlive-xpdfopen))))
 
 (define-public texlive-xpicture
   (package
