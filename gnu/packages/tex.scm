@@ -43430,8 +43430,35 @@ produce bounding box values for Rawppm or Rawpbm format files.")
 
 (define-public texlive-ps2pk
   (package
-    (inherit texlive-bin)
     (name "texlive-ps2pk")
+    (version (number->string %texlive-revision))
+    (source (texlive-origin
+             name version
+             (list "doc/man/man1/mag.1"
+                   "doc/man/man1/mag.man1.pdf"
+                   "doc/man/man1/pfb2pfa.1"
+                   "doc/man/man1/pfb2pfa.man1.pdf"
+                   "doc/man/man1/pk2bm.1"
+                   "doc/man/man1/pk2bm.man1.pdf"
+                   "doc/man/man1/ps2pk.1"
+                   "doc/man/man1/ps2pk.man1.pdf")
+             (base32
+              "14xq9x5rf15ibzr41cm5rm4v3rpmj50rfsqp4zzvyhmpmyw4dsx3")))
+    (outputs '("out" "doc"))
+    (build-system texlive-build-system)
+    (propagated-inputs (list texlive-ps2pk-bin))
+    (home-page "https://ctan.org/pkg/ps2pk")
+    (synopsis "Generate a PK font from an Adobe Type 1 font")
+    (description
+     "This package provides tools to generate a PK file from an Adobe Type
+1 font.  PK fonts are (or used to be) valuable in enabling previewers to view
+documents generated that use Type 1 fonts.")
+    (license license:isc)))
+
+(define-public texlive-ps2pk-bin
+  (package
+    (inherit texlive-bin)
+    (name "texlive-ps2pk-bin")
     (source
      (origin
        (inherit texlive-source)
@@ -43453,9 +43480,9 @@ produce bounding box values for Rawppm or Rawpbm format files.")
     (arguments
      (substitute-keyword-arguments (package-arguments texlive-bin)
        ((#:configure-flags flags)
-        #~(cons* "--enable-ps2pk" (delete "--enable-web2c" #$flags)))
-       ((#:phases _)
-        #~(modify-phases %standard-phases
+        #~(cons "--enable-ps2pk" (delete "--enable-web2c" #$flags)))
+       ((#:phases phases)
+        #~(modify-phases #$phases
             (replace 'check
               (lambda* (#:key tests? #:allow-other-keys)
                 (when tests?
@@ -43465,14 +43492,14 @@ produce bounding box values for Rawppm or Rawpbm format files.")
               (lambda _
                 (with-directory-excursion "texk/ps2pk"
                   (invoke "make" "install"))))))))
-    (inputs '())
-    (home-page "https://ctan.org/pkg/ps2pk")
-    (synopsis "Generate a PK font from an Adobe Type 1 font")
+    (native-inputs (list pkg-config))
+    (inputs (list texlive-libkpathsea))
+    (propagated-inputs '())
+    (home-page (package-home-page texlive-ps2pk))
+    (synopsis "Binaries for @code{texlive-ps2pk}")
     (description
-     "This package provides tools to generate a PK file from an Adobe Type
-1 font.  PK fonts are (or used to be) valuable in enabling previewers to view
-documents generated that use Type 1 fonts.")
-    (license license:isc)))
+     "This package provides the binaries for @code{texlive-ps2pk}.")
+    (license (package-license texlive-ps2pk))))
 
 (define-public texlive-psutils
   (package
