@@ -33994,14 +33994,74 @@ labels and advises the user to use a starred version instead.")
               "0qyrllxvcymmr1a4sq9c88fw5zchcx0n6yac69s61fg6xypk18bq")))
     (outputs '("out" "doc"))
     (build-system texlive-build-system)
-    (arguments (list #:link-scripts #~(list "chkweb.sh" "deweb.pl")))
-    (inputs (list perl))
+    (propagated-inputs (list texlive-chktex-bin))
     (home-page "https://ctan.org/pkg/chktex")
     (synopsis "Check for errors in LaTeX documents")
     (description
      "The program reports typographic and other errors in LaTeX documents.
 Filters are also provided for checking the LaTeX parts of CWEB documents.")
     (license license:gpl2+)))
+
+(define-public texlive-chktex-bin
+  (package
+    (inherit texlive-bin)
+    (name "texlive-chktex-bin")
+    (source
+     (origin
+       (inherit texlive-source)
+       (modules '((guix build utils)
+                  (ice-9 ftw)))
+       (snippet
+        #~(let ((delete-other-directories
+                 (lambda (root keep)
+                   (with-directory-excursion root
+                     (for-each
+                      delete-file-recursively
+                      (scandir
+                       "."
+                       (lambda (file)
+                         (and (not (member file (append keep '("." ".."))))
+                              (eq? 'directory (stat:type (stat file)))))))))))
+            (delete-other-directories "libs" '())
+            (delete-other-directories "utils" '())
+            (delete-other-directories "texk" '("chktex"))))))
+    (arguments
+     (substitute-keyword-arguments (package-arguments texlive-bin)
+       ((#:configure-flags flags)
+        #~(cons "--enable-chktex" (delete "--enable-web2c" #$flags)))
+       ((#:phases phases)
+        #~(modify-phases #$phases
+            (add-after 'unpack 'locate-global-configuration-file
+              ;; `chktex' needs to know where its global configuration file is.
+              ;; However, it cannot understand our convoluted TEXMFMAIN value.
+              ;; This phase forces configuration file name.
+              (lambda _
+                (substitute* "texk/chktex/chktex-src/OpSys.c"
+                  (("kpse_var_value\\(\"TEXMFMAIN\"\\)")
+                   (string-append "strdup(\"" #$output "/share/texmf-dist\")")))))
+            (replace 'check
+              (lambda* (#:key tests? #:allow-other-keys)
+                (when tests?
+                  (with-directory-excursion "texk/chktex"
+                    (invoke "make" "check")))))
+            (replace 'install
+              (lambda _
+                (with-directory-excursion "texk/chktex"
+                  (invoke "make" "install"))))
+            ;; Compilation forces a "/usr/bin/env perl" shebang.  Change it.
+            (add-after 'install 'patch-shebang
+              (lambda _
+                (patch-shebang
+                 (string-append #$output
+                                "/share/texmf-dist/scripts/chktex/deweb.pl"))))))))
+    (native-inputs (list pkg-config))
+    (inputs (list perl texlive-libkpathsea))
+    (propagated-inputs '())
+    (home-page (package-home-page texlive-chktex))
+    (synopsis "Binaries for @code{texlive-chktex}")
+    (description
+     "This package provides the binaries for @code{texlive-chktex}.")
+    (license (package-license texlive-chktex))))
 
 (define-public texlive-clojure-pamphlet
   (package
