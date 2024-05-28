@@ -34982,8 +34982,32 @@ file.  It also supports XeTeX XDV format.")
 
 (define-public texlive-dviout-util
   (package
-    (inherit texlive-bin)
     (name "texlive-dviout-util")
+    (version (number->string %texlive-revision))
+    (source (texlive-origin
+             name version
+             (list "doc/man/man1/chkdvifont.1"
+                   "doc/man/man1/chkdvifont.man1.pdf"
+                   "doc/man/man1/dvispc.1"
+                   "doc/man/man1/dvispc.man1.pdf")
+             (base32
+              "098pksgf2iamq96rmzg5fw7i9dlpvdksficsz1bf8k8z4djnbk8n")))
+    (outputs '("out" "doc"))
+    (build-system texlive-build-system)
+    (propagated-inputs (list texlive-dviout-util-bin))
+    (home-page "https://www.tug.org/texlive/")
+    (synopsis "Utilities from the @code{dviout} package")
+    (description
+     "This package provides two utilities: @command{chkdvifont}, which check
+fonts in DVI/TFM/JFM/FONT files, and @command{dvispc}, which corrects the
+page-independence of DVI file using color specials or tpic specials, and
+transforms between a DVI file and a text file.")
+    (license license:expat)))
+
+(define-public texlive-dviout-util-bin
+  (package
+    (inherit texlive-bin)
+    (name "texlive-dviout-util-bin")
     (source
      (origin
        (inherit texlive-source)
@@ -35006,9 +35030,9 @@ file.  It also supports XeTeX XDV format.")
     (arguments
      (substitute-keyword-arguments (package-arguments texlive-bin)
        ((#:configure-flags flags)
-        #~(cons* "--enable-dviout-util" (delete "--enable-web2c" #$flags)))
-       ((#:phases _)
-        #~(modify-phases %standard-phases
+        #~(cons "--enable-dviout-util" (delete "--enable-web2c" #$flags)))
+       ((#:phases phases)
+        #~(modify-phases #$phases
             (replace 'check
               (lambda* (#:key tests? #:allow-other-keys)
                 (when tests?
@@ -35018,15 +35042,14 @@ file.  It also supports XeTeX XDV format.")
               (lambda _
                 (with-directory-excursion "texk/dviout-util"
                   (invoke "make" "install"))))))))
-    (inputs (list texlive-libptexenc))
-    (home-page "https://www.tug.org/texlive/")
-    (synopsis "Utilities from the @code{dviout} package")
+    (native-inputs (list pkg-config))
+    (inputs (list texlive-libkpathsea texlive-libptexenc))
+    (propagated-inputs '())
+    (home-page (package-home-page texlive-dviout-util))
+    (synopsis "Binary for @code{texlive-dviout-util}")
     (description
-     "This package provides two utilities: @command{chkdvifont}, which check
-fonts in DVI/TFM/JFM/FONT files, and @command{dvispc}, which corrects the
-page-independence of DVI file using color specials or tpic specials, and
-transforms between a DVI file and a text file.")
-    (license license:expat)))
+     "This package provides the binary for @code{texlive-dviout-util}.")
+    (license (package-license texlive-dviout-util))))
 
 (define-public texlive-dvipng
   (package
