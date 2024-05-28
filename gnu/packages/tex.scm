@@ -40637,6 +40637,7 @@ stylized format that Metapost outputs.")
               "1bhv5xgv8jpam5apdybd0cggnvcizk2r6zs7lim1hmhzafpqqlcx")))
     (outputs '("out" "doc"))
     (build-system texlive-build-system)
+    (propagated-inputs (list texlive-seetexk-bin))
     (home-page "https://ctan.org/pkg/dvibook")
     (synopsis "Utilities for manipulating DVI files")
     (description
@@ -40661,6 +40662,52 @@ SeeTeX project.
 
 @end itemize")
     (license license:expat)))
+
+(define-public texlive-seetexk-bin
+  (package
+    (inherit texlive-bin)
+    (name "texlive-seetexk-bin")
+    (source
+     (origin
+       (inherit texlive-source)
+       (modules '((guix build utils)
+                  (ice-9 ftw)))
+       (snippet
+        #~(let ((delete-other-directories
+                 (lambda (root dirs)
+                   (with-directory-excursion root
+                     (for-each
+                      delete-file-recursively
+                      (scandir "."
+                               (lambda (file)
+                                 (and (not (member file (append '("." "..") dirs)))
+                                      (eq? 'directory (stat:type (stat file)))))))))))
+            (delete-other-directories "libs" '())
+            (delete-other-directories "utils" '())
+            (delete-other-directories "texk" '("seetexk"))))))
+    (arguments
+     (substitute-keyword-arguments (package-arguments texlive-bin)
+       ((#:configure-flags flags)
+        #~(cons "--enable-seetexk" (delete "--enable-web2c" #$flags)))
+       ((#:phases phases)
+        #~(modify-phases #$phases
+            (replace 'check
+              (lambda* (#:key tests? #:allow-other-keys)
+                (when tests?
+                  (with-directory-excursion "texk/seetexk"
+                    (invoke "make" "check")))))
+            (replace 'install
+              (lambda _
+                (with-directory-excursion "texk/seetexk"
+                  (invoke "make" "install"))))))))
+    (native-inputs (list pkg-config))
+    (inputs (list texlive-libkpathsea))
+    (propagated-inputs '())
+    (home-page (package-home-page texlive-seetexk))
+    (synopsis "Binary for @code{texlive-seetexk}")
+    (description
+     "This package provides the binary for @code{texlive-seetexk}.")
+    (license (package-license texlive-seetexk))))
 
 (define-public texlive-spix
   (package
