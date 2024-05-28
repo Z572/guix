@@ -4264,7 +4264,6 @@ other parts.")
      "This package provides binaries for @code{texlive-autosp}.")
     (license (package-license texlive-autosp))))
 
-
 (define-public texlive-axodraw2
   (package
     (name "texlive-axodraw2")
@@ -4280,31 +4279,7 @@ other parts.")
               "0x1cskdm3kmf08gdrvgasd1b3l0dri9mdmk13880dz4g2rdgbvi2")))
     (outputs '("out" "doc"))
     (build-system texlive-build-system)
-    (arguments
-     (list
-      #:tests? #true
-      #:phases
-      #~(modify-phases %standard-phases
-          (add-after 'unpack 'build-axohelp
-            (lambda* (#:key tests? #:allow-other-keys)
-              (with-directory-excursion "source/latex/axodraw2"
-                ;; Autoreconf.
-                (invoke "autoreconf" "-vfi")
-                ;; Configure.
-                (let ((sh (which "sh")))
-                  (setenv "CONFIG_SHELL" sh)
-                  (setenv "SHELL" sh)
-                  (invoke sh "configure" (string-append "--prefix=" #$output)))
-                ;; Build.
-                (invoke "make")
-                ;; Tests.
-                (when tests?
-                  (patch-shebang "axohelp.test") ;Bash script
-                  (invoke "make" "check"))
-                ;; Install.
-                (invoke "make" "install")))))))
-    (native-inputs (list autoconf automake pkg-config))
-    (inputs (list openlibm))
+    (propagated-inputs (list texlive-axodraw2-bin))
     (home-page "https://ctan.org/pkg/axodraw2")
     (synopsis "Feynman diagrams in a LaTeX document")
     (description
@@ -4321,6 +4296,53 @@ the pdf code inserted in the output file.  The processing involves a run of
 @command{pdflatex}, a run of @command{axohelp}, and then another run of
 @command{pdflatex}.")
     (license license:gpl3+)))
+
+(define-public texlive-axodraw2-bin
+  (package
+    (inherit texlive-bin)
+    (name "texlive-axodraw2-bin")
+    (source
+     (origin
+       (inherit texlive-source)
+       (modules '((guix build utils)
+                  (ice-9 ftw)))
+       (snippet
+        #~(let ((delete-other-directories
+                 (lambda (root keep)
+                   (with-directory-excursion root
+                     (for-each
+                      delete-file-recursively
+                      (scandir
+                       "."
+                       (lambda (file)
+                         (and (not (member file (append keep '("." ".."))))
+                              (eq? 'directory (stat:type (stat file)))))))))))
+            (delete-other-directories "libs" '())
+            (delete-other-directories "utils" '("axodraw2"))
+            (delete-other-directories "texk" '())))))
+    (arguments
+     (substitute-keyword-arguments (package-arguments texlive-bin)
+       ((#:configure-flags flags)
+        #~(cons "--enable-axodraw2" (delete "--enable-web2c" #$flags)))
+       ((#:phases phases)
+        #~(modify-phases #$phases
+            (replace 'check
+              (lambda* (#:key tests? #:allow-other-keys)
+                (when tests?
+                  (with-directory-excursion "utils/axodraw2"
+                    (invoke "make" "check")))))
+            (replace 'install
+              (lambda _
+                (with-directory-excursion "utils/axodraw2"
+                  (invoke "make" "install"))))))))
+    (native-inputs '())
+    (inputs '())
+    (propagated-inputs '())
+    (home-page (package-home-page texlive-axodraw2))
+    (synopsis "Binary for @code{texlive-axodraw2}")
+    (description
+     "This package provides the binary for @code{texlive-axodraw2}.")
+    (license (package-license texlive-axodraw2))))
 
 (define-public texlive-b1encoding
   (package
