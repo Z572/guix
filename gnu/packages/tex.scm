@@ -43239,20 +43239,7 @@ and glued together.  This will lead to a physical product box.")
               "1anrvgs0hd3790dwpxqal0c2drjmvh93vnyqap40rvp8axwi0a6n")))
     (outputs '("out" "doc"))
     (build-system texlive-build-system)
-    (arguments
-     (list #:link-scripts #~(list "ps2eps.pl")
-           #:phases
-           #~(modify-phases %standard-phases
-               (add-after 'unpack 'configure-ghostscript-executable
-                 ;; ps2eps.pl uses the "gswin32c" ghostscript executable on
-                 ;; Windows, and the "gs" ghostscript executable on Unix.  It
-                 ;; detects Unix by checking for the existence of the
-                 ;; "/usr/bin" directory.  Since Guix System does not have
-                 ;; "/usr/bin", it is also detected as Windows.
-                 (lambda _
-                   (substitute* "scripts/ps2eps/ps2eps.pl"
-                     (("gswin32c") "gs")))))))
-    (inputs (list perl))
+    (propagated-inputs (list texlive-ps2eps-bin))
     (home-page "https://ctan.org/pkg/ps2eps")
     (synopsis "Produce Encapsulated PostScript from PostScript")
     (description
@@ -43267,24 +43254,99 @@ Included in the distribution is the @command{bbox} program, an application to
 produce bounding box values for Rawppm or Rawpbm format files.")
     (license license:gpl3+)))
 
+(define-public texlive-ps2eps-bin
+  (package
+    (inherit texlive-bin)
+    (name "texlive-ps2eps-bin")
+    (source
+     (origin
+       (inherit texlive-source)
+       (modules '((guix build utils)
+                  (ice-9 ftw)))
+       (snippet
+        #~(let ((delete-other-directories
+                 (lambda (root dirs)
+                   (with-directory-excursion root
+                     (for-each
+                      delete-file-recursively
+                      (scandir "."
+                               (lambda (file)
+                                 (and (not (member file (append '("." "..") dirs)))
+                                      (eq? 'directory (stat:type (stat file)))))))))))
+            (delete-other-directories "libs" '())
+            (delete-other-directories "utils" '("ps2eps"))
+            (delete-other-directories "texk" '())))))
+    (arguments
+     (substitute-keyword-arguments (package-arguments texlive-bin)
+       ((#:configure-flags flags)
+        #~(cons "--enable-ps2eps" (delete "--enable-web2c" #$flags)))
+       ((#:phases phases)
+        #~(modify-phases #$phases
+            (add-after 'unpack 'configure-ghostscript-executable
+              ;; ps2eps.pl uses the "gswin32c" ghostscript executable on
+              ;; Windows, and the "gs" ghostscript executable on Unix.  It
+              ;; detects Unix by checking for the existence of the "/usr/bin"
+              ;; directory.  Since Guix System does not have "/usr/bin", it is
+              ;; also detected as a Windows system :(.
+              (lambda _
+                (substitute* "utils/ps2eps/ps2eps-src/bin/ps2eps.pl"
+                  (("gswin32c") "gs"))))
+            (replace 'check
+              (lambda* (#:key tests? #:allow-other-keys)
+                (when tests?
+                  (with-directory-excursion "utils/ps2eps"
+                    (invoke "make" "check")))))
+            (replace 'install
+              (lambda _
+                (with-directory-excursion "utils/ps2eps"
+                  (invoke "make" "install"))))))))
+    (native-inputs '())
+    (inputs (list perl))
+    (propagated-inputs '())
+    (home-page (package-home-page texlive-ps2eps))
+    (synopsis "Binaries for @code{texlive-ps2eps}")
+    (description
+     "This package provides the binaries for @code{texlive-ps2eps}.")
+    (license (package-license texlive-ps2eps))))
+
 (define-public texlive-ps2pk
   (package
+    (inherit texlive-bin)
     (name "texlive-ps2pk")
-    (version (number->string %texlive-revision))
-    (source (texlive-origin
-             name version
-             (list "doc/man/man1/mag.1"
-                   "doc/man/man1/mag.man1.pdf"
-                   "doc/man/man1/pfb2pfa.1"
-                   "doc/man/man1/pfb2pfa.man1.pdf"
-                   "doc/man/man1/pk2bm.1"
-                   "doc/man/man1/pk2bm.man1.pdf"
-                   "doc/man/man1/ps2pk.1"
-                   "doc/man/man1/ps2pk.man1.pdf")
-             (base32
-              "14xq9x5rf15ibzr41cm5rm4v3rpmj50rfsqp4zzvyhmpmyw4dsx3")))
-    (outputs '("out" "doc"))
-    (build-system texlive-build-system)
+    (source
+     (origin
+       (inherit texlive-source)
+       (modules '((guix build utils)
+                  (ice-9 ftw)))
+       (snippet
+        #~(let ((delete-other-directories
+                 (lambda (root dirs)
+                   (with-directory-excursion root
+                     (for-each
+                      delete-file-recursively
+                      (scandir "."
+                               (lambda (file)
+                                 (and (not (member file (append '("." "..") dirs)))
+                                      (eq? 'directory (stat:type (stat file)))))))))))
+            (delete-other-directories "libs" '())
+            (delete-other-directories "utils" '())
+            (delete-other-directories "texk" '("ps2pk"))))))
+    (arguments
+     (substitute-keyword-arguments (package-arguments texlive-bin)
+       ((#:configure-flags flags)
+        #~(cons* "--enable-ps2pk" (delete "--enable-web2c" #$flags)))
+       ((#:phases _)
+        #~(modify-phases %standard-phases
+            (replace 'check
+              (lambda* (#:key tests? #:allow-other-keys)
+                (when tests?
+                  (with-directory-excursion "texk/ps2pk"
+                    (invoke "make" "check")))))
+            (replace 'install
+              (lambda _
+                (with-directory-excursion "texk/ps2pk"
+                  (invoke "make" "install"))))))))
+    (inputs '())
     (home-page "https://ctan.org/pkg/ps2pk")
     (synopsis "Generate a PK font from an Adobe Type 1 font")
     (description
