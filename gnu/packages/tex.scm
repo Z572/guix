@@ -40105,22 +40105,68 @@ environments and another with all extracted environments converted to
               "1qfbg0r6gsncgymh00yc83kcayd4m7bvryap8f63sm9s9bzfl6yv")))
     (outputs '("out" "doc"))
     (build-system texlive-build-system)
-    (arguments (list #:create-formats #~(list "luajithbtex" "luajittex")))
+    (arguments
+     (list #:create-formats
+           #~(and (not #$(or (target-ppc64le?)
+                             (target-riscv64?)))
+                  (list "luajithbtex" "luajittex"))))
     (propagated-inputs
-     (list texlive-cm
-           texlive-etex
-           texlive-hyphen-complete
-           texlive-knuth-lib
-           texlive-luatex
-           texlive-plain
-           texlive-tex-ini-files
-           texlive-unicode-data))
+     (append (if (or (target-ppc64le?)
+                     (target-riscv64?))
+                 '()
+                 (list texlive-luajittex-bin))
+             (list texlive-cm
+                   texlive-etex
+                   texlive-hyphen-complete
+                   texlive-knuth-lib
+                   texlive-luatex
+                   texlive-plain
+                   texlive-tex-ini-files
+                   texlive-unicode-data)))
     (home-page "https://ctan.org/pkg/luajittex")
     (synopsis "LuaTeX with JIT compiler, with and without HarfBuzz")
     (description
      "This package provides LuaTeX with just-in-time (JIT) compiler, with and
 without HarfBuzz.")
     (license license:gpl2)))
+
+(define-public texlive-luajittex-bin
+  (package
+    (inherit texlive-bin)
+    (name "texlive-luajittex-bin")
+    (arguments
+     (substitute-keyword-arguments (package-arguments texlive-bin)
+       ((#:configure-flags flags)
+        #~(cons* "--disable-web2c"
+                 "--enable-luajithbtex"
+                 "--enable-luajittex"
+                 (delete "--disable-luajittex"
+                         (delete "--disable-luajithbtex"
+                                 (delete "--enable-web2c" #$flags)))))
+       ((#:phases phases)
+        #~(modify-phases #$phases
+            (add-after 'unpack 'force-libs-build
+              ;; Once Web2C is disabled, build process refuses to build
+              ;; libraries in the source tree, in particular pplib and luajit,
+              ;; required for LuajitTeX.  The following change forces building
+              ;; them.
+              (lambda _
+                (substitute* "libs/configure"
+                  (("x\\$need_(pplib|luajit)") "xyes"))))
+            (add-after 'install 'install-binaries
+              (lambda _
+                (with-directory-excursion "texk/web2c"
+                  (invoke "make" "luajittex")
+                  (invoke "make" "luajithbtex")
+                  (let ((bin (string-append #$output "/bin")))
+                    (install-file ".libs/luajittex" bin)
+                    (install-file ".libs/luajithbtex" bin)))))))))
+    (native-inputs (list pkg-config))
+    (home-page (package-home-page texlive-luajittex))
+    (synopsis "Binaries for @code{texlive-luajittex}")
+    (description
+     "This package provides the binaries for @code{texlive-luajittex}.")
+    (license (package-license texlive-luajittex))))
 
 (define-public texlive-match-parens
   (package
