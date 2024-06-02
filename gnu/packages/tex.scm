@@ -40203,11 +40203,8 @@ clearly show any mismatches.")
              (base32
               "0ngbhdh8hgpjfqnrjlnp27x3qziks3yf2zp1qq7r4bjfa5jx9gr6")))
     (build-system texlive-build-system)
-    (arguments
-     (list
-      #:link-scripts #~(list "mflua.lua")
-      #:create-formats #~(list "mflua")))
-    (propagated-inputs (list texlive-luatex texlive-metafont))
+    (arguments (list #:create-formats #~(list "mflua")))
+    (propagated-inputs (list texlive-luatex texlive-metafont texlive-mflua-bin))
     (home-page "https://ctan.org/pkg/mflua")
     (synopsis "Configuration and base files for MFLua")
     (description
@@ -40217,6 +40214,59 @@ MFLua without any modification to produce exactly the same result.")
     ;; The license is the same as Metafont's, with a couple of files
     ;; released under Public Domain terms.
     (license (list license:knuth license:public-domain))))
+
+(define-public texlive-mflua-bin
+  (package
+    (inherit texlive-bin)
+    (name "texlive-mflua-bin")
+    (arguments
+     (substitute-keyword-arguments (package-arguments texlive-bin)
+       ((#:configure-flags flags)
+        #~(cons* "--disable-web2c"
+                 "--enable-mflua"
+                 ;; LuaJIT is not ported to some architectures yet.
+                 #$@(if (or (target-ppc64le?)
+                            (target-riscv64?))
+                        '()
+                        '("--enable-mfluajit"))
+                 (delete "--disable-mflua"
+                         (delete "--disable-mfluajit"
+                                 (delete "--enable-web2c" #$flags)))))
+       ((#:phases phases)
+        #~(let ((bin (string-append #$output "/bin")))
+            ;; Once Web2C is disabled, build process refuses to build
+            ;; libraries in the source tree, in particular lua53 and luajit,
+            ;; required for MfluaJIT.  The following changes forces building
+            ;; them.
+            (modify-phases #$phases
+              #$@(if (or (target-ppc64le?) (target-riscv64?))
+                     '()
+                     '((add-after 'unpack 'force-luajit-build
+                         (lambda _
+                           (substitute* "libs/configure"
+                             (("x\\$need_luajit") "xyes"))))
+                       (add-after 'install 'install-mfluajiit
+                         (lambda _
+                           (with-directory-excursion "texk/web2c"
+                             (invoke "make" "mfluajit")
+                             (install-file ".libs/mfluajit" bin))))))
+              (add-after 'unpack 'force-lua53-build
+                (lambda _
+                  (substitute* "libs/configure"
+                    (("x\\$need_lua53") "xyes"))))
+              (add-after 'install 'install-mflua
+                (lambda _
+                  (with-directory-excursion "texk/web2c"
+                    (invoke "make" "mflua")
+                    (install-file ".libs/mflua" bin)))))))))
+    (native-inputs (list pkg-config))
+    (inputs (modify-inputs (package-inputs texlive-bin)
+              (append potrace)))
+    (home-page (package-home-page texlive-mflua))
+    (synopsis "Binaries for @code{texlive-mflua}")
+    (description
+     "This package provides the binaries for @code{texlive-mflua}.")
+    (license (package-license texlive-mflua))))
 
 (define-public texlive-mkjobtexmf
   (package
