@@ -44934,6 +44934,7 @@ marked at the margin with grey bars by the LaTeX @code{changebar} package.")
     (outputs '("out" "doc"))
     (build-system texlive-build-system)
     (arguments (list #:link-scripts #~(list "texdirflatten")))
+    (inputs (list perl))
     (home-page "https://ctan.org/pkg/texdirflatten")
     (synopsis "Collect files related to a LaTeX job in a single directory")
     (description
