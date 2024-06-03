@@ -73478,7 +73478,7 @@ in terms of the collating order of the text being processed.")
     (description
      "XITS is a Times-like font for scientific typesetting with proper
 mathematical support for modern, Unicode and OpenType capable TeX engines,
-namely LuaTeX and XeTeX. For use with LuaLaTeX or XeLaTeX, support is
+namely LuaTeX and XeTeX.  For use with LuaLaTeX or XeLaTeX, support is
 available from the @code{fontspec} and @code{unicode-math} packages.")
     (license license:silofl1.1)))
 
