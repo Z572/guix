@@ -518,8 +518,8 @@ of user-specified directories similar to how shells look up executables.")
     (source (texlive-origin
              name version
              (list "doc/generic/dehyph-exptl/"
-                   "doc/generic/elhyphen"
-                   "doc/generic/huhyphen"
+                   "doc/generic/elhyphen/"
+                   "doc/generic/huhyphen/"
                    "doc/generic/hyph-utf8/"
                    "doc/luatex/hyph-utf8/"
                    "doc/generic/ukrhyph/"
