@@ -499,7 +499,9 @@ of user-specified directories similar to how shells look up executables.")
                 (apply (assoc-ref tex:%standard-phases 'link-scripts)
                        (list #:outputs outputs
                              #:link-scripts
-                             (find-files "scripts")))))))))
+                             (find-files "scripts"))))
+              (with-directory-excursion (string-append #$output "/bin")
+                (symlink "fmtutil" "mktexfmt")))))))
     (inputs (list perl))
     (home-page "https://www.tug.org/texlive/")
     (synopsis "TeX Live infrastructure programs")
