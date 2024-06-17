@@ -517,6 +517,13 @@ of user-specified directories similar to how shells look up executables.")
             (lambda _
               (substitute* "source/generic/hyph-utf8/lib/tex/hyphen/language.rb"
                 (("require 'byebug'") ""))))
+          (add-before 'build 'include-docstrip.tex
+            (lambda* (#:key inputs native-inputs #:allow-other-keys)
+              (let ((docstrip.tex
+                     (search-input-file (or native-inputs inputs)
+                                        "tex/latex/base/docstrip.tex")))
+                (setenv "TEXINPUTS"
+                        (string-append (dirname docstrip.tex) ":")))))
           (add-before 'build 'regenerate-converters
             (lambda _
               (let ((root (getcwd)))
@@ -583,7 +590,11 @@ of user-specified directories similar to how shells look up executables.")
     (native-inputs
      (list ruby-2.7
            ruby-hydra-minimal/pinned
-           texlive-docstrip
+           ;; Build phase requires "docstrip.tex" from TEXLIVE-LATEX.
+           ;; However, adding this package to native inputs would initiate
+           ;; a circular dependency.  To work around this, use TEXLIVE-LATEX
+           ;; source, then add "docstrip.tex" to TEXINPUTS before build.
+           (package-source texlive-latex)
            texlive-tex))
     (home-page "https://ctan.org/pkg/hyph-utf8")
     (synopsis "Hyphenation patterns expressed in UTF-8")
@@ -39308,24 +39319,6 @@ with any software that can understand the MATH OpenType table.")
 from Adobe's basic set.")
     (license license:gpl3+)))
 
-(define texlive-docstrip
-  (package
-    (name "texlive-docstrip")
-    (version (number->string %texlive-revision))
-    (source (texlive-origin
-             name version
-             (list "/tex/latex/base/docstrip.tex")
-             (base32
-              "04cwvqs8cx8l60lrwn60krpjg1ada7i8g5mh6cb6bxaz08yvx9i4")))
-    (build-system texlive-build-system)
-    (arguments
-     (list #:texlive-latex-bin? #f))
-    (home-page "https://www.ctan.org/texlive")
-    (synopsis "Utility to strip documentation from TeX files")
-    (description "This package provides the docstrip utility to strip
-documentation from TeX files.  It is part of the LaTeX base.")
-    (license license:lppl1.3+)))
-
 (define-public texlive-undergradmath
   (package
     (name "texlive-undergradmath")
@@ -48306,7 +48299,7 @@ and gets and writes meta information data about the attached files.")
     (outputs '("out" "doc"))
     (build-system texlive-build-system)
     (arguments (list #:texlive-latex-bin? #f))
-    (native-inputs (list texlive-docstrip texlive-pdftex))
+    (native-inputs (list texlive-latex))
     (home-page "https://ctan.org/pkg/atveryend")
     (synopsis "Hooks at the very end of a document")
     (description
@@ -48718,7 +48711,7 @@ set default \"driver\" options for the color and graphics packages.")
     (outputs '("out" "doc"))
     (build-system texlive-build-system)
     (arguments (list #:texlive-latex-bin? #f))
-    (native-inputs (list texlive-docstrip texlive-pdftex))
+    (native-inputs (list texlive-latex))
     (propagated-inputs (list texlive-graphics-def texlive-graphics-cfg))
     (home-page "https://ctan.org/macros/latex/required/graphics")
     (synopsis "The LaTeX standard graphics bundle")
@@ -49802,7 +49795,7 @@ which controls boxes receiving text for typesetting.
       #:tex-engine "tex"
       #:tex-format #f
       #:texlive-latex-bin? #f))
-    (native-inputs (list texlive-docstrip))
+    (native-inputs (list texlive-latex))
     (propagated-inputs (list texlive-l3backend))
     (home-page "https://ctan.org/pkg/l3kernel")
     (synopsis "LaTeX3 programming conventions")
@@ -49834,7 +49827,7 @@ LaTeX3 conventions can be used with regular LaTeX2e packages.")
      (list #:tex-engine "tex"
            #:tex-format #f
            #:texlive-latex-bin? #f))
-    (native-inputs (list texlive-docstrip))
+    (native-inputs (list texlive-latex))
     (home-page "https://ctan.org/pkg/l3backend")
     (synopsis "LaTeX3 backend drivers")
     (description
@@ -49879,7 +49872,7 @@ an independent schedule.")
            #:tex-engine "tex"
            #:tex-format #f
            #:texlive-latex-bin? #f))
-    (native-inputs (list texlive-docstrip))
+    (native-inputs (list texlive-latex))
     (propagated-inputs (list texlive-l3kernel))
     (home-page "https://ctan.org/pkg/l3packages")
     (synopsis "High-level LaTeX3 concepts")
@@ -50255,7 +50248,7 @@ they are not directly related to Unicode mathematics typesetting.")
     (outputs '("out" "doc"))
     (build-system texlive-build-system)
     (arguments (list #:texlive-latex-bin? #f))
-    (native-inputs (list texlive-docstrip texlive-pdftex))
+    (native-inputs (list texlive-latex))
     (home-page "https://ctan.org/pkg/lualibs")
     (synopsis "Additional Lua functions for LuaTeX macro programmers")
     (description
@@ -50677,7 +50670,7 @@ available as part of the AMS-LaTeX distribution.")
                 (mkdir-p locale-directory)
                 (with-directory-excursion "source/latex/babel/"
                   (invoke "unzip" "locale.zip" "-d" locale-directory))))))))
-    (native-inputs (list texlive-docstrip texlive-pdftex unzip))
+    (native-inputs (list texlive-latex unzip))
     (home-page "https://www.ctan.org/pkg/babel")
     (synopsis "Multilingual support for Plain TeX or LaTeX")
     (description
@@ -52256,7 +52249,7 @@ MakeIndex.")
     (arguments
      (list #:tex-engine "tex"
            #:tex-format #f))
-    (native-inputs (list texlive-docstrip))
+    (native-inputs (list texlive-latex))
     (propagated-inputs (list texlive-cyrillic-bin))
     (home-page "https://ctan.org/pkg/cyrillic")
     (synopsis "Support for Cyrillic fonts in LaTeX")
@@ -53212,7 +53205,7 @@ corresponding italics: light, regular, medium, bold, ...")
     (outputs '("out" "doc"))
     (build-system texlive-build-system)
     (arguments (list #:texlive-latex-bin? #f))
-    (native-inputs (list texlive-docstrip texlive-pdftex))
+    (native-inputs (list texlive-latex))
     (home-page "https://ctan.org/pkg/firstaid")
     (synopsis
      "First aid for external LaTeX files and packages that need updating")
@@ -60302,7 +60295,7 @@ of these examples.")
     (outputs '("out" "doc"))
     (build-system texlive-build-system)
     (arguments (list #:texlive-latex-bin? #f))
-    (native-inputs (list texlive-docstrip texlive-pdftex))
+    (native-inputs (list texlive-latex))
     (home-page "https://ctan.org/pkg/atbegshi")
     (synopsis "Execute commands at @code{\\shipout} time")
     (description
