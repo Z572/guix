@@ -60287,7 +60287,6 @@ in the same way as BSD/GNU @code{getopt_long(3)} functions do.")
                  "TEXMFSYSCONFIG = \"$TEXMFDIST/../texmf-config\",\n")
                 (("TEXMF *=.*")
                  "TEXMF = \"{$TEXMFCONFIG,$TEXMFVAR,$TEXMFHOME,$TEXMFSYSCONFIG,$TEXMFSYSVAR,$TEXMFDIST}\",\n")))))))
-    (native-inputs (list texlive-kpathsea))
     (propagated-inputs
      (list texlive-cm
            texlive-etex
