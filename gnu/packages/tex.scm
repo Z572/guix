@@ -41152,7 +41152,15 @@ chunk of code.")
                 "06i59jxanssx0hngnzkvmigg4gh0szm8n11095wlpdqrma1d162c"))))
     (outputs '("out" "doc"))
     (build-system texlive-build-system)
-    (arguments (list #:link-scripts #~(list "cluttex.lua")))
+    (arguments
+     (list #:link-scripts #~(list "cluttex.lua")
+           #:phases
+           #~(modify-phases %standard-phases
+               (add-after 'link-scripts 'add-symlink
+                 (lambda _
+                   (with-directory-excursion (string-append #$output "/bin")
+                     (for-each (lambda (link) (symlink "cluttex" link))
+                               '("cllualatex" "clxelatex"))))))))
     (home-page "https://ctan.org/pkg/cluttex")
     (synopsis "Automation tool for running LaTeX")
     (description
