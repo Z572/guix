@@ -66900,7 +66900,6 @@ diagrams.")
                 "05y5n265in7mrbpgjxqg339l8r8dmp6lvl4k528pr3rkb8z94qaf"))))
     (outputs '("out" "doc"))
     (build-system texlive-build-system)
-    (native-inputs (list (texlive-updmap.cfg)))
     (home-page "https://www.ctan.org/pkg/makecmds")
     (synopsis "TeX macro to define or redefine a command")
     (description "The package provides a @code{\\makecommand} command, which
