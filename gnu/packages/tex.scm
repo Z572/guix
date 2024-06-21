@@ -64560,23 +64560,12 @@ Unicode option of @code{inputenc} or @code{inputenx}, or by XeLaTeX/LuaLaTeX.")
             ;; a propagated input).  To work around this, install the specific
             ;; "ydocstrip.tex" file from `ydoc' in the build directory and set
             ;; TEXINPUTS variable accordingly so the process can find it.
-            (lambda* (#:key inputs #:allow-other-keys)
-              (install-file (search-input-file inputs
+            (lambda* (#:key inputs native-inputs #:allow-other-keys)
+              (install-file (search-input-file (or native-inputs inputs)
                                                "tex/generic/ydoc/ydocstrip.tex")
                             "build/")
               (setenv "TEXINPUTS" (string-append (getcwd) "/build:")))))))
-    (native-inputs
-     (list
-      (origin
-        (method svn-multi-fetch)
-        (uri (svn-multi-reference
-              (url (texlive-packages-repository version))
-              (revision 66594)
-              (locations (list "tex/generic/ydoc/ydocstrip.tex"))))
-        (file-name (git-file-name name version))
-        (sha256
-         (base32
-          "1nixgvmw8c6jznhxys3yfzr3qw1lci8kyx54rs0shm6i63xjgr9i")))))
+    (native-inputs (list (package-source texlive-ydoc)))
     (home-page "https://ctan.org/pkg/newverbs")
     (synopsis "Define new versions of @code{\\verb}")
     (description
