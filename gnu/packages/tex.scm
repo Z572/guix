@@ -116322,7 +116322,6 @@ vote results and action items.")
     (arguments
      (list #:tex-format "latex"
            #:build-targets #~(list "psfragx.dtx")))
-    (native-inputs (list (texlive-updmap.cfg)))
     (home-page "https://ctan.org/pkg/psfragx")
     (synopsis "@code{psfrag} extension")
     (description
