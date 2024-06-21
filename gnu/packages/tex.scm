@@ -99498,7 +99498,6 @@ intended for symbols in non English languages.")
                  "\\ifodd89\n")         ;create "dotseqn.sty"
                 (("\\\\ifodd\\\\answer \\\\else \\\\OnlyDescription \\\\fi")
                  "\\OnlyDescription"))))))) ;no documentation.
-    (native-inputs (list (texlive-updmap.cfg (list texlive-hypdoc))))
     (home-page "https://ctan.org/pkg/dotseqn")
     (synopsis "Flush left equations with dotted leaders to the numbers")
     (description
