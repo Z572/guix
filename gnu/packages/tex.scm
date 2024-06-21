@@ -39996,16 +39996,7 @@ undergraduate and postgraduate that meet the school's requirements.")
                             "build/")
               (setenv "TEXINPUTS" (string-append (getcwd) "/build:")))))))
     (native-inputs
-     (list (origin
-             (method svn-multi-fetch)
-             (uri (svn-multi-reference
-                   (url (texlive-packages-repository version))
-                   (revision 66594)
-                   (locations (list "tex/generic/ctex/ctxdocstrip.tex"))))
-             (file-name (git-file-name name version))
-             (sha256
-              (base32
-               "154v2d6wfzhfg654nlh2apy9zr78d09rkimymyjqpxymkpbk8lli")))))
+     (list (package-source texlive-ctex)))
     (home-page "https://ctan.org/pkg/xecjk")
     (synopsis "Support for CJK documents in XeLaTeX")
     (description
@@ -58589,17 +58580,7 @@ for the user.")
                             "build/")
               (setenv "TEXINPUTS" (string-append (getcwd) "/build:")))))))
     (native-inputs
-     (list texlive-ttfutils
-           (origin
-             (method svn-multi-fetch)
-             (uri (svn-multi-reference
-                   (url (texlive-packages-repository version))
-                   (revision 66594)
-                   (locations (list "tex/generic/ctex/ctxdocstrip.tex"))))
-             (file-name (git-file-name name version))
-             (sha256
-              (base32
-               "154v2d6wfzhfg654nlh2apy9zr78d09rkimymyjqpxymkpbk8lli")))))
+     (list (package-source texlive-ctex) texlive-ttfutils))
     (home-page "https://ctan.org/pkg/xcjk2uni")
     (synopsis "Convert CJK characters to Unicode, in pdfTeX")
     (description
@@ -58918,16 +58899,7 @@ others.")
       ;; should be a native input) and `ctex' (where this package is
       ;; a propagated input).  To work around this, grab the required
       ;; "ctxdocstrip.tex" file from `ctex'.
-      (origin
-        (method svn-multi-fetch)
-        (uri (svn-multi-reference
-              (url (texlive-packages-repository version))
-              (revision 66594)
-              (locations (list "tex/generic/ctex/ctxdocstrip.tex"))))
-        (file-name (git-file-name name version))
-        (sha256
-         (base32
-          "154v2d6wfzhfg654nlh2apy9zr78d09rkimymyjqpxymkpbk8lli")))))
+      (package-source texlive-ctex)))
     (home-page "https://ctan.org/pkg/xpinyin")
     (synopsis "Automatically add pinyin to Chinese characters")
     (description
