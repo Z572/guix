@@ -48695,7 +48695,14 @@ occurs.")
                 "0wb67hsfasxvl1b484hyxvghhm9nkxwgs6m8ygzshr0m874hsl01"))))
     (outputs '("out" "doc"))
     (build-system texlive-build-system)
-    (arguments (list #:link-scripts #~(list "pdfcrop.pl")))
+    (arguments
+     (list #:link-scripts #~(list "pdfcrop.pl")
+           #:phases
+           #~(modify-phases %standard-phases
+               (add-after 'link-scripts 'add-symlink
+                 (lambda _
+                   (with-directory-excursion (string-append #$output "/bin")
+                     (symlink "pdfcrop" "rpdfcrop")))))))
     (inputs (list perl))
     (home-page "https://ctan.org/pkg/pdfcrop")
     (synopsis "Crop PDF graphics")
