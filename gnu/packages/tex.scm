@@ -438,6 +438,7 @@ of user-specified directories similar to how shells look up executables.")
               (sha256
                "0sqbg5kjpzkpm1fq2c9hpf4f21bvjs3xas944dlbqp44lsqhcmsk")))
     (outputs '("out" "doc"))
+    (properties '((updater-extra-inputs "perl")))
     (build-system copy-build-system)
     (arguments
      (list
@@ -1719,6 +1720,7 @@ scripts.")
                (base32
                 "0kja24rh0ysljwgkyg9mf47h64ayi2kmb1jb3dmvb42ywvg0w9i7"))))
     (outputs '("out" "doc"))
+    (properties '((updater-extra-inputs "perl")))
     (build-system texlive-build-system)
     (arguments (list #:link-scripts #~(list "mkt1font" "vpl2ovp" "vpl2vpl")))
     (inputs (list perl))
@@ -3820,6 +3822,7 @@ style.  ArabTeX will run with Plain TeX and also with LaTeX.")
                (base32
                 "0sshjaxz1ar24mr7dny0lp9l0bggyfsb0868s4b1k00w6jyzh1i8"))))
     (outputs '("out" "doc"))
+    (properties '((updater-extra-inputs "icedtea")))
     (build-system texlive-build-system)
     (arguments
      (list
@@ -7390,6 +7393,7 @@ manuscripts, audiovisual resources, social media and legal references.")
                (base32
                 "05fapyb6wwyv4mwjhgg3gasvqkwpwd6jxv095hird9011n6drrzm"))))
     (outputs '("out" "doc"))
+    (properties '((updater-extra-native-inputs "texlive-updmap.cfg")))
     (build-system texlive-build-system)
     (arguments (list #:tex-format "latex"))
     (native-inputs
@@ -9014,6 +9018,7 @@ LaTeX 2.09.  Neither @code{cite} nor @code{natbib} make this mistake.")
                (base32
                 "1cyyadfvrcym4vvxl9p9zb88692m0578nqljip12xxahb4srcyb9"))))
     (outputs '("out" "doc"))
+    (properties '((updater-extra-native-inputs "texlive-updmap.cfg")))
     (build-system texlive-build-system)
     (arguments (list #:tex-format "latex"))
     (native-inputs (list (texlive-updmap.cfg (list texlive-hypdoc))))
@@ -9102,6 +9107,7 @@ of Chemical Technology, supporting bachelor, master, and doctor theses.")
                (base32
                 "04d022k7bqc7092xhsda0h5ma18b24hkmn0b7mlblpd3zf4qhs79"))))
     (outputs '("out" "doc"))
+    (properties '((updater-extra-inputs "perl")))
     (build-system texlive-build-system)
     (arguments
      (list
@@ -11642,6 +11648,7 @@ for the Computer Modern font family in blackboard bold.")
                (base32
                 "13q5ar2zaf7h6f2mzgxxqzaraziwl6asicbnyq6anfv2ky38rd72"))))
     (outputs '("out" "doc"))
+    (properties '((updater-extra-native-inputs "texlive-euxm")))
     (build-system texlive-build-system)
     (arguments (list #:tex-format "latex"))
     (native-inputs (list texlive-euxm texlive-metafont))
@@ -12234,6 +12241,7 @@ math fonts using parameters from Concrete Roman text fonts.")
                (base32
                 "09frgpcwpfkj9j9aaj5psb8kr12vgbr10plcvcipn0mjahdw9nnz"))))
     (outputs '("out" "doc"))
+    (properties '((updater-extra-native-inputs "texlive-amsfonts")))
     (build-system texlive-build-system)
     (native-inputs (list texlive-amsfonts texlive-metafont))
     (home-page "https://ctan.org/pkg/concmath-fonts")
@@ -14704,6 +14712,7 @@ School.")
                (base32
                 "06mznqh1k9ff8rpifxkphv3yk9ym6zcvz3x1ksk677n6fp5a5jkh"))))
     (outputs '("out" "doc"))
+    (properties '((updater-extra-native-inputs "texlive-ec")))
     (build-system texlive-build-system)
     (native-inputs (list texlive-ec texlive-metafont))
     (home-page "https://ctan.org/pkg/ecc")
@@ -15012,6 +15021,7 @@ with relative ease.  The facilities of PSTricks are used for graphics.")
                (base32
                 "0il058v1x79w5faxyalysdmfsgbxc3a1nq8kraffawpqw6wjcrbj"))))
     (outputs '("out" "doc"))
+    (properties '((updater-extra-native-inputs "texlive-sauter")))
     (build-system texlive-build-system)
     (native-inputs (list texlive-metafont texlive-sauter))
     (home-page "https://ctan.org/pkg/eiad")
@@ -16639,6 +16649,7 @@ Logo fonts to complete the Type 1 encoding.")
                (base32
                 "0kd5xs1xffgplpapj6rjv4aaz7pfjfh8rspy2xrabbf03npkdqz5"))))
     (outputs '("out" "doc"))
+    (properties '((updater-extra-native-inputs "texlive-sauter")))
     (build-system texlive-build-system)
     (native-inputs (list texlive-metafont texlive-sauter))
     (home-page "https://ctan.org/pkg/feyn")
@@ -17150,6 +17161,7 @@ seen as an extension to FontAwesome.")
                (base32
                 "1y061r4hadb2c26dgch6lrjw6f4j87zj1gj5lgzgx0hyyz58snqy"))))
     (outputs '("out" "doc"))
+    (properties '((updater-extra-native-inputs "texlive-updmap.cfg")))
     (build-system texlive-build-system)
     (arguments
      (list #:tex-format "latex"
@@ -18537,6 +18549,7 @@ Polyglossia.")
                (base32
                 "0k55k49sba80k51pjpb08zf9calnkchcxxsyajx8g3c33ah3j2i1"))))
     (outputs '("out" "doc"))
+    (properties '((updater-extra-inputs "perl")))
     (build-system texlive-build-system)
     (arguments
      (list #:link-scripts #~(list "makeglossaries" "makeglossaries-lite.lua")))
@@ -19562,6 +19575,7 @@ musicology.")
                (base32
                 "1bgbybzz5h79i2l3mbjxm11x9nsxm366c6d2mha9j5qabjghakya"))))
     (outputs '("out" "doc"))
+    (properties '((updater-extra-native-inputs "texlive-ctex")))
     (build-system texlive-build-system)
     (native-inputs (list texlive-ctex))
     (home-page "https://ctan.org/pkg/hanzibox")
@@ -25394,6 +25408,7 @@ of his own packages.")
                (base32
                 "1n7bznkcc1ma2k977306rjg1mlpcspc46xg14abnc2d4k2970bfg"))))
     (outputs '("out" "doc"))
+    (properties '((updater-extra-native-inputs "texlive-ec")))
     (build-system texlive-build-system)
     (native-inputs (list texlive-ec texlive-metafont))
     (home-page "https://ctan.org/pkg/lxfonts")
@@ -29107,6 +29122,7 @@ of fonts, designed by Vernon Adams.")
                (base32
                 "001axgdkvkcwfhzg9iw5sgahxh54sp6imi2b442li8f6n5c717lx"))))
     (outputs '("out" "doc"))
+    (properties '((updater-extra-native-inputs "texlive-xetex")))
     (build-system texlive-build-system)
     (arguments
      (list #:tex-format "xetex" #:build-targets #~(list "nwafuthesis.dtx")))
@@ -31199,6 +31215,7 @@ poems, an index of first lines, and some structural commands.")
                (base32
                 "1y78zd1hd3z1901x6mc6q0mw4rgj3qcqhnjn34zix11r0gn4b2jr"))))
     (outputs '("out" "doc"))
+    (properties '((updater-extra-native-inputs "texlive-updmap.cfg")))
     (build-system texlive-build-system)
     (arguments
      (list #:tex-format "latex"
@@ -32524,6 +32541,7 @@ both in English and Chinese with more ease and flexibility.")
                (base32
                 "1gg8qbc8ll3n6rfp3pjshbbjd30s4n3yk219y6qcmz1nv66fp1qq"))))
     (outputs '("out" "doc"))
+    (properties '((updater-extra-native-inputs "texlive-updmap.cfg")))
     (build-system texlive-build-system)
     (arguments (list #:tex-format "latex"))
     (native-inputs (list (texlive-updmap.cfg)))
@@ -35242,6 +35260,7 @@ provides a matching math package using STIX2 letters (Roman and Greek) with
                (base32
                 "1ixxglx4azdnppiqhlkgyahj9a67zamljzv98n6hycp7y6jbd1x0"))))
     (outputs '("out" "doc"))
+    (properties '((updater-extra-native-inputs "texlive-updmap.cfg")))
     (build-system texlive-build-system)
     (arguments
      (list #:tex-format "latex"
@@ -35525,6 +35544,7 @@ The bundle comes with a set of ready-prepared puzzle files.")
                (base32
                 "1m1gsnfcnw9ylz2aik20rqs6jk0p647wlkfm813spl0hbjnpzkpc"))))
     (outputs '("out" "doc"))
+    (properties '((updater-extra-native-inputs "texlive-updmap.cfg")))
     (build-system texlive-build-system)
     (arguments
      (list #:tex-format "lualatex"
@@ -36890,6 +36910,7 @@ of Applied Sciences}.  These Logos are available in English and in Dutch.")
                (base32
                 "1cv2kadwzwwrw3q98wy7cjjl3084qqp55ki50v7m2ylrjxinwkv4"))))
     (outputs '("out" "doc"))
+    (properties '((updater-extra-native-inputs "texlive-updmap.cfg")))
     (build-system texlive-build-system)
     (arguments
      (list
@@ -36902,22 +36923,23 @@ of Applied Sciences}.  These Logos are available in English and in Dutch.")
               (substitute* "source/latex/thucoursework/thucoursework.dtx"
                 (("\\\\DocInput\\{\\\\jobname\\.dtx\\}") "")))))))
     (native-inputs
-     (list texlive-booktabs
-           texlive-carlisle
-           texlive-ctex
-           texlive-enumitem
-           texlive-etoolbox
-           texlive-fancyhdr
-           texlive-hypdoc
-           texlive-kastrup
-           texlive-listings
-           texlive-metalogo
-           texlive-newpx
-           texlive-newtx
-           texlive-oberdiek
-           texlive-realscripts
-           texlive-xcolor
-           texlive-xstring))
+     (list (texlive-updmap.cfg
+            (list texlive-booktabs
+                  texlive-carlisle
+                  texlive-ctex
+                  texlive-enumitem
+                  texlive-etoolbox
+                  texlive-fancyhdr
+                  texlive-hypdoc
+                  texlive-kastrup
+                  texlive-listings
+                  texlive-metalogo
+                  texlive-newpx
+                  texlive-newtx
+                  texlive-oberdiek
+                  texlive-realscripts
+                  texlive-xcolor
+                  texlive-xstring))))
     (home-page "https://ctan.org/pkg/thucoursework")
     (synopsis "Coursework template for Tsinghua University")
     (description
@@ -38113,6 +38135,7 @@ The font Palatine Parliamentary is required to use this package.")
                (base32
                 "07jzmk0p4l28dxxqqpma4px9riykg0zynnjycyripg2m76a9ah2g"))))
     (outputs '("out" "doc"))
+    (properties '((updater-extra-native-inputs "texlive-updmap.cfg")))
     (build-system texlive-build-system)
     (arguments
      (list #:link-scripts #~(list "ulqda.pl")
@@ -38924,6 +38947,7 @@ period, semicolon, colon, parentheses, square brackets, and Arabic numerals.")
                (base32
                 "0sfs2ybkfcqy8w0wdni3aakpnmk60zkmnlc55xskyzzh4yc69qi7"))))
     (outputs '("out" "doc"))
+    (properties '((updater-extra-inputs "perl")))
     (build-system texlive-build-system)
     (arguments (list #:link-scripts #~(list "urlbst")))
     (inputs (list perl))
@@ -39618,6 +39642,7 @@ the end of a line.")
                (base32
                 "0vbpxzqvqpymw2chgrrva7alrvp6lj735hy8wqksal968sch6azx"))))
     (outputs '("out" "doc"))
+    (properties '((updater-extra-native-inputs "texlive-ec")))
     (build-system texlive-build-system)
     (native-inputs (list texlive-ec texlive-metafont))
     (home-page "https://ctan.org/pkg/vntex")
@@ -39950,6 +39975,7 @@ professional master.")
                (base32
                 "17zd5i4vxpg2n7w9449q754i2k280jjm18pfl6d8b6r1adv5hy4c"))))
     (outputs '("out" "doc"))
+    (properties '((updater-extra-native-inputs "texlive-ctex")))
     (build-system texlive-build-system)
     (native-inputs (list texlive-ctex))
     (home-page "https://ctan.org/pkg/xduts")
@@ -39979,6 +40005,8 @@ undergraduate and postgraduate that meet the school's requirements.")
                (base32
                 "0mpmfrj0n00gpnh67zh627vxhpp6vim8x755vdpb75h36k8zm6yq"))))
     (outputs '("out" "doc"))
+    ;; Prevent circular dependencies.
+    (properties '((updater-ignored-propagated-inputs "texlive-ctex")))
     (build-system texlive-build-system)
     (arguments
      (list
@@ -40050,6 +40078,7 @@ to be able to create multilingual documents.")
                (base32
                 "1qnsh0q61zv4jrh92zkhgdk1lzk3fksa2iiv2c2hkyk55sjza6ac"))))
     (outputs '("out" "doc"))
+    (properties '((updater-extra-native-inputs "texlive-ctex")))
     (build-system texlive-build-system)
     (native-inputs (list texlive-ctex))
     (home-page "https://ctan.org/pkg/xmuthesis")
@@ -40179,6 +40208,7 @@ provides three output modes: LaTeX, PostScript and PDF.")
                (base32
                 "1qp1a0y8hkv0wfkbh2rbgkm2il08a320gl0kqppam4rb8y6wn77z"))))
     (outputs '("out" "doc"))
+    (properties '((updater-extra-native-inputs "texlive-updmap.cfg")))
     (build-system texlive-build-system)
     (arguments
      (list #:build-targets #~(list "yathesis.dtx")
@@ -40927,6 +40957,7 @@ supported via the ICU library.")
                (base32
                 "1drgwqgkhr6ba4c21kyykl5y92x7dp6971if2hfcxsqk6kqy3ip1"))))
     (outputs '("out" "doc"))
+    (properties '((updater-extra-inputs "perl")))
     (build-system texlive-build-system)
     (arguments (list #:link-scripts #~(list "arlatex" "bundledoc")))
     (inputs (list perl))
@@ -41030,6 +41061,7 @@ labels and advises the user to use a starred version instead.")
                (base32
                 "0qyrllxvcymmr1a4sq9c88fw5zchcx0n6yac69s61fg6xypk18bq"))))
     (outputs '("out" "doc"))
+    (properties '((updater-ignored-inputs "perl"))) ;in "-bin" already
     (build-system texlive-build-system)
     (propagated-inputs (list texlive-chktex-bin))
     (home-page "https://ctan.org/pkg/chktex")
@@ -41120,6 +41152,7 @@ Filters are also provided for checking the LaTeX parts of CWEB documents.")
                (base32
                 "0dadr9wg7fa2vb6qkzqghrwmnns8jf4la1gb837a59jz2lh8955h"))))
     (outputs '("out" "doc"))
+    (properties '((updater-extra-inputs "perl")))
     (build-system texlive-build-system)
     (arguments (list #:link-scripts #~(list "pamphletangler")))
     (inputs (list perl))
@@ -41327,6 +41360,7 @@ bibliographic information in BibLaTeX format for packages hosted on CTAN.  The
                (base32
                 "1m6gldzm0sm4j7v2kkrpqikx004sqdq0f2gw13gc8ccqzl745cjw"))))
     (outputs '("out" "doc"))
+    (properties '((updater-extra-inputs "perl")))
     (build-system texlive-build-system)
     (arguments (list #:link-scripts #~(list "ctanify")))
     (inputs (list perl))
@@ -41526,6 +41560,7 @@ formed by TeX and Metafont.  No external preprocessor is needed.")
                (base32
                 "1lrrgdmzr6k2v6brz8w1s9v77c7pm7vmcvwga3d0pfndb39bh49j"))))
     (outputs '("out" "doc"))
+    (properties '((updater-extra-inputs "python")))
     (build-system texlive-build-system)
     (arguments (list #:link-scripts #~(list "de-macro")))
     (inputs (list python))
@@ -42795,6 +42830,7 @@ allow a somewhat natural formulation.")
                (base32
                 "0v0r8jcr1lv31mx613h76h13psj73g49p2a6dnd0nfbfharww3gr"))))
     (outputs '("out" "doc"))
+    (properties '((updater-extra-native-inputs "texlive-sauter")))
     (build-system texlive-build-system)
     (arguments
      (list #:phases
@@ -42935,6 +42971,7 @@ area.")
                (base32
                 "1bxj0li1a9qsvwmp0kmfsal4vsgsqal1lgmp4423z9nvwrwvvlrr"))))
     (outputs '("out" "doc"))
+    (properties '((updater-extra-inputs "perl")))
     (build-system texlive-build-system)
     (arguments (list #:link-scripts #~(list "findhyph")))
     (inputs (list perl))
@@ -43152,6 +43189,7 @@ about.")
                (base32
                 "0jfqwhj2i9x9bzq723ch5z3sydfkaha4xr0xlp2haav713ll5027"))))
     (outputs '("out" "doc"))
+    (properties '((updater-extra-inputs "perl")))
     (build-system texlive-build-system)
     (arguments (list #:link-scripts #~(list "afm2afm" "autoinst" "ot2kpx")))
     (inputs (list perl))
@@ -43474,6 +43512,7 @@ provided, using the LGR encoding.")
                (base32
                 "02g40fx99xn80af6bqv7zn16l8dnqihqd42vn5hbphfx85b3p49q"))))
     (outputs '("out" "doc"))
+    (properties '((updater-extra-native-inputs "texlive-ydoc")))
     (build-system texlive-build-system)
     (native-inputs (list texlive-ydoc))
     (home-page "https://ctan.org/pkg/gobble")
@@ -43775,6 +43814,7 @@ manner.")
                (base32
                 "14a1hqqwz3pfpz5rz9k8finxnlan4a3l8a0brgs98p6mdp9xl3q1"))))
     (outputs '("out" "doc"))
+    (properties '((updater-extra-native-inputs "texlive-levy")))
     (build-system texlive-build-system)
     (native-inputs (list texlive-levy texlive-metafont))
     (home-page "https://ctan.org/pkg/ibygrk")
@@ -44222,6 +44262,7 @@ of TeX and one of Metafont are needed.")
                (base32
                 "0bj35wdxn0xllpqzf8lrd00b5rmyy9fws84avz3ijk4k8rvfz8gk"))))
     (outputs '("out" "doc"))
+    (properties '((updater-extra-inputs "perl")))
     (build-system texlive-build-system)
     (arguments (list #:link-scripts #~(list "mkgrkindex")))
     (inputs (list perl))
@@ -44766,6 +44807,8 @@ packages).")
                (base32
                 "18s3by7isk85ksvp40i6qg2ws3iyj5f35fh8h0561rw6jdc024rc"))))
     (outputs '("out" "doc"))
+    (properties '((updater-extra-native-inputs "texlive-amsfonts"
+                                               "texlive-cm")))
     (build-system texlive-build-system)
     (native-inputs (list texlive-amsfonts texlive-metafont texlive-cm))
     (home-page "https://ctan.org/pkg/pl-mf")
@@ -46647,6 +46690,7 @@ operations, etc.)")
                (base32
                 "0s5cfid1r6jn34kzvmxwxyxpvyb0rayn80x3n7k515p1plqmmrnq"))))
     (outputs '("out" "doc"))
+    (properties '((updater-extra-native-inputs "texlive-levy")))
     (build-system texlive-build-system)
     (native-inputs (list texlive-levy texlive-metafont))
     (home-page "https://ctan.org/pkg/yannisgr")
@@ -46702,6 +46746,7 @@ that of the Latin text (usually 1.2 times the font size).")
                (base32
                 "1lhc3a8l5sizyw0v1cfsrwwwymmyab1yvx99iqhdh7avrzmi2gda"))))
     (outputs '("out" "doc"))
+    (properties '((updater-extra-native-inputs "texlive-ctex")))
     (build-system texlive-build-system)
     (native-inputs (list texlive-ctex))
     (home-page "https://ctan.org/pkg/zhlipsum")
@@ -47867,6 +47912,7 @@ generated code can be included in any LaTeX document.")
                (base32
                 "01v6frspg1zrs976bwsdz6qczg0h5z6by90hmlyy4z6l5shscpix"))))
     (outputs '("out" "doc"))
+    (properties '((updater-extra-inputs "perl")))
     (build-system texlive-build-system)
     (arguments (list #:link-scripts #~(list "latex-git-log")))
     (inputs (list perl))
@@ -47948,6 +47994,7 @@ the script calculates the settings for various font and paper sizes.")
                (base32
                 "0c5pfnhw80fh132k2dmj3qdjgvl9dm6xzv55f54g2wlswpzlinis"))))
     (outputs '("out" "doc"))
+    (properties '((updater-extra-inputs "perl")))
     (build-system texlive-build-system)
     (arguments (list #:link-scripts #~(list "latex2man")))
     (inputs (list perl))
@@ -47979,6 +48026,7 @@ actual translation.")
                (base32
                 "04l3pnzwnh86ixlj7pjy6wgkzqm5i3ka332yfkl5f6cw48dw6xw5"))))
     (outputs '("out" "doc"))
+    (properties '((updater-extra-inputs "icedtea")))
     (build-system texlive-build-system)
     (arguments
      (list
@@ -48084,6 +48132,8 @@ style file.")
                (base32
                 "1k2d09z2my38nhxhzdq53jg4alzg5jzirdsb1qa7szm3dya46xgm"))))
     (outputs '("out" "doc"))
+    (properties '((updater-extra-inputs "perl-file-homedir"
+                                        "perl-yaml-tiny")))
     (build-system texlive-build-system)
     (arguments
      (list #:link-scripts #~(list "latexindent.pl")
@@ -48117,6 +48167,7 @@ highlight the structure for the reader.")
                (base32
                 "0v0yn4n6v0kgxwh00ryfkrx7a4sxhkm0pbgnylvi8jfg24gz89ls"))))
     (outputs '("out" "doc"))
+    (properties '((updater-extra-inputs "perl")))
     (build-system texlive-build-system)
     (arguments (list #:link-scripts #~(list "latexpand")))
     (inputs (list perl))
@@ -48351,6 +48402,7 @@ without HarfBuzz.")
                (base32
                 "0qqxbh3h1xkggs5p2gnis4z8h3s0mwknszyjzs2fslnq16yyqi27"))))
     (outputs '("out" "doc"))
+    (properties '((updater-extra-inputs "ruby")))
     (build-system texlive-build-system)
     (arguments (list #:link-scripts #~(list "match_parens")))
     (inputs (list ruby))
@@ -48522,6 +48574,7 @@ conversion tools.")
                (base32
                 "1n122230s49jizldn8ps1pfa5dsg8wmh5x8wla4y6rsgjcccqn4s"))))
     (outputs '("out" "doc"))
+    (properties '((updater-extra-native-inputs "texlive-updmap.cfg")))
     (build-system texlive-build-system)
     (arguments
      (list
@@ -48592,6 +48645,7 @@ of the @code{multirow} package,
                (base32
                 "0rjyhyirkx11v04c8b0kjjz8745kdnj190vzkyyzafwnzfcbd754"))))
     (outputs '("out" "doc"))
+    (properties '((updater-extra-inputs "python")))
     (build-system texlive-build-system)
     (arguments (list #:link-scripts #~(list "optexcount")))
     (inputs (list python))
@@ -48671,6 +48725,7 @@ that can be used by the TeX 82 hyphenation algorithm.")
                (base32
                 "1cw0xw2dmcgmkms8d94pchbbg17lfvvbnzbagaqpy2fzxi2kb4w8"))))
     (outputs '("out" "doc"))
+    (properties '((updater-extra-inputs "python")))
     (build-system texlive-build-system)
     (arguments (list #:link-scripts #~(list "pdfbook2")))
     (inputs (list python))
@@ -48927,6 +48982,7 @@ PostScript files, generated by not too old dvips, and replaces them by type
                (base32
                 "0vq52g65an1v9g0kdhsy0xpsf1hj69gl4cr5aq1m816i8ahhzxxy"))))
     (outputs '("out" "doc"))
+    (properties '((updater-extra-inputs "perl")))
     (build-system texlive-build-system)
     (arguments (list #:link-scripts #~(list "pkfix-helper")))
     (inputs (list perl))
@@ -48963,6 +49019,7 @@ does require the user to verify and, if needed, correct its decisions.")
                (base32
                 "0523kgilwd142a43fw1r406rn8ck67hp78aqhsws931glf7j9y8p"))))
     (outputs '("out" "doc"))
+    (properties '((updater-extra-inputs "perl")))
     (build-system texlive-build-system)
     (arguments (list #:link-scripts #~(list "purifyeps")))
     (inputs (list perl))
@@ -49568,6 +49625,7 @@ LaTeX macro programming.")
                (base32
                 "0l0dpgvngah227snzk6j5hf3kxs5cz5jvlpkv8pbapw6jx084np6"))))
     (outputs '("out" "doc"))
+    (properties '((updater-extra-native-inputs "texlive-cm")))
     (build-system texlive-build-system)
     (arguments
      (list #:phases
@@ -49693,6 +49751,7 @@ part of the cite bundle of the author's citation-related packages.")
                (base32
                 "10adgjc3lkj2z50jp1f9n83bdrx8bqxd76rl605d0d5pb435k97m"))))
     (outputs '("out" "doc"))
+    (properties '((updater-extra-native-inputs "texlive-mfware-bin")))
     (build-system texlive-build-system)
     (arguments
      (list
@@ -49749,6 +49808,8 @@ mathematical fonts in a range of styles, based on Monotype Modern 8A.")
                (base32
                 "0sj6g877p6ak045x7737g3lg4kab8hgc2s2g6i23dw9d35csqf8d"))))
     (outputs '("out" "doc"))
+    (properties '((updater-extra-native-inputs "texlive-amsfonts"
+                                               "texlive-ec")))
     (build-system texlive-build-system)
     (native-inputs (list texlive-amsfonts texlive-ec texlive-metafont))
     (home-page "https://ctan.org/pkg/cmbright")
@@ -50414,6 +50475,7 @@ conversion software and word processors.")
               (sha256
                (base32
                 "0dl8z340n6m6xn7wari4hir0syxqi0kl2fhnf0bvnmkqhqwyzpca"))))
+    (properties '((updater-extra-native-inputs "texlive-cm")))
     (build-system texlive-build-system)
     (arguments (list #:texlive-latex-bin? #f))
     (native-inputs (list texlive-cm texlive-metafont))
@@ -50442,10 +50504,10 @@ Knuth, including the plain format, plain base, and the MF logo fonts.")
               (sha256
                (base32
                 "02cf32f57fr6bngiv9xiw8bh4sq53p9br034ap74s80h3bgcmn1f"))))
+    (properties '((updater-extra-native-inputs "texlive-knuth-lib")))
     (build-system texlive-build-system)
     (home-page "https://ctan.org/pkg/knuth-local")
-    (native-inputs
-     (list texlive-knuth-lib texlive-metafont))
+    (native-inputs (list texlive-knuth-lib texlive-metafont))
     (synopsis "Knuth's local information")
     (description
      "This package provides a collection of experimental programs and
@@ -50498,6 +50560,7 @@ looping commands for programming and many instructive example files.")
                (base32
                 "1bzqzzhs15w7dqz90hfjnaffjqh24q14w2h1h8vnxzvrlsyv21vq"))))
     (outputs '("out" "doc"))
+    (properties '((updater-extra-native-inputs "texlive-cm")))
     (build-system texlive-build-system)
     (arguments (list #:texlive-latex-bin? #f))
     (native-inputs (list texlive-cm texlive-metafont))
@@ -50888,6 +50951,7 @@ orthodrome pieces, and more are part of the package.")
                (base32
                 "1r53qlrcqfwc0dfr7ji1nxnqrj6n0qrlg1rl7fjlw6ap3q9y434k"))))
     (outputs '("out" "doc"))
+    (properties '((updater-extra-native-inputs "texlive-knuth-lib")))
     (build-system texlive-build-system)
     (native-inputs (list texlive-knuth-lib texlive-metafont))
     (home-page "https://ctan.org/pkg/mflogo")
@@ -51061,6 +51125,7 @@ such as the label and scaling factor into these boxes.")
                (base32
                 "1a8jzsgw63siirifpsvwjmfbj68fv58hnn5vrv737i9vbjrv0vm7"))))
     (outputs '("out" "doc"))
+    (properties '((updater-extra-inputs "perl")))
     (build-system texlive-build-system)
     (arguments (list #:link-scripts #~(list "mkpic")))
     (inputs (list perl))
@@ -51341,6 +51406,7 @@ correct fashion.")
                (base32
                 "0m6qmahbw1q5vs63mr30kf75di86drhi8z3a8p7yn9n524jn435c"))))
     (outputs '("out" "doc"))
+    (properties '((updater-extra-inputs "perl")))
     (build-system texlive-build-system)
     (arguments (list #:link-scripts #~(list "pn2pdf")))
     (inputs (list perl))
@@ -52018,6 +52084,7 @@ stamps you must point to a valid PDF of Deutsche Post's Ausdruck
                (base32
                 "0cmkr8533p4lqnj9x7nlcqj0slin021y13mr4mx2hvd35ya0dd80"))))
     (outputs '("out" "doc"))
+    (properties '((updater-extra-native-inputs "readline")))
     (build-system texlive-build-system)
     (arguments
      (list
@@ -52103,6 +52170,7 @@ and glued together.  This will lead to a physical product box.")
                (base32
                 "1anrvgs0hd3790dwpxqal0c2drjmvh93vnyqap40rvp8axwi0a6n"))))
     (outputs '("out" "doc"))
+    (properties '((updater-ignored-inputs "perl"))) ;in "-bin" already
     (build-system texlive-build-system)
     (propagated-inputs (list texlive-ps2eps-bin))
     (home-page "https://ctan.org/pkg/ps2eps")
@@ -52290,6 +52358,7 @@ documents generated that use Type 1 fonts.")
                 "0ba514lz3pc03ll0kb9apdx62mi2yiyd7bnargkp2bbf62dq79cc"))))
     (outputs '("out" "doc"))
     (build-system texlive-build-system)
+    (properties '((updater-ignored-inputs "perl"))) ;in "-bin" already
     (propagated-inputs (list texlive-psutils-bin))
     (home-page "https://ctan.org/pkg/psutils")
     (synopsis "PostScript utilities")
@@ -52810,6 +52879,7 @@ steps can be customized in various ways.")
                (base32
                 "1lhvbwq979whvjwx9gyfhsxz20x6imhh57xm843zk6068lv0b3wj"))))
     (outputs '("out" "doc"))
+    (properties '((updater-extra-native-inputs "texlive-updmap.cfg")))
     (build-system texlive-build-system)
     (arguments
      (list
@@ -53626,6 +53696,7 @@ for use in planning a class.")
                (base32
                 "1svmivc272xj9fzy5p055lp7g9vcqs75jp4x54682yrq0qizv03c"))))
     (outputs '("out" "doc"))
+    (properties '((updater-ignored-inputs "perl"))) ;in "-bin" already
     (build-system texlive-build-system)
     (propagated-inputs (list texlive-tex4ht-bin))
     (home-page "https://ctan.org/pkg/tex4ht")
@@ -53861,6 +53932,7 @@ marked at the margin with grey bars by the LaTeX @code{changebar} package.")
                (base32
                 "0f2h9qlqfml9p83znxh81i7cmwfbsr0zrladrf3486v4aja859kx"))))
     (outputs '("out" "doc"))
+    (properties '((updater-extra-inputs "perl")))
     (build-system texlive-build-system)
     (arguments (list #:link-scripts #~(list "texdirflatten")))
     (inputs (list perl))
@@ -53943,6 +54015,7 @@ other configuration can be extensively customized.")
                (base32
                 "18xxivpgjdh8v6kg0b45zjv18sm9a4ljpwk6a4cghg5l5yggrjcx"))))
     (outputs '("out" "doc"))
+    (properties '((updater-extra-inputs "perl-tk")))
     (build-system texlive-build-system)
     (arguments
      (list
@@ -54071,6 +54144,7 @@ file.tex}.")
                (base32
                 "0qlrpqwfyakhh163ckznw5z8jwm5frp3krpi7fxnf9pz03c7shhr"))))
     (outputs '("out" "doc"))
+    (properties '((updater-extra-inputs "perl")))
     (build-system texlive-build-system)
     (arguments (list #:link-scripts #~(list "texloganalyser")))
     (inputs (list perl))
@@ -54099,6 +54173,7 @@ the log file.")
                (base32
                 "0w2cxkgzalx083hh4kyk10ampy1dx50iv44z9s2gks224p3rlyps"))))
     (outputs '("out" "doc"))
+    (properties '((updater-extra-inputs "perl")))
     (build-system texlive-build-system)
     (arguments (list #:link-scripts #~(list "texlogfilter")))
     (inputs (list perl))
@@ -55218,6 +55293,7 @@ inference.")
                (base32
                 "19zs6agcli2glm92z8y89nr4049v5sqvnlddbwlwym5rni33kh1m"))))
     (outputs '("out" "doc"))
+    (properties '((updater-extra-native-inputs "texlive-ydoc")))
     (build-system texlive-build-system)
     (native-inputs (list texlive-ydoc))
     (propagated-inputs (list texlive-svn-prov))
@@ -55548,6 +55624,7 @@ orbital diagrams.")
                (base32
                 "13ddkwm4a1x2b47zqjk2m55y2dwl09rl3s0pm1vmxv7h2sawgqbr"))))
     (outputs '("out" "doc"))
+    (properties '((updater-extra-native-inputs "texlive-ydoc")))
     (build-system texlive-build-system)
     (native-inputs (list texlive-ydoc))
     (home-page "https://ctan.org/pkg/tikzpagenodes")
@@ -56081,6 +56158,7 @@ packages (like @code{tkz-euclide}).")
                (base32
                 "1nv0wx21x022isw8rycvqdqwiz4ay6ws36bbcpqfqkjmvz5qr76w"))))
     (outputs '("out" "doc"))
+    (properties '((updater-extra-inputs "icedtea")))
     (build-system texlive-build-system)
     (arguments
      (list
@@ -57083,6 +57161,7 @@ of new fonts are given.")
                (base32
                 "0phhzcxapa5607pk37agr981rg90zw2p4rqv7sk7i19byr867a1b"))))
     (outputs '("out" "doc"))
+    (properties '((updater-extra-native-inputs "texlive-cm")))
     (build-system texlive-build-system)
     (native-inputs (list texlive-cm texlive-metafont))
     (home-page "https://ctan.org/pkg/amsfonts")
@@ -57145,6 +57224,7 @@ features generation of clean UTF-8 patterns.")
                (base32
                 "1cyi0vv9dnp45s0ilsrbkyznj9ji62s5bhkqgh49461mv2f8qj6p"))))
     (outputs '("out" "doc"))
+    (properties '((updater-extra-native-inputs "texlive-cm")))
     (build-system texlive-build-system)
     (native-inputs (list texlive-cm texlive-metafont))
     (home-page "https://ctan.org/pkg/ec")
@@ -57189,6 +57269,7 @@ texlive-2019.3/Master/texmf-dist/doc/fonts/ec/copyrite.txt"))))
                (base32
                 "1q48645qgjcl2jmpd0x0ip5wwdan54y9vx06zyvpp51wia30sacy"))))
     (outputs '("out" "doc"))
+    (properties '((updater-extra-native-inputs "texlive-cm")))
     (build-system texlive-build-system)
     (arguments (list #:texlive-latex-bin? #f))
     (native-inputs (list texlive-cm texlive-metafont))
@@ -57347,6 +57428,7 @@ supported by TeX metrics (VF and TFM files) and macros for use with LaTeX.")
                (base32
                 "1xq72k1p820b5q3haxf936g69p6gv34hr30870l96jnxa3ad7y05"))))
     (outputs '("out" "doc"))
+    (properties '((updater-extra-native-inputs "texlive-cm")))
     (build-system texlive-build-system)
     (arguments
      (list
@@ -57623,6 +57705,7 @@ replacement for the @code{inputenc} package.")
                (base32
                 "104kn06vmk7ljpz3sjnsr7r69p0i6nwad2v8gimdl2f38a53s5n3"))))
     (outputs '("out" "doc"))
+    (properties '((updater-extra-inputs "gawk" "sed")))
     (build-system texlive-build-system)
     (arguments
      (list
@@ -57639,7 +57722,7 @@ replacement for the @code{inputenc} package.")
                   (("^version=" m)
                    (format #false "PATH=\"~{~a:~}$PATH\"; export PATH~%~a"
                            dirs m)))))))))
-    (inputs (list sed gawk))
+    (inputs (list gawk sed))
     (propagated-inputs (list texlive-libkpathsea)) ;for the executables
     (home-page "https://ctan.org/pkg/kpathsea")
     (synopsis "Files related to the path searching library for TeX")
@@ -57923,6 +58006,7 @@ and gets and writes meta information data about the attached files.")
                (base32
                 "1rp805h0m99rxs107a798l951lyahlnp7irfklfadn2a2ljzhafn"))))
     (outputs '("out" "doc"))
+    (properties '((updater-extra-native-inputs "texlive-latex")))
     (build-system texlive-build-system)
     (arguments (list #:texlive-latex-bin? #f))
     (native-inputs (list texlive-latex))
@@ -58041,6 +58125,7 @@ possible by converting in multiple steps.")
                (base32
                 "0r2dr8f8myc663hdzzrkaiddfqsmmf41xan9y6kd1n049hhw414l"))))
     (outputs '("out" "doc"))
+    (properties '((updater-extra-inputs "ghostscript")))
     (build-system texlive-build-system)
     (arguments
      (list
@@ -58144,6 +58229,7 @@ overwrite existing files and letting you use @code{filecontents}
                (base32
                 "1zg9svjhrnh52fa04n3pnb0hrijp0lrr939dacf90cjjzwk36sfn"))))
     (outputs '("out" "doc"))
+    (properties '((updater-extra-native-inputs "texlive-ydoc")))
     (build-system texlive-build-system)
     (native-inputs (list texlive-ydoc))
     (home-page "https://ctan.org/pkg/filehook")
@@ -58420,6 +58506,7 @@ set default \"driver\" options for the color and graphics packages.")
                (base32
                 "024hncahwc07yd2l94znv7v72sbykxdri5lpg3w4ip0nf10ywyma"))))
     (outputs '("out" "doc"))
+    (properties '((updater-extra-native-inputs "texlive-latex")))
     (build-system texlive-build-system)
     (arguments (list #:texlive-latex-bin? #f))
     (native-inputs (list texlive-latex))
@@ -58578,6 +58665,7 @@ for the user.")
                (base32
                 "1vjp47ngrirrvbnk4vnm5lbysj3qlbwxbfc1szc22gaikm52ggaq"))))
     (outputs '("out" "doc"))
+    (properties '((updater-extra-native-inputs "texlive-ttfutils")))
     (build-system texlive-build-system)
     (arguments
      (list
@@ -58595,8 +58683,7 @@ for the user.")
                                                "tex/generic/ctex/ctxdocstrip.tex")
                             "build/")
               (setenv "TEXINPUTS" (string-append (getcwd) "/build:")))))))
-    (native-inputs
-     (list (package-source texlive-ctex) texlive-ttfutils))
+    (native-inputs (list (package-source texlive-ctex) texlive-ttfutils))
     (home-page "https://ctan.org/pkg/xcjk2uni")
     (synopsis "Convert CJK characters to Unicode, in pdfTeX")
     (description
@@ -59676,6 +59763,7 @@ which controls boxes receiving text for typesetting.
                (base32
                 "1jbll1x3pdjpm1v70h7kpxgkjsw2mi2zbdilc7qvh251amn0hdbv"))))
     (outputs '("out" "doc"))
+    (properties '((updater-extra-native-inputs "texlive-latex")))
     (build-system texlive-build-system)
     (arguments
      (list
@@ -59714,6 +59802,7 @@ LaTeX3 conventions can be used with regular LaTeX2e packages.")
                (base32
                 "1pd2drks05k9w3fzgzg7vkj46plpw5z9r0zl43r1kzya9c4ldb38"))))
     (outputs '("out" "doc"))
+    (properties '((updater-extra-native-inputs "texlive-latex")))
     (build-system texlive-build-system)
     (arguments
      (list #:tex-engine "tex"
@@ -59758,6 +59847,7 @@ an independent schedule.")
                (base32
                 "0l7mfm8ziil59drqmb723n0wjbwdsx54iah051haxlbj7psqmbax"))))
     (outputs '("out" "doc"))
+    (properties '((updater-extra-native-inputs "texlive-latex")))
     (build-system texlive-build-system)
     (arguments
      (list #:build-targets
@@ -59975,6 +60065,9 @@ available.")
                (base32
                 "19349dxvqiinhsihn83yfhl6pgcvkd48l37w5jh59myx7sc6p8j6"))))
     (outputs '("out" "doc"))
+    (properties '((updater-extra-native-inputs "texlive-amsfonts"
+                                               "texlive-cm"
+                                               "texlive-ec")))
     (build-system texlive-build-system)
     (native-inputs
      (list texlive-amsfonts texlive-cm texlive-ec texlive-metafont))
@@ -60223,6 +60316,7 @@ they are not directly related to Unicode mathematics typesetting.")
                (base32
                 "0x53z6072z8qpp5fh2g9blz95zg20906k82jk6hz1hibv70is0pk"))))
     (outputs '("out" "doc"))
+    (properties '((updater-extra-native-inputs "texlive-latex")))
     (build-system texlive-build-system)
     (arguments (list #:texlive-latex-bin? #f))
     (native-inputs (list texlive-latex))
@@ -60702,6 +60796,8 @@ available as part of the AMS-LaTeX distribution.")
                (base32
                 "18q99xgga4448vk7wf5r5ry79sx5ymqx0zd7v7l1c4wyyiv4riw9"))))
     (outputs '("out" "doc"))
+    (properties '((updater-extra-native-inputs "texlive-latex"
+                                               "unzip")))
     (build-system texlive-build-system)
     (arguments
      (list
@@ -60894,13 +60990,15 @@ the fonts within maths.")
                (base32
                 "0x3fhz582xcv33s9yiwka82j8bz3nxribgmni3j8j03r6dih8d8r"))))
     (outputs '("out" "doc"))
+    (properties '((updater-extra-native-inputs "texlive-updmap.cfg")))
     (build-system texlive-build-system)
     (arguments
      (list #:build-targets #~(list "bbold.dtx")
            #:tex-format "latex"))
     (native-inputs
-     (list (texlive-updmap.cfg
-            (list texlive-hypdoc texlive-metafont))))
+     (list texlive-metafont
+           (texlive-updmap.cfg
+            (list texlive-hypdoc))))
     (home-page "https://ctan.org/pkg/bbold")
     (synopsis "Sans serif blackboard bold")
     (description
@@ -61133,6 +61231,7 @@ with the XeTeX engine.")
               (sha256
                (base32
                 "0nzzcg1yvbslhqm5lsfcpqh6sbzkmnmmgyakg9l8855qpa8g9bf3"))))
+    (properties '((updater-extra-native-inputs "texlive-sauter")))
     (build-system texlive-build-system)
     (native-inputs (list texlive-metafont texlive-sauter))
     (propagated-inputs (list texlive-cmexb))
@@ -61161,9 +61260,10 @@ available.")
               (sha256
                (base32
                 "14z479gkiwgw17pdghrxh5q0rlxnij7ccj49kgf3macwgmh5lm0r"))))
+    (properties '((updater-extra-native-inputs "texlive-xetex")))
+    (build-system texlive-build-system)
     (arguments
      (list #:create-formats #~(list "csplain" "luacsplain" "pdfcsplain")))
-    (build-system texlive-build-system)
     (native-inputs (list texlive-xetex))
     (propagated-inputs
      (list texlive-cm
@@ -62162,6 +62262,7 @@ provided.")
                (base32
                 "08lc76yglblidg24s5ap9j0xmzbxgsfwcf9f6g1m4bwbqwkh089x"))))
     (outputs '("out" "doc"))
+    (properties '((updater-extra-native-inputs "texlive-updmap.cfg")))
     (build-system texlive-build-system)
     (arguments (list #:tex-format "latex"))
     (native-inputs (list (texlive-updmap.cfg (list texlive-hypdoc))))
@@ -62656,6 +62757,7 @@ MakeIndex.")
                (base32
                 "08v670f7s74klnac7pzqsad9m4jsxfkckzkswxb94xxd61kanzdx"))))
     (outputs '("out" "doc"))
+    (properties '((updater-extra-native-inputs "texlive-latex")))
     (build-system texlive-build-system)
     (arguments
      (list #:tex-engine "tex"
@@ -62743,9 +62845,9 @@ with the LaTeX @code{picture} environment.")
                (base32
                 "17zxqz32ky99z22yaqayg9ih8lyaswi97d34jykc0s12w4k4i97c"))))
     (outputs '("out" "doc"))
+    (properties '((updater-extra-native-inputs "texlive-cm")))
     (build-system texlive-build-system)
-    (native-inputs
-     (list texlive-cm))
+    (native-inputs (list texlive-cm))
     (propagated-inputs
      (list texlive-graphics texlive-symbol texlive-zapfding))
     (home-page "https://www.ctan.org/pkg/psnfss")
@@ -62898,9 +63000,9 @@ supported.")
                (base32
                 "11gi7yhq2lnfgvqa29i0sidi5mwkzpja5ggdcpvqwv4xljf4vpvh"))))
     (outputs '("out" "doc"))
+    (properties '((updater-extra-native-inputs "texlive-cm")))
     (build-system texlive-build-system)
-    (native-inputs
-     (list texlive-cm texlive-metafont))
+    (native-inputs (list texlive-cm texlive-metafont))
     (home-page "https://ctan.org/pkg/tipa")
     (synopsis "Fonts and macros for IPA phonetics characters")
     (description
@@ -63815,6 +63917,7 @@ corresponding italics: light, regular, medium, bold, ...")
                (base32
                 "1gpbl3l77mrrf88iqcnfvcgxwraqm2rsvisnngak9fbwbinc489v"))))
     (outputs '("out" "doc"))
+    (properties '((updater-extra-native-inputs "texlive-latex")))
     (build-system texlive-build-system)
     (arguments (list #:texlive-latex-bin? #f))
     (native-inputs (list texlive-latex))
@@ -65811,6 +65914,7 @@ support for page breaks.")
                (base32
                 "0if7pqaib533fbrj9r62mmr4h012hrpszdxs759rwhmyycikg6dk"))))
     (outputs '("out" "doc"))
+    (properties '((updater-extra-native-inputs "texlive-filecontents")))
     (build-system texlive-build-system)
     (arguments
      (list
@@ -66406,6 +66510,7 @@ the document is being typeset.")
                (base32
                 "0g28y2bwqnc3xfcp0ak7rxx0c40b88vl85pj7x5dccmvx0yrxy9n"))))
     (outputs '("out" "doc"))
+    (properties '((updater-extra-native-inputs "texlive-ydoc")))
     (build-system texlive-build-system)
     (native-inputs (list texlive-ydoc))
     (home-page "https://ctan.org/pkg/currfile")
@@ -67134,6 +67239,12 @@ with traditional TeX as well as with Unicode aware variants.")
                (base32
                 "15rqqf0yb09qcs6ibsrkg5jbpzicxkpbj211p6qkfl2fcrc1gndv"))))
     (outputs '("out" "doc"))
+    (properties '((updater-extra-native-inputs "font-dejavu"
+                                               "font-gnu-freefont"
+                                               "font-linuxlibertine"
+                                               "font-sil-ezra"
+                                               "fontconfig"
+                                               "texlive-updmap.cfg")))
     (build-system texlive-build-system)
     (arguments
      (list
@@ -67164,29 +67275,30 @@ with traditional TeX as well as with Unicode aware variants.")
            font-linuxlibertine
            font-sil-ezra
            fontconfig                   ;for XDG_DATA_DIRS (to locate fonts)
-           texlive-amiri
-           texlive-babel
-           texlive-bidi
-           texlive-booktabs
-           texlive-caption
-           texlive-context
-           texlive-fancyvrb
-           texlive-graphics
-           texlive-hyperref
-           texlive-infwarerr
-           texlive-kvoptions
-           texlive-latex-fonts
-           texlive-libertine
-           texlive-metalogo
-           texlive-microtype
-           texlive-noto
-           texlive-paralist
-           texlive-pdftexcmds
-           texlive-tex
-           texlive-tools
-           texlive-xcolor
-           texlive-xetex
-           texlive-zref))
+           (texlive-updmap.cfg
+            (list texlive-amiri
+                  texlive-babel
+                  texlive-bidi
+                  texlive-booktabs
+                  texlive-caption
+                  texlive-context
+                  texlive-fancyvrb
+                  texlive-graphics
+                  texlive-hyperref
+                  texlive-infwarerr
+                  texlive-kvoptions
+                  texlive-latex-fonts
+                  texlive-libertine
+                  texlive-metalogo
+                  texlive-microtype
+                  texlive-noto
+                  texlive-paralist
+                  texlive-pdftexcmds
+                  texlive-tex
+                  texlive-tools
+                  texlive-xcolor
+                  texlive-xetex
+                  texlive-zref))))
     (propagated-inputs
      (list texlive-etoolbox
            texlive-filehook
@@ -68591,6 +68703,7 @@ TeX, and LaTeX font definition and other relevant files.")
                (base32
                 "1nq2il8av1169is3kbq761375vk4znb2cc3f8vk9ab3fh5vqkcjv"))))
     (outputs '("out" "doc"))
+    (properties '((updater-extra-native-inputs "texlive-updmap.cfg")))
     (build-system texlive-build-system)
     (arguments
      (list
@@ -69019,6 +69132,7 @@ modules that use it.")
                (base32
                 "1sa32wnsj84wbwqji1fb4k9ik99dy5ji7zz4v0xbd7306agyhns5"))))
     (outputs '("out" "doc"))
+    (properties '((updater-extra-native-inputs "texlive-cm")))
     (build-system texlive-build-system)
     (native-inputs (list texlive-cm texlive-metafont))
     (home-page "https://ctan.org/pkg/rsfs")
@@ -69519,6 +69633,7 @@ captions sideways.  Options include @code{outercaption}, @code{innercaption},
                (base32
                 "0ljrxbf2p301p4cmadf2w0qb5idvgmx4j6y3kq7qg2v8x4maqqj4"))))
     (outputs '("out" "doc"))
+    (properties '((updater-extra-native-inputs "texlive-cm")))
     (build-system texlive-build-system)
     (arguments
      (list
@@ -70641,8 +70756,10 @@ same job for T1- and TS1-encoded @code{ec} fonts.")
                (base32
                 "0cqwns4zy1847fn3dp8z3wbfpy4dl05cr065nk9k65fmp7wksnjk"))))
     (outputs '("out" "doc"))
+    (properties '((updater-extra-native-inputs "texlive-cm"
+                                               "texlive-metafont")))
     (build-system texlive-build-system)
-    (native-inputs (list texlive-cm texlive-ec texlive-metafont))
+    (native-inputs (list texlive-cm texlive-metafont))
     (propagated-inputs (list texlive-ec))
     (home-page "https://ctan.org/pkg/lh")
     (synopsis "Cyrillic fonts that support LaTeX standard encodings")
@@ -70830,6 +70947,7 @@ natural width.")
                (base32
                 "1swzxgld3lndi5q0q6zkwbw06ndh13fvp04as7zpwyhh646s0hbx"))))
     (outputs '("out" "doc"))
+    (properties '((updater-extra-native-inputs "texlive-cm")))
     (build-system texlive-build-system)
     (native-inputs (list texlive-cm texlive-metafont))
     (home-page "https://ctan.org/pkg/wasy")
@@ -71090,6 +71208,7 @@ e-TeX.")
                (base32
                 "1fp8w8pkxqcv6n8y0zy2rdclm2hcyx4zv93h0fmqai1yvgcx6yh6"))))
     (outputs '("out" "doc"))
+    (properties '((updater-extra-inputs "ghostscript")))
     (build-system texlive-build-system)
     (arguments
      (list #:texlive-latex-bin? #f
@@ -71143,6 +71262,51 @@ documents as well as DVI output.")
                (base32
                 "0i1hqr9zb7b9d1zjlyg4awa6mkyq6wnrb6z4689j1rg07vnbd7mw"))))
     (outputs '("out" "doc"))
+    (properties '((updater-extra-native-inputs "perl-config-autoconf"
+                                               "perl-extutils-libbuilder"
+                                               "perl-file-which"
+                                               "perl-module-build"
+                                               "perl-test-differences")
+                  (updater-extra-inputs "perl"
+                                        "perl-autovivification"
+                                        "perl-class-accessor"
+                                        "perl-data-dump"
+                                        "perl-data-compare"
+                                        "perl-data-uniqid"
+                                        "perl-datetime-format-builder"
+                                        "perl-datetime-calendar-julian"
+                                        "perl-file-slurper"
+                                        "perl-io-string"
+                                        "perl-ipc-cmd"
+                                        "perl-ipc-run3"
+                                        "perl-list-allutils"
+                                        "perl-list-moreutils"
+                                        "perl-mozilla-ca"
+                                        "perl-regexp-common"
+                                        "perl-log-log4perl"
+                                        "perl-parse-recdescent"
+                                        "perl-unicode-collate"
+                                        "perl-unicode-normalize"
+                                        "perl-unicode-linebreak"
+                                        "perl-encode-eucjpascii"
+                                        "perl-encode-jis2k"
+                                        "perl-encode-hanextra"
+                                        "perl-xml-libxml"
+                                        "perl-xml-libxml-simple"
+                                        "perl-xml-libxslt"
+                                        "perl-xml-writer"
+                                        "perl-sort-key"
+                                        "perl-text-csv"
+                                        "perl-text-csv-xs"
+                                        "perl-text-roman"
+                                        "perl-uri"
+                                        "perl-text-bibtex"
+                                        "perl-libwww"
+                                        "perl-lwp-protocol-https"
+                                        "perl-business-isbn"
+                                        "perl-business-issn"
+                                        "perl-business-ismn"
+                                        "perl-lingua-translit")))
     (build-system texlive-build-system)
     (arguments
      (list
@@ -71771,6 +71935,7 @@ number format.")
                (base32
                 "12hbvv1w6b1k29qjvp72bkpnzsxpvrimzshllwinrxh9rx1mn550"))))
     (outputs '("out" "doc"))
+    (properties '((updater-extra-native-inputs "texlive-filecontents")))
     (build-system texlive-build-system)
     (arguments (list #:tex-format "latex"))
     (native-inputs (list texlive-filecontents))
@@ -71801,6 +71966,7 @@ bottom of the page, a new page will be started.")
                (base32
                 "0g9zlbqrgxh3p2vys2s84i8v590qi4fbpppp5lkaqc1di8kw60lm"))))
     (outputs '("out" "doc"))
+    (properties '((updater-extra-native-inputs "texlive-filecontents")))
     (build-system texlive-build-system)
     (arguments (list #:tex-format "latex"))
     (native-inputs (list texlive-filecontents))
@@ -72284,6 +72450,7 @@ of these examples.")
                (base32
                 "0vd90wdjwj5w4g4xka4nms3rgixjw63iwf0hj0v1akcfflwvgn69"))))
     (outputs '("out" "doc"))
+    (properties '((updater-extra-native-inputs "texlive-latex")))
     (build-system texlive-build-system)
     (arguments (list #:texlive-latex-bin? #f))
     (native-inputs (list texlive-latex))
@@ -72884,6 +73051,7 @@ glyphs.")
                (base32
                 "09b51bbm189xh7039h5n8nmab5nn2bybhh26qjn08763m80zdhjg"))))
     (outputs '("out" "doc"))
+    (properties '((updater-extra-native-inputs "texlive-cm")))
     (build-system texlive-build-system)
     (native-inputs (list texlive-cm texlive-metafont))
     (home-page "https://ctan.org/pkg/xypic")
@@ -73024,6 +73192,7 @@ LaTeX, pdfLaTeX, XeLaTeX and LuaLaTeX.")
                (base32
                 "09l5ymgz48s3hyn776l01g3isk3dnhrj1vdavdw4qq4kfxxpqdn9"))))
     (outputs '("out" "doc"))
+    (properties '((updater-extra-propagated-inputs "texlive-psnfss")))
     (build-system texlive-build-system)
     (propagated-inputs
      ;; This provides charter.map.
@@ -77248,6 +77417,7 @@ produced using PSTricks.")
                (base32
                 "0nclsazny3hnzsi2vcixh2g1gsj5lvwxls1v569rms8ykgd9v7z8"))))
     (outputs '("out" "doc"))
+    (properties '((updater-extra-native-inputs "texlive-updmap.cfg")))
     (build-system texlive-build-system)
     (arguments
      (list
@@ -77465,6 +77635,7 @@ package should work with most spell-checkers, even dumb, TeX-unaware ones.")
                (base32
                 "055mz0r837ipb6f0v7lp2imwpy1zh0i45wkd5f1dbpjpb9gf7qny"))))
     (outputs '("out" "doc"))
+    (properties '((updater-extra-native-inputs "texlive-ydoc")))
     (build-system texlive-build-system)
     (native-inputs (list texlive-ydoc))
     (propagated-inputs
@@ -78507,6 +78678,9 @@ the @code{psnfss} distribution.")
                (base32
                 "097lh7ksw9rg93f1c7a4fqglgfpydf1qp3sbgy9xfgszcdpknmrk"))))
     (outputs '("out" "doc"))
+    (properties '((updater-extra-native-inputs "fontconfig"
+                                               "font-gnu-freefont"
+                                               "texlive-updmap.cfg")))
     (build-system texlive-build-system)
     (arguments
      (list
@@ -78526,26 +78700,27 @@ the @code{psnfss} distribution.")
     (native-inputs
      (list fontconfig
            font-gnu-freefont
-           texlive-amsmath
-           texlive-amsfonts
-           texlive-bidi
-           texlive-fancyvrb
-           texlive-fontspec
-           texlive-hologo
-           texlive-hypdoc
-           texlive-hyperref
-           texlive-infwarerr
-           texlive-kvdefinekeys
-           texlive-kvoptions
-           texlive-kvsetkeys
-           texlive-ltxcmds
-           texlive-paralist
-           texlive-pdftexcmds
-           texlive-supertabular
-           texlive-tools
-           texlive-xetex
-           texlive-xkeyval
-           texlive-zref))
+           (texlive-updmap.cfg
+            (list texlive-amsmath
+                  texlive-amsfonts
+                  texlive-bidi
+                  texlive-fancyvrb
+                  texlive-fontspec
+                  texlive-hologo
+                  texlive-hypdoc
+                  texlive-hyperref
+                  texlive-infwarerr
+                  texlive-kvdefinekeys
+                  texlive-kvoptions
+                  texlive-kvsetkeys
+                  texlive-ltxcmds
+                  texlive-paralist
+                  texlive-pdftexcmds
+                  texlive-supertabular
+                  texlive-tools
+                  texlive-xetex
+                  texlive-xkeyval
+                  texlive-zref))))
     (home-page "https://ctan.org/pkg/arabxetex")
     (synopsis "ArabTeX-like interface for XeLaTeX")
     (description
@@ -79081,6 +79256,7 @@ floats merely delays the arrival of the inevitable error message.")
                (base32
                 "19bfi12j5ra19k6vjd1q5fjsm68vipa7ida7pg9pf15l5pxwbgqz"))))
     (outputs '("out" "doc"))
+    (properties '((updater-extra-native-inputs "texlive-filecontents")))
     (build-system texlive-build-system)
     (arguments (list #:tex-format "latex"))
     (native-inputs (list texlive-filecontents))
@@ -79185,6 +79361,7 @@ a physical page.")
                (base32
                 "0mxi28lf97l4zg5kcv524b29n5r167yczrhgy132hql866vkdvyr"))))
     (outputs '("out" "doc"))
+    (properties '((updater-extra-native-inputs "texlive-ydoc")))
     (build-system texlive-build-system)
     (native-inputs (list texlive-ydoc))
     (home-page "https://ctan.org/pkg/ifoddpage")
@@ -79214,6 +79391,7 @@ mode where all pages use the odd page layout.")
                (base32
                 "1vbjq9aq2kbncq1dn4rk7jspfb6kcxk66h49z0xz1qix5yg94gmx"))))
     (outputs '("out" "doc"))
+    (properties '((updater-extra-native-inputs "texlive-ydoc")))
     (build-system texlive-build-system)
     (native-inputs (list texlive-ydoc))
     (home-page "https://ctan.org/pkg/storebox")
@@ -79243,6 +79421,7 @@ store boxes behave the same as save boxes.")
                (base32
                 "0mn0hdzjhbmziqqh2k7knfz816lxbjil0zld0n30qi3ila5v3gk6"))))
     (outputs '("out" "doc"))
+    (properties '((updater-extra-native-inputs "texlive-ydoc")))
     (build-system texlive-build-system)
     (native-inputs (list texlive-ydoc))
     (home-page "https://ctan.org/pkg/collectbox")
@@ -84139,6 +84318,7 @@ solving max-flow min-cut problems.")
                (base32
                 "02iqc3i3n3d16xx8hgfy5s28h26fhnqf1f4kcxap6rssr165jj3h"))))
     (outputs '("out" "doc"))
+    (properties '((updater-extra-native-inputs "texlive-ydoc")))
     (build-system texlive-build-system)
     (native-inputs (list texlive-ydoc))
     (propagated-inputs
@@ -84222,6 +84402,7 @@ the columns and the least significant variables are placed left of the rows.")
                (base32
                 "0116a920z8hq3v50gmgh3f8diq7307wx0zsh2pmznw7gkvn6rn4k"))))
     (outputs '("out" "doc"))
+    (properties '((updater-extra-native-inputs "texlive-filecontents")))
     (build-system texlive-build-system)
     (arguments (list #:tex-format "latex"))
     (native-inputs (list texlive-filecontents))
@@ -84523,6 +84704,7 @@ diagrams (specially in power electronics).")
                (base32
                 "0xkv6rvkbchkwgfam5kiymng0xnc4vja5xb3b5d89rngdr041xwk"))))
     (outputs '("out" "doc"))
+    (properties '((updater-extra-native-inputs "texlive-updmap.cfg")))
     (build-system texlive-build-system)
     (arguments (list #:tex-format "latex"))
     (native-inputs
@@ -85341,6 +85523,7 @@ LaTeX documents, using the TikZ package.")
                (base32
                 "16kbmf9fckms0vhi41h2p6k8znv6plzwn4f2j374zmpqphq1m3il"))))
     (outputs '("out" "doc"))
+    (properties '((updater-extra-native-inputs "texlive-updmap.cfg")))
     (build-system texlive-build-system)
     (arguments (list #:tex-format "latex"))
     (native-inputs
@@ -85553,6 +85736,7 @@ in design methods.")
                (base32
                 "0z4dnd369q1ynpb3xd4pwyhmysn78zx8izq7va1s5kpwdr2hdj99"))))
     (outputs '("out" "doc"))
+    (properties '((updater-extra-inputs "perl")))
     (build-system texlive-build-system)
     (arguments
      (list #:link-scripts #~(list "fig4latex")))
@@ -85846,6 +86030,7 @@ files.")
                (base32
                 "0qy3ri6fdgzdslaaa7gakswvpc299xyarm8ng4cs8w64q14675r1"))))
     (outputs '("out" "doc"))
+    (properties '((updater-extra-native-inputs "texlive-updmap.cfg")))
     (build-system texlive-build-system)
     (arguments (list #:tex-format "latex"))
     (native-inputs
@@ -86518,6 +86703,7 @@ several variants, designed to fit with the Computer Modern-set text.")
                (base32
                 "0ml24rxbl1yir4s3fjjxm0z7axklc3p33syg41b76zc7hck9mk8s"))))
     (outputs '("out" "doc"))
+    (properties '((updater-extra-native-inputs "texlive-cm")))
     (build-system texlive-build-system)
     (native-inputs (list texlive-cm texlive-metafont))
     (home-page "https://ctan.org/pkg/eurosym")
@@ -87006,6 +87192,7 @@ source of that support.")
                (base32
                 "0w5gp11ccc486lckzag63arg97g1r0zkf29bdnnk13pz4r5m2lgx"))))
     (outputs '("out" "doc"))
+    (properties '((updater-extra-native-inputs "texlive-xetex")))
     (build-system texlive-build-system)
     (arguments (list #:tex-format "xelatex"))
     (native-inputs (list texlive-xetex))
@@ -87107,6 +87294,7 @@ handle complex tests.")
         (base32
          "12j2bi0wwp1hyxr1427hhigqmhsd1fyg90bvghxkm1qck85r24vf"))))
     (outputs '("out" "doc"))
+    (properties '((updater-ignored-inputs "perl"))) ;in "-bin" already
     (build-system texlive-build-system)
     (propagated-inputs (list texlive-xindy-bin))
     (home-page "https://ctan.org/pkg/xindy")
@@ -89808,6 +89996,7 @@ letters in their names may be defined.")
                (base32
                 "0rcw2d5ncq8avk33nxika34q3da1v4kcmr6jqdxdg49bq4h8ljs7"))))
     (outputs '("out" "doc"))
+    (properties '((updater-extra-native-inputs "texlive-updmap.cfg")))
     (build-system texlive-build-system)
     (arguments (list #:tex-format "latex"))
     (native-inputs
@@ -89909,10 +90098,15 @@ compatibility reasons.")
                (base32
                 "11y6xazv1nk0m2hzsainjr8ijn5cff04xfccm6a65hzg7ipggraj"))))
     (outputs '("out" "doc"))
+    (properties '((updater-extra-native-inputs "texlive-l3kernel"
+                                               "texlive-l3packages"
+                                               "texlive-latex"
+                                               "texlive-latexconfig"
+                                               "texlive-tex-ini-files")))
     (build-system texlive-build-system)
     ;; Building `texlive-everyshi' requires "latex" format, provided by
     ;; `texlive-latex-bin'.  However, `texlive-everyshi' is also a propagated
-    ;; inputs from `texlive-latex-bin'.  To work around this cycle, build
+    ;; input from `texlive-latex-bin'.  To work around this cycle, build
     ;; a temporary "latex.fmt" format file, and use it to build the package.
     ;; At the end of the process, remove that temporary format file.
     (arguments
@@ -90079,6 +90273,8 @@ package allows such line breaks in the generated links.")
                (base32
                 "0wxpa4s2rx54z259zmg5km91ycydra4d9kn3y6mhkvjjif1yl8av"))))
     (outputs '("out" "doc"))
+    (properties '((updater-extra-native-inputs "texlive-concrete"
+                                               "texlive-pl")))
     (build-system texlive-build-system)
     (native-inputs (list texlive-concrete texlive-metafont texlive-pl))
     (home-page "https://ctan.org/pkg/cc-pl")
@@ -91026,6 +91222,7 @@ terms and acronyms with their expanded form.")
                (base32
                 "0j8z47n0aawhvz2s4i0pwfp7yq1vqsxbd2sjx7f955n6k2f54hhw"))))
     (outputs '("out" "doc"))
+    (properties '((updater-extra-native-inputs "texlive-updmap.cfg")))
     (build-system texlive-build-system)
     (arguments (list #:tex-format "latex"))
     (native-inputs
@@ -91070,6 +91267,7 @@ joint status in symbols of life contingencies.")
                (base32
                 "1rnipnm3crv9qmcf7icymizkp4bkkaa1p50qfni04aq89csqnkwq"))))
     (outputs '("out" "doc"))
+    (properties '((updater-extra-native-inputs "texlive-updmap.cfg")))
     (build-system texlive-build-system)
     (arguments
      (list
@@ -92028,6 +92226,7 @@ the Elsevier ENTCS layout")
                (base32
                 "0hadz4qwaks604mp9zb2cklx77v626vbjri7h0gs847mch35mrnw"))))
     (outputs '("out" "doc"))
+    (properties '((updater-extra-inputs "perl")))
     (build-system texlive-build-system)
     (arguments (list #:link-scripts #~(list "authorindex")))
     (inputs (list perl))
@@ -92107,6 +92306,7 @@ equations that are referenced.  This operation is similar to the
                (base32
                 "0sdlazmx6g530ava1ip8mafbd2p57i7mf8sdlg3y1m4bvq244v4m"))))
     (outputs '("out" "doc"))
+    (properties '((updater-extra-native-inputs "texlive-updmap.cfg")))
     (build-system texlive-build-system)
     (arguments (list #:tex-format "pdflatex"))
     (native-inputs
@@ -100109,6 +100309,7 @@ classes.")
                (base32
                 "1xkc0syipviic3cfc4y3lx5zza13cs8ykmbcvcn30ls17y50rmkm"))))
     (outputs '("out" "doc"))
+    (properties '((updater-extra-native-inputs "texlive-ydoc")))
     (build-system texlive-build-system)
     (native-inputs (list texlive-ydoc))
     (home-page "https://ctan.org/pkg/easyfig")
@@ -101438,6 +101639,7 @@ Metafont source and LaTeX macro support.")
                (base32
                 "12ljghlhh7li8pgpaa39gnsvvn4l4bmww74zik4q3qmirkhvi949"))))
     (outputs '("out" "doc"))
+    (properties '((updater-extra-native-inputs "texlive-updmap.cfg")))
     (build-system texlive-build-system)
     (arguments (list #:tex-format "latex"))
     (native-inputs
@@ -101799,6 +102001,7 @@ and prints it verbatim on the right.")
                (base32
                 "1i5l1a7ay63b0lqzqsc10ywlqqi1byng7zr4fn7g28v99831wmp4"))))
     (outputs '("out" "doc"))
+    (properties '((updater-extra-inputs "perl")))
     (build-system texlive-build-system)
     (arguments (list #:link-scripts #~(list "exceltex")))
     (inputs (list perl))
@@ -102148,6 +102351,7 @@ LaTeX, to generate a nice solution book.")
                (base32
                 "1w2nsgfyhjzg0gwr3rzhq13jh7lj63lh36qjv16hayd2kxrcpb62"))))
     (outputs '("out" "doc"))
+    (properties '((updater-extra-native-inputs "texlive-updmap.cfg")))
     (build-system texlive-build-system)
     (arguments (list #:tex-format "latex"))
     (native-inputs
@@ -103686,6 +103890,7 @@ rather than being numbered sequentially through the document.")
                (base32
                 "1xbl5lzyd264avy3dkqz7yq8imk6pziaalhi7smh9d4jra6412a3"))))
     (outputs '("out" "doc"))
+    (properties '((updater-extra-native-inputs "texlive-updmap.cfg")))
     (build-system texlive-build-system)
     (arguments
      (list
@@ -105397,6 +105602,7 @@ supported.")
                (base32
                 "1vppjv24cwnizg96pyhj68g2wx8dd4193c6bm2k4visqwpnwh95p"))))
     (outputs '("out" "doc"))
+    (properties '((updater-extra-native-inputs "texlive-updmap.cfg")))
     (build-system texlive-build-system)
     (arguments (list #:tex-format "latex"))
     (native-inputs
@@ -105738,6 +105944,7 @@ environments.")
                (base32
                 "0xszyc03vf7h160gxqfd8yfs4aya7s17av4ylf9nc6abbvwipapk"))))
     (outputs '("out" "doc"))
+    (properties '((updater-extra-native-inputs "texlive-updmap.cfg")))
     (build-system texlive-build-system)
     (arguments (list #:tex-format "latex"))
     (native-inputs
@@ -109507,6 +109714,7 @@ the Harel-extensions for the Play-In/Play-Out approach.")
                (base32
                 "0frav8hr2xwpdpkb0qlz3sdiy3vhpln36rk58grvzqdiissa1azg"))))
     (outputs '("out" "doc"))
+    (properties '((updater-extra-native-inputs "texlive-ydoc")))
     (build-system texlive-build-system)
     (native-inputs (list texlive-ydoc))
     (home-page "https://ctan.org/pkg/lstaddons")
@@ -109928,6 +110136,7 @@ LuaTeX (@code{pdfliteral} mode) by a hierarchical name system.")
                (base32
                 "1abi3xvy123alpgv0z7h7gyfj2ynz462vfsxpx0q5pnbv8648y3h"))))
     (outputs '("out" "doc"))
+    (properties '((updater-extra-native-inputs "texlive-ctex")))
     (build-system texlive-build-system)
     (native-inputs (list texlive-ctex))
     (home-page "https://ctan.org/pkg/magicwatermark")
@@ -111086,6 +111295,7 @@ annotations.")
                (base32
                 "0z53r59771rdkbqxyjxn37r2ra67kw0ir0fnggmza90h3vidq5yg"))))
     (outputs '("out" "doc"))
+    (properties '((updater-extra-native-inputs "texlive-filecontents")))
     (build-system texlive-build-system)
     (arguments (list #:tex-format "latex"))
     (native-inputs (list texlive-filecontents))
@@ -112024,6 +112234,7 @@ similar definitions.")
                (base32
                 "0m3p6ql3mqipay9caif3n92687jwnrnhbvwdwa5y5ibrqqpnxi59"))))
     (outputs '("out" "doc"))
+    (properties '((updater-extra-native-inputs "texlive-ydoc")))
     (build-system texlive-build-system)
     (native-inputs (list texlive-ydoc))
     (home-page "https://ctan.org/pkg/multienv")
@@ -112184,6 +112395,7 @@ the unique build number describing the progress of your document.")
                (base32
                 "19ak9zq3mcz2bla9vwvlbvj8h6k64n0wpsvjbbdql51jrqa1r4dj"))))
     (outputs '("out" "doc"))
+    (properties '((updater-extra-native-inputs "texlive-ydoc")))
     (build-system texlive-build-system)
     (native-inputs (list texlive-ydoc))
     (home-page "https://ctan.org/pkg/mwe")
@@ -112344,6 +112556,7 @@ minimize writing and production time and cost.")
                (base32
                 "1k4j0rjfl0cy0in272k3dyiqzq5nc31zhygqckfvaw328mkkagz9"))))
     (outputs '("out" "doc"))
+    (properties '((updater-extra-native-inputs "texlive-updmap.cfg")))
     (build-system texlive-build-system)
     (arguments (list #:tex-format "latex"))
     (native-inputs
@@ -112524,6 +112737,7 @@ all sizing is set automatically.")
                (base32
                 "1naa0w3bvnj709msfq9kk6yb7b5qf1sahisjr7z8bfs1q17ml8xc"))))
     (outputs '("out" "doc"))
+    (properties '((updater-extra-native-inputs "texlive-updmap.cfg")))
     (build-system texlive-build-system)
     (arguments
      (list
@@ -115764,6 +115978,7 @@ including back links.")
                (base32
                 "1b5fmrzaif2d7rwbwlpd9xdykpw1r5p5cpjqiw3gs1f3241p43f4"))))
     (outputs '("out" "doc"))
+    (properties '((updater-extra-native-inputs "texlive-updmap.cfg")))
     (build-system texlive-build-system)
     (home-page "https://ctan.org/pkg/powerdot")
     (arguments
@@ -116983,6 +117198,7 @@ binder cover sheets.")
                (base32
                 "0794jd9d28rjvwk6bx93al2dcavjrb341yjmivhmq74d504wahpf"))))
     (outputs '("out" "doc"))
+    (properties '((updater-extra-native-inputs "texlive-updmap.cfg")))
     (build-system texlive-build-system)
     (arguments (list #:tex-format "latex"))
     (native-inputs (list (texlive-updmap.cfg (list texlive-hypdoc))))
@@ -119136,6 +119352,7 @@ document.")
                (base32
                 "1j1cb5qy25qni8wq1kaf6p6c0whzrbymhm00g4jjajaizagm4ki2"))))
     (outputs '("out" "doc"))
+    (properties '((updater-extra-native-inputs "texlive-updmap.cfg")))
     (build-system texlive-build-system)
     (arguments (list #:tex-format "latex"))
     (native-inputs
@@ -120848,6 +121065,7 @@ for Subversion rather than CVS.")
                (base32
                 "1sfvp00c7bcql1hdmsmvc28jhngc553g8ldrjglvjp8gvcfpjww5"))))
     (outputs '("out" "doc"))
+    (properties '((updater-extra-native-inputs "texlive-ydoc")))
     (build-system texlive-build-system)
     (arguments (list #:link-scripts #~(list "svn-multi.pl")))
     (native-inputs (list texlive-ydoc))
@@ -121169,6 +121387,7 @@ to provide several tables.")
                (base32
                 "1bwwqzdfsqnm338qwnc0lnyskk58k6s4lr0v2gfizskamzygmi1b"))))
     (outputs '("out" "doc"))
+    (properties '((updater-extra-native-inputs "texlive-updmap.cfg")))
     (build-system texlive-build-system)
     (arguments (list #:tex-format "latex"))
     (native-inputs
@@ -121640,6 +121859,7 @@ from a template document.)")
                (base32
                 "0vkp71bpmhs3ys29cx4sxcvqqx63pqym6n87j3sr5hy7rw20ya0x"))))
     (outputs '("out" "doc"))
+    (properties '((updater-extra-native-inputs "texlive-updmap.cfg")))
     (build-system texlive-build-system)
     (arguments (list #:tex-format "latex"))
     (native-inputs
@@ -121759,6 +121979,7 @@ kind of terms with a continuous number.  Candidate terms may appear inside an
                (base32
                 "1yz4kjvc4ip58vnwcvyiyg65sr9szy6z772cammdakx2ga344v78"))))
     (outputs '("out" "doc"))
+    (properties '((updater-extra-native-inputs "texlive-ctex")))
     (build-system texlive-build-system)
     (native-inputs (list texlive-ctex))
     (home-page "https://ctan.org/pkg/termsim")
@@ -124530,6 +124751,7 @@ package.  It is backwards compatible with the original environments.")
                (base32
                 "1a5dlivmmpanlk376c3f9hx71cmb2cx0dg8ijhl7bccqic0zx234"))))
     (outputs '("out" "doc"))
+    (properties '((updater-extra-native-inputs "texlive-ctex")))
     (build-system texlive-build-system)
     (native-inputs (list texlive-ctex))
     (home-page "https://ctan.org/pkg/wrapstuff")
@@ -124602,6 +124824,7 @@ formats.")
                (base32
                 "1gbdnc1k819fncvnhzihx9q6qdxsrkpfjy47dh70bdwqf5klhqbh"))))
     (outputs '("out" "doc"))
+    (properties '((updater-extra-native-inputs "texlive-updmap.cfg")))
     (build-system texlive-build-system)
     (arguments (list #:tex-format "latex"))
     (native-inputs
@@ -125124,6 +125347,7 @@ only if it is necessary.")
                (base32
                 "01khzfgkvsfs8vs64wym07k5hnaa0rmcgpgajp1q06g5f9shcsjc"))))
     (outputs '("out" "doc"))
+    (properties '((updater-extra-native-inputs "texlive-updmap.cfg")))
     (build-system texlive-build-system)
     (arguments
      (list #:tex-format "latex"
@@ -125454,6 +125678,7 @@ appearance and a smooth flow.")
                (base32
                 "0cwd7yzmsp3jxb9190cqy05mbp40kw5qx1fjc7f8rbf5m2dfcbb7"))))
     (outputs '("out" "doc"))
+    (properties '((updater-extra-inputs "perl")))
     (build-system texlive-build-system)
     (arguments (list #:link-scripts #~(list "yplan")))
     (inputs (list perl))
