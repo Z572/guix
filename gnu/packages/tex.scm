@@ -49220,7 +49220,7 @@ adapt the plain e-TeX source file to work with XeTeX and LuaTeX.")
             (lambda _
               (let* ((cwd (getcwd))
                      (mf (string-append cwd "/metafont"))
-                     (modes #$(this-package-native-input "texlive-modes")))
+                     (modes #$(this-package-input "texlive-modes")))
                 (setenv "MFINPUTS"
                         (string-append
                          modes "/share/texmf-dist/fonts/source/public/modes:"
@@ -49238,8 +49238,7 @@ adapt the plain e-TeX source file to work with XeTeX and LuaTeX.")
                 (install-file "mf.base"
                               (string-append #$output
                                              "/share/texmf-dist/web2c"))))))))
-    (native-inputs
-     (list texlive-bin texlive-modes))
+    (propagated-inputs (list texlive-kpathsea texlive-modes))
     (home-page "https://ctan.org/pkg/metafont")
     (synopsis "Metafont base files")
     (description "This package provides the Metafont base files needed to
