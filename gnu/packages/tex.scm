@@ -53719,6 +53719,7 @@ the conversion engine.")
                 "1kh4cpvrxgcvnmzxgb3my4jawyqd4348cy6h195346pvdb5xsphh"))))
     (outputs '("out" "doc"))
     (build-system texlive-build-system)
+    (arguments (list #:link-scripts #~(list "texaccents.sno")))
     (home-page "https://ctan.org/pkg/texaccents")
     (synopsis "Convert composite accented characters to Unicode")
     (description
