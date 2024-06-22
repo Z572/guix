@@ -41319,6 +41319,7 @@ submission has to be requested by an appropriate command line option.")
                (base32
                 "09ngqgs08q8bld334jrzhnd558lv7fajfppmfrkp4kv9hc5iyz9a"))))
     (outputs '("out" "doc"))
+    (properties '((upstream-name . "ctan_chk")))
     (build-system texlive-build-system)
     (home-page "https://ctan.org/pkg/ctan_chk")
     (synopsis "CTAN guidelines verifier and corrector for uploading projects")
