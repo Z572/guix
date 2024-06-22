@@ -60924,6 +60924,7 @@ with LaTeX.")
                (base32
                 "1z0cgjslx4kx8fspf3i5h4idxlzhgpm14i16vq88c96z8cdjb2xy"))))
     (outputs '("out" "doc"))
+    (properties '((upstream-name . "blockdraw_mp")))
     (build-system texlive-build-system)
     (home-page "https://ctan.org/pkg/blockdraw_mp")
     (synopsis "Block diagrams and bond graphs, with MetaPost")
