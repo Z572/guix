@@ -22879,6 +22879,7 @@ links to the individual documents, either in HTML or in PDF format.")
               (sha256
                (base32
                 "1qzn0n19lslf2qg8fvm844xx5k7s8a275a77z2ynbb0vs1w4prpw"))))
+    (properties '((upstream-name . "ksfh_nat")))
     (build-system texlive-build-system)
     (home-page "https://ctan.org/pkg/ksfh-nat")
     (synopsis "BibTeX style for KSFH Munich")
