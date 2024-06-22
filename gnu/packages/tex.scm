@@ -77272,6 +77272,7 @@ differential equations; box plots; matrix plots; and pie charts.")
                (base32
                 "00vgcdf73p4143dfjcvs4b5v4phvisv76ink3iiijl6s6f9zbmy3"))))
     (outputs '("out" "doc"))
+    (properties '((upstream-name . "pstricks_calcnotes")))
     (build-system texlive-build-system)
     (home-page "https://ctan.org/pkg/pstricks-calcnotes")
     (synopsis "Use of PSTricks in calculus lecture notes")
