@@ -116969,6 +116969,7 @@ The author now considers the package obsolete, and recommends use of
                (base32
                 "18js88apqcvsr4z4fwjf6219d28fxnhcv3srhhksbi5h4ky8y88m"))))
     (outputs '("out" "doc"))
+    (properties '((upstream-name . "ran_toks")))
     (build-system texlive-build-system)
     (home-page "https://ctan.org/pkg/ran_toks")
     (synopsis "Randomise token strings")
