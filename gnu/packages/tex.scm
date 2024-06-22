@@ -52768,6 +52768,7 @@ Currently the template is only designed for Chinese typesetting.")
                (base32
                 "15w8sggvlh28567y1d4vpbq8and12hvhphfvd7vabbn8g1l6h1yi"))))
     (outputs '("out" "doc"))
+    (properties '((upstream-name . "r_und_s")))
     (build-system texlive-build-system)
     (home-page "https://ctan.org/pkg/r-und-s")
     (synopsis "Chemical hazard codes")
