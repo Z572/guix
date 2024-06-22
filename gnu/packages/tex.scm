@@ -194,27 +194,41 @@
   (define-deprecated/public old-name name
     (deprecated-package (symbol->string 'old-name) name)))
 
-(define %texlive-version "2023.0")
-
-(define texlive-source
-  (origin
-    (method svn-fetch)
-    (uri (svn-reference
-          (url (string-append %texlive-repository
-                              "tags/texlive-" %texlive-version "/Build/source/"))
-          (revision 66594)))
-    (file-name (git-file-name "texlive-source" %texlive-version))
-    (sha256
-     (base32
-      "186q0r00zfd39wc9r56rvbxs8f1xix7hlrz62zj07c68a0fy76rd"))))
+(define-public texlive-source
+  (package
+    (name "texlive-source")
+    (version "2023.0")
+    (source
+     (origin
+       ;; This could be written as a SVN reference, but with a multi-reference
+       ;; the package can benefit from the `texlive' updater.
+       (method svn-multi-fetch)
+       (uri (svn-multi-reference
+             (url (string-append %texlive-repository
+                                 "tags/texlive-" version "/Build/source"))
+             (revision 66594)
+             (locations (list "./"))))
+       (file-name (git-file-name name version))
+       (sha256
+        (base32
+         "186q0r00zfd39wc9r56rvbxs8f1xix7hlrz62zj07c68a0fy76rd"))))
+    (build-system trivial-build-system)
+    (arguments (list #:builder #~(mkdir #$output)))
+    (home-page "https://www.tug.org/texlive/")
+    (synopsis "Source code for all TeX Live programs")
+    (description
+     "This package fetches the source for all TeX Live programs provided by
+the TeX Live repository.  It is meant to be used as a source-only package; it
+should not be installed in a profile.")
+    (license (license:fsf-free "https://www.tug.org/texlive/copying.html"))))
 
 (define-public texlive-libkpathsea
   (package
     (name "texlive-libkpathsea")
-    (version %texlive-version)
+    (version (package-version texlive-source))
     (source
      (origin
-       (inherit texlive-source)
+       (inherit (package-source texlive-source))
        (modules '((guix build utils)
                   (ice-9 ftw)))
        (snippet
@@ -312,10 +326,10 @@ of user-specified directories similar to how shells look up executables.")
 (define-public texlive-libptexenc
   (package
     (name "texlive-libptexenc")
-    (version %texlive-version)
+    (version (package-version texlive-source))
     (source
      (origin
-       (inherit texlive-source)
+       (inherit (package-source texlive-source))
        (modules '((guix build utils)
                   (ice-9 ftw)))
        (snippet
@@ -754,10 +768,10 @@ and should be preferred to it whenever a package would otherwise depend on
 (define-public texlive-bin
   (package
     (name "texlive-bin")
-    (version %texlive-version)
+    (version (package-version texlive-source))
     (source
      (origin
-       (inherit texlive-source)
+       (inherit (package-source texlive-source))
        (modules '((guix build utils)
                   (ice-9 ftw)))
        (snippet
@@ -887,7 +901,7 @@ Live collection or scheme package to their profile instead of this package.")
 (define-public texlive-scheme-basic
   (package
     (name "texlive-scheme-basic")
-    (version %texlive-version)
+    (version (package-version texlive-source))
     (source #f)
     (build-system trivial-build-system)
     (arguments (list #:builder #~(mkdir #$output)))
@@ -906,7 +920,7 @@ Computer Modern fonts.  This scheme corresponds to @code{collection-basic} and
 (define-public texlive-scheme-bookpub
   (package
     (name "texlive-scheme-bookpub")
-    (version %texlive-version)
+    (version (package-version texlive-source))
     (source #f)
     (build-system trivial-build-system)
     (arguments (list #:builder #~(mkdir #$output)))
@@ -950,7 +964,7 @@ mathematical or other technical packages.")
 (define-public texlive-scheme-context
   (package
     (name "texlive-scheme-context")
-    (version %texlive-version)
+    (version (package-version texlive-source))
     (source #f)
     (build-system trivial-build-system)
     (arguments (list #:builder #~(mkdir #$output)))
@@ -984,7 +998,7 @@ mathematical or other technical packages.")
 (define-public texlive-scheme-full
   (package
     (name "texlive-scheme-full")
-    (version %texlive-version)
+    (version (package-version texlive-source))
     (source #f)
     (build-system trivial-build-system)
     (arguments (list #:builder #~(mkdir #$output)))
@@ -1037,7 +1051,7 @@ mathematical or other technical packages.")
 (define-public texlive-scheme-gust
   (package
     (name "texlive-scheme-gust")
-    (version %texlive-version)
+    (version (package-version texlive-source))
     (source #f)
     (build-system trivial-build-system)
     (arguments (list #:builder #~(mkdir #$output)))
@@ -1084,7 +1098,7 @@ typeset Polish plain TeX, LaTeX and ConTeXt documents in PostScript or PDF.")
 (define-public texlive-scheme-medium
   (package
     (name "texlive-scheme-medium")
-    (version %texlive-version)
+    (version (package-version texlive-source))
     (source #f)
     (build-system trivial-build-system)
     (arguments (list #:builder #~(mkdir #$output)))
@@ -1120,7 +1134,7 @@ LaTeX, many recommended packages, and support for most European languages.")
 (define-public texlive-scheme-minimal
   (package
     (name "texlive-scheme-minimal")
-    (version %texlive-version)
+    (version (package-version texlive-source))
     (source #f)
     (build-system trivial-build-system)
     (arguments (list #:builder #~(mkdir #$output)))
@@ -1137,7 +1151,7 @@ Live infrastructure.  This scheme corresponds exactly to
 (define-public texlive-scheme-small
   (package
     (name "texlive-scheme-small")
-    (version %texlive-version)
+    (version (package-version texlive-source))
     (source #f)
     (build-system trivial-build-system)
     (arguments (list #:builder #~(mkdir #$output)))
@@ -1187,7 +1201,7 @@ variant.  It adds XeTeX, MetaPost, and some recommended packages to
 (define-public texlive-scheme-tetex
   (package
     (name "texlive-scheme-tetex")
-    (version %texlive-version)
+    (version (package-version texlive-source))
     (source #f)
     (build-system trivial-build-system)
     (arguments (list #:builder #~(mkdir #$output)))
@@ -1271,7 +1285,7 @@ This function is meant to be used in packages as a native input, to build
 documentation in the TeX format."
     (let ((default-packages (list texlive-scheme-basic)))
       (package
-        (version "2023.0")
+        (version (package-version texlive-source))
         (source (package-source texlive-scripts))
         (name "texlive-updmap.cfg")
         (build-system copy-build-system)
@@ -2093,7 +2107,7 @@ ligatures, but also offers additional control over them.")
     (name "texlive-afm2pl-bin")
     (source
      (origin
-       (inherit texlive-source)
+       (inherit (package-source texlive-source))
        (modules '((guix build utils)
                   (ice-9 ftw)))
        (snippet
@@ -4885,7 +4899,7 @@ other parts.")
     (name "texlive-autosp-bin")
     (source
      (origin
-       (inherit texlive-source)
+       (inherit (package-source texlive-source))
        (modules '((guix build utils)
                   (ice-9 ftw)))
        (snippet
@@ -4969,7 +4983,7 @@ the pdf code inserted in the output file.  The processing involves a run of
     (name "texlive-axodraw2-bin")
     (source
      (origin
-       (inherit texlive-source)
+       (inherit (package-source texlive-source))
        (modules '((guix build utils)
                   (ice-9 ftw)))
        (snippet
@@ -11292,7 +11306,7 @@ supported.")
     (name "texlive-cjkutils-bin")
     (source
      (origin
-       (inherit texlive-source)
+       (inherit (package-source texlive-source))
        (modules '((guix build utils)
                   (ice-9 ftw)))
        (snippet
@@ -18910,7 +18924,7 @@ create a PDF of your score.")
     (name "texlive-gregoriotex-bin")
     (source
      (origin
-       (inherit texlive-source)
+       (inherit (package-source texlive-source))
        (modules '((guix build utils)
                   (ice-9 ftw)))
        (snippet
@@ -25486,7 +25500,7 @@ those who prefer its language.")
     (name "texlive-m-tx-bin")
     (source
      (origin
-       (inherit texlive-source)
+       (inherit (package-source texlive-source))
        (modules '((guix build utils)
                   (ice-9 ftw)))
        (snippet
@@ -27658,7 +27672,7 @@ source file.  This should be used before using @code{\\TransformNotes}.")
     (name "texlive-musixtnt-bin")
     (source
      (origin
-       (inherit texlive-source)
+       (inherit (package-source texlive-source))
        (modules '((guix build utils)
                   (ice-9 ftw)))
        (snippet
@@ -31048,7 +31062,7 @@ a score.")
     (name "texlive-pmx-bin")
     (source
      (origin
-       (inherit texlive-source)
+       (inherit (package-source texlive-source))
        (modules '((guix build utils)
                   (ice-9 ftw)))
        (snippet
@@ -39377,7 +39391,7 @@ fonts, in both Metafont and Type 1 formats.")
     (name "texlive-velthuis-bin")
     (source
      (origin
-       (inherit texlive-source)
+       (inherit (package-source texlive-source))
        (modules '((guix build utils)
                   (ice-9 ftw)))
        (snippet
@@ -39555,7 +39569,7 @@ the end of a line.")
     (name "texlive-vlna-bin")
     (source
      (origin
-       (inherit texlive-source)
+       (inherit (package-source texlive-source))
        (modules '((guix build utils)
                   (ice-9 ftw)))
        (snippet
@@ -40817,7 +40831,7 @@ order are controlled by an external configuration file.")
     (name "texlive-bibtex8-bin")
     (source
      (origin
-       (inherit texlive-source)
+       (inherit (package-source texlive-source))
        (modules '((guix build utils)
                   (ice-9 ftw)))
        (snippet
@@ -41077,7 +41091,7 @@ Filters are also provided for checking the LaTeX parts of CWEB documents.")
     (name "texlive-chktex-bin")
     (source
      (origin
-       (inherit texlive-source)
+       (inherit (package-source texlive-source))
        (modules '((guix build utils)
                   (ice-9 ftw)))
        (snippet
@@ -41610,7 +41624,7 @@ Kubowicz's OpenDetex as its successor.")
     (name "texlive-detex-bin")
     (source
      (origin
-       (inherit texlive-source)
+       (inherit (package-source texlive-source))
        (modules '((guix build utils)
                   (ice-9 ftw)))
        (snippet
@@ -41770,7 +41784,7 @@ which is readily readable by humans.  The DTL bundle contains an assembler
     (name "texlive-dtl-bin")
     (source
      (origin
-       (inherit texlive-source)
+       (inherit (package-source texlive-source))
        (modules '((guix build utils)
                   (ice-9 ftw)))
        (snippet
@@ -41893,7 +41907,7 @@ the document.")
     (name "texlive-dvi2tty-bin")
     (source
      (origin
-       (inherit texlive-source)
+       (inherit (package-source texlive-source))
        (modules '((guix build utils)
                   (ice-9 ftw)))
        (snippet
@@ -42047,7 +42061,7 @@ exclusions.")
     (name "texlive-dvidvi-bin")
     (source
      (origin
-       (inherit texlive-source)
+       (inherit (package-source texlive-source))
        (modules '((guix build utils)
                   (ice-9 ftw)))
        (snippet
@@ -42154,7 +42168,7 @@ file.  It also supports XeTeX XDV format.")
     (name "texlive-dviljk-bin")
     (source
      (origin
-       (inherit texlive-source)
+       (inherit (package-source texlive-source))
        (modules '((guix build utils)
                   (ice-9 ftw)))
        (snippet
@@ -42230,7 +42244,7 @@ transforms between a DVI file and a text file.")
     (name "texlive-dviout-util-bin")
     (source
      (origin
-       (inherit texlive-source)
+       (inherit (package-source texlive-source))
        (modules '((guix build utils)
                   (ice-9 ftw)))
        (snippet
@@ -42309,7 +42323,7 @@ not read the postamble, so it can be started before TeX finishes.")
     (name "texlive-dvipng-bin")
     (source
      (origin
-       (inherit texlive-source)
+       (inherit (package-source texlive-source))
        (modules '((guix build utils)
                   (ice-9 ftw)))
        (snippet
@@ -42391,7 +42405,7 @@ and @samp{y} location.")
     (name "texlive-dvipos-bin")
     (source
      (origin
-       (inherit texlive-source)
+       (inherit (package-source texlive-source))
        (modules '((guix build utils)
                   (ice-9 ftw)))
        (snippet
@@ -42496,7 +42510,7 @@ support SVG fonts are enabled to render the graphics properly.")
     (name "texlive-dvisvgm-bin")
     (source
      (origin
-       (inherit texlive-source)
+       (inherit (package-source texlive-source))
        (modules '((guix build utils)
                   (ice-9 ftw)))
        (snippet
@@ -45191,7 +45205,7 @@ distributed as package @code{pTeX-manual}.")
     (name "texlive-ptex-bin")
     (source
      (origin
-       (inherit texlive-source)
+       (inherit (package-source texlive-source))
        (modules '((guix build utils)
                   (ice-9 ftw)))
        (snippet
@@ -46859,7 +46873,7 @@ a Type 1 font.
     (name "texlive-lcdftypetools-bin")
     (source
      (origin
-       (inherit texlive-source)
+       (inherit (package-source texlive-source))
        (modules '((guix build utils)
                   (ice-9 ftw)))
        (snippet
@@ -47671,7 +47685,7 @@ does pdfTeX.")
     (name "texlive-dvipdfmx-bin")
     (source
      (origin
-       (inherit texlive-source)
+       (inherit (package-source texlive-source))
        (modules '((guix build utils)
                   (ice-9 ftw)))
        (snippet
@@ -47750,7 +47764,7 @@ PostScript.")
     (name "texlive-dvips-bin")
     (source
      (origin
-       (inherit texlive-source)
+       (inherit (package-source texlive-source))
        (modules '((guix build utils)
                   (ice-9 ftw)))
        (snippet
@@ -47854,7 +47868,7 @@ generated code can be included in any LaTeX document.")
     (name "texlive-lacheck-bin")
     (source
      (origin
-       (inherit texlive-source)
+       (inherit (package-source texlive-source))
        (modules '((guix build utils)
                   (ice-9 ftw)))
        (snippet
@@ -49092,7 +49106,7 @@ SeeTeX project.
     (name "texlive-seetexk-bin")
     (source
      (origin
-       (inherit texlive-source)
+       (inherit (package-source texlive-source))
        (modules '((guix build utils)
                   (ice-9 ftw)))
        (snippet
@@ -52194,7 +52208,7 @@ produce bounding box values for Rawppm or Rawpbm format files.")
     (name "texlive-ps2eps-bin")
     (source
      (origin
-       (inherit texlive-source)
+       (inherit (package-source texlive-source))
        (modules '((guix build utils)
                   (ice-9 ftw)))
        (snippet
@@ -52281,7 +52295,7 @@ documents generated that use Type 1 fonts.")
     (name "texlive-ps2pk-bin")
     (source
      (origin
-       (inherit texlive-source)
+       (inherit (package-source texlive-source))
        (modules '((guix build utils)
                   (ice-9 ftw)))
        (snippet
@@ -52380,7 +52394,7 @@ printing.  Utilities include @command{psbook}, @command{psselect},
     (name "texlive-psutils-bin")
     (source
      (origin
-       (inherit texlive-source)
+       (inherit (package-source texlive-source))
        (modules '((guix build utils)
                   (ice-9 ftw)))
        (snippet
@@ -53522,7 +53536,7 @@ and -editable format;
     (name "texlive-t1utils-bin")
     (source
      (origin
-       (inherit texlive-source)
+       (inherit (package-source texlive-source))
        (modules '((guix build utils)
                   (ice-9 ftw)))
        (snippet
@@ -53720,7 +53734,7 @@ such as @code{gellmu}.")
     (name "texlive-tex4ht-bin")
     (source
      (origin
-       (inherit texlive-source)
+       (inherit (package-source texlive-source))
        (modules '((guix build utils)
                   (ice-9 ftw)))
        (snippet
@@ -56238,7 +56252,7 @@ is planned.")
     (name "texlive-tpic2pdftex-bin")
     (source
      (origin
-       (inherit texlive-source)
+       (inherit (package-source texlive-source))
        (modules '((guix build utils)
                   (ice-9 ftw)))
        (snippet
@@ -56397,7 +56411,7 @@ emulates the macro, using TikZ.")
     (name "texlive-ttfutils-bin")
     (source
      (origin
-       (inherit texlive-source)
+       (inherit (package-source texlive-source))
        (modules '((guix build utils)
                   (ice-9 ftw)))
        (snippet
@@ -56572,7 +56586,7 @@ Zhuyin) for Chinese Han scripts (Hanzi ideographs).
     (name "texlive-upmendex-bin")
     (source
      (origin
-       (inherit texlive-source)
+       (inherit (package-source texlive-source))
        (modules '((guix build utils)
                   (ice-9 ftw)))
        (snippet
@@ -57002,7 +57016,7 @@ command line or from within a (shell) script.  The programs work with
     (name "texlive-xpdfopen-bin")
     (source
      (origin
-       (inherit texlive-source)
+       (inherit (package-source texlive-source))
        (modules '((guix build utils)
                   (ice-9 ftw)))
        (snippet
@@ -58582,7 +58596,7 @@ dealing with Type 1 fonts, direct.")
     (name "texlive-gsftopk-bin")
     (source
      (origin
-       (inherit texlive-source)
+       (inherit (package-source texlive-source))
        (modules '((guix build utils)
                   (ice-9 ftw)))
        (snippet
@@ -58789,7 +58803,7 @@ MusiXTeX processing.")
     (name "texlive-xml2pmx-bin")
     (source
      (origin
-       (inherit texlive-source)
+       (inherit (package-source texlive-source))
        (modules '((guix build utils)
                   (ice-9 ftw)))
        (snippet
@@ -67068,7 +67082,7 @@ always (re)defines a command.  There is also @code{\\makeenvironment} and
     (name "texlive-makeindex-bin")
     (source
      (origin
-       (inherit texlive-source)
+       (inherit (package-source texlive-source))
        (modules '((guix build utils)
                   (ice-9 ftw)))
        (snippet
@@ -79437,7 +79451,7 @@ The macros were designed for use within other macros.")
 (define-public texlive-collection-basic
   (package
     (name "texlive-collection-basic")
-    (version %texlive-version)
+    (version (package-version texlive-source))
     (source #f)
     (build-system trivial-build-system)
    (arguments (list #:builder #~(mkdir #$output)))
@@ -79487,7 +79501,7 @@ LaTeX.")
 (define-public texlive-collection-bibtexextra
   (package
     (name "texlive-collection-bibtexextra")
-    (version %texlive-version)
+    (version (package-version texlive-source))
     (source #f)
     (build-system trivial-build-system)
     (arguments (list #:builder #~(mkdir #$output)))
@@ -79666,7 +79680,7 @@ data(bases), notably including BibLaTeX.")
 (define-public texlive-collection-binextra
   (package
     (name "texlive-collection-binextra")
-    (version %texlive-version)
+    (version (package-version texlive-source))
     (source #f)
     (build-system trivial-build-system)
     (arguments (list #:builder #~(mkdir #$output)))
@@ -79787,7 +79801,7 @@ programming, patgen, and plenty more.")
 (define-public texlive-collection-context
   (package
     (name "texlive-collection-context")
-    (version %texlive-version)
+    (version (package-version texlive-source))
     (source #f)
     (build-system trivial-build-system)
     (arguments (list #:builder #~(mkdir #$output)))
@@ -79837,7 +79851,7 @@ third-party ConTeXt packages.")
 (define-public texlive-collection-fontsextra
   (package
     (name "texlive-collection-fontsextra")
-    (version %texlive-version)
+    (version (package-version texlive-source))
     (source #f)
     (build-system trivial-build-system)
     (arguments (list #:builder #~(mkdir #$output)))
@@ -80199,7 +80213,7 @@ third-party ConTeXt packages.")
 (define-public texlive-collection-fontsrecommended
   (package
     (name "texlive-collection-fontsrecommended")
-    (version %texlive-version)
+    (version (package-version texlive-source))
     (source #f)
     (build-system trivial-build-system)
     (arguments (list #:builder #~(mkdir #$output)))
@@ -80249,7 +80263,7 @@ for Computer Modern, in outline form.")
 (define-public texlive-collection-fontutils
   (package
     (name "texlive-collection-fontutils")
-    (version %texlive-version)
+    (version (package-version texlive-source))
     (source #f)
     (build-system trivial-build-system)
     (arguments (list #:builder #~(mkdir #$output)))
@@ -80285,7 +80299,7 @@ for manipulation of PostScript and other image formats.")
 (define-public texlive-collection-formatsextra
   (package
     (name "texlive-collection-formatsextra")
-    (version %texlive-version)
+    (version (package-version texlive-source))
     (source #f)
     (build-system trivial-build-system)
     (arguments (list #:builder #~(mkdir #$output)))
@@ -80324,7 +80338,7 @@ HiTeX engine and related.")
 (define-public texlive-collection-games
   (package
     (name "texlive-collection-games")
-    (version %texlive-version)
+    (version (package-version texlive-source))
     (source #f)
     (build-system trivial-build-system)
     (arguments (list #:builder #~(mkdir #$output)))
@@ -80387,7 +80401,7 @@ including chess.")
 (define-public texlive-collection-humanities
   (package
     (name "texlive-collection-humanities")
-    (version %texlive-version)
+    (version (package-version texlive-source))
     (source #f)
     (build-system trivial-build-system)
     (arguments (list #:builder #~(mkdir #$output)))
@@ -80455,7 +80469,7 @@ humanities, etc.")
 (define-public texlive-collection-langarabic
   (package
     (name "texlive-collection-langarabic")
-    (version %texlive-version)
+    (version (package-version texlive-source))
     (source #f)
     (build-system trivial-build-system)
     (arguments (list #:builder #~(mkdir #$output)))
@@ -80497,7 +80511,7 @@ humanities, etc.")
 (define-public texlive-collection-langchinese
   (package
     (name "texlive-collection-langchinese")
-    (version %texlive-version)
+    (version (package-version texlive-source))
     (source #f)
     (build-system trivial-build-system)
     (arguments (list #:builder #~(mkdir #$output)))
@@ -80545,7 +80559,7 @@ from @code{collection-langcjk}.")
 (define-public texlive-collection-langcjk
   (package
     (name "texlive-collection-langcjk")
-    (version %texlive-version)
+    (version (package-version texlive-source))
     (source #f)
     (build-system trivial-build-system)
     (arguments (list #:builder #~(mkdir #$output)))
@@ -80581,7 +80595,7 @@ their individual language collections.")
 (define-public texlive-collection-langcyrillic
   (package
     (name "texlive-collection-langcyrillic")
-    (version %texlive-version)
+    (version (package-version texlive-source))
     (source #f)
     (build-system trivial-build-system)
     (arguments (list #:builder #~(mkdir #$output)))
@@ -80633,7 +80647,7 @@ Russian, Serbian, Ukrainian), even if Latin alphabets may also be used.")
 (define-public texlive-collection-langczechslovak
   (package
     (name "texlive-collection-langczechslovak")
-    (version %texlive-version)
+    (version (package-version texlive-source))
     (source #f)
     (build-system trivial-build-system)
     (arguments (list #:builder #~(mkdir #$output)))
@@ -80661,7 +80675,7 @@ Russian, Serbian, Ukrainian), even if Latin alphabets may also be used.")
 (define-public texlive-collection-langenglish
   (package
     (name "texlive-collection-langenglish")
-    (version %texlive-version)
+    (version (package-version texlive-source))
     (source #f)
     (build-system trivial-build-system)
     (arguments (list #:builder #~(mkdir #$output)))
@@ -80745,7 +80759,7 @@ Russian, Serbian, Ukrainian), even if Latin alphabets may also be used.")
 (define-public texlive-collection-langeuropean
   (package
     (name "texlive-collection-langeuropean")
-    (version %texlive-version)
+    (version (package-version texlive-source))
     (source #f)
     (build-system trivial-build-system)
     (arguments (list #:builder #~(mkdir #$output)))
@@ -80808,7 +80822,7 @@ simply on the size of the support.")
 (define-public texlive-collection-langfrench
   (package
     (name "texlive-collection-langfrench")
-    (version %texlive-version)
+    (version (package-version texlive-source))
     (source #f)
     (build-system trivial-build-system)
     (arguments (list #:builder #~(mkdir #$output)))
@@ -80864,7 +80878,7 @@ simply on the size of the support.")
 (define-public texlive-collection-langgerman
   (package
     (name "texlive-collection-langgerman")
-    (version %texlive-version)
+    (version (package-version texlive-source))
     (source #f)
     (build-system trivial-build-system)
     (arguments (list #:builder #~(mkdir #$output)))
@@ -80920,7 +80934,7 @@ simply on the size of the support.")
 (define-public texlive-collection-langgreek
   (package
     (name "texlive-collection-langgreek")
-    (version %texlive-version)
+    (version (package-version texlive-source))
     (source #f)
     (build-system trivial-build-system)
     (arguments (list #:builder #~(mkdir #$output)))
@@ -80958,7 +80972,7 @@ simply on the size of the support.")
 (define-public texlive-collection-langitalian
   (package
     (name "texlive-collection-langitalian")
-    (version %texlive-version)
+    (version (package-version texlive-source))
     (source #f)
     (build-system trivial-build-system)
     (arguments (list #:builder #~(mkdir #$output)))
@@ -80989,7 +81003,7 @@ simply on the size of the support.")
 (define-public texlive-collection-langjapanese
   (package
     (name "texlive-collection-langjapanese")
-    (version %texlive-version)
+    (version (package-version texlive-source))
     (source #f)
     (build-system trivial-build-system)
     (arguments (list #:builder #~(mkdir #$output)))
@@ -81067,7 +81081,7 @@ from @code{collection-langcjk}.")
 (define-public texlive-collection-langkorean
   (package
     (name "texlive-collection-langkorean")
-    (version %texlive-version)
+    (version (package-version texlive-source))
     (source #f)
     (build-system trivial-build-system)
     (arguments (list #:builder #~(mkdir #$output)))
@@ -81095,7 +81109,7 @@ from @code{collection-langcjk}.")
 (define-public texlive-collection-langother
   (package
     (name "texlive-collection-langother")
-    (version %texlive-version)
+    (version (package-version texlive-source))
     (source #f)
     (build-system trivial-build-system)
     (arguments (list #:builder #~(mkdir #$output)))
@@ -81162,7 +81176,7 @@ reasonable.")
 (define-public texlive-collection-langpolish
   (package
     (name "texlive-collection-langpolish")
-    (version %texlive-version)
+    (version (package-version texlive-source))
     (source #f)
     (build-system trivial-build-system)
     (arguments (list #:builder #~(mkdir #$output)))
@@ -81193,7 +81207,7 @@ reasonable.")
 (define-public texlive-collection-langportuguese
   (package
     (name "texlive-collection-langportuguese")
-    (version %texlive-version)
+    (version (package-version texlive-source))
     (source #f)
     (build-system trivial-build-system)
     (arguments (list #:builder #~(mkdir #$output)))
@@ -81218,7 +81232,7 @@ reasonable.")
 (define-public texlive-collection-langspanish
   (package
     (name "texlive-collection-langspanish")
-    (version %texlive-version)
+    (version (package-version texlive-source))
     (source #f)
     (build-system trivial-build-system)
     (arguments (list #:builder #~(mkdir #$output)))
@@ -81241,7 +81255,7 @@ reasonable.")
 (define-public texlive-collection-latex
   (package
     (name "texlive-collection-latex")
-    (version %texlive-version)
+    (version (package-version texlive-source))
     (source #f)
     (build-system trivial-build-system)
     (arguments (list #:builder #~(mkdir #$output)))
@@ -81313,7 +81327,7 @@ used and strongly recommended in practice.")
 (define-public texlive-collection-latexextra
   (package
     (name "texlive-collection-latexextra")
-    (version %texlive-version)
+    (version (package-version texlive-source))
     (source #f)
     (build-system trivial-build-system)
     (arguments (list #:builder #~(mkdir #$output)))
@@ -82797,7 +82811,7 @@ LaTeX.")
 (define-public texlive-collection-latexrecommended
   (package
     (name "texlive-collection-latexrecommended")
-    (version %texlive-version)
+    (version (package-version texlive-source))
     (source #f)
     (build-system trivial-build-system)
     (arguments (list #:builder #~(mkdir #$output)))
@@ -82885,7 +82899,7 @@ LaTeX which have widespread use.")
 (define-public texlive-collection-luatex
   (package
     (name "texlive-collection-luatex")
-    (version %texlive-version)
+    (version (package-version texlive-source))
     (source #f)
     (build-system trivial-build-system)
     (arguments (list #:builder #~(mkdir #$output)))
@@ -82997,7 +83011,7 @@ itself, and plain formats, are in @code{collection-basic}.")
 (define-public texlive-collection-mathscience
   (package
     (name "texlive-collection-mathscience")
-    (version %texlive-version)
+    (version (package-version texlive-source))
     (source #f)
     (build-system trivial-build-system)
     (arguments (list #:builder #~(mkdir #$output)))
@@ -83262,7 +83276,7 @@ science packages.")
 (define-public texlive-collection-metapost
   (package
     (name "texlive-collection-metapost")
-    (version %texlive-version)
+    (version (package-version texlive-source))
     (source #f)
     (build-system trivial-build-system)
     (arguments (list #:builder #~(mkdir #$output)))
@@ -83324,7 +83338,7 @@ with packages in @code{collection-basic}.")
 (define-public texlive-collection-music
   (package
     (name "texlive-collection-music")
-    (version %texlive-version)
+    (version (package-version texlive-source))
     (source #f)
     (build-system trivial-build-system)
     (arguments (list #:builder #~(mkdir #$output)))
@@ -83373,7 +83387,7 @@ with packages in @code{collection-basic}.")
 (define-public texlive-collection-pictures
   (package
     (name "texlive-collection-pictures")
-    (version %texlive-version)
+    (version (package-version texlive-source))
     (source #f)
     (build-system trivial-build-system)
     (arguments (list #:builder #~(mkdir #$output)))
@@ -83627,7 +83641,7 @@ PStricks are separate.")
 (define-public texlive-collection-plaingeneric
   (package
     (name "texlive-collection-plaingeneric")
-    (version %texlive-version)
+    (version (package-version texlive-source))
     (source #f)
     (build-system trivial-build-system)
     (arguments (list #:builder #~(mkdir #$output)))
@@ -83752,7 +83766,7 @@ often LaTeX, and occasionally other formats.")
 (define-public texlive-collection-pstricks
   (package
     (name "texlive-collection-pstricks")
-    (version %texlive-version)
+    (version (package-version texlive-source))
     (source #f)
     (build-system trivial-build-system)
     (arguments (list #:builder #~(mkdir #$output)))
@@ -83880,7 +83894,7 @@ often LaTeX, and occasionally other formats.")
 (define-public texlive-collection-publishers
   (package
     (name "texlive-collection-publishers")
-    (version %texlive-version)
+    (version (package-version texlive-source))
     (source #f)
     (build-system trivial-build-system)
     (arguments (list #:builder #~(mkdir #$output)))
@@ -84170,7 +84184,7 @@ often LaTeX, and occasionally other formats.")
 (define-public texlive-collection-xetex
   (package
     (name "texlive-collection-xetex")
-    (version %texlive-version)
+    (version (package-version texlive-source))
     (source #f)
     (build-system trivial-build-system)
     (arguments (list #:builder #~(mkdir #$output)))
@@ -87309,7 +87323,7 @@ in terms of the collating order of the text being processed.")
     (name "texlive-xindy-bin")
     (source
      (origin
-       (inherit texlive-source)
+       (inherit (package-source texlive-source))
        (modules '((guix build utils)
                   (ice-9 ftw)))
        (snippet
@@ -90744,7 +90758,7 @@ that it will build with web2c out of the box.")
     (name "texlive-xdvi-bin")
     (source
      (origin
-       (inherit texlive-source)
+       (inherit (package-source texlive-source))
        (modules '((guix build utils)
                   (ice-9 ftw)))
        (snippet
