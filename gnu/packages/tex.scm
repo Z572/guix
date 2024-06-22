@@ -57259,8 +57259,7 @@ sign, and many others.  The fonts are available in (traced) Adobe Type
 Modern-style T1-encoded Type 1 set, Latin Modern, is not actually a direct
 development of the EC set, and differs from the EC in a number of
 particulars.")
-    (license (license:fsf-free "https://www.tug.org/svn/texlive/tags/\
-texlive-2019.3/Master/texmf-dist/doc/fonts/ec/copyrite.txt"))))
+    (license (license:fsf-free "file://doc/fonts/ec/copyrite.txt"))))
 
 (define-deprecated-package texlive-fonts-ec texlive-ec)
 
