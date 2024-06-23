@@ -73739,30 +73739,42 @@ a counter to be reset when another is incremented) and
     (build-system texlive-build-system)
     (arguments
      (list
-      #:link-scripts #~(list "mtxrun.lua")
       #:phases
       #~(modify-phases %standard-phases
-          (add-after 'unpack 'locate-texmfcnf.lua
-            ;; Out of the box, "mtxrun" first looks for "texmfcnf.lua" in
-            ;; "~/texmf", then in TEXMFCNF.  The latter is set within
-            ;; TEXLIVE-LIBKPATHSEA; it cannot contain the configuration file
-            ;; provided by TEXLIVE-LUATEX.  Point to the right file instead.
+          (add-after 'install 'install-executables
             (lambda* (#:key inputs #:allow-other-keys)
-              (let ((texmfcnf.lua
-                     (search-input-file inputs
-                                        "share/texmf-dist/web2c/texmfcnf.lua")))
-                (substitute* (find-files "." "\\.lua$")
-                  (("kpse\\.default_texmfcnf\\(\\)")
-                   (format #f "\"~a\"" (dirname texmfcnf.lua)))))))
-          (add-after 'unpack 'create-context-wrapper
-            ;; Create a "context" script for convenience.
-            (lambda _
-              (mkdir-p (string-append #$output "/bin"))
-              (with-directory-excursion (string-append #$output "/bin")
-                (call-with-output-file "context"
+              (let* ((bin (string-append #$output "/bin"))
+                     (context (string-append bin "/context"))
+                     (mtxrun (string-append bin "/mtxrun"))
+                     (texmfcnf.lua
+                      (search-input-file inputs
+                                         "share/texmf-dist/web2c/texmfcnf.lua"))
+                     (sh (search-input-file inputs "bin/sh")))
+                (mkdir-p bin)
+                ;; Create "mtxrun" runner.
+                ;;
+                ;; Out of the box, "mtxrun" first looks for "texmfcnf.lua" in
+                ;; "~/texmf", then in TEXMFCNF.  The latter is set within
+                ;; TEXLIVE-LIBKPATHSEA; it cannot contain the configuration
+                ;; file provided by TEXLIVE-LUATEX.  Point to the right file
+                ;; instead.
+                (call-with-output-file mtxrun
                   (lambda (port)
-                    (format port "#!/bin/sh~%mtxrun --script context \"$@\"")))
-                (chmod "context" #o755)))))))
+                    (format port
+                            "#!~a~%env ~a ~a luatex --luaonly mtxrun.lua \"$@\""
+                            sh
+                            (string-append "LUATEXDIR="
+                                           #$output
+                                           "/share/texmf-dist/scripts/context/lua")
+                            (format #f
+                                    "TEXMFCNF={$HOME/texmf/web2c,~a}"
+                                    (dirname texmfcnf.lua)))))
+                (chmod mtxrun #o755)
+                ;; Create "context" runner.
+                (call-with-output-file context
+                  (lambda (port)
+                    (format port "#!~a~%mtxrun --script context \"$@\"" sh)))
+                (chmod context #o755)))))))
     (propagated-inputs
      (list texlive-amsfonts
            texlive-context-companion-fonts
