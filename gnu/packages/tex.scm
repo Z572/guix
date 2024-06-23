@@ -70379,12 +70379,11 @@ of ink traps which typify the Kurier font.")
           (add-after 'install 'install-wrappers
             (lambda* (#:key inputs #:allow-other-keys)
               (let ((pdftex (search-input-file inputs "/bin/pdftex"))
-                    (web2c (string-append #$output "/share/texmf-dist/web2c")))
-                (mkdir-p (string-append #$output "/bin"))
-                (symlink pdftex
-                         (string-append #$output "/bin/jadetex"))
-                (symlink pdftex
-                         (string-append #$output "/bin/pdfjadetex"))))))))
+                    (bin (string-append #$output "/bin")))
+                (mkdir-p bin)
+                (with-directory-excursion bin
+                  (symlink pdftex "jadetex")
+                  (symlink pdftex "pdfjadetex"))))))))
     (propagated-inputs
      (list texlive-amsfonts
            texlive-atbegshi
