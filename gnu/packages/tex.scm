@@ -36414,7 +36414,17 @@ produces.")
                 "1vdywyg03ab5w50370ml8hwiidim2sy7hhygmz917rnhsnm87lnv"))))
     (outputs '("out" "doc"))
     (build-system texlive-build-system)
-    (arguments (list #:create-formats #~(list "texsis")))
+    (arguments
+     (list #:create-formats #~(list "texsis")
+           #:phases
+           #~(modify-phases %standard-phases
+               (add-after 'install 'symlink-binaries
+                 (lambda* (#:key inputs #:allow-other-keys)
+                   (let ((pdftex (search-input-file inputs "bin/pdftex"))
+                         (bin (string-append #$output "/bin")))
+                     (mkdir-p bin)
+                     (with-directory-excursion bin
+                       (symlink pdftex "texsis"))))))))
     (propagated-inputs
      (list texlive-cm
            texlive-hyphen-base
