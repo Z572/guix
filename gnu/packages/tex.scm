@@ -24639,8 +24639,18 @@ symbol variants more suited to work in logic.")
                 "0xdldlnhsr2n8544j9vd6gllin8bfkpcbhlpmxlhrvjl5bdg0rjp"))))
     (outputs '("out" "doc"))
     (build-system texlive-build-system)
-    (arguments (list #:create-formats #~(list "lollipop")))
-    (propagated-inputs (list texlive-cm texlive-hyphen-base))
+    (arguments
+     (list #:create-formats #~(list "lollipop")
+           #:phases
+           #~(modify-phases %standard-phases
+               (add-after 'install 'symlink-binaries
+                 (lambda* (#:key inputs #:allow-other-keys)
+                   (let ((tex (search-input-file inputs "bin/tex"))
+                         (bin (string-append #$output "/bin")))
+                     (mkdir-p bin)
+                     (with-directory-excursion bin
+                       (symlink tex "lollipop"))))))))
+    (propagated-inputs (list texlive-cm texlive-hyphen-base texlive-tex))
     (home-page "https://ctan.org/pkg/lollipop")
     (synopsis "TeX made easy")
     (description
