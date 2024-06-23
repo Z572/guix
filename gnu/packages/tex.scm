@@ -67239,12 +67239,7 @@ with traditional TeX as well as with Unicode aware variants.")
                (base32
                 "15rqqf0yb09qcs6ibsrkg5jbpzicxkpbj211p6qkfl2fcrc1gndv"))))
     (outputs '("out" "doc"))
-    (properties '((updater-extra-native-inputs "font-dejavu"
-                                               "font-gnu-freefont"
-                                               "font-linuxlibertine"
-                                               "font-sil-ezra"
-                                               "fontconfig"
-                                               "texlive-updmap.cfg")))
+    (properties '((updater-extra-native-inputs "texlive-updmap.cfg")))
     (build-system texlive-build-system)
     (arguments
      (list
@@ -67270,13 +67265,13 @@ with traditional TeX as well as with Unicode aware variants.")
                       (string-append (getcwd) ":"
                                      (getenv "GUIX_TEXMF"))))))))
     (native-inputs
-     (list font-dejavu
-           font-gnu-freefont
-           font-linuxlibertine
-           font-sil-ezra
-           fontconfig                   ;for XDG_DATA_DIRS (to locate fonts)
-           (texlive-updmap.cfg
-            (list texlive-amiri
+     (list (texlive-updmap.cfg
+            (list font-dejavu
+                  font-gnu-freefont
+                  font-linuxlibertine
+                  font-sil-ezra
+                  fontconfig
+                  texlive-amiri
                   texlive-babel
                   texlive-bidi
                   texlive-booktabs
