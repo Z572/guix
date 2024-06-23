@@ -26680,7 +26680,19 @@ with symbols, giving automatic alignment.")
                 "0kc766cvvbcqrj60ncz4a105nrn454y5c2330y7s7jzh45dx8qsi"))))
     (outputs '("out" "doc"))
     (build-system texlive-build-system)
-    (arguments (list #:create-formats #~(list "mex" "pdfmex" "utf8mex")))
+    (arguments
+     (list #:create-formats #~(list "mex" "pdfmex" "utf8mex")
+           #:phases
+           #~(modify-phases %standard-phases
+               (add-after 'install 'symlink-binaries
+                 (lambda* (#:key inputs #:allow-other-keys)
+                   (let ((pdftex (search-input-file inputs "bin/pdftex"))
+                         (bin (string-append #$output "/bin")))
+                     (mkdir-p bin)
+                     (with-directory-excursion bin
+                       (symlink pdftex "mex")
+                       (symlink pdftex "pdfmex")
+                       (symlink pdftex "utf8mex"))))))))
     (propagated-inputs
      (list texlive-enctex
            texlive-hyphen-complete
