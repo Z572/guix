@@ -27062,7 +27062,18 @@ avoids the spindliness of most other Type 1 versions of Computer Modern.")
                 "1ip0q5kqj6bg4jkginzljknbrd74ss4iky2gvlmf8nnrq06n89my"))))
     (outputs '("out" "doc"))
     (build-system texlive-build-system)
-    (arguments (list #:create-formats #~(list "mllatex" "mltex")))
+    (arguments
+     (list #:create-formats #~(list "mllatex" "mltex")
+           #:phases
+           #~(modify-phases %standard-phases
+               (add-after 'install 'symlink-binaries
+                 (lambda* (#:key inputs #:allow-other-keys)
+                   (let ((pdftex (search-input-file inputs "bin/pdftex"))
+                         (bin (string-append #$output "/bin")))
+                     (mkdir-p bin)
+                     (with-directory-excursion bin
+                       (symlink pdftex "mllatex")
+                       (symlink pdftex "mltex"))))))))
     (propagated-inputs
      (list texlive-atbegshi
            texlive-atveryend
