@@ -15652,7 +15652,17 @@ Cosmetica font, which is a similar design to Optima and includes Greek.")
                 "00nmqhfckrf8ygw6i93d5xnf85i8a88ryadb5ml73w4rllwjxr72"))))
     (outputs '("out" "doc"))
     (build-system texlive-build-system)
-    (arguments (list #:create-formats #~(list "eplain")))
+    (arguments
+     (list #:create-formats #~(list "eplain")
+           #:phases
+           #~(modify-phases %standard-phases
+               (add-after 'install 'symlink-binaries
+                 (lambda* (#:key inputs #:allow-other-keys)
+                   (let ((pdftex (search-input-file inputs "bin/pdftex"))
+                         (bin (string-append #$output "/bin")))
+                     (mkdir-p bin)
+                     (with-directory-excursion bin
+                       (symlink pdftex "eplain"))))))))
     (propagated-inputs
      (list texlive-atbegshi
            texlive-atveryend
