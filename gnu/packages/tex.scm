@@ -3015,7 +3015,17 @@ create a bibliography.")
                 "01yh10g2wwa58q151aqg246bsclks25qvd8axc1v799v37wlgqn3"))))
     (outputs '("out" "doc"))
     (build-system texlive-build-system)
-    (arguments (list #:create-formats #~(list "amstex")))
+    (arguments
+     (list #:create-formats #~(list "amstex")
+           #:phases
+           #~(modify-phases %standard-phases
+               (add-after 'install 'symlink-binaries
+                 (lambda* (#:key inputs #:allow-other-keys)
+                   (let ((pdftex (search-input-file inputs "bin/pdftex"))
+                         (bin (string-append #$output "/bin")))
+                     (mkdir-p bin)
+                     (with-directory-excursion bin
+                       (symlink pdftex "amstex"))))))))
     (propagated-inputs
      (list texlive-amsfonts
            texlive-cm
