@@ -61289,7 +61289,19 @@ available.")
     (properties '((updater-extra-native-inputs "texlive-xetex")))
     (build-system texlive-build-system)
     (arguments
-     (list #:create-formats #~(list "csplain" "luacsplain" "pdfcsplain")))
+     (list #:create-formats #~(list "csplain" "luacsplain" "pdfcsplain")
+           #:phases
+           #~(modify-phases %standard-phases
+               (add-after 'install 'symlink-binaries
+                 (lambda* (#:key inputs #:allow-other-keys)
+                   (let ((pdftex (search-input-file inputs "bin/pdftex"))
+                         (luatex (search-input-file inputs "bin/luatex"))
+                         (bin (string-append #$output "/bin")))
+                     (mkdir-p bin)
+                     (with-directory-excursion bin
+                       (symlink pdftex "csplain")
+                       (symlink pdftex "pdfcsplain")
+                       (symlink luatex "luacsplain"))))))))
     (native-inputs (list texlive-xetex))
     (propagated-inputs
      (list texlive-cm
