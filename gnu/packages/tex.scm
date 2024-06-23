@@ -44970,7 +44970,14 @@ LaTeX packages use of @samp{@@@@}) in nested package files.")
                  (lambda _
                    (substitute* "source/platex/base/plfmt.ins"
                      (("\\\\keepsilent\n" all)
-                      (string-append all "\\askforoverwritefalse\n"))))))))
+                      (string-append all "\\askforoverwritefalse\n")))))
+               (add-after 'install 'symlink-binaries
+                 (lambda* (#:key inputs #:allow-other-keys)
+                   (let ((euptex (search-input-file inputs "bin/euptex"))
+                         (bin (string-append #$output "/bin")))
+                     (mkdir-p bin)
+                     (with-directory-excursion bin
+                       (symlink euptex "platex"))))))))
     (propagated-inputs
      (list texlive-atbegshi
            texlive-atveryend
