@@ -46357,7 +46357,14 @@ barcodes.")
                  (lambda _
                    (substitute* "source/uplatex/base/uplfmt.ins"
                      (("\\\\keepsilent\n" all)
-                      (string-append all "\\askforoverwritefalse\n"))))))))
+                      (string-append all "\\askforoverwritefalse\n")))))
+               (add-after 'install 'symlink-binaries
+                 (lambda* (#:key inputs #:allow-other-keys)
+                   (let ((euptex (search-input-file inputs "bin/euptex"))
+                         (bin (string-append #$output "/bin")))
+                     (mkdir-p bin)
+                     (with-directory-excursion bin
+                       (symlink euptex "uplatex"))))))))
     (propagated-inputs
      (list texlive-atbegshi
            texlive-atveryend
