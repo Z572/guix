@@ -71830,7 +71830,17 @@ and back-ends.  It also ensures compatibility with the @code{media9} and
                 "0bcrj9wrimcd2pxrcfk7x3vkhxzij4422l19a8j4h299lkq3pbx0"))))
     (outputs '("out" "doc"))
     (build-system texlive-build-system)
-    (arguments (list #:create-formats #~(list "optex")))
+    (arguments
+     (list #:create-formats #~(list "optex")
+           #:phases
+           #~(modify-phases %standard-phases
+               (add-after 'install 'symlink-binaries
+                 (lambda* (#:key inputs #:allow-other-keys)
+                   (let ((luatex (search-input-file inputs "bin/luatex"))
+                         (bin (string-append #$output "/bin")))
+                     (mkdir-p bin)
+                     (with-directory-excursion bin
+                       (symlink luatex "optex"))))))))
     (propagated-inputs
      (list texlive-amsfonts
            texlive-cm
