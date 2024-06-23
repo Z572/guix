@@ -58966,8 +58966,7 @@ and @code{pdfxmltex}.")
       #~(modify-phases %standard-phases
           (add-after 'install 'install-wrappers
             (lambda* (#:key inputs #:allow-other-keys)
-              (let ((pdftex (search-input-file inputs "/bin/pdftex"))
-                    (web2c (string-append #$output "/share/texmf-dist/web2c")))
+              (let ((pdftex (search-input-file inputs "/bin/pdftex")))
                 (mkdir-p (string-append #$output "/bin"))
                 (symlink pdftex (string-append #$output "/bin/xmltex"))
                 (symlink pdftex (string-append #$output "/bin/pdfxmltex"))))))))
