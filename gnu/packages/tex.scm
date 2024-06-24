@@ -48518,17 +48518,28 @@ without HarfBuzz.")
               ;; libraries in the source tree, in particular pplib and luajit,
               ;; required for LuajitTeX.  The following change forces building
               ;; them.
+              ;;
+              ;; XXX: Skip build on architectures not supporting LuaJIT.  It
+              ;; avoid creating conditional inputs in TEXLIVE-LUAJITTEX, which
+              ;; would give more manual work after an update.
               (lambda _
-                (substitute* "libs/configure"
-                  (("x\\$need_(pplib|luajit)") "xyes"))))
+                #$@(if (or (target-ppc64le?)
+                           (target-riscv64?))
+                       '("skip")
+                       '((substitute* "libs/configure"
+                           (("x\\$need_(pplib|luajit)") "xyes"))))))
             (add-after 'install 'install-binaries
               (lambda _
-                (with-directory-excursion "texk/web2c"
-                  (invoke "make" "luajittex")
-                  (invoke "make" "luajithbtex")
-                  (let ((bin (string-append #$output "/bin")))
-                    (install-file ".libs/luajittex" bin)
-                    (install-file ".libs/luajithbtex" bin)))))))))
+                (let ((out #$output))
+                  #$@(if (or (target-ppc64le?)
+                             (target-riscv64?))
+                         '("skip")
+                         '((with-directory-excursion "texk/web2c"
+                             (invoke "make" "luajittex")
+                             (invoke "make" "luajithbtex")
+                             (let ((bin (string-append out "/bin")))
+                               (install-file ".libs/luajittex" bin)
+                               (install-file ".libs/luajithbtex" bin))))))))))))
     (native-inputs (list pkg-config))
     (home-page (package-home-page texlive-luajittex))
     (synopsis "Binaries for @code{texlive-luajittex}")
