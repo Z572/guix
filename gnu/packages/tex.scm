@@ -187,6 +187,62 @@
 ;;; package definitions, as a native input.  It is possible to augment that
 ;;; tree, in particular with additional font packages.
 ;;;
+;;;
+;;; Notes about updating TeX Live distribution:
+;;; -------------------------------------------
+;;;
+;;; Thanks to the `texlive' updater, the more tedious part of that task, i.e.,
+;;; refreshing version strings, hashes, possibly locations and inputs, is
+;;; automated.  Yet, the following additional steps are required; they can
+;;; keep one busy for a while:
+;;;
+;;; 1. First and foremost, run the updater:
+;;;
+;;;      ./pre-inst-env guix refresh -t texlive -u
+;;;
+;;;    This takes care of updating all binaries and all TeX Live packages,
+;;;    barring "collections" and "schemes", in a single run.
+;;;
+;;; 2. Then delete packages absent from the new TeX Live version.  Those are
+;;;    usually indicated by a failed update, or, more obviously, by their
+;;;    outdated version in the module.
+;;;
+;;;    Since "collections" and "schemes" are not updated automatically, all
+;;;    references to deleted packages must also be cleared from their
+;;;    propagated inputs.
+;;;
+;;; 3. Conversely, import newly integrated packages with, e.g.,
+;;;
+;;;       ./pre-inst-env guix import texlive -r scheme-full
+;;;
+;;;    Those must be added to their respective "collections", too.
+;;;
+;;; 4. Handle inputs issues.  No updater is allowed to create an input field
+;;;    in a package if it didn't exist beforehand.  `texlive' updater is no
+;;;    exception; it cannot update, e.g., propagated inputs if the relative
+;;;    package don't propagate inputs already.  Double check updater's output,
+;;;    such issues are mentioned, and resolve them manually.
+;;;
+;;;    Likewise, look for (list) artefacts the updater may have scattered
+;;;    throughout this module.  They usually appear when all elements have
+;;;    been removed from an input field.  In this situation, for aesthetics,
+;;;    the whole field can be suppressed.
+;;;
+;;; 5. Last, but not least, test and fix the new packages, progressively.  For
+;;;    example, it is possible to consider the following packages as
+;;;    milestones:
+;;;
+;;;      libkpathsea > bin > latex-bin > scheme-basic > scheme-small
+;;;
+;;;    Also, for good measure, it is advisable to check some common
+;;;    "collections" such as "pictures" and (gulp!) "latexextra".
+;;;
+;;;    At this point, if all is fine, send the update to the ML and let the CI
+;;;    sort the rest out.
+;;;
+;;;    Don't forget to pat yourself on the back!
+;;;
+;;;
 ;;; Code:
 
 (define-syntax-rule (define-deprecated-package old-name name)
