@@ -92393,7 +92393,11 @@ equations that are referenced.  This operation is similar to the
     (build-system texlive-build-system)
     (arguments (list #:tex-format "pdflatex"))
     (native-inputs
-     (list (texlive-updmap.cfg (list texlive-catchfile texlive-hypdoc))))
+     (list (texlive-updmap.cfg
+            (list texlive-catchfile
+                  texlive-cm-super
+                  texlive-etoolbox
+                  texlive-hypdoc))))
     (home-page "https://ctan.org/pkg/autopdf")
     (synopsis "Conversion of graphics to pdfLaTeX-compatible formats")
     (description
