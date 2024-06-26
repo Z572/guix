@@ -60756,6 +60756,7 @@ in the same way as BSD/GNU @code{getopt_long(3)} functions do.")
                (base32
                 "1jcqymq0a2yyn7smbwl0inc6q7ly4x7hraq8wbx3r5qr9q63hlpg"))))
     (outputs '("out" "doc"))
+    (properties '((updater-extra-native-inputs "texlive-kpathsea")))
     (build-system texlive-build-system)
     (arguments
      (list
@@ -60773,6 +60774,7 @@ in the same way as BSD/GNU @code{getopt_long(3)} functions do.")
                  "TEXMFSYSCONFIG = \"$TEXMFDIST/../texmf-config\",\n")
                 (("TEXMF *=.*")
                  "TEXMF = \"{$TEXMFCONFIG,$TEXMFVAR,$TEXMFHOME,$TEXMFSYSCONFIG,$TEXMFSYSVAR,$TEXMFDIST}\",\n")))))))
+    (native-inputs (list texlive-kpathsea))
     (propagated-inputs
      (list texlive-cm
            texlive-etex
