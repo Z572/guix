@@ -102437,10 +102437,17 @@ LaTeX, to generate a nice solution book.")
     (outputs '("out" "doc"))
     (properties '((updater-extra-native-inputs "texlive-updmap.cfg")))
     (build-system texlive-build-system)
-    (arguments (list #:tex-format "latex"))
+    (arguments
+     (list #:tex-format "latex"
+           #:phases
+           #~(modify-phases %standard-phases
+               ;; FIXME: Build fails with "LaTeX socket Error: Sockets can
+               ;; only be declared at top-level!".  Skip build.
+               (delete 'build))))
     (native-inputs
      (list (texlive-updmap.cfg
-            (list texlive-float
+            (list texlive-etoolbox
+                  texlive-float
                   texlive-fourier
                   texlive-hypdoc
                   texlive-listings
