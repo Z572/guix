@@ -568,11 +568,6 @@ of user-specified directories similar to how shells look up executables.")
                  (format #f "  $Master = ~s;~%~a"
                          (string-append #$output "/share")
                          all)))))
-          (add-after 'unpack 'fix-fmtutil
-            ;; The line below generates an error when running "fmtutil".
-            (lambda _
-              (substitute* "texmf-dist/scripts/texlive/fmtutil.pl"
-                (("require TeXLive::TLWinGoo if .*") ""))))
           (add-after 'install 'install-doc
             (lambda _
               (let ((doc (string-append #$output:doc "/share/texmf-dist/doc")))
