@@ -432,6 +432,18 @@ other text such as code.  The syntax uses the syntax of the Django template
 system, and the core design of Django is reused in Grantlee.")
     (license license:lgpl2.1+)))
 
+(define-public grantlee-qt6
+  (package
+    (inherit grantlee)
+    (name "grantlee-qt6")
+    (inputs (modify-inputs (package-inputs grantlee)
+              (replace "qtbase" qtbase)
+              (replace "qtdeclarative" qtdeclarative)
+              (delete "qtscript")))
+    (arguments (substitute-keyword-arguments (package-arguments grantlee)
+                 ((#:configure-flags flags #~'())
+                  #~(cons* "-DGRANTLEE_BUILD_WITH_QT6=ON" #$flags))))))
+
 (define (qt-url component version)
   "Return a mirror URL for the Qt5 COMPONENT at VERSION."
   ;; We can't use a mirror:// scheme because these URLs are not exact copies:
