@@ -3526,9 +3526,6 @@ need.")
         #~(modify-phases #$phases
            (delete 'patch-source)))))))
 
-(define kinit-bootstrap
-  ((package-input-rewriting `((,kdbusaddons . ,kdbusaddons-bootstrap))) kinit))
-
 (define-public ktextaddons
   (package
     (name "ktextaddons")
