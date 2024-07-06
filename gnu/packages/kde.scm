@@ -330,7 +330,7 @@ annotating features.")
 (define-public kdenlive
   (package
     (name "kdenlive")
-    (version "24.02.2")
+    (version "24.05.2")
     (source
      (origin
        (method git-fetch)
@@ -339,13 +339,14 @@ annotating features.")
              (commit (string-append "v" version))))
        (file-name (git-file-name name version))
        (sha256
-        (base32 "0chwdsk00lmhdkzac972cslfp772j2sp9ipg21jdixd1016bh8rm"))))
+        (base32 "1kir2drhx194jyb9zbdnk4cixdw022rl26jn1xgxr31pyklqh9in"))))
     (build-system qt-build-system)
     (arguments
      ;; XXX: there is a single test that spawns other tests and
      ;; 1/3 tests failed and 1/327 assertions failed.  It seems
      ;; that individual tests can't be skipped.
      (list
+      #:qtbase qtbase
       #:configure-flags #~(list "-DBUILD_TESTING=off")
       #:tests? #f
       #:phases
@@ -364,11 +365,11 @@ annotating features.")
                   `("LADSPA_PATH" ":" =
                     (,(string-append ladspa "/lib/ladspa")))
                   `("QT_QPA_PLATFORM_PLUGIN_PATH" ":" =
-                    (,(string-append qtbase "/lib/qt5/plugins/platforms")))
+                    (,(string-append qtbase "/lib/qt6/plugins/platforms")))
                   `("MLT_PREFIX" ":" =
                     (,#$(this-package-input "mlt"))))))))))
     (native-inputs
-     (list extra-cmake-modules kdoctools pkg-config qttools-5))
+     (list extra-cmake-modules kdoctools pkg-config qttools))
     (inputs
      (list bash-minimal
            breeze                       ; make dark them available easily
@@ -389,18 +390,15 @@ annotating features.")
            knotifyconfig
            kparts
            kplotting
+           ktextwidgets
            ladspa
            mlt
            purpose
-           qtbase-5
-           qtdeclarative-5
-           qtgraphicaleffects
-           qtmultimedia-5
-           qtnetworkauth-5
-           qtquickcontrols-5
-           qtquickcontrols2-5
-           qtscript
-           qtsvg-5
+           qtbase
+           qtdeclarative
+           qtmultimedia
+           qtnetworkauth
+           qtsvg
            shared-mime-info))
     (home-page "https://kdenlive.org")
     (synopsis "Non-linear video editor")
