@@ -2136,7 +2136,7 @@ integration of Qt applications when running on a KDE Plasma workspace.")
 (define-public plasma-nm
   (package
     (name "plasma-nm")
-    (version "5.27.7")
+    (version "6.1.2")
     (source (origin
               (method url-fetch)
               (uri (string-append "mirror://kde/stable/plasma/"
@@ -2144,10 +2144,11 @@ integration of Qt applications when running on a KDE Plasma workspace.")
                                   ".tar.xz"))
               (sha256
                (base32
-                "1w9zclih2mh8gqwahsmbbm0nrg1b6gcr5w2w02szlw30iq8k92j8"))))
+                "02148q5707cck0qix2c3k7npp9kblnq5h79xvb99rq45sbwc51pr"))))
     (build-system qt-build-system)
     (arguments
-     (list #:phases #~(modify-phases %standard-phases
+     (list #:qtbase qtbase
+           #:phases #~(modify-phases %standard-phases
                         (replace 'check
                           (lambda* (#:key tests? #:allow-other-keys)
                             (when tests?
@@ -2165,18 +2166,20 @@ integration of Qt applications when running on a KDE Plasma workspace.")
                   networkmanager-qt
                   knotifications
                   kirigami
-                  plasma-framework
+                  libplasma
                   modemmanager-qt
                   network-manager
-                  qca
+                  qca-qt6
                   kservice
                   solid
                   prison
                   kwallet
                   kwidgetsaddons
                   kwindowsystem
+                  ksvg
+                  qcoro-qt6
                   openconnect
-                  qtdeclarative-5))
+                  qtdeclarative))
     (synopsis "Plasma applet for managing network connections")
     (description "This package provides Plasma applet for managing network
 connections.")
