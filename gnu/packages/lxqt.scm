@@ -356,7 +356,7 @@ the operating system LXQt is running on.")
     (build-system cmake-build-system)
     (inputs
      (list eudev
-           kwindowsystem
+           kwindowsystem-5
            liblxqt
            libqtxdg
            libxcursor
@@ -364,7 +364,7 @@ the operating system LXQt is running on.")
            qtbase-5
            qtsvg-5
            qtx11extras
-           solid
+           solid-5
            xf86-input-libinput
            xkeyboard-config
            zlib))
