@@ -682,7 +682,7 @@ allows for launching applications or shutting down the system.")
     (inputs
      (list bash-minimal
            eudev
-           kwindowsystem
+           kwindowsystem-5
            liblxqt
            qtxdg-tools
            procps
