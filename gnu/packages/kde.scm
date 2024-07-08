@@ -192,27 +192,28 @@ This package contains GUI widgets for baloo.")
 (define-public akregator
   (package
     (name "akregator")
-    (version "23.04.3")
+    (version "24.05.2")
     (source
      (origin
        (method url-fetch)
        (uri (string-append "mirror://kde/stable/release-service/" version
                            "/src/akregator-" version ".tar.xz"))
        (sha256
-        (base32 "0g916453zip8i5g61pf8ib68fiqfbmr1i1lhbnwmsv1cryx035w9"))))
+        (base32 "07flc3617px9w1c729p0lsixf1g0h297hkbip259ykkbwxizn71q"))))
     (build-system qt-build-system)
     (arguments
-     `(#:phases
-       (modify-phases %standard-phases
-         (add-after 'install 'wrap-qt-process-path
-           (lambda* (#:key inputs outputs #:allow-other-keys)
-             (let* ((out (assoc-ref outputs "out"))
-                    (bin (string-append out "/bin/akregator"))
-                    (qt-process-path
-                     (search-input-file
-                      inputs "/lib/qt5/libexec/QtWebEngineProcess")))
-               (wrap-program bin
-                 `("QTWEBENGINEPROCESS_PATH" = (,qt-process-path)))))))))
+     (list #:qtbase qtbase
+           #:phases
+           #~(modify-phases %standard-phases
+               (add-after 'install 'wrap-qt-process-path
+                 (lambda* (#:key inputs outputs #:allow-other-keys)
+                   (let* ((out (assoc-ref outputs "out"))
+                          (bin (string-append out "/bin/akregator"))
+                          (qt-process-path
+                           (search-input-file
+                            inputs "/lib/qt6/libexec/QtWebEngineProcess")))
+                     (wrap-program bin
+                       `("QTWEBENGINEPROCESS_PATH" = (,qt-process-path)))))))))
     (native-inputs
      (list extra-cmake-modules kdoctools))
     (inputs
@@ -222,7 +223,7 @@ This package contains GUI widgets for baloo.")
            bash-minimal
            boost
            breeze-icons
-           gpgme
+           gpgme-1.23
            grantlee
            grantleetheme
            kcmutils
@@ -238,16 +239,17 @@ This package contains GUI widgets for baloo.")
            kpimcommon
            kpimtextedit
            kquickcharts
+           kstatusnotifieritem
            ktextaddons
            ktexteditor
+           ktextwidgets
            kuserfeedback
            libkdepim
            libkleo
-           qgpgme
-           qtbase-5
-           qtdeclarative-5
-           qtwebchannel-5
-           qtwebengine-5
+           qgpgme-qt6-1.23
+           qtdeclarative
+           qtwebchannel
+           qtwebengine
            syndication))
     (home-page "https://apps.kde.org/en/akregator")
     (synopsis "KDE Feed Reader")
