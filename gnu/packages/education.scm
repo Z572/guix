@@ -685,7 +685,7 @@ language and very flexible regarding to new or unknown keyboard layouts.")
     (source (origin
               (method url-fetch)
               (uri (string-append "mirror://kde/stable/release-service/"
-                                  version "/kqtquickcharts-" version ".tar.xz"))
+                                  version "/src/kqtquickcharts-" version ".tar.xz"))
               (sha256
                (base32
                 "0b0nqg77lzfw6accfsr4yg9fgq78skryd1qwkqf1zijhq4h65708"))))
