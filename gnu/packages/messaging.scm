@@ -1503,7 +1503,7 @@ default.")
                   qtbase-5
                   qtdeclarative-5
                   qtgraphicaleffects
-                  qtlocation
+                  qtlocation-5
                   qtquickcontrols2-5
                   qtsvg-5
                   qtmultimedia-5
