@@ -2810,6 +2810,7 @@ sensors, process information and other system resources.")
                   kwallet
                   kwayland
                   kwin
+                  libxcrypt
                   layer-shell-qt
                   libkscreen
                   libksysguard
