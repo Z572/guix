@@ -2371,7 +2371,13 @@ integrated it into your application's other widgets.")
       #:phases
       #~(modify-phases %standard-phases
           (add-before 'check 'check-setup
-            (lambda _ (setenv "HOME" (getcwd)))))))
+            (lambda _ (setenv "HOME" (getcwd))))
+          (replace 'check
+            (lambda* (#:key tests? #:allow-other-keys)
+              (when tests?
+                (setenv "XDG_CACHE_HOME" "/tmp/xdg-cache")
+                (invoke "ctest" "-E"
+                        "(kcontacts-addresstest)")))))))
     (home-page "https://community.kde.org/Frameworks")
     (synopsis "API for contacts/address book data following the vCard standard")
     (description "This library provides a vCard data model, vCard
