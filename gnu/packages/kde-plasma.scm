@@ -2773,6 +2773,7 @@ sensors, process information and other system resources.")
                   mpfr
                   eudev
                   libsm
+                  libxcrypt
                   libxft
                   libxkbcommon
                   libxrender
