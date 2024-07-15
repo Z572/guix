@@ -96,6 +96,7 @@
   #:use-module (gnu packages admin)
   #:use-module (gnu packages base)
   #:use-module (gnu packages bash)
+  #:use-module (gnu packages certs)
   #:use-module (gnu packages check)
   #:use-module (gnu packages compression)
   #:use-module (gnu packages crates-io)
@@ -3638,6 +3639,7 @@ APIs.")
            python-charset-normalizer
            python-idna
            python-urllib3))
+    (native-inputs (list nss-certs))
     (arguments
      ;; FIXME: Some tests require network access.
      '(#:tests? #f))
@@ -3664,6 +3666,7 @@ than Python’s urllib2 library.")
            python-charset-normalizer
            python-idna
            python-urllib3))
+    (native-inputs (list nss-certs))
     (arguments
      ;; FIXME: Some tests require network access.
      '(#:tests? #f))
