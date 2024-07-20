@@ -73,6 +73,7 @@
   #:use-module (gnu packages autotools)
   #:use-module (gnu packages base)
   #:use-module (gnu packages bash)
+  #:use-module (gnu packages busybox)
   #:use-module (gnu packages cmake)
   #:use-module (gnu packages compression)
   #:use-module (gnu packages cpp)
@@ -3497,8 +3498,10 @@ portable to just about any platform.")
             (lambda _
               (substitute* "test/functests/test_exclude_mono.sh"
                 (("/bin/bash") (which "bash"))))))))
-    (native-inputs (list perl))         ;for tests
-    (inputs (list coreutils-minimal))
+    (native-inputs (list perl))                   ;for tests
+    (inputs (if (target-64bit?)
+                (list coreutils-minimal)
+                (list busybox)))
     (synopsis "Fake the system time for single applications")
     (description
      "The libfaketime library allows users to modify the system time that an
