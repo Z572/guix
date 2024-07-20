@@ -215,7 +215,9 @@ in the Mozilla clients.")
                     ;; leading to test failures:
                     ;; <https://bugzilla.mozilla.org/show_bug.cgi?id=609734>.  To
                     ;; work around that, set the time to roughly the release date.
-                    (invoke "faketime" "2024-01-23" "./nss/tests/all.sh"))
+                    (invoke "faketime"
+                            #$(if (target-64bit?) "2024-01-23" "2024-08-23")
+                            "./nss/tests/all.sh"))
                   (format #t "test suite not run~%"))))
           (replace 'install
             (lambda* (#:key outputs #:allow-other-keys)
