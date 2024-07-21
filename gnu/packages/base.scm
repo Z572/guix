@@ -471,6 +471,13 @@ used to apply commands with arbitrarily long arguments.")
                                    " test-renameatu"
                                    " test-utimensat")))
             '())
+      ,@(if (target-64bit?)
+            '()
+            ;; We currently do not support 64-bit time_t on 32-bit platforms,
+            ;; mixing different bits of time_t will cause a lot of problems
+            ;; so forcibly disable it.
+            ;; see https://wiki.gentoo.org/wiki/Project:Toolchain/time64_migration
+            '(#:configure-flags (list "gl_cv_type_time_t_bits_macro=no")))
       #:phases (modify-phases %standard-phases
                  (add-before 'build 'patch-shell-references
                    (lambda _
