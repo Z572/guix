@@ -477,6 +477,34 @@ according to the Desktop Notifications Specification.")
 of other programs.")
     (license license:lgpl2.1+)))
 
+(define-public libdbusmenu-lxqt
+  (package
+    (name "libdbusmenu-lxqt")
+    (version "0.1.0")
+    (source
+     (origin
+       (method git-fetch)
+       (uri (git-reference
+             (url "https://github.com/lxqt/libdbusmenu-lxqt")
+             (commit version)))
+       (file-name (git-file-name name version))
+       (sha256
+        (base32 "0j9nci0h80pdmbn5sp1mn7naqdi8srrsikns3ix642ldmm9jy1kz"))))
+    (build-system cmake-build-system)
+    (arguments
+     ;; XXX: Tests require a dbus session and some icons.
+     '(#:tests? #f))
+    (native-inputs
+     (list doxygen))
+    (inputs
+     (list qtbase))
+    (home-page "https://github.com/lxqt/libdbusmenu-lxqt")
+    (synopsis "Qt6 implementation of the DBusMenu spec")
+    (description "This library provides a Qt6 implementation of the DBusMenu
+protocol.  The DBusMenu protocol makes it possible for applications to export
+and import their menus over DBus.")
+    (license license:lgpl2.1+)))
+
 (define-public lxqt-panel
   (package
     (name "lxqt-panel")
