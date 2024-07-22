@@ -1042,24 +1042,25 @@ window manager OpenBox.")
 (define-public qps
   (package
     (name "qps")
-    (version "2.7.0")
+    (version "2.9.0")
     (source
      (origin
-       (method url-fetch)
-       (uri (string-append "https://github.com/lxqt/" name "/releases/download/"
-                           version "/" name "-" version ".tar.xz"))
+       (method git-fetch)
+       (uri (git-reference
+             (url "https://github.com/lxqt/qps")
+             (commit version)))
+       (file-name (git-file-name name version))
        (sha256
-        (base32 "126zkj9jvjwxrh2fcm9h0c2iq9m5rm5hbkh155swijn2i8airxgx"))))
+        (base32 "0pcd6g80mq446aaymakgks1dii2p281wk2lxk2q9ijsk1z2fshr8"))))
     (build-system cmake-build-system)
     (inputs
-     (list kwindowsystem-5
+     (list kwindowsystem
            libxrender
            liblxqt
            libqtxdg
-           qtbase-5
-           qtx11extras))
+           qtbase))
     (native-inputs
-     (list lxqt-build-tools qttools-5))
+     (list lxqt-build-tools qttools))
     (arguments
      '(#:tests? #f))                    ; no tests
     (home-page "https://lxqt-project.org")
