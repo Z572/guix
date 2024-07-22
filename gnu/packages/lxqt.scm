@@ -739,27 +739,29 @@ allows for launching applications or shutting down the system.")
 (define-public lxqt-session
   (package
     (name "lxqt-session")
-    (version "1.3.0")
+    (version "2.0.0")
     (source
      (origin
-       (method url-fetch)
-       (uri (string-append "https://github.com/lxqt/" name "/releases/download/"
-                           version "/" name "-" version ".tar.xz"))
+       (method git-fetch)
+       (uri (git-reference
+             (url "https://github.com/lxqt/lxqt-session")
+             (commit version)))
+       (file-name (git-file-name name version))
        (sha256
-        (base32 "0xa5nqiq9mxwfynnw91i4c2cgpmpapl4nxys084nbs7yd88kbm2l"))))
+        (base32 "1y8qxddxfwfj0m5yrafww6hkc549k22dd672pyhkbmkay0mhvvq6"))))
     (build-system cmake-build-system)
     (inputs
      (list eudev
-           kwindowsystem-5
+           kwindowsystem
+           layer-shell-qt
            liblxqt
            qtxdg-tools
            procps
-           qtbase-5
-           qtsvg-5
-           qtx11extras
+           qtbase
+           qtsvg
            xdg-user-dirs))
     (native-inputs
-     (list pkg-config lxqt-build-tools qttools-5))
+     (list pkg-config lxqt-build-tools qttools))
     (arguments
      `(#:tests? #f
        #:phases
@@ -779,9 +781,9 @@ allows for launching applications or shutting down the system.")
                ;; Add write permission to lxqt-rc.xml file which is stored as
                ;; read-only in store.
                (("cp \"\\$LXQT_DEFAULT_OPENBOX_CONFIG\" \"\\$XDG_CONFIG_HOME/openbox\"")
-                 (string-append "cp \"$LXQT_DEFAULT_OPENBOX_CONFIG\" \"$XDG_CONFIG_HOME/openbox\"\n"
-                                "        # fix openbox permission issue\n"
-                                "        chmod u+w  \"$XDG_CONFIG_HOME/openbox\"/*"))))))))
+                (string-append "cp \"$LXQT_DEFAULT_OPENBOX_CONFIG\" \"$XDG_CONFIG_HOME/openbox\"\n"
+                               "        # fix openbox permission issue\n"
+                               "        chmod u+w  \"$XDG_CONFIG_HOME/openbox\"/*"))))))))
     (native-search-paths
      (list (search-path-specification
             ;; LXQt applications install their default config files into
