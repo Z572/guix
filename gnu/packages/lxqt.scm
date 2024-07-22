@@ -1097,19 +1097,21 @@ processes currently in existence, much like code{top} or code{ps}.")
 (define-public qterminal
   (package
     (name "qterminal")
-    (version "1.3.0")
+    (version "2.0.1")
     (source
      (origin
-       (method url-fetch)
-       (uri (string-append "https://github.com/lxqt/" name "/releases/download/"
-                           version "/" name "-" version ".tar.xz"))
+       (method git-fetch)
+       (uri (git-reference
+             (url "https://github.com/lxqt/qterminal")
+             (commit version)))
+       (file-name (git-file-name name version))
        (sha256
-        (base32 "1ibhl51mggf81xhvcmrkbsxl7ls8v0sn74rwhjxw4vqk6r6fhiby"))))
+        (base32 "179j3v11wz00dxaf9z50krfawyyd17x94w3rklja29kgalq9lddb"))))
     (build-system cmake-build-system)
     (inputs
-     (list qtbase-5 qtx11extras qtermwidget))
+     (list qtbase qtermwidget layer-shell-qt))
     (native-inputs
-     (list lxqt-build-tools qttools-5))
+     (list lxqt-build-tools qttools))
     (arguments
      '(#:tests? #f))                      ; no tests
     (home-page "https://lxqt-project.org")
