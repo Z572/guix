@@ -182,17 +182,20 @@ in Qt.")
 (define-public qtxdg-tools
   (package
     (name "qtxdg-tools")
-    (version "3.11.0")
+    (version "4.0.0")
     (source
      (origin
-       (method url-fetch)
-       (uri (string-append
-             "https://github.com/lxqt/qtxdg-tools/releases/download/"
-             version "/qtxdg-tools-" version ".tar.xz"))
+       (method git-fetch)
+       (uri (git-reference
+             (url "https://github.com/lxqt/qtxdg-tools")
+             (commit version)))
+       (file-name (git-file-name name version))
        (sha256
-        (base32 "05bfff9hl1fjy59j89cbxkmzf8yswazb0yz9r01a8a1fw4sh7br9"))))
-    (build-system cmake-build-system)
-    (arguments '(#:tests? #f))          ; no tests
+        (base32 "1x17kv5msz35ic2jv06ly7595xfd2k1z7q5pvkvq9nmadwf4bnn3"))))
+    (build-system qt-build-system)
+    (arguments (list
+                #:qtbase qtbase
+                #:tests? #f))          ; no tests
     (propagated-inputs (list libqtxdg))
     (native-inputs (list lxqt-build-tools))
     (home-page "https://github.com/lxqt/qtxdg-tools")
