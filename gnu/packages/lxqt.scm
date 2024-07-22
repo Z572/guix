@@ -376,47 +376,48 @@ the operating system LXQt is running on.")
 (define-public lxqt-config
   (package
     (name "lxqt-config")
-    (version "1.3.0")
+    (version "2.0.0")
     (source
      (origin
-       (method url-fetch)
-       (uri (string-append "https://github.com/lxqt/" name "/releases/download/"
-                           version "/" name "-" version ".tar.xz"))
+       (method git-fetch)
+       (uri (git-reference
+             (url "https://github.com/lxqt/lxqt-config")
+             (commit version)))
+       (file-name (git-file-name name version))
        (sha256
-        (base32 "13v9mrp6dswdw9vq39lfpd5cgz2bg74mk2kp1x7zinzqijsn17wj"))))
+        (base32 "04krha0iyys048bjhamdg3z894pxjjrc47yh8pjsw5jhppnpi6iw"))))
     (build-system cmake-build-system)
     (inputs
      (list eudev
-           kwindowsystem-5
+           kwindowsystem
+           lxqt-menu-data
            liblxqt
            libqtxdg
            libxcursor
            libxi
-           qtbase-5
-           qtsvg-5
-           qtx11extras
-           solid-5
+           qtbase
+           qtsvg
+           solid
            xf86-input-libinput
            xkeyboard-config
            zlib))
     (native-inputs
-     (list pkg-config lxqt-build-tools qttools-5))
+     (list pkg-config lxqt-build-tools qttools))
     ;; XXX: This is a workaround so libkscreen can find the backends as we
     ;; dont have a way specify them. We may want to  patch like Nix does.
     (propagated-inputs
-     (list libkscreen-5))
+     (list libkscreen))
     (arguments
-     '(#:tests? #f                      ; no tests
-       #:phases
-       (modify-phases %standard-phases
-         (add-after 'unpack 'set-xkeyboard-config-file-name
-           (lambda* (#:key inputs #:allow-other-keys)
-             ;; Set the file name to xkeyboard-config.
-             (let ((xkb (assoc-ref inputs "xkeyboard-config")))
-               (substitute* "lxqt-config-input/keyboardlayoutconfig.h"
-                 (("/usr/share/X11/xkb/rules/base.lst")
-                  (string-append xkb "/share/X11/xkb/rules/base.lst")))
-               #t))))))
+     (list #:tests? #f                      ; no tests
+           #:phases
+           #~(modify-phases %standard-phases
+               (add-after 'unpack 'set-xkeyboard-config-file-name
+                 (lambda* (#:key inputs #:allow-other-keys)
+                   ;; Set the file name to xkeyboard-config.
+                   (let ((xkb (assoc-ref inputs "xkeyboard-config")))
+                     (substitute* "lxqt-config-input/keyboardlayoutconfig.h"
+                       (("/usr/share/X11/xkb/rules/base.lst")
+                        (string-append xkb "/share/X11/xkb/rules/base.lst")))))))))
     (home-page "https://lxqt-project.org")
     (synopsis "Tools to configure LXQt and the underlying operating system")
     (description "lxqt-config is providing several tools involved in the
