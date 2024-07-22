@@ -605,26 +605,27 @@ and import their menus over DBus.")
 (define-public lxqt-policykit
   (package
     (name "lxqt-policykit")
-    (version "1.3.0")
+    (version "2.0.0")
     (source
      (origin
-       (method url-fetch)
-       (uri (string-append "https://github.com/lxqt/" name "/releases/download/"
-                           version "/" name "-" version ".tar.xz"))
+       (method git-fetch)
+       (uri (git-reference
+             (url "https://github.com/lxqt/lxqt-policykit")
+             (commit version)))
+       (file-name (git-file-name name version))
        (sha256
-        (base32 "051lb4kx29rx3ls3whlrbi83r9z9pdiqwyb1wbni56aqilv0svh0"))))
+        (base32 "1p0w7f6j6072gglfa6jb0wpg4357670vwflyqsj634v2bkm082gm"))))
     (build-system cmake-build-system)
     (inputs
-     (list kwindowsystem-5
+     (list kwindowsystem
            liblxqt
            libqtxdg
            pcre
-           polkit-qt
-           qtbase-5
-           qtsvg-5
-           qtx11extras))
+           polkit-qt6
+           qtbase
+           qtsvg))
     (native-inputs
-     (list pkg-config polkit lxqt-build-tools qttools-5))
+     (list pkg-config polkit lxqt-build-tools qttools))
     (arguments '(#:tests? #f))          ; no test target
     (home-page "https://lxqt-project.org")
     (synopsis "The LXQt PolicyKit agent")
