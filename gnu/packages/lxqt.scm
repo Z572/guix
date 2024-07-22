@@ -706,27 +706,29 @@ Qt with LXQt.")
 (define-public lxqt-runner
   (package
     (name "lxqt-runner")
-    (version "1.3.0")
+    (version "2.0.0")
     (source
      (origin
-       (method url-fetch)
-       (uri (string-append "https://github.com/lxqt/" name "/releases/download/"
-                           version "/" name "-" version ".tar.xz"))
+       (method git-fetch)
+       (uri (git-reference
+             (url "https://github.com/lxqt/lxqt-runner")
+             (commit version)))
+       (file-name (git-file-name name version))
        (sha256
-        (base32 "1916cl12v09x4iqrgvp2dwchy50wa97a0y68q4rdigarpdrp3x7j"))))
+        (base32 "0h8x8y067jlvqvx8l4znljdpd42qn2mlx0lhsgqnxywfygirs4pc"))))
     (build-system cmake-build-system)
     (inputs
-     (list kwindowsystem-5
+     (list kwindowsystem
+           layer-shell-qt
            liblxqt
            libqtxdg
            lxqt-globalkeys
            muparser
            pcre
-           qtbase-5
-           qtsvg-5
-           qtx11extras))
+           qtbase
+           qtsvg))
     (native-inputs
-     (list pkg-config qttools-5 lxqt-build-tools))
+     (list pkg-config qttools lxqt-build-tools))
     (arguments '(#:tests? #f))          ; no tests
     (home-page "https://lxqt-project.org")
     (synopsis "Tool used to launch programs quickly by typing their names")
