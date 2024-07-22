@@ -636,27 +636,28 @@ LXQt.")
 (define-public lxqt-powermanagement
   (package
     (name "lxqt-powermanagement")
-    (version "1.3.0")
+    (version "2.0.0")
     (source
      (origin
-       (method url-fetch)
-       (uri (string-append "https://github.com/lxqt/" name "/releases/download/"
-                           version "/" name "-" version ".tar.xz"))
+       (method git-fetch)
+       (uri (git-reference
+             (url "https://github.com/lxqt/lxqt-powermanagement")
+             (commit version)))
+       (file-name (git-file-name name version))
        (sha256
-        (base32 "17d1wh50pjjzqyxv3w7b4qlc1ym1p16yvbhyah9bzl2825irz9ar"))))
+        (base32 "15hjf127v1zv76bgnn8pq3bx4g12xhg78ad20fb52y7rslijd6cr"))))
     (build-system cmake-build-system)
     (inputs
-     (list kidletime-5
-           kwindowsystem-5
+     (list kidletime
+           kwindowsystem
            liblxqt
            libqtxdg
            lxqt-globalkeys
-           qtbase-5
-           qtsvg-5
-           qtx11extras
-           solid-5))
+           qtbase
+           qtsvg
+           solid))
     (native-inputs
-     (list lxqt-build-tools qttools-5))
+     (list lxqt-build-tools qttools))
     (arguments '(#:tests? #f))          ; no tests
     (home-page "https://lxqt-project.org")
     (synopsis "Power management module for LXQt")
