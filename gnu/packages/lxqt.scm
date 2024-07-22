@@ -982,14 +982,16 @@ image viewer.")
 (define-public obconf-qt
   (package
     (name "obconf-qt")
-    (version "0.16.2")
+    (version "0.16.4")
     (source
      (origin
-       (method url-fetch)
-       (uri (string-append "https://github.com/lxqt/" name "/releases/download/"
-                           version "/" name "-" version ".tar.xz"))
+       (method git-fetch)
+       (uri (git-reference
+             (url "https://github.com/lxqt/obconf-qt")
+             (commit version)))
+       (file-name (git-file-name name version))
        (sha256
-        (base32 "0q29f77dkwy005gzrmn2wj2ga1hdnfd2gwp05h72i2dj0qbdla3k"))))
+        (base32 "0aiszckd6zndfbc6g37cp4v9q12vqrj83bvfqx29dndcip41w554"))))
     (build-system cmake-build-system)
     (inputs
      (list imlib2
@@ -1000,10 +1002,9 @@ image viewer.")
            openbox
            pango
            pcre
-           qtbase-5
-           qtx11extras))
+           qtbase))
     (native-inputs
-     (list lxqt-build-tools pkg-config qttools-5))
+     (list lxqt-build-tools pkg-config qttools))
     (arguments
      '(#:tests? #f))                    ; no tests
     (home-page "https://lxqt-project.org")
