@@ -858,14 +858,16 @@ for LXQt.")
 (define-public libfm-qt
   (package
     (name "libfm-qt")
-    (version "1.3.0")
+    (version "2.0.2")
     (source
      (origin
-       (method url-fetch)
-       (uri (string-append "https://github.com/lxqt/" name "/releases/download/"
-                           version "/" name "-" version ".tar.xz"))
+       (method git-fetch)
+       (uri (git-reference
+             (url "https://github.com/lxqt/libfm-qt")
+             (commit version)))
+       (file-name (git-file-name name version))
        (sha256
-        (base32 "1rjrbjw6ixn5yw4r2187xfs7xd6v0j28p7fnjwjnv29lvvzgfm8x"))))
+        (base32 "0v69vry95637rgygqwvfj4qj2x6796jlman12s9ajn42b0c3273x"))))
     (build-system cmake-build-system)
     (arguments
      '(#:tests? #f))                    ; no tests
@@ -875,11 +877,11 @@ for LXQt.")
            libfm
            libxcb
            menu-cache
+           lxqt-menu-data
            pcre
-           qtbase-5
-           qtx11extras))
+           qtbase))
     (native-inputs
-     (list pkg-config lxqt-build-tools qttools-5))
+     (list pkg-config lxqt-build-tools qttools))
     (home-page "https://lxqt-project.org")
     (synopsis "Qt binding for libfm")
     (description "libfm-qt is the Qt port of libfm, a library providing
