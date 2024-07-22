@@ -36,6 +36,7 @@
   #:use-module (guix packages)
   #:use-module (guix utils)
   #:use-module (guix build-system cmake)
+  #:use-module (guix build-system qt)
   #:use-module (guix build-system gnu)
   #:use-module (guix build-system trivial)
   #:use-module (gnu packages)
@@ -150,30 +151,26 @@ itself as well as other components maintained by the LXQt project.")
 (define-public libqtxdg
   (package
     (name "libqtxdg")
-    (version "3.11.0")
+    (version "4.0.0")
     (source
      (origin
-       (method url-fetch)
-       (uri (string-append
-             "https://github.com/lxqt/libqtxdg/releases/download/"
-             version "/libqtxdg-" version ".tar.xz"))
+       (method git-fetch)
+       (uri (git-reference
+             (url "https://github.com/lxqt/libqtxdg")
+             (commit version)))
+       (file-name (git-file-name name version))
        (sha256
-        (base32 "0alphfvkwxaqfnckjxbrwjkj7wjl4yff7qxzmyjz67c8728lxbny"))))
-    (build-system cmake-build-system)
+        (base32 "19iz06zjy5gf41cf5iagz14r7jgm3m1mvbz1hicixfqq13mqws2l"))))
+    (build-system qt-build-system)
     (arguments
-     '(#:configure-flags
-       '("-DBUILD_TESTS=ON"
-         "-DQTXDGX_ICONENGINEPLUGIN_INSTALL_PATH=lib/qt5/plugins/iconengines")
-       #:phases
-       (modify-phases %standard-phases
-         (add-before 'check 'pre-check
-           (lambda _
-             ;; Run the tests offscreen.
-             (setenv "QT_QPA_PLATFORM" "offscreen")
-             #t)))))
+     (list
+      #:qtbase qtbase
+      #:configure-flags
+      #~(list "-DBUILD_TESTS=ON"
+              "-DQTXDGX_ICONENGINEPLUGIN_INSTALL_PATH=lib/qt6/plugins/iconengines")))
     (propagated-inputs
-     ;; required by Qt5XdgIconLoader.pc
-     (list glib qtbase-5 qtsvg-5))
+     ;; required by Qt6XdgIconLoader.pc
+     (list glib qtsvg))
     (native-inputs
      (list lxqt-build-tools pkg-config))
     (home-page "https://github.com/lxqt/libqtxdg")
