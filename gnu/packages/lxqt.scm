@@ -544,19 +544,22 @@ and import their menus over DBus.")
 (define-public lxqt-panel
   (package
     (name "lxqt-panel")
-    (version "1.3.0")
+    (version "2.0.1")
     (source
      (origin
-       (method url-fetch)
-       (uri (string-append "https://github.com/lxqt/" name "/releases/download/"
-                           version "/" name "-" version ".tar.xz"))
+       (method git-fetch)
+       (uri (git-reference
+             (url "https://github.com/lxqt/lxqt-panel")
+             (commit version)))
+       (file-name (git-file-name name version))
        (sha256
-        (base32 "1lnqiw1rd5m9576rsg7lx8v95nc8krrj35fbi54ipc688na3j6s3"))))
+        (base32 "04w2da0z8slhl6qrqz4pqkrwwai0j80f2s93ixzi5fnpykh1ygzs"))))
     (build-system cmake-build-system)
     (inputs
      (list alsa-lib
            kguiaddons
-           libdbusmenu-qt
+           libdbusmenu-lxqt
+           layer-shell-qt
            liblxqt
            libqtxdg
            libstatgrab
@@ -570,31 +573,30 @@ and import their menus over DBus.")
            lxqt-globalkeys
            pcre
            pulseaudio
-           qtbase-5
-           qtsvg-5
-           qtx11extras
-           solid-5
+           qtbase
+           qtsvg
+           solid
            xcb-util
            xcb-util-image
            xkeyboard-config))
     (native-inputs
-     (list pkg-config lxqt-build-tools qttools-5))
+     (list pkg-config lxqt-build-tools qttools))
     (propagated-inputs
      ;; Propagating KWINDOWSYSTEM so that the list of opened applications
      ;; shows up in lxqt-panel's taskbar plugin.
-     (list kwindowsystem-5 lxmenu-data))
+     (list kwindowsystem
+           lxqt-menu-data))
     (arguments
-     '(#:tests? #f                      ; no tests
-       #:phases
-       (modify-phases %standard-phases
-         (add-after 'unpack 'set-xkeyboard-config-file-path
-                (lambda* (#:key inputs #:allow-other-keys)
-                  ;; Set the path to xkeyboard-config.
-                  (let ((xkb (assoc-ref inputs "xkeyboard-config")))
-                    (substitute* "plugin-kbindicator/src/x11/kbdlayout.cpp"
-                      (("/usr/share/X11/xkb/rules/evdev.xml")
-                       (string-append xkb "/share/X11/xkb/rules/evdev.xml")))
-                  #t))))))
+     (list #:tests? #f                      ; no tests
+           #:phases
+           #~(modify-phases %standard-phases
+               (add-after 'unpack 'set-xkeyboard-config-file-path
+                 (lambda* (#:key inputs #:allow-other-keys)
+                   ;; Set the path to xkeyboard-config.
+                   (let ((xkb (assoc-ref inputs "xkeyboard-config")))
+                     (substitute* "plugin-kbindicator/src/x11/kbdlayout.cpp"
+                       (("/usr/share/X11/xkb/rules/evdev.xml")
+                        (string-append xkb "/share/X11/xkb/rules/evdev.xml")))))))))
     (home-page "https://lxqt-project.org")
     (synopsis "The LXQt desktop panel")
     (description "lxqt-panel represents the taskbar of LXQt.")
