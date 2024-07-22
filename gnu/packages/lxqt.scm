@@ -956,19 +956,21 @@ manager Compton.")
 (define-public lximage-qt
   (package
     (name "lximage-qt")
-    (version "1.3.0")
+    (version "2.0.1")
     (source
      (origin
-       (method url-fetch)
-       (uri (string-append "https://github.com/lxqt/" name "/releases/download/"
-                           version "/" name "-" version ".tar.xz"))
+       (method git-fetch)
+       (uri (git-reference
+             (url "https://github.com/lxqt/lximage-qt")
+             (commit version)))
+       (file-name (git-file-name name version))
        (sha256
-        (base32 "1zrlzx72zqcnqk1j0slwc2jsaxf71v5y1zhcwgv0n4z5548x3n38"))))
+        (base32 "0fk94sgcwq4vyap7r3cp6379f7y9f2bi332z06h87d2fkbd6jq1g"))))
     (build-system cmake-build-system)
     (inputs
-     (list libexif libfm-qt qtbase-5 qtsvg-5 qtx11extras))
+     (list libexif libfm-qt qtbase qtsvg))
     (native-inputs
-     (list pkg-config lxqt-build-tools qttools-5))
+     (list pkg-config lxqt-build-tools qttools))
     (arguments
      '(#:tests? #f))                    ; no tests
     (home-page "https://lxqt-project.org")
