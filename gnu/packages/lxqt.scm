@@ -669,34 +669,34 @@ when laptop batteries are low on power.")
 (define-public lxqt-qtplugin
   (package
     (name "lxqt-qtplugin")
-    (version "1.3.0")
+    (version "2.0.0")
     (source
      (origin
-       (method url-fetch)
-       (uri (string-append "https://github.com/lxqt/" name "/releases/download/"
-                           version "/" name "-" version ".tar.xz"))
+       (method git-fetch)
+       (uri (git-reference
+             (url "https://github.com/lxqt/lxqt-qtplugin")
+             (commit version)))
+       (file-name (git-file-name name version))
        (sha256
-        (base32 "0hdxa9cb39vklx616ywcc7jgipij99p4bd16w0f0cvidh6p1rqhv"))))
+        (base32 "0bya80k88qmv625afnskdgi5dz9pkgfpsnb05makk9psx4lmdzb5"))))
     (build-system cmake-build-system)
     (inputs
-     (list libdbusmenu-qt
+     (list libdbusmenu-lxqt
            libfm-qt
            libqtxdg
-           qtbase-5
-           qtsvg-5
-           qtx11extras))
+           qtbase
+           qtsvg))
     (native-inputs
-     (list lxqt-build-tools qttools-5))
+     (list lxqt-build-tools qttools))
     (arguments
-     '(#:tests? #f                      ; no tests
-       #:phases
-       (modify-phases %standard-phases
-         (add-after 'unpack 'patch-source
-           (lambda _
-             (substitute* '("src/CMakeLists.txt")
-               (("DESTINATION \"\\$\\{QT_PLUGINS_DIR\\}")
-                "DESTINATION \"lib/qt5/plugins"))
-             #t)))))
+     (list #:tests? #f                      ; no tests
+           #:phases
+           #~(modify-phases %standard-phases
+               (add-after 'unpack 'patch-source
+                 (lambda _
+                   (substitute* '("src/CMakeLists.txt")
+                     (("DESTINATION \"\\$\\{QT_PLUGINS_DIR\\}")
+                      "DESTINATION \"lib/qt6/plugins")))))))
     (home-page "https://lxqt-project.org")
     (synopsis "LXQt Qt platform integration plugin")
     (description "lxqt-qtplugin is providing a library libqtlxqt to integrate
