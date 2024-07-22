@@ -302,32 +302,32 @@ and memory usage or network traffic.")
 (define-public lxqt-about
   (package
     (name "lxqt-about")
-    (version "1.3.0")
+    (version "2.0.0")
     (source
      (origin
-       (method url-fetch)
-       (uri (string-append "https://github.com/lxqt/" name "/releases/download/"
-                           version "/" name "-" version ".tar.xz"))
+       (method git-fetch)
+       (uri (git-reference
+             (url "https://github.com/lxqt/lxqt-about")
+             (commit version)))
+       (file-name (git-file-name name version))
        (sha256
-        (base32 "08b922gyg4591b399pw0y9zl3gr2627dw20c33abqpl30iq1fmd9"))))
+        (base32 "0q18ib3xd48wxyblpb0l220ddq08y93vl801zfpbsrfy6ykbiq7l"))))
     (build-system cmake-build-system)
     (inputs
-     (list kwindowsystem-5
+     (list kwindowsystem
            liblxqt
            libqtxdg
-           qtbase-5
-           qtsvg-5
-           qtx11extras))
+           qtbase
+           qtsvg))
     (native-inputs
-     (list lxqt-build-tools qttools-5))
+     (list lxqt-build-tools qttools))
     (arguments
-     '(#:tests? #f                      ; no tests
-       #:phases
-       (modify-phases %standard-phases
-         (add-before 'build 'setenv
-           (lambda _
-             (setenv "QT_RCC_SOURCE_DATE_OVERRIDE" "1")
-             #t)))))
+     (list #:tests? #f                      ; no tests
+           #:phases
+           #~(modify-phases %standard-phases
+               (add-before 'build 'setenv
+                 (lambda _
+                   (setenv "QT_RCC_SOURCE_DATE_OVERRIDE" "1"))))))
     (home-page "https://lxqt-project.org")
     (synopsis "Provides information about LXQt and the system")
     (description "lxqt-about is a dialogue window providing information about
