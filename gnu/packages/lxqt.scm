@@ -204,6 +204,34 @@ for handling file associations and opening files with their default
 applications.")
     (license license:lgpl2.1+)))
 
+(define-public lxqt-menu-data
+  (package
+    (name "lxqt-menu-data")
+    (version "2.0.0")
+    (source
+     (origin
+       (method git-fetch)
+       (uri (git-reference
+             (url "https://github.com/lxqt/lxqt-menu-data")
+             (commit version)))
+       (file-name (git-file-name name version))
+       (sha256
+        (base32 "1m9krvybzk5v4f6vawqzgicq3sqc633ikzcp505392252zgkdmh8"))))
+    (build-system cmake-build-system)
+    (inputs
+     (list qtbase))
+    (native-inputs
+     (list pkg-config lxqt-build-tools qttools))
+    (arguments
+     '(#:tests? #f))
+    (home-page "https://lxqt-project.org")
+    (synopsis "Menu files for LXQt Panel, Configuration Center and
+PCManFM-Qt/libfm-qt")
+    (description
+     "This package provides menu files for LXQt Panel, Configuration Center and
+PCManFM-Qt/libfm-qt.")
+    (license license:gpl2+)))
+
 (define-public liblxqt
   (package
     (name "liblxqt")
