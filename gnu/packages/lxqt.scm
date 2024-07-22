@@ -891,14 +891,16 @@ components to build desktop file managers which belongs to LXDE.")
 (define-public pcmanfm-qt
   (package
     (name "pcmanfm-qt")
-    (version "1.3.0")
+    (version "2.0.0")
     (source
      (origin
-       (method url-fetch)
-       (uri (string-append "https://github.com/lxqt/" name "/releases/download/"
-                           version "/" name "-" version ".tar.xz"))
+       (method git-fetch)
+       (uri (git-reference
+             (url "https://github.com/lxqt/pcmanfm-qt")
+             (commit version)))
+       (file-name (git-file-name name version))
        (sha256
-        (base32 "190gfq6sp2z6hs7wy02xw831gdp2sxfrpy6jrhrf0zlfv26f6z3w"))))
+        (base32 "0yi6j307mgmqlsg8rmravj5fdqjdbj5dsj0ms64sv8vkwizz64x9"))))
     (build-system cmake-build-system)
     (arguments
      (list
@@ -907,15 +909,16 @@ components to build desktop file managers which belongs to LXDE.")
       #~(modify-phases %standard-phases
           (add-before 'configure 'patch-settings.conf.in
             (lambda* (#:key inputs #:allow-other-keys)
-              (let ((wallpaper (search-input-file inputs
-                                "share/lxqt/wallpapers/waves-logo.png")))
-               (substitute* "config/pcmanfm-qt/lxqt/settings.conf.in"
-                 (("Wallpaper=.*")
-                  (string-append "Wallpaper=" wallpaper "\n")))))))))
+              (let ((wallpaper
+                     (search-input-file inputs
+                                        "share/lxqt/wallpapers/waves-logo.png")))
+                (substitute* "config/pcmanfm-qt/lxqt/settings.conf.in"
+                  (("Wallpaper=.*")
+                   (string-append "Wallpaper=" wallpaper "\n")))))))))
     (inputs
-     (list libfm-qt qtbase-5 qtx11extras lxqt-themes))
+     (list libfm-qt qtbase lxqt-themes layer-shell-qt))
     (native-inputs
-     (list pkg-config qttools-5 lxqt-build-tools))
+     (list pkg-config qttools lxqt-build-tools))
     (home-page "https://lxqt-project.org")
     (synopsis "File manager and desktop icon manager")
     (description "PCManFM-Qt is the Qt port of PCManFM, the file manager of
