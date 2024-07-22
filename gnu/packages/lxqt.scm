@@ -1189,10 +1189,12 @@ like @command{tar} and @command{zip}.")
            hicolor-icon-theme
            xdg-user-dirs
            xdg-utils
+           libxcursor
+           qtbase
            ;; Base
            ;; TODO: qtsvg-5 is needed for lxqt apps to display icons. Maybe it
            ;; should be added to their propagated-inputs?
-           qtsvg-5
+           qtsvg
            ;; Core
            lxqt-about
            lxqt-admin
@@ -1213,7 +1215,6 @@ like @command{tar} and @command{zip}.")
            picom
            font-dejavu
            lximage-qt
-           obconf-qt
            openbox
            breeze-icons       ; default by <lxqt-session>/share/lxqt/lxqt.conf
            pavucontrol-qt
