@@ -236,35 +236,35 @@ PCManFM-Qt/libfm-qt.")
 (define-public liblxqt
   (package
     (name "liblxqt")
-    (version "1.3.0")
+    (version "2.0.0")
     (source
      (origin
-       (method url-fetch)
-       (uri (string-append
-             "https://github.com/lxqt/" name "/releases/download/"
-             version "/" name "-" version ".tar.xz"))
+       (method git-fetch)
+       (uri (git-reference
+             (url "https://github.com/lxqt/liblxqt")
+             (commit version)))
+       (file-name (git-file-name name version))
        (sha256
-        (base32 "1vr43sd2dzs4gmiaidr1gpm64fl500k30rlxxq7yj9p3iwk5d3xp"))))
-    (build-system cmake-build-system)
+        (base32 "0jjp5ynhnw4d97kjfmqijq4xlncnhcbzddi5nfarla1aar9hk9wp"))))
+    (build-system qt-build-system)
     (arguments
-     `(#:tests? #f                      ; no tests
-       #:phases
-       (modify-phases %standard-phases
-         (add-after 'unpack 'patch-source
-           (lambda _
-             (substitute* "CMakeLists.txt"
-               (("DESTINATION \"\\$\\{POLKITQT-1_POLICY_FILES_INSTALL_DIR\\}")
-                "DESTINATION \"share/polkit-1/actions"))
-             #t)))))
+     (list #:qtbase qtbase
+           #:tests? #f                      ; no tests
+           #:phases
+           #~(modify-phases %standard-phases
+               (add-after 'unpack 'patch-source
+                 (lambda _
+                   (substitute* "CMakeLists.txt"
+                     (("DESTINATION \"\\$\\{POLKITQT-1_POLICY_FILES_INSTALL_DIR\\}")
+                      "DESTINATION \"share/polkit-1/actions")))))))
     (inputs
-     (list kwindowsystem-5
+     (list kwindowsystem
            libqtxdg
            libxscrnsaver
-           polkit-qt
-           qtsvg-5
-           qtx11extras))
+           polkit-qt6
+           qtsvg))
     (native-inputs
-     (list lxqt-build-tools qttools-5))
+     (list lxqt-build-tools qttools))
     (home-page "https://lxqt-project.org")
     (synopsis "Core utility library for all LXQt components")
     (description "liblxqt provides the basic libraries shared by the
