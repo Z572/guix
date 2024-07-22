@@ -427,25 +427,25 @@ configuration of both LXQt and the underlying operating system.")
 (define-public lxqt-globalkeys
   (package
     (name "lxqt-globalkeys")
-    (version "1.3.0")
+    (version "2.0.0")
     (source
      (origin
-       (method url-fetch)
-       (uri (string-append "https://github.com/lxqt/lxqt-globalkeys/"
-                           "releases/download/" version "/"
-                           "lxqt-globalkeys-" version ".tar.xz"))
+       (method git-fetch)
+       (uri (git-reference
+             (url "https://github.com/lxqt/lxqt-globalkeys")
+             (commit version)))
+       (file-name (git-file-name name version))
        (sha256
-        (base32 "17km7yl5fqwhjy35w700s4rjxf9ann3vv6mw6l4r1cf7pvzmxhy7"))))
+        (base32 "1drcclszadm6cibvbcj3ck2l057g4xr9ddxfwpml5x1azbnk16pm"))))
     (build-system cmake-build-system)
     (inputs
-     (list kwindowsystem-5
+     (list kwindowsystem
            liblxqt
            libqtxdg
-           qtbase-5
-           qtsvg-5
-           qtx11extras))
+           qtbase
+           qtsvg))
     (native-inputs
-     (list pkg-config qttools-5 lxqt-build-tools))
+     (list pkg-config qttools lxqt-build-tools))
     (arguments '(#:tests? #f))          ; no tests
     (home-page "https://lxqt-project.org")
     (synopsis "Daemon used to register global keyboard shortcuts")
