@@ -337,35 +337,36 @@ LXQt and the system it's running on.")
 (define-public lxqt-admin
   (package
     (name "lxqt-admin")
-    (version "1.3.0")
+    (version "2.0.0")
     (source
      (origin
-       (method url-fetch)
-       (uri (string-append "https://github.com/lxqt/" name "/releases/download/"
-                           version "/" name "-" version ".tar.xz"))
+       (method git-fetch)
+       (uri (git-reference
+             (url "https://github.com/lxqt/lxqt-admin")
+             (commit version)))
+       (file-name (git-file-name name version))
        (sha256
-        (base32 "1p9959rvj5kh1svv2p9dsfnf008xvrhllcccrsxnk4s8vzjhdqjp"))))
-    (build-system cmake-build-system)
+        (base32 "180yn1yh0hbrz26wbvn3lgvm1hsnrxb1xcyphszfk4ahkzv0ywpg"))))
+    (build-system qt-build-system)
     (inputs
-     (list kwindowsystem-5
+     (list kwindowsystem
            liblxqt
            libqtxdg
-           polkit-qt
-           qtsvg-5
-           qtx11extras))
+           polkit-qt6
+           qtsvg))
     (native-inputs
-     (list lxqt-build-tools qttools-5))
+     (list lxqt-build-tools qttools))
     (arguments
-     '(#:tests? #f                      ; no tests
-       #:phases
-       (modify-phases %standard-phases
-         (add-after 'unpack 'patch-source
-           (lambda _
-             (substitute* '("lxqt-admin-user/CMakeLists.txt"
-                            "lxqt-admin-time/CMakeLists.txt")
-               (("DESTINATION \"\\$\\{POLKITQT-1_POLICY_FILES_INSTALL_DIR\\}")
-                "DESTINATION \"share/polkit-1/actions"))
-             #t)))))
+     (list #:tests? #f                      ; no tests
+           #:qtbase qtbase
+           #:phases
+           #~(modify-phases %standard-phases
+               (add-after 'unpack 'patch-source
+                 (lambda _
+                   (substitute* '("lxqt-admin-user/CMakeLists.txt"
+                                  "lxqt-admin-time/CMakeLists.txt")
+                     (("DESTINATION \"\\$\\{POLKITQT-1_POLICY_FILES_INSTALL_DIR\\}")
+                      "DESTINATION \"share/polkit-1/actions")))))))
     (home-page "https://lxqt-project.org")
     (synopsis "LXQt system administration tool")
     (description "lxqt-admin is providing two GUI tools to adjust settings of
