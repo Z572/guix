@@ -934,16 +934,18 @@ LXDE.")
     (version "0.16.0")
     (source
      (origin
-       (method url-fetch)
-       (uri (string-append "https://github.com/lxqt/" name "/releases/download/"
-                           version "/" name "-" version ".tar.xz"))
+       (method git-fetch)
+       (uri (git-reference
+             (url "https://github.com/lxqt/compton-conf")
+             (commit version)))
+       (file-name (git-file-name name version))
        (sha256
-        (base32 "0haarzhndjp0wndfhcdy6zl2whpdn3w0qzr3rr137kfqibc58lvx"))))
+        (base32 "04w2da0z8slhl6qrqz4pqkrwwai0j80f2s93ixzi5fnpykh1ygzs"))))
     (build-system cmake-build-system)
     (inputs
-     (list libconfig qtbase-5))
+     (list libconfig qtbase))
     (native-inputs
-     (list lxqt-build-tools pkg-config qttools-5))
+     (list lxqt-build-tools pkg-config qttools))
     (arguments '(#:tests? #f))          ; no tests
     (home-page "https://lxqt-project.org")
     (synopsis "GUI configuration tool for compton X composite manager")
