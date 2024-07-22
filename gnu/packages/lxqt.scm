@@ -457,24 +457,26 @@ as a whole and are not limited to distinct applications.")
 (define-public lxqt-notificationd
   (package
     (name "lxqt-notificationd")
-    (version "1.3.0")
+    (version "2.0.1")
     (source
      (origin
-       (method url-fetch)
-       (uri (string-append "https://github.com/lxqt/" name "/releases/download/"
-                           version "/" name "-" version ".tar.xz"))
+       (method git-fetch)
+       (uri (git-reference
+             (url "https://github.com/lxqt/lxqt-notificationd")
+             (commit version)))
+       (file-name (git-file-name name version))
        (sha256
-        (base32 "182mjvc17dvavk8vznhgnk6j1lv594bqv4796p2p1f4zdhq6fgm6"))))
+        (base32 "01pdssf17rpbad16nsaa72dq5izwiwwxffgi4r131vjbqrzw5bhs"))))
     (build-system cmake-build-system)
     (inputs
-     (list kwindowsystem-5
+     (list kwindowsystem
+           layer-shell-qt
            liblxqt
            libqtxdg
-           qtbase-5
-           qtsvg-5
-           qtx11extras))
+           qtbase
+           qtsvg))
     (native-inputs
-     (list lxqt-build-tools qttools-5))
+     (list lxqt-build-tools qttools))
     (arguments '(#:tests? #f))          ; no test target
     (home-page "https://lxqt-project.org")
     (synopsis "The LXQt notification daemon")
