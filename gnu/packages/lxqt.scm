@@ -101,15 +101,16 @@ to statistics about the system on which it's run.")
 (define-public lxqt-build-tools
   (package
     (name "lxqt-build-tools")
-    (version "0.13.0")
+    (version "2.0.0")
     (source
      (origin
-       (method url-fetch)
-       (uri (string-append "https://github.com/lxqt/lxqt-build-tools/releases"
-                           "/download/" version
-                           "/lxqt-build-tools-" version ".tar.xz"))
+       (method git-fetch)
+       (uri (git-reference
+             (url "https://github.com/lxqt/lxqt-build-tools")
+             (commit version)))
+       (file-name (git-file-name name version))
        (sha256
-        (base32 "1kjrxc1aj7yfn3v72lwryn58hkwsribsspm480qg4qbw1nfijg7x"))))
+        (base32 "0srhr4j133vxy9zdm8sfqww4kz6bbncr0zqpwjqp4rd4frj1whjv"))))
     (build-system cmake-build-system)
     (arguments
      (list
@@ -127,7 +128,7 @@ to statistics about the system on which it's run.")
           (add-after 'install 'patch-LXQtConfigVars.cmake
             (lambda _
               (substitute* (string-append #$output
-                                          "/share/cmake/lxqt-build-tools"
+                                          "/share/cmake/lxqt2-build-tools"
                                           "/modules/LXQtConfigVars.cmake")
                 (((regexp-quote (string-append #$output "/"))) "")))))
       #:configure-flags
@@ -135,7 +136,7 @@ to statistics about the system on which it's run.")
     (native-inputs
      (list pkg-config glib))
     (inputs
-     (list qtbase-5))
+     (list qtbase))
     (propagated-inputs
      ;; Dependent projects require Perl via the CMake files.
      (list perl))
