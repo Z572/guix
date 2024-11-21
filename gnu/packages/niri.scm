@@ -5865,62 +5865,6 @@ wrappers for the new DXC HLSL compiler and validator.")
      "This package provides Discover and configure system dependencies from declarative dependencies in\nCargo.toml.")
     (license (list license:expat license:asl2.0))))
 
-(define-public rust-system-deps-7
-  (package
-    (name "rust-system-deps")
-    (version "7.0.3")
-    (source
-     (origin
-       (method url-fetch)
-       (uri (crate-uri "system-deps" version))
-       (file-name
-        (string-append name "-" version ".tar.gz"))
-       (sha256
-        (base32
-         "01d0fllzpkfybzadyaq1vlx70imzj56dxs4rk9w2f4ikkypkmlk6"))))
-    (build-system cargo-build-system)
-    (arguments
-     `(#:skip-build?
-       #t
-       #:cargo-inputs
-       (("rust-cfg-expr" ,rust-cfg-expr-0.17)
-        ("rust-heck" ,rust-heck-0.5)
-        ("rust-pkg-config" ,rust-pkg-config-0.3)
-        ("rust-toml" ,rust-toml-0.8)
-        ("rust-version-compare"
-         ,rust-version-compare-0.2))))
-    (home-page
-     "https://github.com/gdesmott/system-deps")
-    (synopsis
-     "Discover and configure system dependencies from declarative dependencies in Cargo.toml")
-    (description
-     "This package provides Discover and configure system dependencies from declarative dependencies in\nCargo.toml.")
-    (license (list license:expat license:asl2.0))))
-
-(define-public rust-target-lexicon-0.12
-  (package
-    (name "rust-target-lexicon")
-    (version "0.12.16")
-    (source
-     (origin
-       (method url-fetch)
-       (uri (crate-uri "target-lexicon" version))
-       (file-name
-        (string-append name "-" version ".tar.gz"))
-       (sha256
-        (base32
-         "1cg3bnx1gdkdr5hac1hzxy64fhw4g7dqkd0n3dxy5lfngpr1mi31"))))
-    (build-system cargo-build-system)
-    (arguments `(#:skip-build? #t))
-    (home-page
-     "https://github.com/bytecodealliance/target-lexicon")
-    (synopsis
-     "Targeting utilities for compilers and related tools")
-    (description
-     "This package provides Targeting utilities for compilers and related tools.")
-    (license (list license:asl2.0 ;; unknown-license!
-                   ))))
-
 (define-public rust-tauri-winrt-notification-0.1
   (package
     (name "rust-tauri-winrt-notification")
@@ -5948,37 +5892,6 @@ wrappers for the new DXC HLSL compiler and validator.")
     (description
      "This package provides An incomplete wrapper over the @code{WinRT} toast api.")
     (license (list license:expat license:asl2.0))))
-
-#;(define-public rust-tempfile-3
-   (package
-     (name "rust-tempfile")
-     (version "3.13.0")
-     (source
-      (origin
-        (method url-fetch)
-        (uri (crate-uri "tempfile" version))
-        (file-name
-         (string-append name "-" version ".tar.gz"))
-        (sha256
-         (base32
-          "0nyagmbd4v5g6nzfydiihcn6l9j1w9bxgzyca5lyzgnhcbyckwph"))))
-     (build-system cargo-build-system)
-     (arguments
-      `(#:skip-build?
-        #t
-        #:cargo-inputs
-        (("rust-cfg-if" ,rust-cfg-if-1)
-         ("rust-fastrand" ,rust-fastrand-2)
-         ("rust-once-cell" ,rust-once-cell-1)
-         ("rust-rustix" ,rust-rustix-0.38)
-         ("rust-windows-sys" ,rust-windows-sys-0.59))))
-     (home-page
-      "https://stebalien.com/projects/tempfile-rs/")
-     (synopsis
-      "library for managing temporary files and directories.")
-     (description
-      "This package provides a library for managing temporary files and directories.")
-     (license (list license:expat license:asl2.0))))
 
 (define-public rust-textwrap-0.15
   (package
@@ -7180,61 +7093,6 @@ wrappers for the new DXC HLSL compiler and validator.")
      "This package provides Rust for Windows.")
     (license (list license:expat license:asl2.0))))
 
-(define-public rust-windows-interface-0.58
-  (package
-    (name "rust-windows-interface")
-    (version "0.58.0")
-    (source
-     (origin
-       (method url-fetch)
-       (uri (crate-uri "windows-interface" version))
-       (file-name
-        (string-append name "-" version ".tar.gz"))
-       (sha256
-        (base32
-         "059mxmfvx3x88q74ms0qlxmj2pnidmr5mzn60hakn7f95m34qg05"))))
-    (build-system cargo-build-system)
-    (arguments
-     `(#:skip-build?
-       #t
-       #:cargo-inputs
-       (("rust-proc-macro2" ,rust-proc-macro2-1)
-        ("rust-quote" ,rust-quote-1)
-        ("rust-syn" ,rust-syn-2))))
-    (home-page
-     "https://github.com/microsoft/windows-rs")
-    (synopsis
-     "The interface macro for the windows crate")
-    (description
-     "This package provides The interface macro for the windows crate.")
-    (license (list license:expat license:asl2.0))))
-
-(define-public rust-winnow-0.6
-  (package
-    (name "rust-winnow")
-    (version "0.6.20")
-    (source
-     (origin
-       (method url-fetch)
-       (uri (crate-uri "winnow" version))
-       (file-name
-        (string-append name "-" version ".tar.gz"))
-       (sha256
-        (base32
-         "16y4i8z9vh8hazjxg5mvmq0c5i35wlk8rxi5gkq6cn5vlb0zxh9n"))))
-    (build-system cargo-build-system)
-    (arguments
-     `(#:skip-build?
-       #t
-       #:cargo-inputs
-       (("rust-memchr" ,rust-memchr-2))))
-    (home-page "https://github.com/winnow-rs/winnow")
-    (synopsis
-     "byte-oriented, zero-copy, parser combinators library")
-    (description
-     "This package provides a byte-oriented, zero-copy, parser combinators library.")
-    (license license:expat)))
-
 (define-public rust-write16-1
   (package
     (name "rust-write16")
@@ -7279,58 +7137,26 @@ wrappers for the new DXC HLSL compiler and validator.")
      "This package provides a more efficient alternative to fmt::Display.")
     (license unknown-license!)))
 
-(define-public rust-x11rb-0.13
-  (package
-    (name "rust-x11rb")
-    (version "0.13.1")
-    (source
-     (origin
-       (method url-fetch)
-       (uri (crate-uri "x11rb" version))
-       (file-name
-        (string-append name "-" version ".tar.gz"))
-       (sha256
-        (base32
-         "04jyfm0xmc538v09pzsyr2w801yadsgvyl2p0p76hzzffg5gz4ax"))))
-    (build-system cargo-build-system)
-    (arguments
-     `(#:skip-build?
-       #t
-       #:cargo-inputs
-       (("rust-as-raw-xcb-connection"
-         ,rust-as-raw-xcb-connection-1)
-        ("rust-gethostname" ,rust-gethostname-0.4)
-        ("rust-libc" ,rust-libc-0.2)
-        ("rust-libloading" ,rust-libloading-0.8)
-        ("rust-once-cell" ,rust-once-cell-1)
-        ("rust-rustix" ,rust-rustix-0.38)
-        ("rust-x11rb-protocol" ,rust-x11rb-protocol-0.13))))
-    (home-page "https://github.com/psychon/x11rb")
-    (synopsis "Rust bindings to X11")
-    (description
-     "This package provides Rust bindings to X11.")
-    (license (list license:expat license:asl2.0))))
-
-(define-public rust-x11rb-protocol-0.13
-  (package
-    (name "rust-x11rb-protocol")
-    (version "0.13.1")
-    (source
-     (origin
-       (method url-fetch)
-       (uri (crate-uri "x11rb-protocol" version))
-       (file-name
-        (string-append name "-" version ".tar.gz"))
-       (sha256
-        (base32
-         "0gfbxf2k7kbk577j3rjhfx7hm70kmwln6da7xyc4l2za0d2pq47c"))))
-    (build-system cargo-build-system)
-    (arguments `(#:skip-build? #t))
-    (home-page "https://github.com/psychon/x11rb")
-    (synopsis "Rust bindings to X11")
-    (description
-     "This package provides Rust bindings to X11.")
-    (license (list license:expat license:asl2.0))))
+;; (define-public rust-x11rb-protocol-0.13
+;;   (package
+;;     (name "rust-x11rb-protocol")
+;;     (version "0.13.1")
+;;     (source
+;;      (origin
+;;        (method url-fetch)
+;;        (uri (crate-uri "x11rb-protocol" version))
+;;        (file-name
+;;         (string-append name "-" version ".tar.gz"))
+;;        (sha256
+;;         (base32
+;;          "0gfbxf2k7kbk577j3rjhfx7hm70kmwln6da7xyc4l2za0d2pq47c"))))
+;;     (build-system cargo-build-system)
+;;     (arguments `(#:skip-build? #t))
+;;     (home-page "https://github.com/psychon/x11rb")
+;;     (synopsis "Rust bindings to X11")
+;;     (description
+;;      "This package provides Rust bindings to X11.")
+;;     (license (list license:expat license:asl2.0))))
 
 (define-public rust-xcursor-0.3
   (package
@@ -7352,33 +7178,6 @@ wrappers for the new DXC HLSL compiler and validator.")
     (synopsis "library for loading XCursor themes")
     (description
      "This package provides a library for loading XCursor themes.")
-    (license license:expat)))
-
-(define-public rust-xdg-home-1
-  (package
-    (name "rust-xdg-home")
-    (version "1.3.0")
-    (source
-     (origin
-       (method url-fetch)
-       (uri (crate-uri "xdg-home" version))
-       (file-name
-        (string-append name "-" version ".tar.gz"))
-       (sha256
-        (base32
-         "1xm122zz0wjc8p8cmchij0j9nw34hwncb39jc7dc0mgvb2rdl77c"))))
-    (build-system cargo-build-system)
-    (arguments
-     `(#:skip-build?
-       #t
-       #:cargo-inputs
-       (("rust-libc" ,rust-libc-0.2)
-        ("rust-windows-sys" ,rust-windows-sys-0.59))))
-    (home-page "https://github.com/zeenix/xdg-home")
-    (synopsis
-     "The user's home directory as per XDG Specification")
-    (description
-     "This package provides The user's home directory as per XDG Specification.")
     (license license:expat)))
 
 (define-public rust-xkbcommon-0.8
