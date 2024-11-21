@@ -1232,28 +1232,6 @@
      "This package provides Stackfull Generator Library in Rust.")
     (license (list license:expat license:asl2.0))))
 
-(define-public rust-gimli-0.31
-  (package
-    (name "rust-gimli")
-    (version "0.31.1")
-    (source
-     (origin
-       (method url-fetch)
-       (uri (crate-uri "gimli" version))
-       (file-name
-        (string-append name "-" version ".tar.gz"))
-       (sha256
-        (base32
-         "0gvqc0ramx8szv76jhfd4dms0zyamvlg4whhiz11j34hh3dqxqh7"))))
-    (build-system cargo-build-system)
-    (arguments `(#:skip-build? #t))
-    (home-page "https://github.com/gimli-rs/gimli")
-    (synopsis
-     "library for reading and writing the DWARF debugging format.")
-    (description
-     "This package provides a library for reading and writing the DWARF debugging\nformat.")
-    (license (list license:expat license:asl2.0))))
-
 (define-public rust-glam-0.29
   (package
     (name "rust-glam")
@@ -1497,34 +1475,6 @@
     (description
      "This package provides FFI bindings of GTK 4.")
     (license license:expat)))
-
-(define-public rust-hashbrown-0.14
-  (package
-    (name "rust-hashbrown")
-    (version "0.14.5")
-    (source
-     (origin
-       (method url-fetch)
-       (uri (crate-uri "hashbrown" version))
-       (file-name
-        (string-append name "-" version ".tar.gz"))
-       (sha256
-        (base32
-         "1wa1vy1xs3mp11bn3z9dv0jricgr6a2j0zkf1g19yz3vw4il89z5"))))
-    (build-system cargo-build-system)
-    (arguments
-     `(#:skip-build?
-       #t
-       #:cargo-inputs
-       (("rust-ahash" ,rust-ahash-0.8)
-        ("rust-allocator-api2" ,rust-allocator-api2-0.2))))
-    (home-page
-     "https://github.com/rust-lang/hashbrown")
-    (synopsis
-     "Rust port of Google's SwissTable hash map")
-    (description
-     "This package provides a Rust port of Google's @code{SwissTable} hash map.")
-    (license (list license:expat license:asl2.0))))
 
 (define-public rust-hashbrown-0.15
   (package
