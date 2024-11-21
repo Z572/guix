@@ -1782,70 +1782,6 @@
      "This package provides Unmaintained, consider using web-time instead - A partial replacement for\nstd::time::Instant that works on WASM to.")
     (license license:bsd-3)))
 
-(define-public rust-io-lifetimes-1
-  (package
-    (name "rust-io-lifetimes")
-    (version "1.0.11")
-    (source
-     (origin
-       (method url-fetch)
-       (uri (crate-uri "io-lifetimes" version))
-       (file-name
-        (string-append name "-" version ".tar.gz"))
-       (sha256
-        (base32
-         "1hph5lz4wd3drnn6saakwxr497liznpfnv70via6s0v8x6pbkrza"))))
-    (build-system cargo-build-system)
-    (arguments
-     `(#:skip-build?
-       #t
-       #:cargo-inputs
-       (("rust-hermit-abi" ,rust-hermit-abi-0.3)
-        ("rust-libc" ,rust-libc-0.2)
-        ("rust-windows-sys" ,rust-windows-sys-0.48))))
-    (home-page
-     "https://github.com/sunfishcode/io-lifetimes")
-    (synopsis
-     "low-level I/O ownership and borrowing library")
-    (description
-     "This package provides a low-level I/O ownership and borrowing library.")
-    (license
-     ;; (list license:asl2.0
-     ;;       unknown-license!
-     ;;       license:asl2.0
-     ;;       license:expat)
-     #f
-     )))
-
-(define-public rust-is-terminal-0.4
-  (package
-    (name "rust-is-terminal")
-    (version "0.4.13")
-    (source
-     (origin
-       (method url-fetch)
-       (uri (crate-uri "is-terminal" version))
-       (file-name
-        (string-append name "-" version ".tar.gz"))
-       (sha256
-        (base32
-         "0jwgjjz33kkmnwai3nsdk1pz9vb6gkqvw1d1vq7bs3q48kinh7r6"))))
-    (build-system cargo-build-system)
-    (arguments
-     `(#:skip-build?
-       #t
-       #:cargo-inputs
-       (("rust-hermit-abi" ,rust-hermit-abi-0.4)
-        ("rust-libc" ,rust-libc-0.2)
-        ("rust-windows-sys" ,rust-windows-sys-0.52))))
-    (home-page
-     "https://github.com/sunfishcode/is-terminal")
-    (synopsis
-     "Test whether a given stream is a terminal")
-    (description
-     "This package provides Test whether a given stream is a terminal.")
-    (license license:expat)))
-
 (define-public rust-is-terminal-polyfill-1
   (package
     (name "rust-is-terminal-polyfill")
@@ -1867,33 +1803,6 @@
      "Polyfill for `is_terminal` stdlib feature for use with older MSRVs")
     (description
      "This package provides Polyfill for `is_terminal` stdlib feature for use with older MSRVs.")
-    (license (list license:expat license:asl2.0))))
-
-(define-public rust-js-sys-0.3
-  (package
-    (name "rust-js-sys")
-    (version "0.3.72")
-    (source
-     (origin
-       (method url-fetch)
-       (uri (crate-uri "js-sys" version))
-       (file-name
-        (string-append name "-" version ".tar.gz"))
-       (sha256
-        (base32
-         "1a8r61hbgw5kmscgj3g5pzg2ywlnswvljy0l592v0xdxlayz323a"))))
-    (build-system cargo-build-system)
-    (arguments
-     `(#:skip-build?
-       #t
-       #:cargo-inputs
-       (("rust-wasm-bindgen" ,rust-wasm-bindgen-0.2))))
-    (home-page
-     "https://rustwasm.github.io/wasm-bindgen/")
-    (synopsis
-     "Bindings for all JS global objects and functions in all JS environments like\nNode.js and browsers, built on `#[wasm_bindgen]` using the `wasm-bindgen` crate.")
-    (description
-     "This package provides Bindings for all JS global objects and functions in all JS environments like\nNode.js and browsers, built on `#[wasm_bindgen]` using the `wasm-bindgen` crate.")
     (license (list license:expat license:asl2.0))))
 
 (define-public rust-knuffel-3
