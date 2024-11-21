@@ -456,70 +456,6 @@
      "This package provides Trait to facilitate interoperatibility with libxcb C API.")
     (license (list license:expat license:asl2.0))))
 
-(define-public rust-async-channel-2
-  (package
-    (name "rust-async-channel")
-    (version "2.3.1")
-    (source
-     (origin
-       (method url-fetch)
-       (uri (crate-uri "async-channel" version))
-       (file-name
-        (string-append name "-" version ".tar.gz"))
-       (sha256
-        (base32
-         "0skvwxj6ysfc6d7bhczz9a2550260g62bm5gl0nmjxxyn007id49"))))
-    (build-system cargo-build-system)
-    (arguments
-     `(#:skip-build?
-       #t
-       #:cargo-inputs
-       (("rust-concurrent-queue"
-         ,rust-concurrent-queue-2)
-        ("rust-event-listener-strategy"
-         ,rust-event-listener-strategy-0.5)
-        ("rust-futures-core" ,rust-futures-core-0.3)
-        ("rust-pin-project-lite"
-         ,rust-pin-project-lite-0.2))))
-    (home-page
-     "https://github.com/smol-rs/async-channel")
-    (synopsis
-     "Async multi-producer multi-consumer channel")
-    (description
-     "This package provides Async multi-producer multi-consumer channel.")
-    (license (list license:asl2.0 license:expat))))
-
-(define-public rust-async-executor-1
-  (package
-    (name "rust-async-executor")
-    (version "1.13.1")
-    (source
-     (origin
-       (method url-fetch)
-       (uri (crate-uri "async-executor" version))
-       (file-name
-        (string-append name "-" version ".tar.gz"))
-       (sha256
-        (base32
-         "1v6w1dbvsmw6cs4dk4lxj5dvrikc6xi479wikwaab2qy3h09mjih"))))
-    (build-system cargo-build-system)
-    (arguments
-     `(#:skip-build?
-       #t
-       #:cargo-inputs
-       (("rust-async-task" ,rust-async-task-4)
-        ("rust-concurrent-queue"
-         ,rust-concurrent-queue-2)
-        ("rust-fastrand" ,rust-fastrand-2)
-        ("rust-futures-lite" ,rust-futures-lite-2)
-        ("rust-slab" ,rust-slab-0.4))))
-    (home-page
-     "https://github.com/smol-rs/async-executor")
-    (synopsis "Async executor")
-    (description
-     "This package provides Async executor.")
-    (license (list license:asl2.0 license:expat))))
-
 (define-public rust-async-recursion-1
   (package
     (name "rust-async-recursion")
@@ -4284,27 +4220,6 @@
     (description
      "This package provides FFI bindings to @code{PangoCairo}.")
     (license license:expat)))
-
-(define-public rust-parking-2
-  (package
-    (name "rust-parking")
-    (version "2.2.1")
-    (source
-     (origin
-       (method url-fetch)
-       (uri (crate-uri "parking" version))
-       (file-name
-        (string-append name "-" version ".tar.gz"))
-       (sha256
-        (base32
-         "1fnfgmzkfpjd69v4j9x737b1k8pnn054bvzcn5dm3pkgq595d3gk"))))
-    (build-system cargo-build-system)
-    (arguments `(#:skip-build? #t))
-    (home-page "https://github.com/smol-rs/parking")
-    (synopsis "Thread parking and unparking")
-    (description
-     "This package provides Thread parking and unparking.")
-    (license (list license:asl2.0 license:expat))))
 
 (define-public rust-pipewire-0.8
   (let ((commit "86df39190c0ab67444666a42908f7e8c1344e24a")
