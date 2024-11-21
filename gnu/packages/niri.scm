@@ -40,79 +40,6 @@
 
 (define-public unknown-license! #f)
 
-(define-public rust-android-activity-0.6
-  (package
-    (name "rust-android-activity")
-    (version "0.6.0")
-    (source
-     (origin
-       (method url-fetch)
-       (uri (crate-uri "android-activity" version))
-       (file-name
-        (string-append name "-" version ".tar.gz"))
-       (sha256
-        (base32
-         "0inh88x8x2fh62jg739s9hwyvdh8i920qf0qw7bhr802j9c7hsgg"))))
-    (build-system cargo-build-system)
-    (arguments
-     `(#:skip-build?
-       #t
-       #:cargo-inputs
-       (("rust-android-properties"
-         ,rust-android-properties-0.2)
-        ("rust-bitflags" ,rust-bitflags-2)
-        ("rust-cc" ,rust-cc-1)
-        ("rust-cesu8" ,rust-cesu8-1)
-        ("rust-jni" ,rust-jni-0.21)
-        ("rust-jni-sys" ,rust-jni-sys-0.3)
-        ("rust-libc" ,rust-libc-0.2)
-        ("rust-log" ,rust-log-0.4)
-        ("rust-ndk" ,rust-ndk-0.9)
-        ("rust-ndk-context" ,rust-ndk-context-0.1)
-        ("rust-ndk-sys" ,rust-ndk-sys-0.6)
-        ("rust-num-enum" ,rust-num-enum-0.7)
-        ("rust-thiserror" ,rust-thiserror-1))))
-    (home-page
-     "https://github.com/rust-mobile/android-activity")
-    (synopsis
-     "Glue for building Rust applications on Android with NativeActivity or GameActivity")
-    (description
-     "This package provides Glue for building Rust applications on Android with @code{NativeActivity} or\n@code{GameActivity}.")
-    (license (list license:expat license:asl2.0))))
-
-(define-public rust-anstream-0.6
-  (package
-    (name "rust-anstream")
-    (version "0.6.17")
-    (source
-     (origin
-       (method url-fetch)
-       (uri (crate-uri "anstream" version))
-       (file-name
-        (string-append name "-" version ".tar.gz"))
-       (sha256
-        (base32
-         "0f0k3g8hl8k8cd8f3rq6yj04415jhd3k3kz1mwnki1jx1wzyb893"))))
-    (build-system cargo-build-system)
-    (arguments
-     `(#:skip-build?
-       #t
-       #:cargo-inputs
-       (("rust-anstyle" ,rust-anstyle-1)
-        ("rust-anstyle-parse" ,rust-anstyle-parse-0.2)
-        ("rust-anstyle-query" ,rust-anstyle-query-1)
-        ("rust-anstyle-wincon" ,rust-anstyle-wincon-3)
-        ("rust-colorchoice" ,rust-colorchoice-1)
-        ("rust-is-terminal-polyfill"
-         ,rust-is-terminal-polyfill-1)
-        ("rust-utf8parse" ,rust-utf8parse-0.2))))
-    (home-page "https://github.com/rust-cli/anstyle")
-    (synopsis
-     "simple cross platform library for writing colored text to a terminal.")
-    (description
-     "This package provides a simple cross platform library for writing colored text\nto a terminal.")
-    (license (list license:expat license:asl2.0))))
-
 (define-public rust-anstyle-1
   (package
     (name "rust-anstyle")
@@ -6022,36 +5949,36 @@ wrappers for the new DXC HLSL compiler and validator.")
      "This package provides An incomplete wrapper over the @code{WinRT} toast api.")
     (license (list license:expat license:asl2.0))))
 
-(define-public rust-tempfile-3
-  (package
-    (name "rust-tempfile")
-    (version "3.13.0")
-    (source
-     (origin
-       (method url-fetch)
-       (uri (crate-uri "tempfile" version))
-       (file-name
-        (string-append name "-" version ".tar.gz"))
-       (sha256
-        (base32
-         "0nyagmbd4v5g6nzfydiihcn6l9j1w9bxgzyca5lyzgnhcbyckwph"))))
-    (build-system cargo-build-system)
-    (arguments
-     `(#:skip-build?
-       #t
-       #:cargo-inputs
-       (("rust-cfg-if" ,rust-cfg-if-1)
-        ("rust-fastrand" ,rust-fastrand-2)
-        ("rust-once-cell" ,rust-once-cell-1)
-        ("rust-rustix" ,rust-rustix-0.38)
-        ("rust-windows-sys" ,rust-windows-sys-0.59))))
-    (home-page
-     "https://stebalien.com/projects/tempfile-rs/")
-    (synopsis
-     "library for managing temporary files and directories.")
-    (description
-     "This package provides a library for managing temporary files and directories.")
-    (license (list license:expat license:asl2.0))))
+#;(define-public rust-tempfile-3
+   (package
+     (name "rust-tempfile")
+     (version "3.13.0")
+     (source
+      (origin
+        (method url-fetch)
+        (uri (crate-uri "tempfile" version))
+        (file-name
+         (string-append name "-" version ".tar.gz"))
+        (sha256
+         (base32
+          "0nyagmbd4v5g6nzfydiihcn6l9j1w9bxgzyca5lyzgnhcbyckwph"))))
+     (build-system cargo-build-system)
+     (arguments
+      `(#:skip-build?
+        #t
+        #:cargo-inputs
+        (("rust-cfg-if" ,rust-cfg-if-1)
+         ("rust-fastrand" ,rust-fastrand-2)
+         ("rust-once-cell" ,rust-once-cell-1)
+         ("rust-rustix" ,rust-rustix-0.38)
+         ("rust-windows-sys" ,rust-windows-sys-0.59))))
+     (home-page
+      "https://stebalien.com/projects/tempfile-rs/")
+     (synopsis
+      "library for managing temporary files and directories.")
+     (description
+      "This package provides a library for managing temporary files and directories.")
+     (license (list license:expat license:asl2.0))))
 
 (define-public rust-textwrap-0.15
   (package
