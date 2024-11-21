@@ -3327,62 +3327,6 @@
      "This package provides Custom-derive for the Arbitrary trait of proptest.")
     (license (list license:expat license:asl2.0))))
 
-(define-public rust-redox-syscall-0.5
-  (package
-    (name "rust-redox-syscall")
-    (version "0.5.7")
-    (source
-     (origin
-       (method url-fetch)
-       (uri (crate-uri "redox_syscall" version))
-       (file-name
-        (string-append name "-" version ".tar.gz"))
-       (sha256
-        (base32
-         "07vpgfr6a04k0x19zqr1xdlqm6fncik3zydbdi3f5g3l5k7zwvcv"))))
-    (build-system cargo-build-system)
-    (arguments
-     `(#:skip-build?
-       #t
-       #:cargo-inputs
-       (("rust-bitflags" ,rust-bitflags-2))))
-    (home-page
-     "https://gitlab.redox-os.org/redox-os/syscall")
-    (synopsis
-     "Rust library to access raw Redox system calls")
-    (description
-     "This package provides a Rust library to access raw Redox system calls.")
-    (license license:expat)))
-
-(define-public rust-redox-users-0.4
-  (package
-    (name "rust-redox-users")
-    (version "0.4.6")
-    (source
-     (origin
-       (method url-fetch)
-       (uri (crate-uri "redox_users" version))
-       (file-name
-        (string-append name "-" version ".tar.gz"))
-       (sha256
-        (base32
-         "0hya2cxx6hxmjfxzv9n8rjl5igpychav7zfi1f81pz6i4krry05s"))))
-    (build-system cargo-build-system)
-    (arguments
-     `(#:skip-build?
-       #t
-       #:cargo-inputs
-       (("rust-getrandom" ,rust-getrandom-0.2)
-        ("rust-libredox" ,rust-libredox-0.1)
-        ("rust-thiserror" ,rust-thiserror-1))))
-    (home-page
-     "https://gitlab.redox-os.org/redox-os/users")
-    (synopsis
-     "Rust library to access Redox users and groups functionality")
-    (description
-     "This package provides a Rust library to access Redox users and groups\nfunctionality.")
-    (license license:expat)))
-
 (define-public rust-regex-1
   (package
     (name "rust-regex")
