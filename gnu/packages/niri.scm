@@ -3214,33 +3214,6 @@
      "This package provides Replacement for crate (macro_rules keyword) in proc-macros.")
     (license (list license:expat license:asl2.0))))
 
-(define-public rust-proc-macro-crate-3
-  (package
-    (name "rust-proc-macro-crate")
-    (version "3.2.0")
-    (source
-     (origin
-       (method url-fetch)
-       (uri (crate-uri "proc-macro-crate" version))
-       (file-name
-        (string-append name "-" version ".tar.gz"))
-       (sha256
-        (base32
-         "0yzsqnavb3lmrcsmbrdjfrky9vcbl46v59xi9avn0796rb3likwf"))))
-    (build-system cargo-build-system)
-    (arguments
-     `(#:skip-build?
-       #t
-       #:cargo-inputs
-       (("rust-toml-edit" ,rust-toml-edit-0.22))))
-    (home-page
-     "https://github.com/bkchr/proc-macro-crate")
-    (synopsis
-     "Replacement for crate (macro_rules keyword) in proc-macros")
-    (description
-     "This package provides Replacement for crate (macro_rules keyword) in proc-macros.")
-    (license (list license:expat license:asl2.0))))
-
 (define-public rust-profiling-1
   (package
     (name "rust-profiling")
