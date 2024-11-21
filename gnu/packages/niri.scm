@@ -2981,37 +2981,6 @@
      "This package provides a key-value Map implementation based on a flat, sorted\nVec.")
     (license unknown-license!)))
 
-(define-public rust-loom-0.7
-  (package
-    (name "rust-loom")
-    (version "0.7.2")
-    (source
-     (origin
-       (method url-fetch)
-       (uri (crate-uri "loom" version))
-       (file-name
-        (string-append name "-" version ".tar.gz"))
-       (sha256
-        (base32
-         "1jpszf9qxv8ydpsm2h9vcyvxvyxcfkhmmfbylzd4gfbc0k40v7j1"))))
-    (build-system cargo-build-system)
-    (arguments
-     `(#:skip-build?
-       #t
-       #:cargo-inputs
-       (("rust-cfg-if" ,rust-cfg-if-1)
-        ("rust-generator" ,rust-generator-0.8)
-        ("rust-scoped-tls" ,rust-scoped-tls-1)
-        ("rust-tracing" ,rust-tracing-0.1)
-        ("rust-tracing-subscriber"
-         ,rust-tracing-subscriber-0.3))))
-    (home-page "https://github.com/tokio-rs/loom")
-    (synopsis
-     "Permutation testing for concurrent code")
-    (description
-     "This package provides Permutation testing for concurrent code.")
-    (license license:expat)))
-
 (define-public rust-mac-notification-sys-0.6
   (package
     (name "rust-mac-notification-sys")
@@ -6117,36 +6086,6 @@ wrappers for the new DXC HLSL compiler and validator.")
     (synopsis "TOML-compatible datetime type")
     (description
      "This package provides a TOML-compatible datetime type.")
-    (license (list license:expat license:asl2.0))))
-
-(define-public rust-toml-edit-0.22
-  (package
-    (name "rust-toml-edit")
-    (version "0.22.22")
-    (source
-     (origin
-       (method url-fetch)
-       (uri (crate-uri "toml_edit" version))
-       (file-name
-        (string-append name "-" version ".tar.gz"))
-       (sha256
-        (base32
-         "1xf7sxfzmnc45f75x302qrn5aph52vc8w226v59yhrm211i8vr2a"))))
-    (build-system cargo-build-system)
-    (arguments
-     `(#:skip-build?
-       #t
-       #:cargo-inputs
-       (("rust-indexmap" ,rust-indexmap-2)
-        ("rust-serde" ,rust-serde-1)
-        ("rust-serde-spanned" ,rust-serde-spanned-0.6)
-        ("rust-toml-datetime" ,rust-toml-datetime-0.6)
-        ("rust-winnow" ,rust-winnow-0.6))))
-    (home-page "https://github.com/toml-rs/toml")
-    (synopsis
-     "Yet another format-preserving TOML parser")
-    (description
-     "This package provides Yet another format-preserving TOML parser.")
     (license (list license:expat license:asl2.0))))
 
 (define-public rust-tracy-client-0.17
