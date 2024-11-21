@@ -2135,34 +2135,6 @@
      "This package provides Rust FFI bindings for libspa.")
     (license license:expat)))
 
-(define-public rust-linux-raw-sys-0.3
-  (package
-    (name "rust-linux-raw-sys")
-    (version "0.3.8")
-    (source
-     (origin
-       (method url-fetch)
-       (uri (crate-uri "linux-raw-sys" version))
-       (file-name
-        (string-append name "-" version ".tar.gz"))
-       (sha256
-        (base32
-         "068mbigb3frrxvbi5g61lx25kksy98f2qgkvc4xg8zxznwp98lzg"))))
-    (build-system cargo-build-system)
-    (arguments `(#:skip-build? #t))
-    (home-page
-     "https://github.com/sunfishcode/linux-raw-sys")
-    (synopsis
-     "Generated bindings for Linux's userspace API")
-    (description
-     "This package provides Generated bindings for Linux's userspace API.")
-    (license
-     ;; (list license:asl2.0
-     ;;       unknown-license!
-     ;;       license:asl2.0
-     ;;       license:expat)
-     #f)))
-
 (define-public rust-litemap-0.7
   (package
     (name "rust-litemap")
@@ -2471,134 +2443,6 @@
      "This package provides Show desktop notifications (linux, bsd, mac).  Pure Rust dbus client and server.")
     (license (list license:expat license:asl2.0))))
 
-(define-public rust-num-enum-0.7
-  (package
-    (name "rust-num-enum")
-    (version "0.7.3")
-    (source
-     (origin
-       (method url-fetch)
-       (uri (crate-uri "num_enum" version))
-       (file-name
-        (string-append name "-" version ".tar.gz"))
-       (sha256
-        (base32
-         "0yai0vafhy85mvhknzfqd7lm04hzaln7i5c599rhy8mj831kyqaf"))))
-    (build-system cargo-build-system)
-    (arguments
-     `(#:skip-build?
-       #t
-       #:cargo-inputs
-       (("rust-num-enum-derive"
-         ,rust-num-enum-derive-0.7))))
-    (home-page
-     "https://github.com/illicitonion/num_enum")
-    (synopsis
-     "Procedural macros to make inter-operation between primitives and enums easier")
-    (description
-     "This package provides Procedural macros to make inter-operation between primitives and enums easier.")
-    (license
-     (list license:bsd-3 license:expat license:asl2.0))))
-
-(define-public rust-num-enum-derive-0.7
-  (package
-    (name "rust-num-enum-derive")
-    (version "0.7.3")
-    (source
-     (origin
-       (method url-fetch)
-       (uri (crate-uri "num_enum_derive" version))
-       (file-name
-        (string-append name "-" version ".tar.gz"))
-       (sha256
-        (base32
-         "0mksna1jj87ydh146gn6jcqkvvs920c3dgh0p4f3xk184kpl865g"))))
-    (build-system cargo-build-system)
-    (arguments
-     `(#:skip-build?
-       #t
-       #:cargo-inputs
-       (("rust-proc-macro-crate"
-         ,rust-proc-macro-crate-3)
-        ("rust-proc-macro2" ,rust-proc-macro2-1)
-        ("rust-quote" ,rust-quote-1)
-        ("rust-syn" ,rust-syn-2))))
-    (home-page
-     "https://github.com/illicitonion/num_enum")
-    (synopsis
-     "Internal implementation details for ::num_enum (Procedural macros to make inter-operation between primitives and enums easier)")
-    (description
-     "This package provides Internal implementation details for ::num_enum (Procedural macros to make\ninter-operation between primitives and enums easier).")
-    (license
-     (list license:bsd-3 license:expat license:asl2.0))))
-
-(define-public rust-objc2-app-kit-0.2
-  (package
-    (name "rust-objc2-app-kit")
-    (version "0.2.2")
-    (source
-     (origin
-       (method url-fetch)
-       (uri (crate-uri "objc2-app-kit" version))
-       (file-name
-        (string-append name "-" version ".tar.gz"))
-       (sha256
-        (base32
-         "1zqyi5l1bm26j1bgmac9783ah36m5kcrxlqp5carglnpwgcrms74"))))
-    (build-system cargo-build-system)
-    (arguments
-     `(#:skip-build?
-       #t
-       #:cargo-inputs
-       (("rust-bitflags" ,rust-bitflags-2)
-        ("rust-block2" ,rust-block2-0.5)
-        ("rust-libc" ,rust-libc-0.2)
-        ("rust-objc2" ,rust-objc2-0.5)
-        ("rust-objc2-core-data"
-         ,rust-objc2-core-data-0.2)
-        ("rust-objc2-core-image"
-         ,rust-objc2-core-image-0.2)
-        ("rust-objc2-foundation"
-         ,rust-objc2-foundation-0.2)
-        ("rust-objc2-quartz-core"
-         ,rust-objc2-quartz-core-0.2))))
-    (home-page "https://github.com/madsmtm/objc2")
-    (synopsis "Bindings to the AppKit framework")
-    (description
-     "This package provides Bindings to the @code{AppKit} framework.")
-    (license license:expat)))
-
-(define-public rust-objc2-cloud-kit-0.2
-  (package
-    (name "rust-objc2-cloud-kit")
-    (version "0.2.2")
-    (source
-     (origin
-       (method url-fetch)
-       (uri (crate-uri "objc2-cloud-kit" version))
-       (file-name
-        (string-append name "-" version ".tar.gz"))
-       (sha256
-        (base32
-         "02dhjvmcq8c2bwj31jx423jygif1scs9f0lmlab0ayhw75b3ppbl"))))
-    (build-system cargo-build-system)
-    (arguments
-     `(#:skip-build?
-       #t
-       #:cargo-inputs
-       (("rust-bitflags" ,rust-bitflags-2)
-        ("rust-block2" ,rust-block2-0.5)
-        ("rust-objc2" ,rust-objc2-0.5)
-        ("rust-objc2-core-location"
-         ,rust-objc2-core-location-0.2)
-        ("rust-objc2-foundation"
-         ,rust-objc2-foundation-0.2))))
-    (home-page "https://github.com/madsmtm/objc2")
-    (synopsis "Bindings to the CloudKit framework")
-    (description
-     "This package provides Bindings to the @code{CloudKit} framework.")
-    (license license:expat)))
-
 (define-public rust-objc2-contacts-0.2
   (package
     (name "rust-objc2-contacts")
@@ -2715,28 +2559,6 @@
      "This package provides Bindings to the @code{CoreLocation} framework.")
     (license license:expat)))
 
-(define-public rust-objc2-encode-4
-  (package
-    (name "rust-objc2-encode")
-    (version "4.0.3")
-    (source
-     (origin
-       (method url-fetch)
-       (uri (crate-uri "objc2-encode" version))
-       (file-name
-        (string-append name "-" version ".tar.gz"))
-       (sha256
-        (base32
-         "1y7hjg4k828zhn4fjnbidrz3vzw4llk9ldy92drj47ydjc9yg4bq"))))
-    (build-system cargo-build-system)
-    (arguments `(#:skip-build? #t))
-    (home-page "https://github.com/madsmtm/objc2")
-    (synopsis
-     "Objective-C type-encoding representation and parsing")
-    (description
-     "This package provides Objective-C type-encoding representation and parsing.")
-    (license license:expat)))
-
 (define-public rust-objc2-foundation-0.2
   (package
     (name "rust-objc2-foundation")
@@ -2764,36 +2586,6 @@
     (synopsis "Bindings to the Foundation framework")
     (description
      "This package provides Bindings to the Foundation framework.")
-    (license license:expat)))
-
-(define-public rust-objc2-link-presentation-0.2
-  (package
-    (name "rust-objc2-link-presentation")
-    (version "0.2.2")
-    (source
-     (origin
-       (method url-fetch)
-       (uri (crate-uri "objc2-link-presentation" version))
-       (file-name
-        (string-append name "-" version ".tar.gz"))
-       (sha256
-        (base32
-         "160k4qh00yrx57dabn3hzas4r98kmk9bc0qsy1jvwday3irax8d1"))))
-    (build-system cargo-build-system)
-    (arguments
-     `(#:skip-build?
-       #t
-       #:cargo-inputs
-       (("rust-block2" ,rust-block2-0.5)
-        ("rust-objc2" ,rust-objc2-0.5)
-        ("rust-objc2-app-kit" ,rust-objc2-app-kit-0.2)
-        ("rust-objc2-foundation"
-         ,rust-objc2-foundation-0.2))))
-    (home-page "https://github.com/madsmtm/objc2")
-    (synopsis
-     "Bindings to the LinkPresentation framework")
-    (description
-     "This package provides Bindings to the @code{LinkPresentation} framework.")
     (license license:expat)))
 
 (define-public rust-objc2-metal-0.2
@@ -2855,59 +2647,6 @@
     (description
      "This package provides Bindings to the @code{QuartzCore/CoreAnimation} framework.")
     (license license:expat)))
-
-(define-public rust-objc2-symbols-0.2
-  (package
-    (name "rust-objc2-symbols")
-    (version "0.2.2")
-    (source
-     (origin
-       (method url-fetch)
-       (uri (crate-uri "objc2-symbols" version))
-       (file-name
-        (string-append name "-" version ".tar.gz"))
-       (sha256
-        (base32
-         "1p04hjkxan18g2b7h9n2n8xxsvazapv2h6mfmmdk06zc7pz4ws0a"))))
-    (build-system cargo-build-system)
-    (arguments
-     `(#:skip-build?
-       #t
-       #:cargo-inputs
-       (("rust-objc2" ,rust-objc2-0.5)
-        ("rust-objc2-foundation"
-         ,rust-objc2-foundation-0.2))))
-    (home-page "https://github.com/madsmtm/objc2")
-    (synopsis "Bindings to the Symbols framework")
-    (description
-     "This package provides Bindings to the Symbols framework.")
-    (license license:expat)))
-
-(define-public rust-object-0.36
-  (package
-    (name "rust-object")
-    (version "0.36.5")
-    (source
-     (origin
-       (method url-fetch)
-       (uri (crate-uri "object" version))
-       (file-name
-        (string-append name "-" version ".tar.gz"))
-       (sha256
-        (base32
-         "0gk8lhbs229c68lapq6w6qmnm4jkj48hrcw5ilfyswy514nhmpxf"))))
-    (build-system cargo-build-system)
-    (arguments
-     `(#:skip-build?
-       #t
-       #:cargo-inputs
-       (("rust-memchr" ,rust-memchr-2))))
-    (home-page "https://github.com/gimli-rs/object")
-    (synopsis
-     "unified interface for reading and writing object file formats.")
-    (description
-     "This package provides a unified interface for reading and writing object file\nformats.")
-    (license (list license:asl2.0 license:expat))))
 
 (define-public rust-ordered-float-4
   (package
@@ -3184,34 +2923,6 @@
      "Overwrite `assert_eq!` and `assert_ne!` with drop-in replacements, adding colorful diffs")
     (description
      "This package provides Overwrite `assert_eq!` and `assert_ne!` with drop-in replacements, adding\ncolorful diffs.")
-    (license (list license:expat license:asl2.0))))
-
-(define-public rust-proc-macro-crate-1
-  (package
-    (name "rust-proc-macro-crate")
-    (version "1.3.1")
-    (source
-     (origin
-       (method url-fetch)
-       (uri (crate-uri "proc-macro-crate" version))
-       (file-name
-        (string-append name "-" version ".tar.gz"))
-       (sha256
-        (base32
-         "069r1k56bvgk0f58dm5swlssfcp79im230affwk6d9ck20g04k3z"))))
-    (build-system cargo-build-system)
-    (arguments
-     `(#:skip-build?
-       #t
-       #:cargo-inputs
-       (("rust-once-cell" ,rust-once-cell-1)
-        ("rust-toml-edit" ,rust-toml-edit-0.19))))
-    (home-page
-     "https://github.com/bkchr/proc-macro-crate")
-    (synopsis
-     "Replacement for crate (macro_rules keyword) in proc-macros")
-    (description
-     "This package provides Replacement for crate (macro_rules keyword) in proc-macros.")
     (license (list license:expat license:asl2.0))))
 
 (define-public rust-profiling-1
