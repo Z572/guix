@@ -34214,6 +34214,59 @@ Directory traversal is already pretty fast.  If you don't need this crate's
 speed then walkdir provides a smaller and more tested single threaded implementation.")
     (license license:expat)))
 
+(define-public rust-knuffel-3
+  (package
+    (name "rust-knuffel")
+    (version "3.2.0")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "knuffel" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "04vl2xmdn280rcigv96v06a00v7gbxqggr0w9cqi2407qvfydgh4"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:cargo-inputs (("rust-base64" ,rust-base64-0.21)
+                       ("rust-chumsky" ,rust-chumsky-0.9)
+                       ("rust-knuffel-derive" ,rust-knuffel-derive-3)
+                       ("rust-miette" ,rust-miette-5)
+                       ("rust-minicbor" ,rust-minicbor-0.19)
+                       ("rust-thiserror" ,rust-thiserror-1)
+                       ("rust-unicode-width" ,rust-unicode-width-0.1))
+       #:cargo-development-inputs (("rust-assert-json-diff" ,rust-assert-json-diff-2)
+                                   ("rust-miette" ,rust-miette-5)
+                                   ("rust-serde-json" ,rust-serde-json-1))))
+    (home-page "https://github.com/tailhook/knuffel")
+    (synopsis "Another KDL language implementation")
+    (description "This package provides Another KDL language implementation.")
+    (license (list license:expat license:asl2.0))))
+
+(define-public rust-knuffel-derive-3
+  (package
+    (name "rust-knuffel-derive")
+    (version "3.2.0")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "knuffel-derive" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "0g98909l5wb1d1hcz61q53kvsmjadry2w3l47lg9dywwqib7z5wi"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:cargo-inputs (("rust-heck" ,rust-heck-0.4)
+                       ("rust-proc-macro-error" ,rust-proc-macro-error-1)
+                       ("rust-proc-macro2" ,rust-proc-macro2-1)
+                       ("rust-quote" ,rust-quote-1)
+                       ("rust-syn" ,rust-syn-1))
+       #:cargo-development-inputs (("rust-miette" ,rust-miette-5))))
+    (home-page "https://github.com/tailhook/knuffel")
+    (synopsis "A derive implementation for knuffel KDL parser")
+    (description
+     "This package provides a derive implementation for knuffel KDL parser.")
+    (license (list license:expat license:asl2.0))))
+
 (define-public rust-koibumi-base32-0.0.2
   (package
     (name "rust-koibumi-base32")
@@ -42905,6 +42958,53 @@ Server Protocol.")
     (synopsis "Rust LZ4 sys package")
     (description "This is the Rust LZ4 sys package.")
     (license license:expat)))
+
+(define-public rust-minicbor-0.19
+  (package
+    (name "rust-minicbor")
+    (version "0.19.1")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "minicbor" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "0fb1782d95yxhmzzykskhqas4s68ir9xbabiwi6zynbs4npml06p"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:skip-build? #t
+       #:cargo-inputs (("rust-half" ,rust-half-1)
+                       ("rust-minicbor-derive" ,rust-minicbor-derive-0.13))))
+    (home-page "https://github.com/twittner/minicbor")
+    (synopsis "small CBOR codec suitable for no_std environments.")
+    (description
+     "This package provides a small CBOR codec suitable for no_std environments.")
+    (license #f ;; unknown-license!
+             )))
+
+(define-public rust-minicbor-derive-0.13
+  (package
+    (name "rust-minicbor-derive")
+    (version "0.13.0")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "minicbor-derive" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "0rz235mzw8k1fd3dcb9lg1pv95fhnc8n7nqshj17knzg0sa80m0i"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:skip-build? #t
+       #:cargo-inputs (("rust-proc-macro2" ,rust-proc-macro2-1)
+                       ("rust-quote" ,rust-quote-1)
+                       ("rust-syn" ,rust-syn-1))))
+    (home-page "https://github.com/twittner/minicbor")
+    (synopsis "Derive minicbor `Decode` and `Encode` traits")
+    (description
+     "This package provides Derive minicbor `Decode` and `Encode` traits.")
+    (license #f ;; unknown-license!
+             )))
 
 (define-public rust-rust-lzma-0.5
   (package

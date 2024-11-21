@@ -24,6 +24,13 @@
   #:use-module (gnu packages crates-crypto)
   #:use-module (gnu packages crates-graphics)
   #:use-module (gnu packages crates-apple)
+  #:use-module (gnu packages admin)
+  #:use-module (gnu packages xdisorg)
+  #:use-module (gnu packages linux)
+  #:use-module (gnu packages freedesktop)
+  #:use-module (gnu packages gl)
+  #:use-module (gnu packages pkg-config)
+  #:use-module (gnu packages wm)
   #:use-module (gnu packages crates-io))
 
 (define unknown-license! #f)
@@ -4272,7 +4279,9 @@
         (string-append name "-" version ".tar.gz"))
        (sha256
         (base32
-         "0000000000000000000000000000000000000000000000000000"))))
+         ;; "0000000000000000000000000000000000000000000000000000"
+         "07yh4i5grzbxkchg6dnxlwbdw2wm5jnd7ffbhl77jr0388b9f3dz"
+         ))))
     (build-system cargo-build-system)
     (arguments
      `(#:skip-build?
@@ -4646,18 +4655,39 @@
     (name "rust-niri")
     (version "0.1.10")
     (source
+     ;; (origin
+     ;;   (method url-fetch)
+     ;;   (uri (crate-uri "niri" version))
+     ;;   (file-name
+     ;;    (string-append name "-" version ".tar.gz"))
+     ;;   (sha256
+     ;;    (base32
+     ;;     "0000000000000000000000000000000000000000000000000000")))
      (origin
-       (method url-fetch)
-       (uri (crate-uri "niri" version))
-       (file-name
-        (string-append name "-" version ".tar.gz"))
+       (method git-fetch)
+       (uri (git-reference
+             (url "https://github.com/YaLTeR/niri")
+             (commit (string-append "v" version))))
+       (file-name (git-file-name name version))
        (sha256
-        (base32
-         "0000000000000000000000000000000000000000000000000000"))))
+        (base32 "11sjz3ckk8qw74h1ahgkx5yxjzndjzawqdg5d5s6y0l0rz3pkbbr"))
+       (modules '((guix build utils)))
+       (snippet
+        '(begin (substitute* "Cargo.toml"
+                  (("git = \"https://github.com/Smithay/smithay.git\"")
+                   "")
+                  (("# path = \"\\.\\./smithay\"")
+                   "version = \"0.3.0\"")
+                  (("# path = \"\\.\\./smithay/smithay-drm-extras\"")
+                   "version = \"0.1.0\"")
+                  (("git = \"https://gitlab.freedesktop.org/pipewire/pipewire-rs.git\"")
+                   "version = \"0.8.0\"")))))
+
+     )
     (build-system cargo-build-system)
     (arguments
-     `(#:skip-build?
-       #t
+     `(;; #:skip-build?
+       ;; #t
        #:cargo-inputs
        (("rust-anyhow" ,rust-anyhow-1)
         ("rust-approx" ,rust-approx-0.5)
@@ -4712,25 +4742,38 @@
          ,rust-wayland-scanner-0.31)
         ("rust-xcursor" ,rust-xcursor-0.3)
         ("rust-xshell" ,rust-xshell-0.2)
-        ("rust-zbus" ,rust-zbus-3))))
+        ("rust-zbus" ,rust-zbus-3)
+
+        ;; xxx
+        ("rust-libadwaita" ,rust-libadwaita-0.7))))
+    (inputs (list rust-smithay-0.3 rust-smithay-drm-extras-0.1))
     (home-page "")
     (synopsis "")
     (description "")
     (license #f)))
 
-(define rust-niri-config-0.1
+(define-public rust-niri-config-0.1
   (package
     (name "rust-niri-config")
     (version "0.1.10")
     (source
+     ;; (origin
+     ;;   (method url-fetch)
+     ;;   (uri (crate-uri "niri-config" version))
+     ;;   (file-name
+     ;;    (string-append name "-" version ".tar.gz"))
+     ;;   (sha256
+     ;;    (base32
+     ;;     "0000000000000000000000000000000000000000000000000000")))
      (origin
-       (method url-fetch)
-       (uri (crate-uri "niri-config" version))
-       (file-name
-        (string-append name "-" version ".tar.gz"))
+       (method git-fetch)
+       (uri (git-reference
+             (url "https://github.com/YaLTeR/niri")
+             (commit (string-append "v" version))))
+       (file-name (git-file-name name version))
        (sha256
-        (base32
-         "0000000000000000000000000000000000000000000000000000"))))
+        (base32 "11sjz3ckk8qw74h1ahgkx5yxjzndjzawqdg5d5s6y0l0rz3pkbbr")))
+     )
     (build-system cargo-build-system)
     (arguments
      `(#:skip-build?
@@ -4765,7 +4808,9 @@
         (string-append name "-" version ".tar.gz"))
        (sha256
         (base32
-         "0000000000000000000000000000000000000000000000000000"))))
+         ;; "0000000000000000000000000000000000000000000000000000"
+         "0hj2yxs90xcs14mnj36q2y51n2n2s5qvlr97nwdds9mlsg5439aa"
+         ))))
     (build-system cargo-build-system)
     (arguments
      `(#:skip-build?
@@ -5852,7 +5897,9 @@
         (string-append name "-" version ".tar.gz"))
        (sha256
         (base32
-         "0000000000000000000000000000000000000000000000000000"))))
+         ;; "0000000000000000000000000000000000000000000000000000"
+         "1nldg1hz4v0qr26lzdxqpvrac4zbc3pb6436sl392425bjx4brh8"
+         ))))
     (build-system cargo-build-system)
     (arguments
      `(#:skip-build?
@@ -5885,7 +5932,9 @@
         (string-append name "-" version ".tar.gz"))
        (sha256
         (base32
-         "0000000000000000000000000000000000000000000000000000"))))
+         ;; "0000000000000000000000000000000000000000000000000000"
+         "04hiy3rl8v3j2dfzp04gr7r8l5azzqqsvqdzwa7sipdij27ii7l4"
+         ))))
     (build-system cargo-build-system)
     (arguments
      `(#:skip-build?
@@ -7136,74 +7185,891 @@
      "This package provides functions for finding row-minima in a totally monotone\nmatrix.")
     (license license:expat)))
 
-(define rust-smithay-0.3
+(define-public rust-fps-ticker-1
   (package
-    (name "rust-smithay")
-    (version "0.3.0")
+    (name "rust-fps-ticker")
+    (version "1.0.0")
     (source
      (origin
        (method url-fetch)
-       (uri (crate-uri "smithay" version))
-       (file-name
-        (string-append name "-" version ".tar.gz"))
+       (uri (crate-uri "fps_ticker" version))
+       (file-name (string-append name "-" version ".tar.gz"))
        (sha256
-        (base32
-         "0000000000000000000000000000000000000000000000000000"))))
+        (base32 "06cj5c5rk5grm2ajh4sabcppxr1h57gxfqacvi5psxb9zw2lj5py"))))
+    (build-system cargo-build-system)
+    (home-page "https://github.com/mitchmindtree/fps_ticker")
+    (synopsis
+     "simple crate for measuring the average, minimum and maximum frame rate over a window of time.")
+    (description
+     "This package provides a simple crate for measuring the average, minimum and
+maximum frame rate over a window of time.")
+    (license (list license:expat license:asl2.0))))
+
+
+(define-public rust-lz4-flex-0.10
+  (package
+    (name "rust-lz4-flex")
+    (version "0.10.0")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "lz4_flex" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "10sgbj93sagbl0ngzqvnlkldzbfz5vnzr7fry8sgssy299cp534b"))))
     (build-system cargo-build-system)
     (arguments
-     `(#:skip-build?
-       #t
-       #:cargo-inputs
-       (("rust-appendlist" ,rust-appendlist-1)
-        ("rust-bitflags" ,rust-bitflags-2)
-        ("rust-calloop" ,rust-calloop-0.14)
-        ("rust-cc" ,rust-cc-1)
-        ("rust-cgmath" ,rust-cgmath-0.18)
-        ("rust-cursor-icon" ,rust-cursor-icon-1)
-        ("rust-downcast-rs" ,rust-downcast-rs-1)
-        ("rust-drm" ,rust-drm-0.14)
-        ("rust-drm-ffi" ,rust-drm-ffi-0.9)
-        ("rust-drm-fourcc" ,rust-drm-fourcc-2)
-        ("rust-errno" ,rust-errno-0.3)
-        ("rust-gbm" ,rust-gbm-0.16)
-        ("rust-gl-generator" ,rust-gl-generator-0.14)
-        ("rust-indexmap" ,rust-indexmap-2)
-        ("rust-input" ,rust-input-0.9)
-        ("rust-libc" ,rust-libc-0.2)
-        ("rust-libloading" ,rust-libloading-0.8)
-        ("rust-libseat" ,rust-libseat-0.2)
-        ("rust-once-cell" ,rust-once-cell-1)
-        ("rust-pixman" ,rust-pixman-0.1)
-        ("rust-pkg-config" ,rust-pkg-config-0.3)
-        ("rust-profiling" ,rust-profiling-1)
-        ("rust-rand" ,rust-rand-0.8)
-        ("rust-rustix" ,rust-rustix-0.38)
-        ("rust-smallvec" ,rust-smallvec-1)
-        ("rust-tempfile" ,rust-tempfile-3)
-        ("rust-thiserror" ,rust-thiserror-1)
-        ("rust-tracing" ,rust-tracing-0.1)
-        ("rust-udev" ,rust-udev-0.9)
-        ("rust-wayland-backend"
-         ,rust-wayland-backend-0.3)
-        ("rust-wayland-client" ,rust-wayland-client-0.31)
-        ("rust-wayland-cursor" ,rust-wayland-cursor-0.31)
-        ("rust-wayland-egl" ,rust-wayland-egl-0.32)
-        ("rust-wayland-protocols"
-         ,rust-wayland-protocols-0.32)
-        ("rust-wayland-protocols-misc"
-         ,rust-wayland-protocols-misc-0.3)
-        ("rust-wayland-protocols-wlr"
-         ,rust-wayland-protocols-wlr-0.3)
-        ("rust-wayland-server" ,rust-wayland-server-0.31)
-        ("rust-wayland-sys" ,rust-wayland-sys-0.31)
-        ("rust-winit" ,rust-winit-0.30)
-        ("rust-xkbcommon" ,rust-xkbcommon-0.8))))
-    (home-page "https://smithay.github.io/")
-    (synopsis
-     "Smithay is a library for writing wayland compositors")
+     `(#:skip-build? #t
+       #:cargo-inputs (("rust-twox-hash" ,rust-twox-hash-1))))
+    (home-page "https://github.com/pseitz/lz4_flex")
+    (synopsis "Fastest LZ4 implementation in Rust, no unsafe by default")
     (description
-     "This package provides Smithay is a library for writing wayland compositors.")
+     "This package provides Fastest LZ4 implementation in Rust, no unsafe by default.")
     (license license:expat)))
+
+(define-public rust-puffin-0.16
+  (package
+    (name "rust-puffin")
+    (version "0.16.0")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "puffin" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "08ass1hfdcq86y7dywa1jylzq57la95rgpcmd6yx82hs9symlhkn"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:skip-build? #t
+       #:cargo-inputs (("rust-anyhow" ,rust-anyhow-1)
+                       ("rust-bincode" ,rust-bincode-1)
+                       ("rust-byteorder" ,rust-byteorder-1)
+                       ("rust-cfg-if" ,rust-cfg-if-1)
+                       ("rust-instant" ,rust-instant-0.1)
+                       ("rust-js-sys" ,rust-js-sys-0.3)
+                       ("rust-lz4-flex" ,rust-lz4-flex-0.10)
+                       ("rust-once-cell" ,rust-once-cell-1)
+                       ("rust-parking-lot" ,rust-parking-lot-0.12)
+                       ("rust-ruzstd" ,rust-ruzstd-0.4)
+                       ("rust-serde" ,rust-serde-1)
+                       ("rust-zstd" ,rust-zstd-0.12))))
+    (home-page "https://github.com/EmbarkStudios/puffin")
+    (synopsis "Simple instrumentation profiler for games")
+    (description
+     "This package provides Simple instrumentation profiler for games.")
+    (license (list license:expat license:asl2.0))))
+
+(define-public rust-puffin-http-0.13
+  (package
+    (name "rust-puffin-http")
+    (version "0.13.0")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "puffin_http" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "14w1ihjlv48mpbh114yvgixdqdnzzipnmsg158l3v49m1ihgrgqk"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:cargo-inputs (("rust-anyhow" ,rust-anyhow-1)
+                       ("rust-crossbeam-channel" ,rust-crossbeam-channel-0.5)
+                       ("rust-log" ,rust-log-0.4)
+                       ("rust-puffin" ,rust-puffin-0.16))
+       #:cargo-development-inputs (("rust-simple-logger" ,rust-simple-logger-2))))
+    (home-page "https://github.com/EmbarkStudios/puffin")
+    (synopsis "TCP server/client for puffin profiler data")
+    (description
+     "This package provides TCP server/client for puffin profiler data.")
+    (license (list license:expat license:asl2.0))))
+
+(define-public rust-wgpu-subscriber-0.1
+  (package
+    (name "rust-wgpu-subscriber")
+    (version "0.1.0")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "wgpu-subscriber" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "09zdjmi3dhy4ff3dq4260nf6kl5cslfhs2xxgdbnxn40ch6mp5ci"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:skip-build? #t
+       #:cargo-inputs (("rust-parking-lot" ,rust-parking-lot-0.11)
+                       ("rust-thread-id" ,rust-thread-id-3)
+                       ("rust-tracing" ,rust-tracing-0.1)
+                       ("rust-tracing-log" ,rust-tracing-log-0.1)
+                       ("rust-tracing-subscriber" ,rust-tracing-subscriber-0.2))))
+    (home-page "https://github.com/gfx-rs/wgpu")
+    (synopsis "WebGPU tracing subscribers")
+    (description "This package provides @code{WebGPU} tracing subscribers.")
+    (license license:mpl2.0)))
+
+(define-public rust-wgpu-types-0.15
+  (package
+    (name "rust-wgpu-types")
+    (version "0.15.2")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "wgpu-types" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "047iysi1v6yznrfplgp08jyr353s8pg2zqqd5jq0rl0b3c94wi1j"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:skip-build? #t
+       #:cargo-inputs (("rust-bitflags" ,rust-bitflags-1)
+                       ("rust-js-sys" ,rust-js-sys-0.3)
+                       ("rust-serde" ,rust-serde-1)
+                       ("rust-web-sys" ,rust-web-sys-0.3))))
+    (home-page "https://wgpu.rs/")
+    (synopsis "WebGPU types")
+    (description "This package provides @code{WebGPU} types.")
+    (license (list license:expat license:asl2.0))))
+
+(define-public rust-renderdoc-sys-0.7
+  (package
+    (name "rust-renderdoc-sys")
+    (version "0.7.1")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "renderdoc-sys" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "0mx1crv83mwmfl7yvhnpmhjb01fx5yd9f3f2gpwlnb1518gjsf7i"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:skip-build? #t))
+    (home-page
+     "https://github.com/ebkalderon/renderdoc-rs/tree/master/renderdoc-sys")
+    (synopsis "Low-level bindings to the RenderDoc API")
+    (description
+     "This package provides Low-level bindings to the @code{RenderDoc} API.")
+    (license (list license:expat license:asl2.0))))
+
+(define-public rust-range-alloc-0.1
+  (package
+    (name "rust-range-alloc")
+    (version "0.1.3")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "range-alloc" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "1azfwh89nd4idj0s272qgmw3x1cj6m7d3f44b2la02wzvkyrk2lw"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:skip-build? #t))
+    (home-page "https://github.com/gfx-rs/range-alloc")
+    (synopsis "Generic range allocator")
+    (description "This package provides Generic range allocator.")
+    (license (list license:expat license:asl2.0))))
+
+(define-public rust-metal-0.24
+  (package
+    (name "rust-metal")
+    (version "0.24.0")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "metal" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "0q6h0a20003db7h77xbv37dwwpc2wx6lsfvs08nli0b73xfka4fy"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:skip-build? #t
+       #:cargo-inputs (("rust-bitflags" ,rust-bitflags-1)
+                       ("rust-block" ,rust-block-0.1)
+                       ("rust-core-graphics-types" ,rust-core-graphics-types-0.1)
+                       ("rust-dispatch" ,rust-dispatch-0.2)
+                       ("rust-foreign-types" ,rust-foreign-types-0.3)
+                       ("rust-log" ,rust-log-0.4)
+                       ("rust-objc" ,rust-objc-0.2))))
+    (home-page "https://github.com/gfx-rs/metal-rs")
+    (synopsis "Rust bindings for Metal")
+    (description "This package provides Rust bindings for Metal.")
+    (license (list license:expat license:asl2.0))))
+
+(define-public rust-khronos-egl-4
+  (package
+    (name "rust-khronos-egl")
+    (version "4.1.0")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "khronos-egl" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "1qqm42ix278w72snhss8sw8kq4y8c11z4h4xrdqvikhb3nym48wc"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:skip-build? #t
+       #:cargo-inputs (("rust-libc" ,rust-libc-0.2)
+                       ("rust-libloading" ,rust-libloading-0.7)
+                       ("rust-pkg-config" ,rust-pkg-config-0.3))))
+    (home-page "https://github.com/timothee-haudebourg/khronos-egl")
+    (synopsis "Rust bindings for EGL")
+    (description "This package provides Rust bindings for EGL.")
+    (license (list license:expat license:asl2.0))))
+
+(define-public rust-com-rs-0.2
+  (package
+    (name "rust-com-rs")
+    (version "0.2.1")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "com-rs" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "0hk6051kwpabjs2dx32qkkpy0xrliahpqfh9df292aa0fv2yshxz"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:skip-build? #t))
+    (home-page "https://github.com/Eljay/com-rs")
+    (synopsis "Deprecated. Use the `com` crate instead")
+    (description
+     "This package provides Deprecated.  Use the `com` crate instead.")
+    (license (list license:expat license:asl2.0))))
+
+(define-public rust-hassle-rs-0.9
+  (package
+    (name "rust-hassle-rs")
+    (version "0.9.0")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "hassle-rs" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "11gvc8z6m8s4rfry2fsj7lh75n53yfrjr12kzi2p7336i5hiqq4h"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:skip-build? #t
+       #:cargo-inputs (("rust-bitflags" ,rust-bitflags-1)
+                       ("rust-com-rs" ,rust-com-rs-0.2)
+                       ("rust-libc" ,rust-libc-0.2)
+                       ("rust-libloading" ,rust-libloading-0.7)
+                       ("rust-thiserror" ,rust-thiserror-1)
+                       ("rust-widestring" ,rust-widestring-0.5)
+                       ("rust-winapi" ,rust-winapi-0.3))))
+    (home-page "https://github.com/Traverse-Research/hassle-rs")
+    (synopsis
+     "HLSL compiler library, this crate provides an FFI layer and idiomatic rust wrappers for the new DXC HLSL compiler and validator")
+    (description
+     "This package provides HLSL compiler library, this crate provides an FFI layer and idiomatic rust
+wrappers for the new DXC HLSL compiler and validator.")
+    (license license:expat)))
+
+(define-public rust-gpu-descriptor-types-0.1
+  (package
+    (name "rust-gpu-descriptor-types")
+    (version "0.1.2")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "gpu-descriptor-types" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "135pp1b3bzyr7bfnb30rf9pkgy61h75w0jabi8fpw2q9dxpb7w3b"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:skip-build? #t
+       #:cargo-inputs (("rust-bitflags" ,rust-bitflags-2))))
+    (home-page "https://github.com/zakarumych/gpu-descriptor")
+    (synopsis "Core types of gpu-descriptor crate")
+    (description "This package provides Core types of gpu-descriptor crate.")
+    (license (list license:expat license:asl2.0))))
+
+(define-public rust-gpu-descriptor-0.2
+  (package
+    (name "rust-gpu-descriptor")
+    (version "0.2.4")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "gpu-descriptor" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "0b38pi460ajx8ksb61zxardwkpa27qgz8fpm252mczlfrqddy4fc"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:skip-build? #t
+       #:cargo-inputs (("rust-bitflags" ,rust-bitflags-2)
+                       ("rust-gpu-descriptor-types" ,rust-gpu-descriptor-types-0.1)
+                       ("rust-hashbrown" ,rust-hashbrown-0.14)
+                       ("rust-serde" ,rust-serde-1)
+                       ("rust-tracing" ,rust-tracing-0.1))))
+    (home-page "https://github.com/zakarumych/gpu-descriptor")
+    (synopsis
+     "Implementation agnostic descriptor allocator for Vulkan like APIs")
+    (description
+     "This package provides Implementation agnostic descriptor allocator for Vulkan like APIs.")
+    (license (list license:expat license:asl2.0))))
+
+(define-public rust-chlorine-1
+  (package
+    (name "rust-chlorine")
+    (version "1.0.12")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "chlorine" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "0jcsm5bfikdw0q1ha321qislhb8p2l8nazadcvvqx9vckxbff40y"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:skip-build? #t))
+    (home-page "https://github.com/Lokathor/chlorine")
+    (synopsis "Just the C types for `no_std`, but builds faster")
+    (description
+     "This package provides Just the C types for `no_std`, but builds faster.")
+    (license (list license:zlib license:asl2.0 license:expat))))
+
+(define-public rust-imgui-sys-0.10
+  (package
+    (name "rust-imgui-sys")
+    (version "0.10.0")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "imgui-sys" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "1nqa4msiqip1vs8ciw4avlq6xzmk328571zrcnqr7hmq8fzylb31"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:skip-build? #t
+       #:cargo-inputs (("rust-cc" ,rust-cc-1)
+                       ("rust-cfg-if" ,rust-cfg-if-1)
+                       ("rust-chlorine" ,rust-chlorine-1)
+                       ("rust-mint" ,rust-mint-0.5)
+                       ("rust-pkg-config" ,rust-pkg-config-0.3)
+                       ("rust-vcpkg" ,rust-vcpkg-0.2))))
+    (home-page "https://github.com/imgui-rs/imgui-rs")
+    (synopsis "Raw FFI bindings to dear imgui")
+    (description "This package provides Raw FFI bindings to dear imgui.")
+    (license (list license:expat license:asl2.0))))
+
+(define-public rust-imgui-0.10
+  (package
+    (name "rust-imgui")
+    (version "0.10.0")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "imgui" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "1g11074q3s23igmhqfdgs1mb54lpvn7gdab38scrqz94j351ksic"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:skip-build? #t
+       #:cargo-inputs (("rust-bitflags" ,rust-bitflags-1)
+                       ("rust-cfg-if" ,rust-cfg-if-1)
+                       ("rust-imgui-sys" ,rust-imgui-sys-0.10)
+                       ("rust-mint" ,rust-mint-0.5)
+                       ("rust-parking-lot" ,rust-parking-lot-0.12))))
+    (home-page "https://github.com/imgui-rs/imgui-rs")
+    (synopsis "High-level Rust bindings to dear imgui")
+    (description
+     "This package provides High-level Rust bindings to dear imgui.")
+    (license (list license:expat license:asl2.0))))
+
+(define-public rust-gpu-allocator-0.22
+  (package
+    (name "rust-gpu-allocator")
+    (version "0.22.0")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "gpu-allocator" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "1s13qi1yvp8gan95q7r3dxbhdnq503v5laz4zjnnyb0ww7igk5ff"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:skip-build? #t
+       #:cargo-inputs (("rust-ash" ,rust-ash-0.37)
+                       ("rust-backtrace" ,rust-backtrace-0.3)
+                       ("rust-imgui" ,rust-imgui-0.10)
+                       ("rust-log" ,rust-log-0.4)
+                       ("rust-thiserror" ,rust-thiserror-1)
+                       ("rust-winapi" ,rust-winapi-0.3)
+                       ("rust-windows" ,rust-windows-0.44))))
+    (home-page "https://github.com/Traverse-Research/gpu-allocator")
+    (synopsis "Memory allocator for GPU memory in Vulkan and DirectX 12")
+    (description
+     "This package provides Memory allocator for GPU memory in Vulkan and @code{DirectX} 12.")
+    (license (list license:expat license:asl2.0))))
+
+(define-public rust-gpu-alloc-types-0.2
+  (package
+    (name "rust-gpu-alloc-types")
+    (version "0.2.0")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "gpu-alloc-types" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "19b7zqg0va1lqcr7sj2z66cvasgg1p8imv7aninz5my9dc6lv02l"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:skip-build? #t
+       #:cargo-inputs (("rust-bitflags" ,rust-bitflags-1))))
+    (home-page "https://github.com/zakarumych/gpu-alloc")
+    (synopsis "Core types of gpu-alloc crate")
+    (description "This package provides Core types of gpu-alloc crate.")
+    (license (list license:expat license:asl2.0))))
+
+(define-public rust-gpu-alloc-0.5
+  (package
+    (name "rust-gpu-alloc")
+    (version "0.5.4")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "gpu-alloc" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "0qkzv19k8ls20nx13qw63gfy9jc4gbxzcc50gr2h90mk57yamgi2"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:skip-build? #t
+       #:cargo-inputs (("rust-bitflags" ,rust-bitflags-1)
+                       ("rust-gpu-alloc-types" ,rust-gpu-alloc-types-0.2)
+                       ("rust-serde" ,rust-serde-1)
+                       ("rust-tracing" ,rust-tracing-0.1))))
+    (home-page "https://github.com/zakarumych/gpu-alloc")
+    (synopsis "Implementation agnostic memory allocator for Vulkan like APIs")
+    (description
+     "This package provides Implementation agnostic memory allocator for Vulkan like APIs.")
+    (license (list license:expat license:asl2.0))))
+
+(define-public rust-d3d12-0.6
+  (package
+    (name "rust-d3d12")
+    (version "0.6.0")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "d3d12" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "1nirigg48lvilgbwgbk89xrf2k1ak60wgqy0xslx8ywfb8pxxw6q"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:skip-build? #t
+       #:cargo-inputs (("rust-bitflags" ,rust-bitflags-1)
+                       ("rust-libloading" ,rust-libloading-0.7)
+                       ("rust-winapi" ,rust-winapi-0.3))))
+    (home-page "https://github.com/gfx-rs/wgpu/tree/trunk/d3d12")
+    (synopsis "Low level D3D12 API wrapper")
+    (description "This package provides Low level D3D12 API wrapper.")
+    (license (list license:expat license:asl2.0))))
+
+(define-public rust-wgpu-hal-0.15
+  (package
+    (name "rust-wgpu-hal")
+    (version "0.15.4")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "wgpu-hal" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "12r8w1577ivkdhf6c9xhlrf6vy7kj7m8ipakajxl9ixdhfi63kxx"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:skip-build? #t
+       #:cargo-inputs (("rust-android-system-properties" ,rust-android-system-properties-0.1)
+                       ("rust-arrayvec" ,rust-arrayvec-0.7)
+                       ("rust-ash" ,rust-ash-0.37)
+                       ("rust-bit-set" ,rust-bit-set-0.5)
+                       ("rust-bitflags" ,rust-bitflags-1)
+                       ("rust-block" ,rust-block-0.1)
+                       ("rust-core-graphics-types" ,rust-core-graphics-types-0.1)
+                       ("rust-d3d12" ,rust-d3d12-0.6)
+                       ("rust-foreign-types" ,rust-foreign-types-0.3)
+                       ("rust-fxhash" ,rust-fxhash-0.2)
+                       ("rust-glow" ,rust-glow-0.12)
+                       ("rust-gpu-alloc" ,rust-gpu-alloc-0.5)
+                       ("rust-gpu-allocator" ,rust-gpu-allocator-0.22)
+                       ("rust-gpu-descriptor" ,rust-gpu-descriptor-0.2)
+                       ("rust-hassle-rs" ,rust-hassle-rs-0.9)
+                       ("rust-js-sys" ,rust-js-sys-0.3)
+                       ("rust-khronos-egl" ,rust-khronos-egl-4)
+                       ("rust-libc" ,rust-libc-0.2)
+                       ("rust-libloading" ,rust-libloading-0.7)
+                       ("rust-log" ,rust-log-0.4)
+                       ("rust-metal" ,rust-metal-0.24)
+                       ("rust-naga" ,rust-naga-0.11)
+                       ("rust-objc" ,rust-objc-0.2)
+                       ("rust-parking-lot" ,rust-parking-lot-0.11)
+                       ("rust-profiling" ,rust-profiling-1)
+                       ("rust-range-alloc" ,rust-range-alloc-0.1)
+                       ("rust-raw-window-handle" ,rust-raw-window-handle-0.5)
+                       ("rust-renderdoc-sys" ,rust-renderdoc-sys-0.7)
+                       ("rust-smallvec" ,rust-smallvec-1)
+                       ("rust-thiserror" ,rust-thiserror-1)
+                       ("rust-wasm-bindgen" ,rust-wasm-bindgen-0.2)
+                       ("rust-web-sys" ,rust-web-sys-0.3)
+                       ("rust-wgpu-types" ,rust-wgpu-types-0.15)
+                       ("rust-winapi" ,rust-winapi-0.3))))
+    (home-page "https://wgpu.rs/")
+    (synopsis "WebGPU hardware abstraction layer")
+    (description
+     "This package provides @code{WebGPU} hardware abstraction layer.")
+    (license (list license:expat license:asl2.0))))
+
+(define-public rust-wgpu-core-0.15
+  (package
+    (name "rust-wgpu-core")
+    (version "0.15.1")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "wgpu-core" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "1zrzkxnpqkxppbdwvrz2x6008fsp74vg162scj95fcqfjj6l0cbi"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:skip-build? #t
+       #:cargo-inputs (("rust-arrayvec" ,rust-arrayvec-0.7)
+                       ("rust-bit-vec" ,rust-bit-vec-0.6)
+                       ("rust-bitflags" ,rust-bitflags-1)
+                       ("rust-codespan-reporting" ,rust-codespan-reporting-0.11)
+                       ("rust-fxhash" ,rust-fxhash-0.2)
+                       ("rust-log" ,rust-log-0.4)
+                       ("rust-naga" ,rust-naga-0.11)
+                       ("rust-parking-lot" ,rust-parking-lot-0.11)
+                       ("rust-profiling" ,rust-profiling-1)
+                       ("rust-raw-window-handle" ,rust-raw-window-handle-0.5)
+                       ("rust-ron" ,rust-ron-0.8)
+                       ("rust-serde" ,rust-serde-1)
+                       ("rust-smallvec" ,rust-smallvec-1)
+                       ("rust-thiserror" ,rust-thiserror-1)
+                       ("rust-web-sys" ,rust-web-sys-0.3)
+                       ("rust-wgpu-hal" ,rust-wgpu-hal-0.15)
+                       ("rust-wgpu-types" ,rust-wgpu-types-0.15))))
+    (home-page "https://wgpu.rs/")
+    (synopsis "WebGPU core logic on wgpu-hal")
+    (description "This package provides @code{WebGPU} core logic on wgpu-hal.")
+    (license (list license:expat license:asl2.0))))
+
+(define-public rust-spirv-0.2
+  (package
+    (name "rust-spirv")
+    (version "0.2.0+1.5.4")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "spirv" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "0c7qjinqpwcfxk00qx0j46z7i31lnzg2qnnar3gz3crxzqwglsr4"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:skip-build? #t
+       #:cargo-inputs (("rust-bitflags" ,rust-bitflags-1)
+                       ("rust-num-traits" ,rust-num-traits-0.2)
+                       ("rust-serde" ,rust-serde-1))))
+    (home-page "https://github.com/gfx-rs/rspirv")
+    (synopsis "Rust definition of SPIR-V structs and enums")
+    (description
+     "This package provides Rust definition of SPIR-V structs and enums.")
+    (license license:asl2.0)))
+
+(define-public rust-pp-rs-0.2
+  (package
+    (name "rust-pp-rs")
+    (version "0.2.1")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "pp-rs" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "1vkd9lgwf5rxy7qgzl8mka7vnghaq6nnn0nmg7mycl72ysvqnidv"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:skip-build? #t
+       #:cargo-inputs (("rust-unicode-xid" ,rust-unicode-xid-0.2))))
+    (home-page "https://github.com/Kangz/glslpp-rs")
+    (synopsis "Shader preprocessor")
+    (description "This package provides Shader preprocessor.")
+    (license license:bsd-3)))
+
+(define-public rust-naga-0.11
+  (package
+    (name "rust-naga")
+    (version "0.11.1")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "naga" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "0w9jhnd2ikwdd1apmsrs12l4wpxpmzhzs0kp14hh3mdppill4gbc"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:skip-build? #t
+       #:cargo-inputs (("rust-arbitrary" ,rust-arbitrary-1)
+                       ("rust-bit-set" ,rust-bit-set-0.5)
+                       ("rust-bitflags" ,rust-bitflags-1)
+                       ("rust-codespan-reporting" ,rust-codespan-reporting-0.11)
+                       ("rust-hexf-parse" ,rust-hexf-parse-0.2)
+                       ("rust-indexmap" ,rust-indexmap-1)
+                       ("rust-log" ,rust-log-0.4)
+                       ("rust-num-traits" ,rust-num-traits-0.2)
+                       ("rust-petgraph" ,rust-petgraph-0.6)
+                       ("rust-pp-rs" ,rust-pp-rs-0.2)
+                       ("rust-rustc-hash" ,rust-rustc-hash-1)
+                       ("rust-serde" ,rust-serde-1)
+                       ("rust-spirv" ,rust-spirv-0.2)
+                       ("rust-termcolor" ,rust-termcolor-1)
+                       ("rust-thiserror" ,rust-thiserror-1)
+                       ("rust-unicode-xid" ,rust-unicode-xid-0.2))))
+    (home-page "https://github.com/gfx-rs/wgpu/tree/trunk/naga")
+    (synopsis "Shader translation infrastructure")
+    (description "This package provides Shader translation infrastructure.")
+    (license (list license:expat license:asl2.0))))
+
+(define-public rust-container-of-0.5
+  (package
+    (name "rust-container-of")
+    (version "0.5.1")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "container_of" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "0as7g6gspvdbp4vl1a1834pzh481x9jp4clfgyl6c7vnhvmvpxc9"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:skip-build? #t
+       #:cargo-inputs (("rust-memoffset" ,rust-memoffset-0.6))))
+    (home-page "")
+    (synopsis "Porting C's `container_of` macro to Rust")
+    (description
+     "This package provides Porting C's `container_of` macro to Rust.")
+    (license license:expat)))
+
+(define-public rust-wlcs-0.1
+  (package
+    (name "rust-wlcs")
+    (version "0.1.0")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "wlcs" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "17k0nwn3f2z71rncb8glb4x15m5zmcbklnk71hpv739nrq2w769d"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:cargo-inputs (("rust-container-of" ,rust-container-of-0.5)
+                       ("rust-memoffset" ,rust-memoffset-0.9)
+                       ("rust-nix" ,rust-nix-0.27)
+                       ("rust-wayland-sys" ,rust-wayland-sys-0.31))))
+    (home-page "")
+    (synopsis "Bindings/helpers for WLCS (Wayland Conformance Test Suite)")
+    (description
+     "This package provides Bindings/helpers for WLCS (Wayland Conformance Test Suite).")
+    (license license:expat)))
+
+(define-public rust-wgpu-0.15
+  (package
+    (name "rust-wgpu")
+    (version "0.15.1")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "wgpu" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "1mrjs44n1wmsyr5y31yr2hk1s3j5w3pg0advxwyw718xv6va2ifp"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:skip-build? #t
+       #:cargo-inputs (("rust-arrayvec" ,rust-arrayvec-0.7)
+                       ("rust-cfg-if" ,rust-cfg-if-1)
+                       ("rust-js-sys" ,rust-js-sys-0.3)
+                       ("rust-log" ,rust-log-0.4)
+                       ("rust-naga" ,rust-naga-0.11)
+                       ("rust-parking-lot" ,rust-parking-lot-0.11)
+                       ("rust-profiling" ,rust-profiling-1)
+                       ("rust-raw-window-handle" ,rust-raw-window-handle-0.5)
+                       ("rust-serde" ,rust-serde-1)
+                       ("rust-smallvec" ,rust-smallvec-1)
+                       ("rust-static-assertions" ,rust-static-assertions-1)
+                       ("rust-wasm-bindgen" ,rust-wasm-bindgen-0.2)
+                       ("rust-wasm-bindgen-futures" ,rust-wasm-bindgen-futures-0.4)
+                       ("rust-web-sys" ,rust-web-sys-0.3)
+                       ("rust-wgpu-core" ,rust-wgpu-core-0.15)
+                       ("rust-wgpu-hal" ,rust-wgpu-hal-0.15)
+                       ("rust-wgpu-types" ,rust-wgpu-types-0.15))))
+    (home-page "https://wgpu.rs/")
+    (synopsis "Rusty WebGPU API wrapper")
+    (description "This package provides Rusty @code{WebGPU} API wrapper.")
+    (license (list license:expat license:asl2.0))))
+
+(define-public rust-renderdoc-sys-1
+  (package
+    (name "rust-renderdoc-sys")
+    (version "1.1.0")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "renderdoc-sys" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "0cj8zjs7k0gvchcx3jhpg8r9bbqy8b1hsgbz0flcq2ydn12hmcqr"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:skip-build? #t))
+    (home-page
+     "https://github.com/ebkalderon/renderdoc-rs/tree/master/renderdoc-sys")
+    (synopsis "Low-level bindings to the RenderDoc API")
+    (description
+     "This package provides Low-level bindings to the @code{RenderDoc} API.")
+    (license (list license:expat license:asl2.0))))
+
+(define-public rust-renderdoc-0.11
+  (package
+    (name "rust-renderdoc")
+    (version "0.11.0")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "renderdoc" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "04hycbzwqmzw25qnk0lwps70jgxi43cgmkjdvwbyzc183vnajb97"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:cargo-inputs (("rust-bitflags" ,rust-bitflags-1)
+                       ("rust-float-cmp" ,rust-float-cmp-0.9)
+                       ("rust-glutin" ,rust-glutin-0.30)
+                       ("rust-libloading" ,rust-libloading-0.7)
+                       ("rust-once-cell" ,rust-once-cell-1)
+                       ("rust-renderdoc-sys" ,rust-renderdoc-sys-1)
+                       ("rust-winapi" ,rust-winapi-0.3)
+                       ("rust-winit" ,rust-winit-0.28)
+                       ("rust-wio" ,rust-wio-0.2))
+       #:cargo-development-inputs (("rust-pollster" ,rust-pollster-0.3)
+                                   ("rust-wgpu" ,rust-wgpu-0.15)
+                                   ("rust-wgpu-subscriber" ,rust-wgpu-subscriber-0.1)
+                                   ("rust-winit" ,rust-winit-0.28))))
+    (home-page "https://github.com/ebkalderon/renderdoc-rs")
+    (synopsis "RenderDoc application bindings for Rust")
+    (description
+     "This package provides @code{RenderDoc} application bindings for Rust.")
+    (license (list license:expat license:asl2.0))))
+
+(define-public rust-smithay-0.3
+  (let ((commit "5e137dcebc9f2de4d026180dfc4ce81282f7f14f")
+        (revision "1"))
+    (package
+      (name "rust-smithay")
+      (version (git-version "0.3.0" revision commit))
+      (source
+       (origin
+         (method git-fetch)
+         (uri (git-reference
+               (url "https://github.com/Smithay/smithay")
+               (commit commit)))
+         (file-name (git-file-name name version))
+         (sha256
+          (base32 "0iak8l19x5bjbv7mpzgi7dhc4i1n8lmfdcz5v6kys70nx4p3n8wx")))
+       ;; (origin
+       ;;   (method url-fetch)
+       ;;   (uri (crate-uri "smithay" version))
+       ;;   (file-name
+       ;;    (string-append name "-" version ".tar.gz"))
+       ;;   (sha256
+       ;;    (base32
+       ;;     "1pym4gwp8fgh1ffcj9n3cniqjpy941v3bgan7fdcmg6dj79p0jjj")))
+       )
+      (build-system cargo-build-system)
+      (arguments
+       `(;; #:skip-build?
+         ;; #t
+         #:cargo-inputs
+         (("rust-appendlist" ,rust-appendlist-1)
+          ("rust-bitflags" ,rust-bitflags-2)
+          ("rust-calloop" ,rust-calloop-0.14)
+          ("rust-cc" ,rust-cc-1)
+          ("rust-cgmath" ,rust-cgmath-0.18)
+          ("rust-cursor-icon" ,rust-cursor-icon-1)
+          ("rust-downcast-rs" ,rust-downcast-rs-1)
+          ("rust-drm" ,rust-drm-0.14)
+          ("rust-drm-ffi" ,rust-drm-ffi-0.9)
+          ("rust-drm-fourcc" ,rust-drm-fourcc-2)
+          ("rust-errno" ,rust-errno-0.3)
+          ("rust-gbm" ,rust-gbm-0.16)
+          ("rust-gl-generator" ,rust-gl-generator-0.14)
+          ("rust-indexmap" ,rust-indexmap-2)
+          ("rust-input" ,rust-input-0.9)
+          ("rust-libc" ,rust-libc-0.2)
+          ("rust-libloading" ,rust-libloading-0.8)
+          ("rust-libseat" ,rust-libseat-0.2)
+          ("rust-once-cell" ,rust-once-cell-1)
+          ("rust-pixman" ,rust-pixman-0.1)
+          ("rust-pkg-config" ,rust-pkg-config-0.3)
+          ("rust-profiling" ,rust-profiling-1)
+          ("rust-rand" ,rust-rand-0.8)
+          ("rust-rustix" ,rust-rustix-0.38)
+          ("rust-smallvec" ,rust-smallvec-1)
+          ("rust-tempfile" ,rust-tempfile-3)
+          ("rust-thiserror" ,rust-thiserror-1)
+          ("rust-tracing" ,rust-tracing-0.1)
+          ("rust-udev" ,rust-udev-0.9)
+          ("rust-wayland-backend"
+           ,rust-wayland-backend-0.3)
+          ("rust-wayland-client" ,rust-wayland-client-0.31)
+          ("rust-wayland-cursor" ,rust-wayland-cursor-0.31)
+          ("rust-wayland-egl" ,rust-wayland-egl-0.32)
+          ("rust-wayland-protocols"
+           ,rust-wayland-protocols-0.32)
+          ("rust-wayland-protocols-misc"
+           ,rust-wayland-protocols-misc-0.3)
+          ("rust-wayland-protocols-wlr"
+           ,rust-wayland-protocols-wlr-0.3)
+          ("rust-wayland-server" ,rust-wayland-server-0.31)
+          ("rust-wayland-sys" ,rust-wayland-sys-0.31)
+          ("rust-winit" ,rust-winit-0.30)
+          ("rust-xkbcommon" ,rust-xkbcommon-0.8)
+
+
+          ("rust-libdisplay-info" ,rust-libdisplay-info-0.1)
+          ("rust-ash" ,rust-ash-0.38)
+          ("rust-glow" ,rust-glow-0.14)
+          ("rust-criterion" ,rust-criterion-0.5)
+          ("rust-image" ,rust-image-0.25)
+          ("rust-fps-ticker" ,rust-fps-ticker-1)
+          ("rust-puffin-http" ,rust-puffin-http-0.13)
+          ("rust-renderdoc" ,rust-renderdoc-0.11)
+          ("rust-wlcs" ,rust-wlcs-0.1)
+          ("rust-xkbcommon" ,rust-xkbcommon-0.7))))
+      (native-inputs (list pkg-config))
+      (inputs (list eudev libxkbcommon libseat libinput pixman mesa))
+      (home-page "https://smithay.github.io/")
+      (synopsis
+       "Smithay is a library for writing wayland compositors")
+      (description
+       "This package provides Smithay is a library for writing wayland compositors.")
+      (license license:expat))))
 
 (define rust-smithay-client-toolkit-0.19
   (package
@@ -7254,58 +8120,61 @@
      "This package provides Toolkit for making client wayland applications.")
     (license license:expat)))
 
-(define rust-smithay-drm-extras-0.1
-  (package
-    (name "rust-smithay-drm-extras")
-    (version "0.1.0")
-    (source
-     (origin
-       (method url-fetch)
-       (uri (crate-uri "smithay-drm-extras" version))
-       (file-name
-        (string-append name "-" version ".tar.gz"))
-       (sha256
-        (base32
-         "0000000000000000000000000000000000000000000000000000"))))
-    (build-system cargo-build-system)
-    (arguments
-     `(#:skip-build?
-       #t
-       #:cargo-inputs
-       (("rust-drm" ,rust-drm-0.14)
-        ("rust-libdisplay-info"
-         ,rust-libdisplay-info-0.1))))
-    (home-page "")
-    (synopsis "")
-    (description "")
-    (license #f)))
+(define-public rust-smithay-drm-extras-0.1
+  (let ((commit "5e137dcebc9f2de4d026180dfc4ce81282f7f14f")
+        (revision "1"))
+    (package
+      (name "rust-smithay-drm-extras")
+      (version (git-version "0.1.0" revision commit))
+      (source
+       (origin
+         (method git-fetch)
+         (uri (git-reference
+               (url "https://github.com/Smithay/smithay")
+               (commit commit)))
+         (file-name (git-file-name name version))
+         (sha256
+          (base32 "0iak8l19x5bjbv7mpzgi7dhc4i1n8lmfdcz5v6kys70nx4p3n8wx")))
+       ;; (origin
+       ;;   (method url-fetch)
+       ;;   (uri (crate-uri "smithay-drm-extras" version))
+       ;;   (file-name
+       ;;    (string-append name "-" version ".tar.gz"))
+       ;;   (sha256
+       ;;    (base32
+       ;;     "0000000000000000000000000000000000000000000000000000")))
 
-(define rust-smol-str-0.2
-  (package
-    (name "rust-smol-str")
-    (version "0.2.2")
-    (source
-     (origin
-       (method url-fetch)
-       (uri (crate-uri "smol_str" version))
-       (file-name
-        (string-append name "-" version ".tar.gz"))
-       (sha256
-        (base32
-         "1bfylqf2vnqaglw58930vpxm2rfzji5gjp15a2c0kh8aj6v8ylyx"))))
-    (build-system cargo-build-system)
-    (arguments
-     `(#:skip-build?
-       #t
-       #:cargo-inputs
-       (("rust-serde" ,rust-serde-1))))
-    (home-page
-     "https://github.com/rust-analyzer/smol_str")
-    (synopsis
-     "small-string optimized string type with O(1) clone")
-    (description
-     "This package provides small-string optimized string type with O(1) clone.")
-    (license (list license:expat license:asl2.0))))
+       )
+      (build-system cargo-build-system)
+      (arguments
+       `(#:tests? #f ;; doc file
+         ;; #:skip-build?
+         ;; #t
+         #:cargo-inputs
+         (("rust-drm" ,rust-drm-0.14)
+          ("rust-libdisplay-info"
+           ,rust-libdisplay-info-0.1))
+         #:cargo-development-inputs
+         (("rust-smithay" ,rust-smithay-0.3))
+         ;; #:cargo-package-flags '("--no-metadata"
+         ;;                         "--no-verify"
+         ;;                         "--package"
+         ;;                         "smithay-drm-extras")
+         #:phases (modify-phases %standard-phases
+                    (add-after 'unpack 'chdir
+                      (lambda _ (chdir "smithay-drm-extras")))
+                    (add-before 'install 'chdir
+                      (lambda _ (chdir "..")))
+                    ;; (add-after 'compress-documentation 'fail
+                    ;;   (lambda _
+                    ;;     (error "a")))
+                    )))
+      (native-inputs (list pkg-config))
+      (inputs (list eudev libxkbcommon libseat libinput pixman mesa libdisplay-info))
+      (home-page "")
+      (synopsis "")
+      (description "")
+      (license #f))))
 
 (define rust-socket2-0.4
   (package

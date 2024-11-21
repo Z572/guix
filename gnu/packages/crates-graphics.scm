@@ -334,6 +334,29 @@ Mac, and Unix.")
      `(#:skip-build? #t  ;; TODO: failes due to an unresolved import
        #:cargo-inputs (("rust-term" ,rust-term-0.5))))))
 
+(define-public rust-ash-0.38
+  (package
+    (name "rust-ash")
+    (version "0.38.0+1.3.281")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "ash" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "0vx4yf689v1rc680jvy8bnysx5sgd8f33wnp2vqaizh0v0v4kd0b"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:cargo-test-flags
+       '("--release" "--"
+         "--skip=entry::Entry::try_enumerate_instance_version"
+         "--skip=src/lib.rs")
+       #:cargo-inputs (("rust-libloading" ,rust-libloading-0.8))))
+    (home-page "https://github.com/MaikKlein/ash")
+    (synopsis "Vulkan bindings for Rust")
+    (description "Vulkan bindings for Rust.")
+    (license (list license:expat license:asl2.0))))
+
 (define-public rust-ash-0.37
   (package
     (name "rust-ash")
@@ -1781,6 +1804,31 @@ EUI-64, also known as MAC-48 media access control addresses.")
     (description
      "Generated OpenGL bindings and wrapper for Servo.")
     (license (list license:asl2.0 license:expat))))
+
+(define-public rust-glow-0.14
+  (package
+    (name "rust-glow")
+    (version "0.14.2")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "glow" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "10s41k7zjj831jm8rzhid75ymyk226ifs4rzw08w3x95y1is67ym"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:cargo-inputs (("rust-js-sys" ,rust-js-sys-0.3)
+                       ("rust-log" ,rust-log-0.4)
+                       ("rust-slotmap" ,rust-slotmap-1)
+                       ("rust-wasm-bindgen" ,rust-wasm-bindgen-0.2)
+                       ("rust-web-sys" ,rust-web-sys-0.3))))
+    (home-page "https://github.com/grovesNL/glow.git")
+    (synopsis "Bindings to run GL anywhere")
+    (description
+     "GL on Whatever: a set of bindings to run GL (Open GL, @code{OpenGL} ES, and
+@code{WebGL}) anywhere, and avoid target-specific code.")
+    (license (list license:expat license:asl2.0 license:zlib))))
 
 (define-public rust-glow-0.12
   (package
