@@ -2309,33 +2309,6 @@
      "This package provides Thin wrapper around @code{macOS} Notifications.")
     (license license:expat)))
 
-;; remove?
-(define-public rust-memoffset-0.9
-  (package
-    (name "rust-memoffset")
-    (version "0.9.1")
-    (source
-     (origin
-       (method url-fetch)
-       (uri (crate-uri "memoffset" version))
-       (file-name
-        (string-append name "-" version ".tar.gz"))
-       (sha256
-        (base32
-         "12i17wh9a9plx869g7j4whf62xw68k5zd4k0k5nh6ys5mszid028"))))
-    (build-system cargo-build-system)
-    (arguments
-     `(#:skip-build?
-       #t
-       #:cargo-inputs
-       (("rust-autocfg" ,rust-autocfg-1))))
-    (home-page "https://github.com/Gilnaa/memoffset")
-    (synopsis
-     "offset_of functionality for Rust structs")
-    (description
-     "This package provides offset_of functionality for Rust structs.")
-    (license license:expat)))
-
 (define-public niri
   (package
     (name "niri")
