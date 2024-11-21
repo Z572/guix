@@ -520,98 +520,6 @@
      "This package provides Async executor.")
     (license (list license:asl2.0 license:expat))))
 
-(define-public rust-async-io-2
-  (package
-    (name "rust-async-io")
-    (version "2.3.4")
-    (source
-     (origin
-       (method url-fetch)
-       (uri (crate-uri "async-io" version))
-       (file-name
-        (string-append name "-" version ".tar.gz"))
-       (sha256
-        (base32
-         "1s679l7x6ijh8zcxqn5pqgdiyshpy4xwklv86ldm1rhfjll04js4"))))
-    (build-system cargo-build-system)
-    (arguments
-     `(#:skip-build?
-       #t
-       #:cargo-inputs
-       (("rust-async-lock" ,rust-async-lock-3)
-        ("rust-cfg-if" ,rust-cfg-if-1)
-        ("rust-concurrent-queue"
-         ,rust-concurrent-queue-2)
-        ("rust-futures-io" ,rust-futures-io-0.3)
-        ("rust-futures-lite" ,rust-futures-lite-2)
-        ("rust-parking" ,rust-parking-2)
-        ("rust-polling" ,rust-polling-3)
-        ("rust-rustix" ,rust-rustix-0.38)
-        ("rust-slab" ,rust-slab-0.4)
-        ("rust-tracing" ,rust-tracing-0.1)
-        ("rust-windows-sys" ,rust-windows-sys-0.59))))
-    (home-page "https://github.com/smol-rs/async-io")
-    (synopsis "Async I/O and timers")
-    (description
-     "This package provides Async I/O and timers.")
-    (license (list license:asl2.0 license:expat))))
-
-(define-public rust-async-lock-2
-  (package
-    (name "rust-async-lock")
-    (version "2.8.0")
-    (source
-     (origin
-       (method url-fetch)
-       (uri (crate-uri "async-lock" version))
-       (file-name
-        (string-append name "-" version ".tar.gz"))
-       (sha256
-        (base32
-         "0asq5xdzgp3d5m82y5rg7a0k9q0g95jy6mgc7ivl334x7qlp4wi8"))))
-    (build-system cargo-build-system)
-    (arguments
-     `(#:skip-build?
-       #t
-       #:cargo-inputs
-       (("rust-event-listener" ,rust-event-listener-2))))
-    (home-page
-     "https://github.com/smol-rs/async-lock")
-    (synopsis "Async synchronization primitives")
-    (description
-     "This package provides Async synchronization primitives.")
-    (license (list license:asl2.0 license:expat))))
-
-(define-public rust-async-lock-3
-  (package
-    (name "rust-async-lock")
-    (version "3.4.0")
-    (source
-     (origin
-       (method url-fetch)
-       (uri (crate-uri "async-lock" version))
-       (file-name
-        (string-append name "-" version ".tar.gz"))
-       (sha256
-        (base32
-         "060vh45i809wcqyxzs5g69nqiqah7ydz0hpkcjys9258vqn4fvpz"))))
-    (build-system cargo-build-system)
-    (arguments
-     `(#:skip-build?
-       #t
-       #:cargo-inputs
-       (("rust-event-listener" ,rust-event-listener-5)
-        ("rust-event-listener-strategy"
-         ,rust-event-listener-strategy-0.5)
-        ("rust-pin-project-lite"
-         ,rust-pin-project-lite-0.2))))
-    (home-page
-     "https://github.com/smol-rs/async-lock")
-    (synopsis "Async synchronization primitives")
-    (description
-     "This package provides Async synchronization primitives.")
-    (license (list license:asl2.0 license:expat))))
-
 (define-public rust-async-recursion-1
   (package
     (name "rust-async-recursion")
@@ -675,57 +583,6 @@
     (description
      "This package provides Async signal handling.")
     (license (list license:asl2.0 license:expat))))
-
-(define-public rust-async-task-4
-  (package
-    (name "rust-async-task")
-    (version "4.7.1")
-    (source
-     (origin
-       (method url-fetch)
-       (uri (crate-uri "async-task" version))
-       (file-name
-        (string-append name "-" version ".tar.gz"))
-       (sha256
-        (base32
-         "1pp3avr4ri2nbh7s6y9ws0397nkx1zymmcr14sq761ljarh3axcb"))))
-    (build-system cargo-build-system)
-    (arguments `(#:skip-build? #t))
-    (home-page
-     "https://github.com/smol-rs/async-task")
-    (synopsis
-     "Task abstraction for building executors")
-    (description
-     "This package provides Task abstraction for building executors.")
-    (license (list license:asl2.0 license:expat))))
-
-(define-public rust-async-trait-0.1
-  (package
-    (name "rust-async-trait")
-    (version "0.1.83")
-    (source
-     (origin
-       (method url-fetch)
-       (uri (crate-uri "async-trait" version))
-       (file-name
-        (string-append name "-" version ".tar.gz"))
-       (sha256
-        (base32
-         "1p8q8gm4fv2fdka8hwy2w3f8df7p5inixqi7rlmbnky3wmysw73j"))))
-    (build-system cargo-build-system)
-    (arguments
-     `(#:skip-build?
-       #t
-       #:cargo-inputs
-       (("rust-proc-macro2" ,rust-proc-macro2-1)
-        ("rust-quote" ,rust-quote-1)
-        ("rust-syn" ,rust-syn-2))))
-    (home-page
-     "https://github.com/dtolnay/async-trait")
-    (synopsis "Type erasure for async trait methods")
-    (description
-     "This package provides Type erasure for async trait methods.")
-    (license (list license:expat license:asl2.0))))
 
 (define-public rust-autocfg-1
   (package
@@ -3311,32 +3168,6 @@
      "This package provides Low-level bindings for libdisplay-info.")
     (license license:expat)))
 
-(define-public rust-libm-0.2
-  (package
-    (name "rust-libm")
-    (version "0.2.10")
-    (source
-     (origin
-       (method url-fetch)
-       (uri (crate-uri "libm" version))
-       (file-name
-        (string-append name "-" version ".tar.gz"))
-       (sha256
-        (base32
-         "0iw0h9yrzj7b4w7k0wglghkjfdmx0cncxr8d7gaj3b2sfgg1j150"))))
-    (build-system cargo-build-system)
-    (arguments `(#:skip-build? #t))
-    (home-page "https://github.com/rust-lang/libm")
-    (synopsis "libm in pure Rust")
-    (description
-     "This package provides libm in pure Rust.")
-    (license
-     #f
-     ;; (list license:expat
-     ;;       unknown-license!
-     ;;       unknown-license!)
-     )))
-
 (define-public rust-libseat-0.2
   (package
     (name "rust-libseat")
@@ -3571,6 +3402,7 @@
      "This package provides Thin wrapper around @code{macOS} Notifications.")
     (license license:expat)))
 
+;; remove?
 (define-public rust-memoffset-0.9
   (package
     (name "rust-memoffset")
@@ -5429,32 +5261,6 @@
     (description
      "This package provides Serde-compatible spanned Value.")
     (license (list license:expat license:asl2.0))))
-
-(define-public rust-sharded-slab-0.1
-  (package
-    (name "rust-sharded-slab")
-    (version "0.1.7")
-    (source
-     (origin
-       (method url-fetch)
-       (uri (crate-uri "sharded-slab" version))
-       (file-name
-        (string-append name "-" version ".tar.gz"))
-       (sha256
-        (base32
-         "1xipjr4nqsgw34k7a2cgj9zaasl2ds6jwn89886kww93d32a637l"))))
-    (build-system cargo-build-system)
-    (arguments
-     `(#:skip-build?
-       #t
-       #:cargo-inputs
-       (("rust-lazy-static" ,rust-lazy-static-1))))
-    (home-page
-     "https://github.com/hawkw/sharded-slab")
-    (synopsis "lock-free concurrent slab.")
-    (description
-     "This package provides a lock-free concurrent slab.")
-    (license license:expat)))
 
 (define-public rust-signal-hook-registry-1
   (package
