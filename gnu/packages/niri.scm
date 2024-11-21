@@ -3042,51 +3042,6 @@
      "This package provides a JSON serialization file format.")
     (license (list license:expat license:asl2.0))))
 
-(define-public rust-smallvec-1
-  (package
-    (name "rust-smallvec")
-    (version "1.13.2")
-    (source
-     (origin
-       (method url-fetch)
-       (uri (crate-uri "smallvec" version))
-       (file-name
-        (string-append name "-" version ".tar.gz"))
-       (sha256
-        (base32
-         "0rsw5samawl3wsw6glrsb127rx6sh89a8wyikicw6dkdcjd1lpiw"))))
-    (build-system cargo-build-system)
-    (arguments `(#:skip-build? #t))
-    (home-page
-     "https://github.com/servo/rust-smallvec")
-    (synopsis
-     "'Small vector' optimization: store up to a small number of items on the stack")
-    (description
-     "This package provides Small vector optimization: store up to a small number of items on the stack.")
-    (license (list license:expat license:asl2.0))))
-
-(define-public rust-smawk-0.3
-  (package
-    (name "rust-smawk")
-    (version "0.3.2")
-    (source
-     (origin
-       (method url-fetch)
-       (uri (crate-uri "smawk" version))
-       (file-name
-        (string-append name "-" version ".tar.gz"))
-       (sha256
-        (base32
-         "0344z1la39incggwn6nl45k8cbw2x10mr5j0qz85cdz9np0qihxp"))))
-    (build-system cargo-build-system)
-    (arguments `(#:skip-build? #t))
-    (home-page "https://github.com/mgeisler/smawk")
-    (synopsis
-     "Functions for finding row-minima in a totally monotone matrix")
-    (description
-     "This package provides functions for finding row-minima in a totally monotone\nmatrix.")
-    (license license:expat)))
-
 (define-public rust-fps-ticker-1
   (package
     (name "rust-fps-ticker")
