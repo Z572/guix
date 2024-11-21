@@ -5104,81 +5104,81 @@
      "This package provides Lightweight crate for systemd service state notifications.")
     (license (list license:expat license:asl2.0))))
 
-(define-public rust-semver-1
-  (package
-    (name "rust-semver")
-    (version "1.0.23")
-    (source
-     (origin
-       (method url-fetch)
-       (uri (crate-uri "semver" version))
-       (file-name
-        (string-append name "-" version ".tar.gz"))
-       (sha256
-        (base32
-         "12wqpxfflclbq4dv8sa6gchdh92ahhwn4ci1ls22wlby3h57wsb1"))))
-    (build-system cargo-build-system)
-    (arguments `(#:skip-build? #t))
-    (home-page "https://github.com/dtolnay/semver")
-    (synopsis
-     "Parser and evaluator for Cargo's flavor of Semantic Versioning")
-    (description
-     "This package provides Parser and evaluator for Cargo's flavor of Semantic Versioning.")
-    (license (list license:expat license:asl2.0))))
+;; (define-public rust-semver-1
+;;   (package
+;;     (name "rust-semver")
+;;     (version "1.0.23")
+;;     (source
+;;      (origin
+;;        (method url-fetch)
+;;        (uri (crate-uri "semver" version))
+;;        (file-name
+;;         (string-append name "-" version ".tar.gz"))
+;;        (sha256
+;;         (base32
+;;          "12wqpxfflclbq4dv8sa6gchdh92ahhwn4ci1ls22wlby3h57wsb1"))))
+;;     (build-system cargo-build-system)
+;;     (arguments `(#:skip-build? #t))
+;;     (home-page "https://github.com/dtolnay/semver")
+;;     (synopsis
+;;      "Parser and evaluator for Cargo's flavor of Semantic Versioning")
+;;     (description
+;;      "This package provides Parser and evaluator for Cargo's flavor of Semantic Versioning.")
+;;     (license (list license:expat license:asl2.0))))
 
-(define-public rust-serde-1
-  (package
-    (name "rust-serde")
-    (version "1.0.214")
-    (source
-     (origin
-       (method url-fetch)
-       (uri (crate-uri "serde" version))
-       (file-name
-        (string-append name "-" version ".tar.gz"))
-       (sha256
-        (base32
-         "1danzh1zw9pg10y3bg0b7bvbkqbk5dfpiwchg2ni4757mj9k2p7m"))))
-    (build-system cargo-build-system)
-    (arguments
-     `(#:skip-build?
-       #t
-       #:cargo-inputs
-       (("rust-serde-derive" ,rust-serde-derive-1))))
-    (home-page "https://serde.rs")
-    (synopsis
-     "generic serialization/deserialization framework")
-    (description
-     "This package provides a generic serialization/deserialization framework.")
-    (license (list license:expat license:asl2.0))))
+;; (define-public rust-serde-1
+;;   (package
+;;     (name "rust-serde")
+;;     (version "1.0.214")
+;;     (source
+;;      (origin
+;;        (method url-fetch)
+;;        (uri (crate-uri "serde" version))
+;;        (file-name
+;;         (string-append name "-" version ".tar.gz"))
+;;        (sha256
+;;         (base32
+;;          "1danzh1zw9pg10y3bg0b7bvbkqbk5dfpiwchg2ni4757mj9k2p7m"))))
+;;     (build-system cargo-build-system)
+;;     (arguments
+;;      `(#:skip-build?
+;;        #t
+;;        #:cargo-inputs
+;;        (("rust-serde-derive" ,rust-serde-derive-1))))
+;;     (home-page "https://serde.rs")
+;;     (synopsis
+;;      "generic serialization/deserialization framework")
+;;     (description
+;;      "This package provides a generic serialization/deserialization framework.")
+;;     (license (list license:expat license:asl2.0))))
 
-(define-public rust-serde-derive-1
-  (package
-    (name "rust-serde-derive")
-    (version "1.0.214")
-    (source
-     (origin
-       (method url-fetch)
-       (uri (crate-uri "serde_derive" version))
-       (file-name
-        (string-append name "-" version ".tar.gz"))
-       (sha256
-        (base32
-         "0rkp2idkb2p9s96fpqhlzp01qiby63wf1p2wc3x2hph93xw3ylny"))))
-    (build-system cargo-build-system)
-    (arguments
-     `(#:skip-build?
-       #t
-       #:cargo-inputs
-       (("rust-proc-macro2" ,rust-proc-macro2-1)
-        ("rust-quote" ,rust-quote-1)
-        ("rust-syn" ,rust-syn-2))))
-    (home-page "https://serde.rs")
-    (synopsis
-     "Macros 1.1 implementation of #[derive(Serialize, Deserialize)]")
-    (description
-     "This package provides Macros 1.1 implementation of #[derive(Serialize, Deserialize)].")
-    (license (list license:expat license:asl2.0))))
+;; (define-public rust-serde-derive-1
+;;   (package
+;;     (name "rust-serde-derive")
+;;     (version "1.0.214")
+;;     (source
+;;      (origin
+;;        (method url-fetch)
+;;        (uri (crate-uri "serde_derive" version))
+;;        (file-name
+;;         (string-append name "-" version ".tar.gz"))
+;;        (sha256
+;;         (base32
+;;          "0rkp2idkb2p9s96fpqhlzp01qiby63wf1p2wc3x2hph93xw3ylny"))))
+;;     (build-system cargo-build-system)
+;;     (arguments
+;;      `(#:skip-build?
+;;        #t
+;;        #:cargo-inputs
+;;        (("rust-proc-macro2" ,rust-proc-macro2-1)
+;;         ("rust-quote" ,rust-quote-1)
+;;         ("rust-syn" ,rust-syn-2))))
+;;     (home-page "https://serde.rs")
+;;     (synopsis
+;;      "Macros 1.1 implementation of #[derive(Serialize, Deserialize)]")
+;;     (description
+;;      "This package provides Macros 1.1 implementation of #[derive(Serialize, Deserialize)].")
+;;     (license (list license:expat license:asl2.0))))
 
 (define-public rust-serde-json-1
   (package
@@ -5208,111 +5208,82 @@
      "This package provides a JSON serialization file format.")
     (license (list license:expat license:asl2.0))))
 
-(define-public rust-serde-repr-0.1
-  (package
-    (name "rust-serde-repr")
-    (version "0.1.19")
-    (source
-     (origin
-       (method url-fetch)
-       (uri (crate-uri "serde_repr" version))
-       (file-name
-        (string-append name "-" version ".tar.gz"))
-       (sha256
-        (base32
-         "1sb4cplc33z86pzlx38234xr141wr3cmviqgssiadisgl8dlar3c"))))
-    (build-system cargo-build-system)
-    (arguments
-     `(#:skip-build?
-       #t
-       #:cargo-inputs
-       (("rust-proc-macro2" ,rust-proc-macro2-1)
-        ("rust-quote" ,rust-quote-1)
-        ("rust-syn" ,rust-syn-2))))
-    (home-page
-     "https://github.com/dtolnay/serde-repr")
-    (synopsis
-     "Derive Serialize and Deserialize that delegates to the underlying repr of a C-like enum")
-    (description
-     "This package provides Derive Serialize and Deserialize that delegates to the underlying repr of a\nC-like enum.")
-    (license (list license:expat license:asl2.0))))
+;; (define-public rust-serde-spanned-0.6
+;;   (package
+;;     (name "rust-serde-spanned")
+;;     (version "0.6.8")
+;;     (source
+;;      (origin
+;;        (method url-fetch)
+;;        (uri (crate-uri "serde_spanned" version))
+;;        (file-name
+;;         (string-append name "-" version ".tar.gz"))
+;;        (sha256
+;;         (base32
+;;          "1q89g70azwi4ybilz5jb8prfpa575165lmrffd49vmcf76qpqq47"))))
+;;     (build-system cargo-build-system)
+;;     (arguments
+;;      `(#:skip-build?
+;;        #t
+;;        #:cargo-inputs
+;;        (("rust-serde" ,rust-serde-1))))
+;;     (home-page "https://github.com/toml-rs/toml")
+;;     (synopsis "Serde-compatible spanned Value")
+;;     (description
+;;      "This package provides Serde-compatible spanned Value.")
+;;     (license (list license:expat license:asl2.0))))
 
-(define-public rust-serde-spanned-0.6
-  (package
-    (name "rust-serde-spanned")
-    (version "0.6.8")
-    (source
-     (origin
-       (method url-fetch)
-       (uri (crate-uri "serde_spanned" version))
-       (file-name
-        (string-append name "-" version ".tar.gz"))
-       (sha256
-        (base32
-         "1q89g70azwi4ybilz5jb8prfpa575165lmrffd49vmcf76qpqq47"))))
-    (build-system cargo-build-system)
-    (arguments
-     `(#:skip-build?
-       #t
-       #:cargo-inputs
-       (("rust-serde" ,rust-serde-1))))
-    (home-page "https://github.com/toml-rs/toml")
-    (synopsis "Serde-compatible spanned Value")
-    (description
-     "This package provides Serde-compatible spanned Value.")
-    (license (list license:expat license:asl2.0))))
+;; (define-public rust-signal-hook-registry-1
+;;   (package
+;;     (name "rust-signal-hook-registry")
+;;     (version "1.4.2")
+;;     (source
+;;      (origin
+;;        (method url-fetch)
+;;        (uri (crate-uri "signal-hook-registry" version))
+;;        (file-name
+;;         (string-append name "-" version ".tar.gz"))
+;;        (sha256
+;;         (base32
+;;          "1cb5akgq8ajnd5spyn587srvs4n26ryq0p78nswffwhv46sf1sd9"))))
+;;     (build-system cargo-build-system)
+;;     (arguments
+;;      `(#:skip-build?
+;;        #t
+;;        #:cargo-inputs
+;;        (("rust-libc" ,rust-libc-0.2))))
+;;     (home-page
+;;      "https://github.com/vorner/signal-hook")
+;;     (synopsis "Backend crate for signal-hook")
+;;     (description
+;;      "This package provides Backend crate for signal-hook.")
+;;     (license (list license:asl2.0 license:expat))))
 
-(define-public rust-signal-hook-registry-1
-  (package
-    (name "rust-signal-hook-registry")
-    (version "1.4.2")
-    (source
-     (origin
-       (method url-fetch)
-       (uri (crate-uri "signal-hook-registry" version))
-       (file-name
-        (string-append name "-" version ".tar.gz"))
-       (sha256
-        (base32
-         "1cb5akgq8ajnd5spyn587srvs4n26ryq0p78nswffwhv46sf1sd9"))))
-    (build-system cargo-build-system)
-    (arguments
-     `(#:skip-build?
-       #t
-       #:cargo-inputs
-       (("rust-libc" ,rust-libc-0.2))))
-    (home-page
-     "https://github.com/vorner/signal-hook")
-    (synopsis "Backend crate for signal-hook")
-    (description
-     "This package provides Backend crate for signal-hook.")
-    (license (list license:asl2.0 license:expat))))
-
-(define-public rust-slab-0.4
-  (package
-    (name "rust-slab")
-    (version "0.4.9")
-    (source
-     (origin
-       (method url-fetch)
-       (uri (crate-uri "slab" version))
-       (file-name
-        (string-append name "-" version ".tar.gz"))
-       (sha256
-        (base32
-         "0rxvsgir0qw5lkycrqgb1cxsvxzjv9bmx73bk5y42svnzfba94lg"))))
-    (build-system cargo-build-system)
-    (arguments
-     `(#:skip-build?
-       #t
-       #:cargo-inputs
-       (("rust-autocfg" ,rust-autocfg-1))))
-    (home-page "https://github.com/tokio-rs/slab")
-    (synopsis
-     "Pre-allocated storage for a uniform data type")
-    (description
-     "This package provides Pre-allocated storage for a uniform data type.")
-    (license license:expat)))
+;; (define-public rust-slab-0.4
+;;   (package
+;;     (name "rust-slab")
+;;     (version "0.4.9")
+;;     (source
+;;      (origin
+;;        (method url-fetch)
+;;        (uri (crate-uri "slab" version))
+;;        (file-name
+;;         (string-append name "-" version ".tar.gz"))
+;;        (sha256
+;;         (base32
+;;          "0rxvsgir0qw5lkycrqgb1cxsvxzjv9bmx73bk5y42svnzfba94lg"))))
+;;     (build-system cargo-build-system)
+;;     (arguments
+;;      `(#:skip-build?
+;;        #t
+;;        #:cargo-inputs
+;;        (("rust-autocfg" ,rust-autocfg-1))))
+;;     (home-page "https://github.com/tokio-rs/slab")
+;;     (synopsis
+;;      "Pre-allocated storage for a uniform data type")
+;;     (description
+;;      "This package provides Pre-allocated storage for a uniform data type.")
+;;     (license license:expat)))
 
 (define-public rust-smallvec-1
   (package
