@@ -351,28 +351,28 @@
      "This package provides CSS color parser library.")
     (license (list license:expat license:asl2.0))))
 
-(define-public rust-downcast-rs-1
-  (package
-    (name "rust-downcast-rs")
-    (version "1.2.1")
-    (source
-     (origin
-       (method url-fetch)
-       (uri (crate-uri "downcast-rs" version))
-       (file-name
-        (string-append name "-" version ".tar.gz"))
-       (sha256
-        (base32
-         "1lmrq383d1yszp7mg5i7i56b17x2lnn3kb91jwsq0zykvg2jbcvm"))))
-    (build-system cargo-build-system)
-    (arguments `(#:skip-build? #t))
-    (home-page
-     "https://github.com/marcianx/downcast-rs")
-    (synopsis
-     "Trait object downcasting support using only safe Rust. It supports type\nparameters, associated types, and type constraints.")
-    (description
-     "This package provides Trait object downcasting support using only safe Rust.  It supports type\nparameters, associated types, and type constraints.")
-    (license (list license:expat license:asl2.0))))
+#;(define-public rust-downcast-rs-1
+(package
+(name "rust-downcast-rs")
+(version "1.2.1")
+(source
+(origin
+(method url-fetch)
+(uri (crate-uri "downcast-rs" version))
+(file-name
+(string-append name "-" version ".tar.gz"))
+(sha256
+(base32
+"1lmrq383d1yszp7mg5i7i56b17x2lnn3kb91jwsq0zykvg2jbcvm"))))
+(build-system cargo-build-system)
+(arguments `(#:skip-build? #t))
+(home-page
+"https://github.com/marcianx/downcast-rs")
+(synopsis
+"Trait object downcasting support using only safe Rust. It supports type\nparameters, associated types, and type constraints.")
+(description
+"This package provides Trait object downcasting support using only safe Rust.  It supports type\nparameters, associated types, and type constraints.")
+(license (list license:expat license:asl2.0))))
 
 (define-public rust-dpi-0.1
   (package
@@ -480,28 +480,6 @@
     (description
      "This package provides Bindings to the Direct Rendering Manager API.")
     (license license:expat)))
-
-(define-public rust-either-1
-  (package
-    (name "rust-either")
-    (version "1.13.0")
-    (source
-     (origin
-       (method url-fetch)
-       (uri (crate-uri "either" version))
-       (file-name
-        (string-append name "-" version ".tar.gz"))
-       (sha256
-        (base32
-         "1w2c1mybrd7vljyxk77y9f4w9dyjrmp3yp82mk7bcm8848fazcb0"))))
-    (build-system cargo-build-system)
-    (arguments `(#:skip-build? #t))
-    (home-page "https://github.com/rayon-rs/either")
-    (synopsis
-     "The enum `Either` with variants `Left` and `Right` is a general purpose sum type with two cases.")
-    (description
-     "This package provides The enum `Either` with variants `Left` and `Right` is a general purpose sum type\nwith two cases.")
-    (license (list license:expat license:asl2.0))))
 
 (define-public rust-errno-0.3
   (package
@@ -1754,33 +1732,6 @@
     (description
      "This package provides Bindgen generated unsafe libinput wrapper.")
     (license license:expat)))
-
-(define-public rust-instant-0.1
-  (package
-    (name "rust-instant")
-    (version "0.1.13")
-    (source
-     (origin
-       (method url-fetch)
-       (uri (crate-uri "instant" version))
-       (file-name
-        (string-append name "-" version ".tar.gz"))
-       (sha256
-        (base32
-         "08h27kzvb5jw74mh0ajv0nv9ggwvgqm8ynjsn2sa9jsks4cjh970"))))
-    (build-system cargo-build-system)
-    (arguments
-     `(#:skip-build?
-       #t
-       #:cargo-inputs
-       (("rust-cfg-if" ,rust-cfg-if-1))))
-    (home-page
-     "https://github.com/sebcrozet/instant")
-    (synopsis
-     "Unmaintained, consider using web-time instead - A partial replacement for std::time::Instant that works on WASM to")
-    (description
-     "This package provides Unmaintained, consider using web-time instead - A partial replacement for\nstd::time::Instant that works on WASM to.")
-    (license license:bsd-3)))
 
 (define-public rust-is-terminal-polyfill-1
   (package
@@ -4272,35 +4223,6 @@ wrappers for the new DXC HLSL compiler and validator.")
      "This package provides derive(Error).")
     (license (list license:expat license:asl2.0))))
 
-(define-public rust-thiserror-impl-1
-  (package
-    (name "rust-thiserror-impl")
-    (version "1.0.65")
-    (source
-     (origin
-       (method url-fetch)
-       (uri (crate-uri "thiserror-impl" version))
-       (file-name
-        (string-append name "-" version ".tar.gz"))
-       (sha256
-        (base32
-         "00l6gyrx6qlm1d7if3dcfl2sl0mg8k21caknkpk7glnb481pfwdf"))))
-    (build-system cargo-build-system)
-    (arguments
-     `(#:skip-build?
-       #t
-       #:cargo-inputs
-       (("rust-proc-macro2" ,rust-proc-macro2-1)
-        ("rust-quote" ,rust-quote-1)
-        ("rust-syn" ,rust-syn-2))))
-    (home-page
-     "https://github.com/dtolnay/thiserror")
-    (synopsis
-     "Implementation detail of the `thiserror` crate")
-    (description
-     "This package provides Implementation detail of the `thiserror` crate.")
-    (license (list license:expat license:asl2.0))))
-
 (define-public rust-thread-local-1
   (package
     (name "rust-thread-local")
@@ -4326,36 +4248,6 @@ wrappers for the new DXC HLSL compiler and validator.")
     (synopsis "Per-object thread-local storage")
     (description
      "This package provides Per-object thread-local storage.")
-    (license (list license:expat license:asl2.0))))
-
-(define-public rust-time-0.3
-  (package
-    (name "rust-time")
-    (version "0.3.36")
-    (source
-     (origin
-       (method url-fetch)
-       (uri (crate-uri "time" version))
-       (file-name
-        (string-append name "-" version ".tar.gz"))
-       (sha256
-        (base32
-         "11g8hdpahgrf1wwl2rpsg5nxq3aj7ri6xr672v4qcij6cgjqizax"))))
-    (build-system cargo-build-system)
-    (arguments
-     `(#:skip-build?
-       #t
-       #:cargo-inputs
-       (("rust-deranged" ,rust-deranged-0.3)
-        ("rust-num-conv" ,rust-num-conv-0.1)
-        ("rust-powerfmt" ,rust-powerfmt-0.2)
-        ("rust-serde" ,rust-serde-1)
-        ("rust-time-core" ,rust-time-core-0.1))))
-    (home-page "https://time-rs.github.io")
-    (synopsis
-     "Date and time library. Fully interoperable with the standard library. Mostly compatible with #![no_std]")
-    (description
-     "This package provides Date and time library.  Fully interoperable with the standard library.  Mostly\ncompatible with #![no_std].")
     (license (list license:expat license:asl2.0))))
 
 (define-public rust-tinystr-0.7
