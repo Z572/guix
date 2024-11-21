@@ -14,6 +14,9 @@
 ;;; TODO: Fix home-page, synopsis, description and license for rust-smithay-drm-extras
 
 (define-module (gnu packages niri)
+  #:use-module (gnu packages)
+  #:use-module (gnu packages gtk)
+  #:use-module (gnu packages glib)
   #:use-module ((guix licenses) #:prefix license:)
   #:use-module (guix build-system cargo)
   #:use-module (guix download)
@@ -30,12 +33,13 @@
   #:use-module (gnu packages freedesktop)
   #:use-module (gnu packages gl)
   #:use-module (gnu packages pkg-config)
+  #:use-module (gnu packages llvm)
   #:use-module (gnu packages wm)
   #:use-module (gnu packages crates-io))
 
-(define unknown-license! #f)
+(define-public unknown-license! #f)
 
-(define rust-addr2line-0.24
+(define-public rust-addr2line-0.24
   (package
     (name "rust-addr2line")
     (version "0.24.2")
@@ -62,7 +66,7 @@
      "This package provides a cross-platform symbolication library written in Rust,\nusing `gimli`.")
     (license (list license:asl2.0 license:expat))))
 
-(define rust-adler2-2
+(define-public rust-adler2-2
   (package
     (name "rust-adler2")
     (version "2.0.0")
@@ -85,7 +89,7 @@
     (license
      (list license:bsd-0 license:expat license:asl2.0))))
 
-(define rust-ahash-0.8
+(define-public rust-ahash-0.8
   (package
     (name "rust-ahash")
     (version "0.8.11")
@@ -115,7 +119,7 @@
      "This package provides a non-cryptographic hash function using AES-NI for high\nperformance.")
     (license (list license:expat license:asl2.0))))
 
-(define rust-aho-corasick-1
+(define-public rust-aho-corasick-1
   (package
     (name "rust-aho-corasick")
     (version "1.1.3")
@@ -141,7 +145,7 @@
      "This package provides Fast multiple substring searching.")
     (license (list license:unlicense license:expat))))
 
-(define rust-allocator-api2-0.2
+(define-public rust-allocator-api2-0.2
   (package
     (name "rust-allocator-api2")
     (version "0.2.18")
@@ -163,7 +167,7 @@
      "This package provides Mirror of Rust's allocator API.")
     (license (list license:expat license:asl2.0))))
 
-(define rust-android-activity-0.6
+(define-public rust-android-activity-0.6
   (package
     (name "rust-android-activity")
     (version "0.6.0")
@@ -203,7 +207,7 @@
      "This package provides Glue for building Rust applications on Android with @code{NativeActivity} or\n@code{GameActivity}.")
     (license (list license:expat license:asl2.0))))
 
-(define rust-anstream-0.6
+(define-public rust-anstream-0.6
   (package
     (name "rust-anstream")
     (version "0.6.17")
@@ -236,7 +240,7 @@
      "This package provides a simple cross platform library for writing colored text\nto a terminal.")
     (license (list license:expat license:asl2.0))))
 
-(define rust-anstyle-1
+(define-public rust-anstyle-1
   (package
     (name "rust-anstyle")
     (version "1.0.9")
@@ -257,7 +261,7 @@
      "This package provides ANSI text styling.")
     (license (list license:expat license:asl2.0))))
 
-(define rust-anstyle-parse-0.2
+(define-public rust-anstyle-parse-0.2
   (package
     (name "rust-anstyle-parse")
     (version "0.2.6")
@@ -282,7 +286,7 @@
      "This package provides Parse ANSI Style Escapes.")
     (license (list license:expat license:asl2.0))))
 
-(define rust-anstyle-query-1
+(define-public rust-anstyle-query-1
   (package
     (name "rust-anstyle-query")
     (version "1.1.2")
@@ -308,7 +312,7 @@
      "This package provides Look up colored console capabilities.")
     (license (list license:expat license:asl2.0))))
 
-(define rust-anstyle-wincon-3
+(define-public rust-anstyle-wincon-3
   (package
     (name "rust-anstyle-wincon")
     (version "3.0.6")
@@ -334,7 +338,7 @@
      "This package provides Styling legacy Windows terminals.")
     (license (list license:expat license:asl2.0))))
 
-(define rust-anyhow-1
+(define-public rust-anyhow-1
   (package
     (name "rust-anyhow")
     (version "1.0.93")
@@ -356,7 +360,7 @@
      "This package provides Flexible concrete Error type built on std::error::Error.")
     (license (list license:expat license:asl2.0))))
 
-(define rust-appendlist-1
+(define-public rust-appendlist-1
   (package
     (name "rust-appendlist")
     (version "1.4.0")
@@ -379,7 +383,7 @@
      "This package provides An append-only list that preserves references to its elements.")
     (license license:expat)))
 
-(define rust-approx-0.5
+(define-public rust-approx-0.5
   (package
     (name "rust-approx")
     (version "0.5.1")
@@ -406,7 +410,7 @@
      "This package provides Approximate floating point equality comparisons and assertions.")
     (license license:asl2.0)))
 
-(define rust-arrayvec-0.7
+(define-public rust-arrayvec-0.7
   (package
     (name "rust-arrayvec")
     (version "0.7.6")
@@ -428,7 +432,7 @@
      "This package provides a vector with fixed capacity, backed by an array (it can\nbe stored on the stack too).  Implements fixed capacity @code{ArrayVec} and\n@code{ArrayString}.")
     (license (list license:expat license:asl2.0))))
 
-(define rust-as-raw-xcb-connection-1
+(define-public rust-as-raw-xcb-connection-1
   (package
     (name "rust-as-raw-xcb-connection")
     (version "1.0.1")
@@ -451,7 +455,7 @@
      "This package provides Trait to facilitate interoperatibility with libxcb C API.")
     (license (list license:expat license:asl2.0))))
 
-(define rust-async-channel-2
+(define-public rust-async-channel-2
   (package
     (name "rust-async-channel")
     (version "2.3.1")
@@ -484,7 +488,7 @@
      "This package provides Async multi-producer multi-consumer channel.")
     (license (list license:asl2.0 license:expat))))
 
-(define rust-async-executor-1
+(define-public rust-async-executor-1
   (package
     (name "rust-async-executor")
     (version "1.13.1")
@@ -515,7 +519,7 @@
      "This package provides Async executor.")
     (license (list license:asl2.0 license:expat))))
 
-(define rust-async-io-2
+(define-public rust-async-io-2
   (package
     (name "rust-async-io")
     (version "2.3.4")
@@ -551,7 +555,7 @@
      "This package provides Async I/O and timers.")
     (license (list license:asl2.0 license:expat))))
 
-(define rust-async-lock-2
+(define-public rust-async-lock-2
   (package
     (name "rust-async-lock")
     (version "2.8.0")
@@ -577,7 +581,7 @@
      "This package provides Async synchronization primitives.")
     (license (list license:asl2.0 license:expat))))
 
-(define rust-async-lock-3
+(define-public rust-async-lock-3
   (package
     (name "rust-async-lock")
     (version "3.4.0")
@@ -607,7 +611,7 @@
      "This package provides Async synchronization primitives.")
     (license (list license:asl2.0 license:expat))))
 
-(define rust-async-recursion-1
+(define-public rust-async-recursion-1
   (package
     (name "rust-async-recursion")
     (version "1.1.1")
@@ -635,7 +639,7 @@
      "This package provides Recursion for async functions.")
     (license (list license:expat license:asl2.0))))
 
-(define rust-async-signal-0.2
+(define-public rust-async-signal-0.2
   (package
     (name "rust-async-signal")
     (version "0.2.10")
@@ -671,7 +675,7 @@
      "This package provides Async signal handling.")
     (license (list license:asl2.0 license:expat))))
 
-(define rust-async-task-4
+(define-public rust-async-task-4
   (package
     (name "rust-async-task")
     (version "4.7.1")
@@ -694,7 +698,7 @@
      "This package provides Task abstraction for building executors.")
     (license (list license:asl2.0 license:expat))))
 
-(define rust-async-trait-0.1
+(define-public rust-async-trait-0.1
   (package
     (name "rust-async-trait")
     (version "0.1.83")
@@ -722,7 +726,7 @@
      "This package provides Type erasure for async trait methods.")
     (license (list license:expat license:asl2.0))))
 
-(define rust-autocfg-1
+(define-public rust-autocfg-1
   (package
     (name "rust-autocfg")
     (version "1.4.0")
@@ -744,7 +748,7 @@
      "This package provides Automatic cfg for Rust compiler features.")
     (license (list license:asl2.0 license:expat))))
 
-(define rust-backtrace-0.3
+(define-public rust-backtrace-0.3
   (package
     (name "rust-backtrace")
     (version "0.3.74")
@@ -778,7 +782,7 @@
      "This package provides a library to acquire a stack trace (backtrace) at runtime\nin a Rust program.")
     (license (list license:expat license:asl2.0))))
 
-(define rust-bindgen-0.69
+(define-public rust-bindgen-0.69
   (package
     (name "rust-bindgen")
     (version "0.69.5")
@@ -818,7 +822,7 @@
      "This package provides Automatically generates Rust FFI bindings to C and C++ libraries.")
     (license license:bsd-3)))
 
-(define rust-bitflags-2
+(define-public rust-bitflags-2
   (package
     (name "rust-bitflags")
     (version "2.6.0")
@@ -841,7 +845,7 @@
      "This package provides a macro to generate structures which behave like bitflags.")
     (license (list license:expat license:asl2.0))))
 
-(define rust-block2-0.5
+(define-public rust-block2-0.5
   (package
     (name "rust-block2")
     (version "0.5.1")
@@ -867,7 +871,7 @@
      "This package provides Apple's C language extension of blocks.")
     (license license:expat)))
 
-(define rust-blocking-1
+(define-public rust-blocking-1
   (package
     (name "rust-blocking")
     (version "1.6.1")
@@ -897,7 +901,7 @@
      "This package provides a thread pool for isolating blocking I/O in async\nprograms.")
     (license (list license:asl2.0 license:expat))))
 
-(define rust-bumpalo-3
+(define-public rust-bumpalo-3
   (package
     (name "rust-bumpalo")
     (version "3.16.0")
@@ -918,7 +922,7 @@
      "This package provides a fast bump allocation arena for Rust.")
     (license (list license:expat license:asl2.0))))
 
-(define rust-bytemuck-1
+(define-public rust-bytemuck-1
   (package
     (name "rust-bytemuck")
     (version "1.19.0")
@@ -946,7 +950,7 @@
     (license
      (list license:zlib license:asl2.0 license:expat))))
 
-(define rust-bytemuck-derive-1
+(define-public rust-bytemuck-derive-1
   (package
     (name "rust-bytemuck-derive")
     (version "1.8.0")
@@ -975,7 +979,7 @@
     (license
      (list license:zlib license:asl2.0 license:expat))))
 
-(define rust-bytes-1
+(define-public rust-bytes-1
   (package
     (name "rust-bytes")
     (version "1.8.0")
@@ -997,7 +1001,7 @@
      "This package provides Types and traits for working with bytes.")
     (license license:expat)))
 
-(define rust-cairo-rs-0.20
+(define-public rust-cairo-rs-0.20
   (package
     (name "rust-cairo-rs")
     (version "0.20.1")
@@ -1025,7 +1029,7 @@
      "This package provides Rust bindings for the Cairo library.")
     (license license:expat)))
 
-(define rust-cairo-sys-rs-0.20
+(define-public rust-cairo-sys-rs-0.20
   (package
     (name "rust-cairo-sys-rs")
     (version "0.20.0")
@@ -1052,7 +1056,7 @@
      "This package provides FFI bindings to libcairo.")
     (license license:expat)))
 
-(define rust-calloop-0.13
+(define-public rust-calloop-0.13
   (package
     (name "rust-calloop")
     (version "0.13.0")
@@ -1082,7 +1086,7 @@
      "This package provides a callback-based event loop.")
     (license license:expat)))
 
-(define rust-calloop-0.14
+(define-public rust-calloop-0.14
   (package
     (name "rust-calloop")
     (version "0.14.1")
@@ -1113,7 +1117,7 @@
      "This package provides a callback-based event loop.")
     (license license:expat)))
 
-(define rust-calloop-wayland-source-0.3
+(define-public rust-calloop-wayland-source-0.3
   (package
     (name "rust-calloop-wayland-source")
     (version "0.3.0")
@@ -1144,7 +1148,7 @@
      "This package provides a wayland-rs client event source for callloop.")
     (license license:expat)))
 
-(define rust-cc-1
+(define-public rust-cc-1
   (package
     (name "rust-cc")
     (version "1.1.31")
@@ -1172,7 +1176,7 @@
      "This package provides a build-time dependency for Cargo build scripts to assist\nin invoking the native C compiler to compile native C code into a static archive\nto be linked into Rust code.")
     (license (list license:expat license:asl2.0))))
 
-(define rust-cfg-expr-0.15
+(define-public rust-cfg-expr-0.15
   (package
     (name "rust-cfg-expr")
     (version "0.15.8")
@@ -1200,7 +1204,7 @@
      "This package provides a parser and evaluator for Rust `cfg()` expressions.")
     (license (list license:expat license:asl2.0))))
 
-(define rust-cfg-expr-0.17
+(define-public rust-cfg-expr-0.17
   (package
     (name "rust-cfg-expr")
     (version "0.17.0")
@@ -1228,7 +1232,7 @@
      "This package provides a parser and evaluator for Rust `cfg()` expressions.")
     (license (list license:expat license:asl2.0))))
 
-(define rust-cfg-aliases-0.2
+(define-public rust-cfg-aliases-0.2
   (package
     (name "rust-cfg-aliases")
     (version "0.2.1")
@@ -1251,7 +1255,7 @@
      "This package provides a tiny utility to help save you a lot of effort with long\nwinded `#[cfg()]` checks.")
     (license license:expat)))
 
-(define rust-chumsky-0.9
+(define-public rust-chumsky-0.9
   (package
     (name "rust-chumsky")
     (version "0.9.3")
@@ -1277,7 +1281,7 @@
      "This package provides a parser library for humans with powerful error recovery.")
     (license license:expat)))
 
-(define rust-clang-sys-1
+(define-public rust-clang-sys-1
   (package
     (name "rust-clang-sys")
     (version "1.8.1")
@@ -1305,7 +1309,7 @@
      "This package provides Rust bindings for libclang.")
     (license license:asl2.0)))
 
-(define rust-clap-4
+(define-public rust-clap-4
   (package
     (name "rust-clap")
     (version "4.5.20")
@@ -1332,7 +1336,7 @@
      "This package provides a simple to use, efficient, and full-featured Command Line\nArgument Parser.")
     (license (list license:expat license:asl2.0))))
 
-(define rust-clap-builder-4
+(define-public rust-clap-builder-4
   (package
     (name "rust-clap-builder")
     (version "4.5.20")
@@ -1361,7 +1365,7 @@
      "This package provides a simple to use, efficient, and full-featured Command Line\nArgument Parser.")
     (license (list license:expat license:asl2.0))))
 
-(define rust-clap-derive-4
+(define-public rust-clap-derive-4
   (package
     (name "rust-clap-derive")
     (version "4.5.18")
@@ -1390,7 +1394,7 @@
      "This package provides Parse command line argument by defining a struct, derive crate.")
     (license (list license:expat license:asl2.0))))
 
-(define rust-clap-lex-0.7
+(define-public rust-clap-lex-0.7
   (package
     (name "rust-clap-lex")
     (version "0.7.2")
@@ -1412,7 +1416,7 @@
      "This package provides Minimal, flexible command line parser.")
     (license (list license:expat license:asl2.0))))
 
-(define rust-colorchoice-1
+(define-public rust-colorchoice-1
   (package
     (name "rust-colorchoice")
     (version "1.0.3")
@@ -1434,7 +1438,7 @@
      "This package provides Global override of color control.")
     (license (list license:expat license:asl2.0))))
 
-(define rust-combine-4
+(define-public rust-combine-4
   (package
     (name "rust-combine")
     (version "4.6.7")
@@ -1461,7 +1465,7 @@
      "This package provides Fast parser combinators on arbitrary streams with zero-copy support.")
     (license license:expat)))
 
-(define rust-concurrent-queue-2
+(define-public rust-concurrent-queue-2
   (package
     (name "rust-concurrent-queue")
     (version "2.5.0")
@@ -1489,7 +1493,7 @@
      "This package provides Concurrent multi-producer multi-consumer queue.")
     (license (list license:asl2.0 license:expat))))
 
-(define rust-cookie-factory-0.3
+(define-public rust-cookie-factory-0.3
   (package
     (name "rust-cookie-factory")
     (version "0.3.3")
@@ -1515,7 +1519,7 @@
      "This package provides nom inspired serialization library.")
     (license license:expat)))
 
-(define rust-core-foundation-sys-0.8
+(define-public rust-core-foundation-sys-0.8
   (package
     (name "rust-core-foundation-sys")
     (version "0.8.7")
@@ -1538,7 +1542,7 @@
      "This package provides Bindings to Core Foundation for @code{macOS}.")
     (license (list license:expat license:asl2.0))))
 
-(define rust-core-graphics-0.23
+(define-public rust-core-graphics-0.23
   (package
     (name "rust-core-graphics")
     (version "0.23.2")
@@ -1570,7 +1574,7 @@
      "This package provides Bindings to Core Graphics for @code{macOS}.")
     (license (list license:expat license:asl2.0))))
 
-(define rust-core-graphics-types-0.1
+(define-public rust-core-graphics-types-0.1
   (package
     (name "rust-core-graphics-types")
     (version "0.1.3")
@@ -1600,7 +1604,7 @@
      "This package provides Bindings for some fundamental Core Graphics types.")
     (license (list license:expat license:asl2.0))))
 
-(define rust-cpufeatures-0.2
+(define-public rust-cpufeatures-0.2
   (package
     (name "rust-cpufeatures")
     (version "0.2.14")
@@ -1626,7 +1630,7 @@
      "This package provides Lightweight runtime CPU feature detection for aarch64, loongarch64, and\nx86/x86_64 targets, with no_std support and support for mobile targets including\nAndroid and @code{iOS}.")
     (license (list license:expat license:asl2.0))))
 
-(define rust-crc32fast-1
+(define-public rust-crc32fast-1
   (package
     (name "rust-crc32fast")
     (version "1.4.2")
@@ -1653,7 +1657,7 @@
      "This package provides Fast, SIMD-accelerated CRC32 (IEEE) checksum computation.")
     (license (list license:expat license:asl2.0))))
 
-(define rust-crossbeam-utils-0.8
+(define-public rust-crossbeam-utils-0.8
   (package
     (name "rust-crossbeam-utils")
     (version "0.8.20")
@@ -1675,7 +1679,7 @@
      "This package provides Utilities for concurrent programming.")
     (license (list license:expat license:asl2.0))))
 
-(define rust-csscolorparser-0.7
+(define-public rust-csscolorparser-0.7
   (package
     (name "rust-csscolorparser")
     (version "0.7.0")
@@ -1701,7 +1705,7 @@
      "This package provides CSS color parser library.")
     (license (list license:expat license:asl2.0))))
 
-(define rust-deranged-0.3
+(define-public rust-deranged-0.3
   (package
     (name "rust-deranged")
     (version "0.3.11")
@@ -1726,7 +1730,7 @@
      "This package provides Ranged integers.")
     (license (list license:expat license:asl2.0))))
 
-(define rust-displaydoc-0.2
+(define-public rust-displaydoc-0.2
   (package
     (name "rust-displaydoc")
     (version "0.2.5")
@@ -1754,7 +1758,7 @@
      "This package provides a derive macro for implementing the display Trait via a\ndoc comment and string interpolation.")
     (license (list license:expat license:asl2.0))))
 
-(define rust-downcast-rs-1
+(define-public rust-downcast-rs-1
   (package
     (name "rust-downcast-rs")
     (version "1.2.1")
@@ -1777,7 +1781,7 @@
      "This package provides Trait object downcasting support using only safe Rust.  It supports type\nparameters, associated types, and type constraints.")
     (license (list license:expat license:asl2.0))))
 
-(define rust-dpi-0.1
+(define-public rust-dpi-0.1
   (package
     (name "rust-dpi")
     (version "0.1.1")
@@ -1799,7 +1803,7 @@
      "This package provides Types for handling UI scaling.")
     (license license:asl2.0)))
 
-(define rust-drm-0.14
+(define-public rust-drm-0.14
   (package
     (name "rust-drm")
     (version "0.14.1")
@@ -1830,7 +1834,7 @@
      "This package provides Safe, low-level bindings to the Direct Rendering Manager API.")
     (license license:expat)))
 
-(define rust-drm-ffi-0.9
+(define-public rust-drm-ffi-0.9
   (package
     (name "rust-drm-ffi")
     (version "0.9.0")
@@ -1857,7 +1861,7 @@
      "This package provides Safe, low-level bindings to the Direct Rendering Manager API.")
     (license license:expat)))
 
-(define rust-drm-sys-0.8
+(define-public rust-drm-sys-0.8
   (package
     (name "rust-drm-sys")
     (version "0.8.0")
@@ -1884,7 +1888,7 @@
      "This package provides Bindings to the Direct Rendering Manager API.")
     (license license:expat)))
 
-(define rust-either-1
+(define-public rust-either-1
   (package
     (name "rust-either")
     (version "1.13.0")
@@ -1906,7 +1910,7 @@
      "This package provides The enum `Either` with variants `Left` and `Right` is a general purpose sum type\nwith two cases.")
     (license (list license:expat license:asl2.0))))
 
-(define rust-enumflags2-0.7
+(define-public rust-enumflags2-0.7
   (package
     (name "rust-enumflags2")
     (version "0.7.10")
@@ -1934,7 +1938,7 @@
      "This package provides Enum-based bit flags.")
     (license (list license:expat license:asl2.0))))
 
-(define rust-enumflags2-derive-0.7
+(define-public rust-enumflags2-derive-0.7
   (package
     (name "rust-enumflags2-derive")
     (version "0.7.10")
@@ -1963,7 +1967,7 @@
      "This package provides Do not use directly, use the reexport in the `enumflags2` crate.  This allows\nfor better compatibility across versions.")
     (license (list license:expat license:asl2.0))))
 
-(define rust-errno-0.3
+(define-public rust-errno-0.3
   (package
     (name "rust-errno")
     (version "0.3.9")
@@ -1991,7 +1995,7 @@
      "This package provides Cross-platform interface to the `errno` variable.")
     (license (list license:expat license:asl2.0))))
 
-(define rust-event-listener-5
+(define-public rust-event-listener-5
   (package
     (name "rust-event-listener")
     (version "5.3.1")
@@ -2021,7 +2025,7 @@
      "This package provides Notify async tasks or threads.")
     (license (list license:asl2.0 license:expat))))
 
-(define rust-event-listener-strategy-0.5
+(define-public rust-event-listener-strategy-0.5
   (package
     (name "rust-event-listener-strategy")
     (version "0.5.2")
@@ -2050,7 +2054,7 @@
      "This package provides Block or poll on event_listener easily.")
     (license (list license:asl2.0 license:expat))))
 
-(define rust-fastrand-2
+(define-public rust-fastrand-2
   (package
     (name "rust-fastrand")
     (version "2.2.0")
@@ -2072,7 +2076,7 @@
      "This package provides a simple and fast random number generator.")
     (license (list license:asl2.0 license:expat))))
 
-(define rust-fdeflate-0.3
+(define-public rust-fdeflate-0.3
   (package
     (name "rust-fdeflate")
     (version "0.3.6")
@@ -2099,7 +2103,7 @@
      "This package provides Fast specialized deflate implementation.")
     (license (list license:expat license:asl2.0))))
 
-(define rust-field-offset-0.3
+(define-public rust-field-offset-0.3
   (package
     (name "rust-field-offset")
     (version "0.3.6")
@@ -2127,7 +2131,7 @@
      "This package provides Safe pointer-to-member implementation.")
     (license (list license:expat license:asl2.0))))
 
-(define rust-flate2-1
+(define-public rust-flate2-1
   (package
     (name "rust-flate2")
     (version "1.0.34")
@@ -2155,7 +2159,7 @@
      "This package provides DEFLATE compression and decompression exposed as Read/@code{BufRead/Write}\nstreams.  Supports miniz_oxide and multiple zlib implementations.  Supports\nzlib, gzip, and raw deflate streams.")
     (license (list license:expat license:asl2.0))))
 
-(define rust-foreign-types-macros-0.2
+(define-public rust-foreign-types-macros-0.2
   (package
     (name "rust-foreign-types-macros")
     (version "0.2.3")
@@ -2184,7 +2188,7 @@
      "This package provides An internal crate used by foreign-types.")
     (license (list license:expat license:asl2.0))))
 
-(define rust-foreign-types-shared-0.3
+(define-public rust-foreign-types-shared-0.3
   (package
     (name "rust-foreign-types-shared")
     (version "0.3.1")
@@ -2207,7 +2211,7 @@
      "This package provides An internal crate used by foreign-types.")
     (license (list license:expat license:asl2.0))))
 
-(define rust-futures-0.3
+(define-public rust-futures-0.3
   (package
     (name "rust-futures")
     (version "0.3.31")
@@ -2242,7 +2246,7 @@
      "This package provides An implementation of futures and streams featuring zero allocations,\ncomposability, and iterator-like interfaces.")
     (license (list license:expat license:asl2.0))))
 
-(define rust-futures-channel-0.3
+(define-public rust-futures-channel-0.3
   (package
     (name "rust-futures-channel")
     (version "0.3.31")
@@ -2270,7 +2274,7 @@
      "This package provides Channels for asynchronous communication using futures-rs.")
     (license (list license:expat license:asl2.0))))
 
-(define rust-futures-core-0.3
+(define-public rust-futures-core-0.3
   (package
     (name "rust-futures-core")
     (version "0.3.31")
@@ -2293,7 +2297,7 @@
      "This package provides The core traits and types in for the `futures` library.")
     (license (list license:expat license:asl2.0))))
 
-(define rust-futures-executor-0.3
+(define-public rust-futures-executor-0.3
   (package
     (name "rust-futures-executor")
     (version "0.3.31")
@@ -2322,7 +2326,7 @@
      "This package provides Executors for asynchronous tasks based on the futures-rs library.")
     (license (list license:expat license:asl2.0))))
 
-(define rust-futures-io-0.3
+(define-public rust-futures-io-0.3
   (package
     (name "rust-futures-io")
     (version "0.3.31")
@@ -2345,7 +2349,7 @@
      "This package provides The `@code{AsyncRead`}, `@code{AsyncWrite`}, `@code{AsyncSeek`}, and\n`@code{AsyncBufRead`} traits for the futures-rs library.")
     (license (list license:expat license:asl2.0))))
 
-(define rust-futures-lite-2
+(define-public rust-futures-lite-2
   (package
     (name "rust-futures-lite")
     (version "2.3.0")
@@ -2377,7 +2381,7 @@
      "This package provides Futures, streams, and async I/O combinators.")
     (license (list license:asl2.0 license:expat))))
 
-(define rust-futures-macro-0.3
+(define-public rust-futures-macro-0.3
   (package
     (name "rust-futures-macro")
     (version "0.3.31")
@@ -2406,7 +2410,7 @@
      "This package provides The futures-rs procedural macro implementations.")
     (license (list license:expat license:asl2.0))))
 
-(define rust-futures-sink-0.3
+(define-public rust-futures-sink-0.3
   (package
     (name "rust-futures-sink")
     (version "0.3.31")
@@ -2429,7 +2433,7 @@
      "This package provides The asynchronous `Sink` trait for the futures-rs library.")
     (license (list license:expat license:asl2.0))))
 
-(define rust-futures-task-0.3
+(define-public rust-futures-task-0.3
   (package
     (name "rust-futures-task")
     (version "0.3.31")
@@ -2451,7 +2455,7 @@
      "This package provides tools for working with tasks.")
     (license (list license:expat license:asl2.0))))
 
-(define rust-futures-util-0.3
+(define-public rust-futures-util-0.3
   (package
     (name "rust-futures-util")
     (version "0.3.31")
@@ -2489,7 +2493,7 @@
      "This package provides Common utilities and extension traits for the futures-rs library.")
     (license (list license:expat license:asl2.0))))
 
-(define rust-gbm-0.16
+(define-public rust-gbm-0.16
   (package
     (name "rust-gbm")
     (version "0.16.0")
@@ -2521,7 +2525,7 @@
      "This package provides libgbm bindings for rust.")
     (license license:expat)))
 
-(define rust-gbm-sys-0.3
+(define-public rust-gbm-sys-0.3
   (package
     (name "rust-gbm-sys")
     (version "0.3.1")
@@ -2548,7 +2552,7 @@
      "This package provides Bindgen generated unsafe libgbm wrapper.")
     (license license:expat)))
 
-(define rust-gdk-pixbuf-0.20
+(define-public rust-gdk-pixbuf-0.20
   (package
     (name "rust-gdk-pixbuf")
     (version "0.20.4")
@@ -2577,7 +2581,7 @@
      "This package provides Rust bindings for the @code{GdkPixbuf} library.")
     (license license:expat)))
 
-(define rust-gdk-pixbuf-sys-0.20
+(define-public rust-gdk-pixbuf-sys-0.20
   (package
     (name "rust-gdk-pixbuf-sys")
     (version "0.20.4")
@@ -2606,7 +2610,7 @@
      "This package provides FFI bindings to libgdk_pixbuf-2.0.")
     (license license:expat)))
 
-(define rust-gdk4-0.9
+(define-public rust-gdk4-0.9
   (package
     (name "rust-gdk4")
     (version "0.9.2")
@@ -2637,7 +2641,7 @@
      "This package provides Rust bindings of the GDK 4 library.")
     (license license:expat)))
 
-(define rust-gdk4-sys-0.9
+(define-public rust-gdk4-sys-0.9
   (package
     (name "rust-gdk4-sys")
     (version "0.9.2")
@@ -2670,7 +2674,7 @@
      "This package provides FFI bindings of GDK 4.")
     (license license:expat)))
 
-(define rust-generator-0.8
+(define-public rust-generator-0.8
   (package
     (name "rust-generator")
     (version "0.8.3")
@@ -2700,7 +2704,7 @@
      "This package provides Stackfull Generator Library in Rust.")
     (license (list license:expat license:asl2.0))))
 
-(define rust-getrandom-0.2
+(define-public rust-getrandom-0.2
   (package
     (name "rust-getrandom")
     (version "0.2.15")
@@ -2729,7 +2733,7 @@
      "This package provides a small cross-platform library for retrieving random data\nfrom system source.")
     (license (list license:expat license:asl2.0))))
 
-(define rust-gimli-0.31
+(define-public rust-gimli-0.31
   (package
     (name "rust-gimli")
     (version "0.31.1")
@@ -2751,7 +2755,7 @@
      "This package provides a library for reading and writing the DWARF debugging\nformat.")
     (license (list license:expat license:asl2.0))))
 
-(define rust-gio-0.20
+(define-public rust-gio-0.20
   (package
     (name "rust-gio")
     (version "0.20.4")
@@ -2786,7 +2790,7 @@
      "This package provides Rust bindings for the Gio library.")
     (license license:expat)))
 
-(define rust-gio-sys-0.20
+(define-public rust-gio-sys-0.20
   (package
     (name "rust-gio-sys")
     (version "0.20.4")
@@ -2815,7 +2819,7 @@
      "This package provides FFI bindings to libgio-2.0.")
     (license license:expat)))
 
-(define rust-glam-0.29
+(define-public rust-glam-0.29
   (package
     (name "rust-glam")
     (version "0.29.2")
@@ -2838,7 +2842,7 @@
      "This package provides a simple and fast 3D math library for games and graphics.")
     (license (list license:expat license:asl2.0))))
 
-(define rust-glib-0.20
+(define-public rust-glib-0.20
   (package
     (name "rust-glib")
     (version "0.20.4")
@@ -2877,7 +2881,7 @@
      "This package provides Rust bindings for the GLib library.")
     (license license:expat)))
 
-(define rust-glib-macros-0.20
+(define-public rust-glib-macros-0.20
   (package
     (name "rust-glib-macros")
     (version "0.20.4")
@@ -2908,7 +2912,7 @@
      "This package provides Rust bindings for the GLib library, proc macros crate.")
     (license license:expat)))
 
-(define rust-glib-sys-0.20
+(define-public rust-glib-sys-0.20
   (package
     (name "rust-glib-sys")
     (version "0.20.4")
@@ -2934,7 +2938,7 @@
      "This package provides FFI bindings to libglib-2.0.")
     (license license:expat)))
 
-(define rust-gobject-sys-0.20
+(define-public rust-gobject-sys-0.20
   (package
     (name "rust-gobject-sys")
     (version "0.20.4")
@@ -2961,7 +2965,7 @@
      "This package provides FFI bindings to libgobject-2.0.")
     (license license:expat)))
 
-(define rust-graphene-rs-0.20
+(define-public rust-graphene-rs-0.20
   (package
     (name "rust-graphene-rs")
     (version "0.20.4")
@@ -2989,7 +2993,7 @@
      "This package provides Rust bindings for the Graphene library.")
     (license license:expat)))
 
-(define rust-graphene-sys-0.20
+(define-public rust-graphene-sys-0.20
   (package
     (name "rust-graphene-sys")
     (version "0.20.4")
@@ -3017,7 +3021,7 @@
      "This package provides FFI bindings to libgraphene-1.0.")
     (license license:expat)))
 
-(define rust-gsk4-0.9
+(define-public rust-gsk4-0.9
   (package
     (name "rust-gsk4")
     (version "0.9.2")
@@ -3048,7 +3052,7 @@
      "This package provides Rust bindings of the GSK 4 library.")
     (license license:expat)))
 
-(define rust-gsk4-sys-0.9
+(define-public rust-gsk4-sys-0.9
   (package
     (name "rust-gsk4-sys")
     (version "0.9.2")
@@ -3080,7 +3084,7 @@
      "This package provides FFI bindings of GSK 4.")
     (license license:expat)))
 
-(define rust-gtk4-0.9
+(define-public rust-gtk4-0.9
   (package
     (name "rust-gtk4")
     (version "0.9.3")
@@ -3118,7 +3122,7 @@
      "This package provides Rust bindings of the GTK 4 library.")
     (license license:expat)))
 
-(define rust-gtk4-macros-0.9
+(define-public rust-gtk4-macros-0.9
   (package
     (name "rust-gtk4-macros")
     (version "0.9.1")
@@ -3147,7 +3151,7 @@
      "This package provides Macros helpers for GTK 4 bindings.")
     (license license:expat)))
 
-(define rust-gtk4-sys-0.9
+(define-public rust-gtk4-sys-0.9
   (package
     (name "rust-gtk4-sys")
     (version "0.9.2")
@@ -3182,7 +3186,7 @@
      "This package provides FFI bindings of GTK 4.")
     (license license:expat)))
 
-(define rust-hashbrown-0.14
+(define-public rust-hashbrown-0.14
   (package
     (name "rust-hashbrown")
     (version "0.14.5")
@@ -3210,7 +3214,7 @@
      "This package provides a Rust port of Google's @code{SwissTable} hash map.")
     (license (list license:expat license:asl2.0))))
 
-(define rust-hashbrown-0.15
+(define-public rust-hashbrown-0.15
   (package
     (name "rust-hashbrown")
     (version "0.15.0")
@@ -3233,7 +3237,7 @@
      "This package provides a Rust port of Google's @code{SwissTable} hash map.")
     (license (list license:expat license:asl2.0))))
 
-(define rust-hermit-abi-0.3
+(define-public rust-hermit-abi-0.3
   (package
     (name "rust-hermit-abi")
     (version "0.3.9")
@@ -3255,7 +3259,7 @@
      "This package provides Hermit system calls definitions.")
     (license (list license:expat license:asl2.0))))
 
-(define rust-hermit-abi-0.4
+(define-public rust-hermit-abi-0.4
   (package
     (name "rust-hermit-abi")
     (version "0.4.0")
@@ -3277,7 +3281,7 @@
      "This package provides Hermit system calls definitions.")
     (license (list license:expat license:asl2.0))))
 
-(define rust-icu-collections-1
+(define-public rust-icu-collections-1
   (package
     (name "rust-icu-collections")
     (version "1.5.0")
@@ -3306,7 +3310,7 @@
      "This package provides Collection of API for use in ICU libraries.")
     (license unknown-license!)))
 
-(define rust-icu-locid-1
+(define-public rust-icu-locid-1
   (package
     (name "rust-icu-locid")
     (version "1.5.0")
@@ -3336,7 +3340,7 @@
      "This package provides API for managing Unicode Language and Locale Identifiers.")
     (license unknown-license!)))
 
-(define rust-icu-locid-transform-1
+(define-public rust-icu-locid-transform-1
   (package
     (name "rust-icu-locid-transform")
     (version "1.5.0")
@@ -3368,7 +3372,7 @@
      "This package provides API for Unicode Language and Locale Identifiers canonicalization.")
     (license unknown-license!)))
 
-(define rust-icu-locid-transform-data-1
+(define-public rust-icu-locid-transform-data-1
   (package
     (name "rust-icu-locid-transform-data")
     (version "1.5.0")
@@ -3390,7 +3394,7 @@
      "This package provides Data for the icu_locid_transform crate.")
     (license unknown-license!)))
 
-(define rust-icu-normalizer-1
+(define-public rust-icu-normalizer-1
   (package
     (name "rust-icu-normalizer")
     (version "1.5.0")
@@ -3426,7 +3430,7 @@
      "This package provides API for normalizing text into Unicode Normalization Forms.")
     (license unknown-license!)))
 
-(define rust-icu-normalizer-data-1
+(define-public rust-icu-normalizer-data-1
   (package
     (name "rust-icu-normalizer-data")
     (version "1.5.0")
@@ -3447,7 +3451,7 @@
      "This package provides Data for the icu_normalizer crate.")
     (license unknown-license!)))
 
-(define rust-icu-properties-1
+(define-public rust-icu-properties-1
   (package
     (name "rust-icu-properties")
     (version "1.5.1")
@@ -3480,7 +3484,7 @@
      "This package provides Definitions for Unicode properties.")
     (license unknown-license!)))
 
-(define rust-icu-properties-data-1
+(define-public rust-icu-properties-data-1
   (package
     (name "rust-icu-properties-data")
     (version "1.5.0")
@@ -3501,7 +3505,7 @@
      "This package provides Data for the icu_properties crate.")
     (license unknown-license!)))
 
-(define rust-icu-provider-1
+(define-public rust-icu-provider-1
   (package
     (name "rust-icu-provider")
     (version "1.5.0")
@@ -3537,7 +3541,7 @@
      "This package provides Trait and struct definitions for the ICU data provider.")
     (license unknown-license!)))
 
-(define rust-icu-provider-macros-1
+(define-public rust-icu-provider-macros-1
   (package
     (name "rust-icu-provider-macros")
     (version "1.5.0")
@@ -3564,7 +3568,7 @@
      "This package provides Proc macros for ICU data providers.")
     (license unknown-license!)))
 
-(define rust-idna-1
+(define-public rust-idna-1
   (package
     (name "rust-idna")
     (version "1.0.3")
@@ -3592,7 +3596,7 @@
      "This package provides IDNA (Internationalizing Domain Names in Applications) and Punycode.")
     (license (list license:expat license:asl2.0))))
 
-(define rust-idna-adapter-1
+(define-public rust-idna-adapter-1
   (package
     (name "rust-idna-adapter")
     (version "1.2.0")
@@ -3619,7 +3623,7 @@
      "This package provides Back end adapter for idna.")
     (license (list license:asl2.0 license:expat))))
 
-(define rust-indexmap-2
+(define-public rust-indexmap-2
   (package
     (name "rust-indexmap")
     (version "2.6.0")
@@ -3647,7 +3651,7 @@
      "This package provides a hash table with consistent order and fast iteration.")
     (license (list license:asl2.0 license:expat))))
 
-(define rust-input-0.9
+(define-public rust-input-0.9
   (package
     (name "rust-input")
     (version "0.9.1")
@@ -3677,7 +3681,7 @@
      "This package provides libinput bindings for rust.")
     (license license:expat)))
 
-(define rust-input-sys-1
+(define-public rust-input-sys-1
   (package
     (name "rust-input-sys")
     (version "1.18.0")
@@ -3700,7 +3704,7 @@
      "This package provides Bindgen generated unsafe libinput wrapper.")
     (license license:expat)))
 
-(define rust-instant-0.1
+(define-public rust-instant-0.1
   (package
     (name "rust-instant")
     (version "0.1.13")
@@ -3727,7 +3731,7 @@
      "This package provides Unmaintained, consider using web-time instead - A partial replacement for\nstd::time::Instant that works on WASM to.")
     (license license:bsd-3)))
 
-(define rust-io-lifetimes-1
+(define-public rust-io-lifetimes-1
   (package
     (name "rust-io-lifetimes")
     (version "1.0.11")
@@ -3762,7 +3766,7 @@
      #f
      )))
 
-(define rust-is-terminal-0.4
+(define-public rust-is-terminal-0.4
   (package
     (name "rust-is-terminal")
     (version "0.4.13")
@@ -3791,7 +3795,7 @@
      "This package provides Test whether a given stream is a terminal.")
     (license license:expat)))
 
-(define rust-is-terminal-polyfill-1
+(define-public rust-is-terminal-polyfill-1
   (package
     (name "rust-is-terminal-polyfill")
     (version "1.70.1")
@@ -3814,7 +3818,7 @@
      "This package provides Polyfill for `is_terminal` stdlib feature for use with older MSRVs.")
     (license (list license:expat license:asl2.0))))
 
-(define rust-jobserver-0.1
+(define-public rust-jobserver-0.1
   (package
     (name "rust-jobserver")
     (version "0.1.32")
@@ -3841,7 +3845,7 @@
      "This package provides An implementation of the GNU Make jobserver for Rust.")
     (license (list license:expat license:asl2.0))))
 
-(define rust-js-sys-0.3
+(define-public rust-js-sys-0.3
   (package
     (name "rust-js-sys")
     (version "0.3.72")
@@ -3868,7 +3872,7 @@
      "This package provides Bindings for all JS global objects and functions in all JS environments like\nNode.js and browsers, built on `#[wasm_bindgen]` using the `wasm-bindgen` crate.")
     (license (list license:expat license:asl2.0))))
 
-(define rust-knuffel-3
+(define-public rust-knuffel-3
   (package
     (name "rust-knuffel")
     (version "3.2.0")
@@ -3898,7 +3902,7 @@
      "This package provides Another KDL language implementation.")
     (license (list license:expat license:asl2.0))))
 
-(define rust-knuffel-derive-3
+(define-public rust-knuffel-derive-3
   (package
     (name "rust-knuffel-derive")
     (version "3.2.0")
@@ -3929,7 +3933,7 @@
      "This package provides a derive implementation for knuffel KDL parser.")
     (license (list license:expat license:asl2.0))))
 
-(define rust-lazy-static-1
+(define-public rust-lazy-static-1
   (package
     (name "rust-lazy-static")
     (version "1.5.0")
@@ -3952,7 +3956,7 @@
      "This package provides a macro for declaring lazily evaluated statics in Rust.")
     (license (list license:expat license:asl2.0))))
 
-(define rust-libadwaita-0.7
+(define-public rust-libadwaita-0.7
   (package
     (name "rust-libadwaita")
     (version "0.7.1")
@@ -3984,7 +3988,7 @@
      "This package provides Rust bindings for libadwaita.")
     (license license:expat)))
 
-(define rust-libadwaita-sys-0.7
+(define-public rust-libadwaita-sys-0.7
   (package
     (name "rust-libadwaita-sys")
     (version "0.7.0")
@@ -4017,7 +4021,7 @@
      "This package provides FFI bindings for libadwaita.")
     (license license:expat)))
 
-(define rust-libc-0.2
+(define-public rust-libc-0.2
   (package
     (name "rust-libc")
     (version "0.2.162")
@@ -4039,7 +4043,7 @@
      "This package provides Raw FFI bindings to platform libraries like libc.")
     (license (list license:expat license:asl2.0))))
 
-(define rust-libdisplay-info-0.1
+(define-public rust-libdisplay-info-0.1
   (package
     (name "rust-libdisplay-info")
     (version "0.1.0")
@@ -4071,7 +4075,7 @@
      "This package provides EDID and @code{DisplayID} library.")
     (license license:expat)))
 
-(define rust-libdisplay-info-derive-0.1
+(define-public rust-libdisplay-info-derive-0.1
   (package
     (name "rust-libdisplay-info-derive")
     (version "0.1.0")
@@ -4100,7 +4104,7 @@
      "This package provides Utility crate for managing FFI bindings in libdisplay-info.")
     (license license:expat)))
 
-(define rust-libdisplay-info-sys-0.1
+(define-public rust-libdisplay-info-sys-0.1
   (package
     (name "rust-libdisplay-info-sys")
     (version "0.1.0")
@@ -4123,7 +4127,7 @@
      "This package provides Low-level bindings for libdisplay-info.")
     (license license:expat)))
 
-(define rust-libloading-0.8
+(define-public rust-libloading-0.8
   (package
     (name "rust-libloading")
     (version "0.8.5")
@@ -4152,7 +4156,7 @@
      "This package provides Bindings around the platform's dynamic library loading primitives with greatly\nimproved memory safety.")
     (license license:isc)))
 
-(define rust-libm-0.2
+(define-public rust-libm-0.2
   (package
     (name "rust-libm")
     (version "0.2.10")
@@ -4178,7 +4182,7 @@
      ;;       unknown-license!)
      )))
 
-(define rust-libseat-0.2
+(define-public rust-libseat-0.2
   (package
     (name "rust-libseat")
     (version "0.2.1")
@@ -4206,7 +4210,7 @@
      "This package provides Safe libseat bindings.")
     (license license:expat)))
 
-(define rust-libseat-sys-0.1
+(define-public rust-libseat-sys-0.1
   (package
     (name "rust-libseat-sys")
     (version "0.1.7")
@@ -4232,7 +4236,7 @@
      "This package provides libseat bindings.")
     (license license:expat)))
 
-(define rust-libspa-0.8
+(define-public rust-libspa-0.8
   (package
     (name "rust-libspa")
     (version "0.8.0")
@@ -4246,7 +4250,8 @@
         (base32
          ;; "0000000000000000000000000000000000000000000000000000"
          "044qs48yl0llp2dmrgwxj9y1pgfy09i6fhq661zqqb9a3fwa9wv5"
-         ))))
+         ))
+       (patches (search-patches "rust-libspa-0.8.0-unrelease.patch"))))
     (build-system cargo-build-system)
     (arguments
      `(#:skip-build?
@@ -4267,7 +4272,7 @@
      "This package provides Rust bindings for libspa.")
     (license license:expat)))
 
-(define rust-libspa-sys-0.8
+(define-public rust-libspa-sys-0.8
   (package
     (name "rust-libspa-sys")
     (version "0.8.0")
@@ -4281,7 +4286,8 @@
         (base32
          ;; "0000000000000000000000000000000000000000000000000000"
          "07yh4i5grzbxkchg6dnxlwbdw2wm5jnd7ffbhl77jr0388b9f3dz"
-         ))))
+         ))
+       (patches (search-patches "rust-libspa-sys-0.8.0-unrelease.patch"))))
     (build-system cargo-build-system)
     (arguments
      `(#:skip-build?
@@ -4296,7 +4302,7 @@
      "This package provides Rust FFI bindings for libspa.")
     (license license:expat)))
 
-(define rust-linux-raw-sys-0.3
+(define-public rust-linux-raw-sys-0.3
   (package
     (name "rust-linux-raw-sys")
     (version "0.3.8")
@@ -4324,7 +4330,7 @@
      ;;       license:expat)
      #f)))
 
-(define rust-linux-raw-sys-0.4
+(define-public rust-linux-raw-sys-0.4
   (package
     (name "rust-linux-raw-sys")
     (version "0.4.14")
@@ -4353,7 +4359,7 @@
      #f
      )))
 
-(define rust-linux-raw-sys-0.6
+(define-public rust-linux-raw-sys-0.6
   (package
     (name "rust-linux-raw-sys")
     (version "0.6.5")
@@ -4380,7 +4386,7 @@
            license:asl2.0
            license:expat))))
 
-(define rust-litemap-0.7
+(define-public rust-litemap-0.7
   (package
     (name "rust-litemap")
     (version "0.7.3")
@@ -4403,7 +4409,7 @@
      "This package provides a key-value Map implementation based on a flat, sorted\nVec.")
     (license unknown-license!)))
 
-(define rust-log-0.4
+(define-public rust-log-0.4
   (package
     (name "rust-log")
     (version "0.4.22")
@@ -4424,7 +4430,7 @@
      "This package provides a lightweight logging facade for Rust.")
     (license (list license:expat license:asl2.0))))
 
-(define rust-loom-0.7
+(define-public rust-loom-0.7
   (package
     (name "rust-loom")
     (version "0.7.2")
@@ -4455,7 +4461,7 @@
      "This package provides Permutation testing for concurrent code.")
     (license license:expat)))
 
-(define rust-mac-notification-sys-0.6
+(define-public rust-mac-notification-sys-0.6
   (package
     (name "rust-mac-notification-sys")
     (version "0.6.2")
@@ -4487,7 +4493,7 @@
      "This package provides Thin wrapper around @code{macOS} Notifications.")
     (license license:expat)))
 
-(define rust-memchr-2
+(define-public rust-memchr-2
   (package
     (name "rust-memchr")
     (version "2.7.4")
@@ -4510,7 +4516,7 @@
      "This package provides extremely fast (uses SIMD on x86_64, aarch64 and wasm32)\nroutines for 1, 2 or 3 byte search and single substring search.")
     (license (list license:unlicense license:expat))))
 
-(define rust-memmap2-0.9
+(define-public rust-memmap2-0.9
   (package
     (name "rust-memmap2")
     (version "0.9.5")
@@ -4537,7 +4543,7 @@
      "This package provides Cross-platform Rust API for memory-mapped file IO.")
     (license (list license:expat license:asl2.0))))
 
-(define rust-memoffset-0.9
+(define-public rust-memoffset-0.9
   (package
     (name "rust-memoffset")
     (version "0.9.1")
@@ -4563,7 +4569,7 @@
      "This package provides offset_of functionality for Rust structs.")
     (license license:expat)))
 
-(define rust-miniz-oxide-0.8
+(define-public rust-miniz-oxide-0.8
   (package
     (name "rust-miniz-oxide")
     (version "0.8.0")
@@ -4592,7 +4598,7 @@
     (license
      (list license:expat license:zlib license:asl2.0))))
 
-(define rust-ndk-0.9
+(define-public rust-ndk-0.9
   (package
     (name "rust-ndk")
     (version "0.9.0")
@@ -4625,7 +4631,7 @@
      "This package provides Safe Rust bindings to the Android NDK.")
     (license (list license:expat license:asl2.0))))
 
-(define rust-ndk-sys-0.6
+(define-public rust-ndk-sys-0.6
   (package
     (name "rust-ndk-sys")
     (version "0.6.0+11769913")
@@ -4650,9 +4656,9 @@
      "This package provides FFI bindings for the Android NDK.")
     (license (list license:expat license:asl2.0))))
 
-(define-public rust-niri-0.1
+(define-public niri
   (package
-    (name "rust-niri")
+    (name "niri")
     (version "0.1.10")
     (source
      ;; (origin
@@ -4745,8 +4751,19 @@
         ("rust-zbus" ,rust-zbus-3)
 
         ;; xxx
-        ("rust-libadwaita" ,rust-libadwaita-0.7))))
-    (inputs (list rust-smithay-0.3 rust-smithay-drm-extras-0.1))
+        ("rust-libadwaita" ,rust-libadwaita-0.7))
+       #:install-source? #f
+       ;; #:phases (modify-phases %standard-phases
+       ;;            (add-before 'package '))
+       ))
+    (native-inputs (list pkg-config))
+    (inputs (list rust-smithay-0.3 rust-smithay-drm-extras-0.1
+                  glib
+                  cairo
+                  pango
+                  pipewire
+                  clang
+                  eudev libxkbcommon libseat libinput pixman mesa libdisplay-info))
     (home-page "")
     (synopsis "")
     (description "")
@@ -4796,7 +4813,7 @@
     (description "")
     (license #f)))
 
-(define rust-niri-ipc-0.1
+(define-public rust-niri-ipc-0.1
   (package
     (name "rust-niri-ipc")
     (version "0.1.10")
@@ -4827,39 +4844,39 @@
      "This package provides Types and helpers for interfacing with the niri Wayland compositor.")
     (license license:gpl3+)))
 
-(define rust-niri-visual-tests-0.1
-  (package
-    (name "rust-niri-visual-tests")
-    (version "0.1.10")
-    (source
-     (origin
-       (method url-fetch)
-       (uri (crate-uri "niri-visual-tests" version))
-       (file-name
-        (string-append name "-" version ".tar.gz"))
-       (sha256
-        (base32
-         "0000000000000000000000000000000000000000000000000000"))))
-    (build-system cargo-build-system)
-    (arguments
-     `(#:skip-build?
-       #t
-       #:cargo-inputs
-       (("rust-anyhow" ,rust-anyhow-1)
-        ("rust-gtk4" ,rust-gtk4-0.9)
-        ("rust-libadwaita" ,rust-libadwaita-0.7)
-        ("rust-niri" ,rust-niri-0.1)
-        ("rust-niri-config" ,rust-niri-config-0.1)
-        ("rust-smithay" ,rust-smithay-0.3)
-        ("rust-tracing" ,rust-tracing-0.1)
-        ("rust-tracing-subscriber"
-         ,rust-tracing-subscriber-0.3))))
-    (home-page "")
-    (synopsis "")
-    (description "")
-    (license #f)))
+;; (define-public rust-niri-visual-tests-0.1
+;;   (package
+;;     (name "rust-niri-visual-tests")
+;;     (version "0.1.10")
+;;     (source
+;;      (origin
+;;        (method url-fetch)
+;;        (uri (crate-uri "niri-visual-tests" version))
+;;        (file-name
+;;         (string-append name "-" version ".tar.gz"))
+;;        (sha256
+;;         (base32
+;;          "0000000000000000000000000000000000000000000000000000"))))
+;;     (build-system cargo-build-system)
+;;     (arguments
+;;      `(#:skip-build?
+;;        #t
+;;        #:cargo-inputs
+;;        (("rust-anyhow" ,rust-anyhow-1)
+;;         ("rust-gtk4" ,rust-gtk4-0.9)
+;;         ("rust-libadwaita" ,rust-libadwaita-0.7)
+;;         ("rust-niri" ,rust-niri-0.1)
+;;         ("rust-niri-config" ,rust-niri-config-0.1)
+;;         ("rust-smithay" ,rust-smithay-0.3)
+;;         ("rust-tracing" ,rust-tracing-0.1)
+;;         ("rust-tracing-subscriber"
+;;          ,rust-tracing-subscriber-0.3))))
+;;     (home-page "")
+;;     (synopsis "")
+;;     (description "")
+;;     (license #f)))
 
-(define rust-notify-rust-4
+(define-public rust-notify-rust-4
   (package
     (name "rust-notify-rust")
     (version "4.10.0")
@@ -4892,7 +4909,7 @@
      "This package provides Show desktop notifications (linux, bsd, mac).  Pure Rust dbus client and server.")
     (license (list license:expat license:asl2.0))))
 
-(define rust-nu-ansi-term-0.46
+(define-public rust-nu-ansi-term-0.46
   (package
     (name "rust-nu-ansi-term")
     (version "0.46.0")
@@ -4920,7 +4937,7 @@
      "This package provides Library for ANSI terminal colors and styles (bold, underline).")
     (license license:expat)))
 
-(define rust-num-enum-0.7
+(define-public rust-num-enum-0.7
   (package
     (name "rust-num-enum")
     (version "0.7.3")
@@ -4949,7 +4966,7 @@
     (license
      (list license:bsd-3 license:expat license:asl2.0))))
 
-(define rust-num-enum-derive-0.7
+(define-public rust-num-enum-derive-0.7
   (package
     (name "rust-num-enum-derive")
     (version "0.7.3")
@@ -4981,7 +4998,7 @@
     (license
      (list license:bsd-3 license:expat license:asl2.0))))
 
-(define rust-objc-sys-0.3
+(define-public rust-objc-sys-0.3
   (package
     (name "rust-objc-sys")
     (version "0.3.5")
@@ -5003,7 +5020,7 @@
      "This package provides Raw bindings to the Objective-C runtime and ABI.")
     (license license:expat)))
 
-(define rust-objc2-0.5
+(define-public rust-objc2-0.5
   (package
     (name "rust-objc2")
     (version "0.5.2")
@@ -5030,7 +5047,7 @@
      "This package provides Objective-C interface and runtime bindings.")
     (license license:expat)))
 
-(define rust-objc2-app-kit-0.2
+(define-public rust-objc2-app-kit-0.2
   (package
     (name "rust-objc2-app-kit")
     (version "0.2.2")
@@ -5066,7 +5083,7 @@
      "This package provides Bindings to the @code{AppKit} framework.")
     (license license:expat)))
 
-(define rust-objc2-cloud-kit-0.2
+(define-public rust-objc2-cloud-kit-0.2
   (package
     (name "rust-objc2-cloud-kit")
     (version "0.2.2")
@@ -5097,7 +5114,7 @@
      "This package provides Bindings to the @code{CloudKit} framework.")
     (license license:expat)))
 
-(define rust-objc2-contacts-0.2
+(define-public rust-objc2-contacts-0.2
   (package
     (name "rust-objc2-contacts")
     (version "0.2.2")
@@ -5125,7 +5142,7 @@
      "This package provides Bindings to the Contacts framework.")
     (license license:expat)))
 
-(define rust-objc2-core-data-0.2
+(define-public rust-objc2-core-data-0.2
   (package
     (name "rust-objc2-core-data")
     (version "0.2.2")
@@ -5154,7 +5171,7 @@
      "This package provides Bindings to the @code{CoreData} framework.")
     (license license:expat)))
 
-(define rust-objc2-core-image-0.2
+(define-public rust-objc2-core-image-0.2
   (package
     (name "rust-objc2-core-image")
     (version "0.2.2")
@@ -5183,7 +5200,7 @@
      "This package provides Bindings to the @code{CoreImage} framework.")
     (license license:expat)))
 
-(define rust-objc2-core-location-0.2
+(define-public rust-objc2-core-location-0.2
   (package
     (name "rust-objc2-core-location")
     (version "0.2.2")
@@ -5213,7 +5230,7 @@
      "This package provides Bindings to the @code{CoreLocation} framework.")
     (license license:expat)))
 
-(define rust-objc2-encode-4
+(define-public rust-objc2-encode-4
   (package
     (name "rust-objc2-encode")
     (version "4.0.3")
@@ -5235,7 +5252,7 @@
      "This package provides Objective-C type-encoding representation and parsing.")
     (license license:expat)))
 
-(define rust-objc2-foundation-0.2
+(define-public rust-objc2-foundation-0.2
   (package
     (name "rust-objc2-foundation")
     (version "0.2.2")
@@ -5264,7 +5281,7 @@
      "This package provides Bindings to the Foundation framework.")
     (license license:expat)))
 
-(define rust-objc2-link-presentation-0.2
+(define-public rust-objc2-link-presentation-0.2
   (package
     (name "rust-objc2-link-presentation")
     (version "0.2.2")
@@ -5294,7 +5311,7 @@
      "This package provides Bindings to the @code{LinkPresentation} framework.")
     (license license:expat)))
 
-(define rust-objc2-metal-0.2
+(define-public rust-objc2-metal-0.2
   (package
     (name "rust-objc2-metal")
     (version "0.2.2")
@@ -5323,7 +5340,7 @@
      "This package provides Bindings to the Metal framework.")
     (license license:expat)))
 
-(define rust-objc2-quartz-core-0.2
+(define-public rust-objc2-quartz-core-0.2
   (package
     (name "rust-objc2-quartz-core")
     (version "0.2.2")
@@ -5354,7 +5371,7 @@
      "This package provides Bindings to the @code{QuartzCore/CoreAnimation} framework.")
     (license license:expat)))
 
-(define rust-objc2-symbols-0.2
+(define-public rust-objc2-symbols-0.2
   (package
     (name "rust-objc2-symbols")
     (version "0.2.2")
@@ -5381,7 +5398,7 @@
      "This package provides Bindings to the Symbols framework.")
     (license license:expat)))
 
-(define rust-objc2-ui-kit-0.2
+(define-public rust-objc2-ui-kit-0.2
   (package
     (name "rust-objc2-ui-kit")
     (version "0.2.2")
@@ -5427,7 +5444,7 @@
      "This package provides Bindings to the UIKit framework.")
     (license license:expat)))
 
-(define rust-objc2-uniform-type-identifiers-0.2
+(define-public rust-objc2-uniform-type-identifiers-0.2
   (package
     (name "rust-objc2-uniform-type-identifiers")
     (version "0.2.2")
@@ -5458,7 +5475,7 @@
      "This package provides Bindings to the @code{UniformTypeIdentifiers} framework.")
     (license license:expat)))
 
-(define rust-objc2-user-notifications-0.2
+(define-public rust-objc2-user-notifications-0.2
   (package
     (name "rust-objc2-user-notifications")
     (version "0.2.2")
@@ -5490,7 +5507,7 @@
      "This package provides Bindings to the @code{UserNotifications} framework.")
     (license license:expat)))
 
-(define rust-object-0.36
+(define-public rust-object-0.36
   (package
     (name "rust-object")
     (version "0.36.5")
@@ -5516,7 +5533,7 @@
      "This package provides a unified interface for reading and writing object file\nformats.")
     (license (list license:asl2.0 license:expat))))
 
-(define rust-once-cell-1
+(define-public rust-once-cell-1
   (package
     (name "rust-once-cell")
     (version "1.20.2")
@@ -5539,7 +5556,7 @@
      "This package provides Single assignment cells and lazy values.")
     (license (list license:expat license:asl2.0))))
 
-(define rust-orbclient-0.3
+(define-public rust-orbclient-0.3
   (package
     (name "rust-orbclient")
     (version "0.3.48")
@@ -5565,7 +5582,7 @@
      "This package provides The Orbital Client Library.")
     (license license:expat)))
 
-(define rust-ordered-float-4
+(define-public rust-ordered-float-4
   (package
     (name "rust-ordered-float")
     (version "4.5.0")
@@ -5592,7 +5609,7 @@
      "This package provides Wrappers for total ordering on floats.")
     (license license:expat)))
 
-(define rust-pango-0.20
+(define-public rust-pango-0.20
   (package
     (name "rust-pango")
     (version "0.20.4")
@@ -5620,7 +5637,7 @@
      "This package provides Rust bindings for the Pango library.")
     (license license:expat)))
 
-(define rust-pango-sys-0.20
+(define-public rust-pango-sys-0.20
   (package
     (name "rust-pango-sys")
     (version "0.20.4")
@@ -5648,7 +5665,7 @@
      "This package provides FFI bindings to libpango-1.0.")
     (license license:expat)))
 
-(define rust-pangocairo-0.20
+(define-public rust-pangocairo-0.20
   (package
     (name "rust-pangocairo")
     (version "0.20.4")
@@ -5678,7 +5695,7 @@
      "This package provides Rust bindings for the @code{PangoCairo} library.")
     (license license:expat)))
 
-(define rust-pangocairo-sys-0.20
+(define-public rust-pangocairo-sys-0.20
   (package
     (name "rust-pangocairo-sys")
     (version "0.20.4")
@@ -5707,7 +5724,7 @@
      "This package provides FFI bindings to @code{PangoCairo}.")
     (license license:expat)))
 
-(define rust-parking-2
+(define-public rust-parking-2
   (package
     (name "rust-parking")
     (version "2.2.1")
@@ -5728,7 +5745,7 @@
      "This package provides Thread parking and unparking.")
     (license (list license:asl2.0 license:expat))))
 
-(define rust-paste-1
+(define-public rust-paste-1
   (package
     (name "rust-paste")
     (version "1.0.15")
@@ -5750,7 +5767,7 @@
      "This package provides Macros for all your token pasting needs.")
     (license (list license:expat license:asl2.0))))
 
-(define rust-phf-generator-0.11
+(define-public rust-phf-generator-0.11
   (package
     (name "rust-phf-generator")
     (version "0.11.2")
@@ -5777,7 +5794,7 @@
      "This package provides PHF generation logic.")
     (license license:expat)))
 
-(define rust-pin-project-1
+(define-public rust-pin-project-1
   (package
     (name "rust-pin-project")
     (version "1.1.7")
@@ -5805,7 +5822,7 @@
      "This package provides a crate for safe and ergonomic pin-projection.")
     (license (list license:asl2.0 license:expat))))
 
-(define rust-pin-project-internal-1
+(define-public rust-pin-project-internal-1
   (package
     (name "rust-pin-project-internal")
     (version "1.1.7")
@@ -5834,7 +5851,7 @@
      "This package provides Implementation detail of the `pin-project` crate.")
     (license (list license:asl2.0 license:expat))))
 
-(define rust-pin-project-lite-0.2
+(define-public rust-pin-project-lite-0.2
   (package
     (name "rust-pin-project-lite")
     (version "0.2.15")
@@ -5857,7 +5874,7 @@
      "This package provides a lightweight version of pin-project written with\ndeclarative macros.")
     (license (list license:asl2.0 license:expat))))
 
-(define rust-piper-0.2
+(define-public rust-piper-0.2
   (package
     (name "rust-piper")
     (version "0.2.4")
@@ -5885,42 +5902,57 @@
      "This package provides Async pipes, channels, mutexes, and more.")
     (license (list license:expat license:asl2.0))))
 
-(define rust-pipewire-0.8
-  (package
-    (name "rust-pipewire")
-    (version "0.8.0")
-    (source
-     (origin
-       (method url-fetch)
-       (uri (crate-uri "pipewire" version))
-       (file-name
-        (string-append name "-" version ".tar.gz"))
-       (sha256
-        (base32
-         ;; "0000000000000000000000000000000000000000000000000000"
-         "1nldg1hz4v0qr26lzdxqpvrac4zbc3pb6436sl392425bjx4brh8"
-         ))))
-    (build-system cargo-build-system)
-    (arguments
-     `(#:skip-build?
-       #t
-       #:cargo-inputs
-       (("rust-anyhow" ,rust-anyhow-1)
-        ("rust-bitflags" ,rust-bitflags-2)
-        ("rust-libc" ,rust-libc-0.2)
-        ("rust-libspa" ,rust-libspa-0.8)
-        ("rust-libspa-sys" ,rust-libspa-sys-0.8)
-        ("rust-nix" ,rust-nix-0.27)
-        ("rust-once-cell" ,rust-once-cell-1)
-        ("rust-pipewire-sys" ,rust-pipewire-sys-0.8)
-        ("rust-thiserror" ,rust-thiserror-1))))
-    (home-page "https://pipewire.org")
-    (synopsis "Rust bindings for PipeWire")
-    (description
-     "This package provides Rust bindings for @code{PipeWire}.")
-    (license license:expat)))
+(define-public rust-pipewire-0.8
+  (let ((commit "86df39190c0ab67444666a42908f7e8c1344e24a")
+        (revision "0"))
+    (package
+      (name "rust-pipewire")
+      (version "0.8.0"
+               ;; (git-version "0.8.0" revision commit)
+               )
+      (source
+       (origin
+         (method url-fetch)
+         (uri (crate-uri "pipewire" version))
+         (file-name
+          (string-append name "-" version ".tar.gz"))
+         (sha256
+          (base32
+           ;; "0000000000000000000000000000000000000000000000000000"
+           "1nldg1hz4v0qr26lzdxqpvrac4zbc3pb6436sl392425bjx4brh8"
+           ))
+         (patches (search-patches "rust-pipewire-0.8.0-unrelease.patch"))
+         )
+       ;; (origin
+       ;;   (method git-fetch)
+       ;;   (uri (git-reference
+       ;;         (url "https://gitlab.freedesktop.org/pipewire/pipewire-rs.git")
+       ;;         (commit commit)))
+       ;;   (file-name (git-file-name name version))
+       ;;   (sha256
+       ;;    (base32 "1n8ngihd75i3vgbfnfhpj8mi6shlrhbhvwfyms14m03613jp37lj")))
+       )
+      (build-system cargo-build-system)
+      (arguments
+       `(#:skip-build?
+         #t
+         #:cargo-inputs
+         (("rust-anyhow" ,rust-anyhow-1)
+          ("rust-bitflags" ,rust-bitflags-2)
+          ("rust-libc" ,rust-libc-0.2)
+          ("rust-libspa" ,rust-libspa-0.8)
+          ("rust-libspa-sys" ,rust-libspa-sys-0.8)
+          ("rust-nix" ,rust-nix-0.27)
+          ("rust-once-cell" ,rust-once-cell-1)
+          ("rust-pipewire-sys" ,rust-pipewire-sys-0.8)
+          ("rust-thiserror" ,rust-thiserror-1))))
+      (home-page "https://pipewire.org")
+      (synopsis "Rust bindings for PipeWire")
+      (description
+       "This package provides Rust bindings for @code{PipeWire}.")
+      (license license:expat))))
 
-(define rust-pipewire-sys-0.8
+(define-public rust-pipewire-sys-0.8
   (package
     (name "rust-pipewire-sys")
     (version "0.8.0")
@@ -5949,7 +5981,7 @@
      "This package provides Rust FFI bindings for @code{PipeWire}.")
     (license license:expat)))
 
-(define rust-pixman-0.1
+(define-public rust-pixman-0.1
   (package
     (name "rust-pixman")
     (version "0.1.0")
@@ -5979,7 +6011,7 @@
      "This package provides Pixman is a low-level software library for pixel manipulation, providing\nfeatures such as image compositing and trapezoid rasterization.")
     (license license:expat)))
 
-(define rust-pixman-sys-0.1
+(define-public rust-pixman-sys-0.1
   (package
     (name "rust-pixman-sys")
     (version "0.1.0")
@@ -6002,7 +6034,7 @@
      "This package provides Pixman is a low-level software library for pixel manipulation, providing\nfeatures such as image compositing and trapezoid rasterization.")
     (license license:expat)))
 
-(define rust-pkg-config-0.3
+(define-public rust-pkg-config-0.3
   (package
     (name "rust-pkg-config")
     (version "0.3.31")
@@ -6025,7 +6057,7 @@
      "This package provides a library to run the pkg-config system tool at build time\nin order to be used in Cargo build scripts.")
     (license (list license:expat license:asl2.0))))
 
-(define rust-png-0.17
+(define-public rust-png-0.17
   (package
     (name "rust-png")
     (version "0.17.14")
@@ -6056,7 +6088,7 @@
      "This package provides PNG decoding and encoding library in pure Rust.")
     (license (list license:expat license:asl2.0))))
 
-(define rust-polling-3
+(define-public rust-polling-3
   (package
     (name "rust-polling")
     (version "3.7.3")
@@ -6090,7 +6122,7 @@
      "This package provides Portable interface to epoll, kqueue, event ports, and IOCP.")
     (license (list license:asl2.0 license:expat))))
 
-(define rust-portable-atomic-1
+(define-public rust-portable-atomic-1
   (package
     (name "rust-portable-atomic")
     (version "1.9.0")
@@ -6113,7 +6145,7 @@
      "This package provides Portable atomic types including support for 128-bit atomics, atomic float, etc.")
     (license (list license:asl2.0 license:expat))))
 
-(define rust-ppv-lite86-0.2
+(define-public rust-ppv-lite86-0.2
   (package
     (name "rust-ppv-lite86")
     (version "0.2.20")
@@ -6140,7 +6172,7 @@
      "This package provides Implementation of the crypto-simd API for x86.")
     (license (list license:expat license:asl2.0))))
 
-(define rust-pretty-assertions-1
+(define-public rust-pretty-assertions-1
   (package
     (name "rust-pretty-assertions")
     (version "1.4.1")
@@ -6168,7 +6200,7 @@
      "This package provides Overwrite `assert_eq!` and `assert_ne!` with drop-in replacements, adding\ncolorful diffs.")
     (license (list license:expat license:asl2.0))))
 
-(define rust-proc-macro-crate-1
+(define-public rust-proc-macro-crate-1
   (package
     (name "rust-proc-macro-crate")
     (version "1.3.1")
@@ -6196,7 +6228,7 @@
      "This package provides Replacement for crate (macro_rules keyword) in proc-macros.")
     (license (list license:expat license:asl2.0))))
 
-(define rust-proc-macro-crate-3
+(define-public rust-proc-macro-crate-3
   (package
     (name "rust-proc-macro-crate")
     (version "3.2.0")
@@ -6223,7 +6255,7 @@
      "This package provides Replacement for crate (macro_rules keyword) in proc-macros.")
     (license (list license:expat license:asl2.0))))
 
-(define rust-proc-macro2-1
+(define-public rust-proc-macro2-1
   (package
     (name "rust-proc-macro2")
     (version "1.0.89")
@@ -6250,7 +6282,7 @@
      "This package provides a substitute implementation of the compiler's `proc_macro`\nAPI to decouple token-based libraries from the procedural macro use case.")
     (license (list license:expat license:asl2.0))))
 
-(define rust-profiling-1
+(define-public rust-profiling-1
   (package
     (name "rust-profiling")
     (version "1.0.16")
@@ -6279,7 +6311,7 @@
      "This crate provides a very thin abstraction over other profiler crates.")
     (license (list license:expat license:asl2.0))))
 
-(define rust-profiling-procmacros-1
+(define-public rust-profiling-procmacros-1
   (package
     (name "rust-profiling-procmacros")
     (version "1.0.16")
@@ -6307,7 +6339,7 @@
      "This crate provides a very thin abstraction over other profiler crates.")
     (license (list license:expat license:asl2.0))))
 
-(define rust-proptest-1
+(define-public rust-proptest-1
   (package
     (name "rust-proptest")
     (version "1.5.0")
@@ -6345,7 +6377,7 @@
      "This package provides Hypothesis-like property-based testing and shrinking.")
     (license (list license:expat license:asl2.0))))
 
-(define rust-proptest-derive-0.5
+(define-public rust-proptest-derive-0.5
   (package
     (name "rust-proptest-derive")
     (version "0.5.0")
@@ -6374,7 +6406,7 @@
      "This package provides Custom-derive for the Arbitrary trait of proptest.")
     (license (list license:expat license:asl2.0))))
 
-(define rust-quick-xml-0.36
+(define-public rust-quick-xml-0.36
   (package
     (name "rust-quick-xml")
     (version "0.36.2")
@@ -6400,7 +6432,7 @@
      "This package provides High performance xml reader and writer.")
     (license license:expat)))
 
-(define rust-quote-1
+(define-public rust-quote-1
   (package
     (name "rust-quote")
     (version "1.0.37")
@@ -6425,7 +6457,7 @@
      "This package provides Quasi-quoting macro quote!(...).")
     (license (list license:expat license:asl2.0))))
 
-(define rust-raw-window-handle-0.6
+(define-public rust-raw-window-handle-0.6
   (package
     (name "rust-raw-window-handle")
     (version "0.6.2")
@@ -6449,7 +6481,7 @@
     (license
      (list license:expat license:asl2.0 license:zlib))))
 
-(define rust-redox-syscall-0.5
+(define-public rust-redox-syscall-0.5
   (package
     (name "rust-redox-syscall")
     (version "0.5.7")
@@ -6476,7 +6508,7 @@
      "This package provides a Rust library to access raw Redox system calls.")
     (license license:expat)))
 
-(define rust-redox-users-0.4
+(define-public rust-redox-users-0.4
   (package
     (name "rust-redox-users")
     (version "0.4.6")
@@ -6505,7 +6537,7 @@
      "This package provides a Rust library to access Redox users and groups\nfunctionality.")
     (license license:expat)))
 
-(define rust-regex-1
+(define-public rust-regex-1
   (package
     (name "rust-regex")
     (version "1.11.1")
@@ -6534,7 +6566,7 @@
      "This package provides An implementation of regular expressions for Rust.  This implementation uses\nfinite automata and guarantees linear time matching on all inputs.")
     (license (list license:expat license:asl2.0))))
 
-(define rust-regex-automata-0.1
+(define-public rust-regex-automata-0.1
   (package
     (name "rust-regex-automata")
     (version "0.1.10")
@@ -6561,7 +6593,7 @@
      "This package provides Automata construction and matching using regular expressions.")
     (license (list license:expat license:asl2.0))))
 
-(define rust-regex-automata-0.4
+(define-public rust-regex-automata-0.4
   (package
     (name "rust-regex-automata")
     (version "0.4.8")
@@ -6590,7 +6622,7 @@
      "This package provides Automata construction and matching using regular expressions.")
     (license (list license:expat license:asl2.0))))
 
-(define rust-regex-syntax-0.6
+(define-public rust-regex-syntax-0.6
   (package
     (name "rust-regex-syntax")
     (version "0.6.29")
@@ -6612,7 +6644,7 @@
      "This package provides a regular expression parser.")
     (license (list license:expat license:asl2.0))))
 
-(define rust-regex-syntax-0.8
+(define-public rust-regex-syntax-0.8
   (package
     (name "rust-regex-syntax")
     (version "0.8.5")
@@ -6634,7 +6666,7 @@
      "This package provides a regular expression parser.")
     (license (list license:expat license:asl2.0))))
 
-(define rust-rustc-demangle-0.1
+(define-public rust-rustc-demangle-0.1
   (package
     (name "rust-rustc-demangle")
     (version "0.1.24")
@@ -6656,7 +6688,7 @@
      "This package provides Rust compiler symbol demangling.")
     (license (list license:expat license:asl2.0))))
 
-(define rust-rustc-version-0.4
+(define-public rust-rustc-version-0.4
   (package
     (name "rust-rustc-version")
     (version "0.4.1")
@@ -6683,7 +6715,7 @@
      "This package provides a library for querying the version of a installed rustc\ncompiler.")
     (license (list license:expat license:asl2.0))))
 
-(define rust-rustix-0.37
+(define-public rust-rustix-0.37
   (package
     (name "rust-rustix")
     (version "0.37.27")
@@ -6719,7 +6751,7 @@
            license:asl2.0
            license:expat))))
 
-(define rust-rustix-0.38
+(define-public rust-rustix-0.38
   (package
     (name "rust-rustix")
     (version "0.38.38")
@@ -6754,7 +6786,7 @@
            license:asl2.0
            license:expat))))
 
-(define rust-rustversion-1
+(define-public rust-rustversion-1
   (package
     (name "rust-rustversion")
     (version "1.0.18")
@@ -6777,7 +6809,7 @@
      "This package provides Conditional compilation according to rustc compiler version.")
     (license (list license:expat license:asl2.0))))
 
-(define rust-ryu-1
+(define-public rust-ryu-1
   (package
     (name "rust-ryu")
     (version "1.0.18")
@@ -6799,7 +6831,7 @@
      "This package provides Fast floating point to string conversion.")
     (license (list license:asl2.0 license:boost1.0))))
 
-(define rust-schemars-0.8
+(define-public rust-schemars-0.8
   (package
     (name "rust-schemars")
     (version "0.8.21")
@@ -6828,7 +6860,7 @@
      "This package provides Generate JSON Schemas from Rust code.")
     (license license:expat)))
 
-(define rust-schemars-derive-0.8
+(define-public rust-schemars-derive-0.8
   (package
     (name "rust-schemars-derive")
     (version "0.8.21")
@@ -6858,7 +6890,7 @@
      "This package provides Macros for #[derive(@code{JsonSchema})], for use with schemars.")
     (license license:expat)))
 
-(define rust-scoped-tls-1
+(define-public rust-scoped-tls-1
   (package
     (name "rust-scoped-tls")
     (version "1.0.1")
@@ -6881,7 +6913,7 @@
      "This package provides Library implementation of the standard library's old `scoped_thread_local!`\nmacro for providing scoped access to thread local storage (TLS) so any type can\nbe stored into TLS.")
     (license (list license:expat license:asl2.0))))
 
-(define rust-sd-notify-0.4
+(define-public rust-sd-notify-0.4
   (package
     (name "rust-sd-notify")
     (version "0.4.3")
@@ -6904,7 +6936,7 @@
      "This package provides Lightweight crate for systemd service state notifications.")
     (license (list license:expat license:asl2.0))))
 
-(define rust-semver-1
+(define-public rust-semver-1
   (package
     (name "rust-semver")
     (version "1.0.23")
@@ -6926,7 +6958,7 @@
      "This package provides Parser and evaluator for Cargo's flavor of Semantic Versioning.")
     (license (list license:expat license:asl2.0))))
 
-(define rust-serde-1
+(define-public rust-serde-1
   (package
     (name "rust-serde")
     (version "1.0.214")
@@ -6952,7 +6984,7 @@
      "This package provides a generic serialization/deserialization framework.")
     (license (list license:expat license:asl2.0))))
 
-(define rust-serde-derive-1
+(define-public rust-serde-derive-1
   (package
     (name "rust-serde-derive")
     (version "1.0.214")
@@ -6980,7 +7012,7 @@
      "This package provides Macros 1.1 implementation of #[derive(Serialize, Deserialize)].")
     (license (list license:expat license:asl2.0))))
 
-(define rust-serde-json-1
+(define-public rust-serde-json-1
   (package
     (name "rust-serde-json")
     (version "1.0.132")
@@ -7008,7 +7040,7 @@
      "This package provides a JSON serialization file format.")
     (license (list license:expat license:asl2.0))))
 
-(define rust-serde-repr-0.1
+(define-public rust-serde-repr-0.1
   (package
     (name "rust-serde-repr")
     (version "0.1.19")
@@ -7037,7 +7069,7 @@
      "This package provides Derive Serialize and Deserialize that delegates to the underlying repr of a\nC-like enum.")
     (license (list license:expat license:asl2.0))))
 
-(define rust-serde-spanned-0.6
+(define-public rust-serde-spanned-0.6
   (package
     (name "rust-serde-spanned")
     (version "0.6.8")
@@ -7062,7 +7094,7 @@
      "This package provides Serde-compatible spanned Value.")
     (license (list license:expat license:asl2.0))))
 
-(define rust-sharded-slab-0.1
+(define-public rust-sharded-slab-0.1
   (package
     (name "rust-sharded-slab")
     (version "0.1.7")
@@ -7088,7 +7120,7 @@
      "This package provides a lock-free concurrent slab.")
     (license license:expat)))
 
-(define rust-signal-hook-registry-1
+(define-public rust-signal-hook-registry-1
   (package
     (name "rust-signal-hook-registry")
     (version "1.4.2")
@@ -7114,7 +7146,7 @@
      "This package provides Backend crate for signal-hook.")
     (license (list license:asl2.0 license:expat))))
 
-(define rust-slab-0.4
+(define-public rust-slab-0.4
   (package
     (name "rust-slab")
     (version "0.4.9")
@@ -7140,7 +7172,7 @@
      "This package provides Pre-allocated storage for a uniform data type.")
     (license license:expat)))
 
-(define rust-smallvec-1
+(define-public rust-smallvec-1
   (package
     (name "rust-smallvec")
     (version "1.13.2")
@@ -7163,7 +7195,7 @@
      "This package provides Small vector optimization: store up to a small number of items on the stack.")
     (license (list license:expat license:asl2.0))))
 
-(define rust-smawk-0.3
+(define-public rust-smawk-0.3
   (package
     (name "rust-smawk")
     (version "0.3.2")
@@ -8071,7 +8103,7 @@ wrappers for the new DXC HLSL compiler and validator.")
        "This package provides Smithay is a library for writing wayland compositors.")
       (license license:expat))))
 
-(define rust-smithay-client-toolkit-0.19
+(define-public rust-smithay-client-toolkit-0.19
   (package
     (name "rust-smithay-client-toolkit")
     (version "0.19.2")
@@ -8176,7 +8208,7 @@ wrappers for the new DXC HLSL compiler and validator.")
       (description "")
       (license #f))))
 
-(define rust-socket2-0.4
+(define-public rust-socket2-0.4
   (package
     (name "rust-socket2")
     (version "0.4.10")
@@ -8204,7 +8236,7 @@ wrappers for the new DXC HLSL compiler and validator.")
      "This package provides Utilities for handling networking sockets with a maximal amount of configuration\npossible intended.")
     (license (list license:expat license:asl2.0))))
 
-(define rust-strsim-0.11
+(define-public rust-strsim-0.11
   (package
     (name "rust-strsim")
     (version "0.11.1")
@@ -8227,7 +8259,7 @@ wrappers for the new DXC HLSL compiler and validator.")
      "This package provides Implementations of string similarity metrics.  Includes Hamming, Levenshtein,\nOSA, Damerau-Levenshtein, Jaro, Jaro-Winkler, and SÃ¸rensen-Dice.")
     (license license:expat)))
 
-(define rust-supports-color-2
+(define-public rust-supports-color-2
   (package
     (name "rust-supports-color")
     (version "2.1.0")
@@ -8255,7 +8287,7 @@ wrappers for the new DXC HLSL compiler and validator.")
      "This package provides Detects whether a terminal supports color, and gives details about that support.")
     (license license:asl2.0)))
 
-(define rust-syn-2
+(define-public rust-syn-2
   (package
     (name "rust-syn")
     (version "2.0.86")
@@ -8282,7 +8314,7 @@ wrappers for the new DXC HLSL compiler and validator.")
      "This package provides Parser for Rust source code.")
     (license (list license:expat license:asl2.0))))
 
-(define rust-synstructure-0.13
+(define-public rust-synstructure-0.13
   (package
     (name "rust-synstructure")
     (version "0.13.1")
@@ -8311,7 +8343,7 @@ wrappers for the new DXC HLSL compiler and validator.")
      "This package provides Helper methods and macros for custom derives.")
     (license license:expat)))
 
-(define rust-system-deps-6
+(define-public rust-system-deps-6
   (package
     (name "rust-system-deps")
     (version "6.2.2")
@@ -8343,7 +8375,7 @@ wrappers for the new DXC HLSL compiler and validator.")
      "This package provides Discover and configure system dependencies from declarative dependencies in\nCargo.toml.")
     (license (list license:expat license:asl2.0))))
 
-(define rust-system-deps-7
+(define-public rust-system-deps-7
   (package
     (name "rust-system-deps")
     (version "7.0.3")
@@ -8375,7 +8407,7 @@ wrappers for the new DXC HLSL compiler and validator.")
      "This package provides Discover and configure system dependencies from declarative dependencies in\nCargo.toml.")
     (license (list license:expat license:asl2.0))))
 
-(define rust-target-lexicon-0.12
+(define-public rust-target-lexicon-0.12
   (package
     (name "rust-target-lexicon")
     (version "0.12.16")
@@ -8399,7 +8431,7 @@ wrappers for the new DXC HLSL compiler and validator.")
     (license (list license:asl2.0 ;; unknown-license!
                    ))))
 
-(define rust-tauri-winrt-notification-0.1
+(define-public rust-tauri-winrt-notification-0.1
   (package
     (name "rust-tauri-winrt-notification")
     (version "0.1.3")
@@ -8427,7 +8459,7 @@ wrappers for the new DXC HLSL compiler and validator.")
      "This package provides An incomplete wrapper over the @code{WinRT} toast api.")
     (license (list license:expat license:asl2.0))))
 
-(define rust-tempfile-3
+(define-public rust-tempfile-3
   (package
     (name "rust-tempfile")
     (version "3.13.0")
@@ -8458,7 +8490,7 @@ wrappers for the new DXC HLSL compiler and validator.")
      "This package provides a library for managing temporary files and directories.")
     (license (list license:expat license:asl2.0))))
 
-(define rust-textwrap-0.15
+(define-public rust-textwrap-0.15
   (package
     (name "rust-textwrap")
     (version "0.15.2")
@@ -8488,7 +8520,7 @@ wrappers for the new DXC HLSL compiler and validator.")
      "This package provides Library for word wrapping, indenting, and dedenting strings.  Has optional\nsupport for Unicode and emojis as well as machine hyphenation.")
     (license license:expat)))
 
-(define rust-thiserror-1
+(define-public rust-thiserror-1
   (package
     (name "rust-thiserror")
     (version "1.0.65")
@@ -8514,7 +8546,7 @@ wrappers for the new DXC HLSL compiler and validator.")
      "This package provides derive(Error).")
     (license (list license:expat license:asl2.0))))
 
-(define rust-thiserror-impl-1
+(define-public rust-thiserror-impl-1
   (package
     (name "rust-thiserror-impl")
     (version "1.0.65")
@@ -8543,7 +8575,7 @@ wrappers for the new DXC HLSL compiler and validator.")
      "This package provides Implementation detail of the `thiserror` crate.")
     (license (list license:expat license:asl2.0))))
 
-(define rust-thread-local-1
+(define-public rust-thread-local-1
   (package
     (name "rust-thread-local")
     (version "1.1.8")
@@ -8570,7 +8602,7 @@ wrappers for the new DXC HLSL compiler and validator.")
      "This package provides Per-object thread-local storage.")
     (license (list license:expat license:asl2.0))))
 
-(define rust-time-0.3
+(define-public rust-time-0.3
   (package
     (name "rust-time")
     (version "0.3.36")
@@ -8600,7 +8632,7 @@ wrappers for the new DXC HLSL compiler and validator.")
      "This package provides Date and time library.  Fully interoperable with the standard library.  Mostly\ncompatible with #![no_std].")
     (license (list license:expat license:asl2.0))))
 
-(define rust-tinystr-0.7
+(define-public rust-tinystr-0.7
   (package
     (name "rust-tinystr")
     (version "0.7.6")
@@ -8630,7 +8662,7 @@ wrappers for the new DXC HLSL compiler and validator.")
      #f
      )))
 
-(define rust-toml-0.8
+(define-public rust-toml-0.8
   (package
     (name "rust-toml")
     (version "0.8.19")
@@ -8659,7 +8691,7 @@ wrappers for the new DXC HLSL compiler and validator.")
      "This package provides a native Rust encoder and decoder of TOML-formatted files\nand streams.  Provides implementations of the standard Serialize/Deserialize\ntraits for TOML data to facilitate deserializing and serializing Rust\nstructures.")
     (license (list license:expat license:asl2.0))))
 
-(define rust-toml-datetime-0.6
+(define-public rust-toml-datetime-0.6
   (package
     (name "rust-toml-datetime")
     (version "0.6.8")
@@ -8684,7 +8716,7 @@ wrappers for the new DXC HLSL compiler and validator.")
      "This package provides a TOML-compatible datetime type.")
     (license (list license:expat license:asl2.0))))
 
-(define rust-toml-edit-0.22
+(define-public rust-toml-edit-0.22
   (package
     (name "rust-toml-edit")
     (version "0.22.22")
@@ -8714,7 +8746,7 @@ wrappers for the new DXC HLSL compiler and validator.")
      "This package provides Yet another format-preserving TOML parser.")
     (license (list license:expat license:asl2.0))))
 
-(define rust-tracy-client-0.17
+(define-public rust-tracy-client-0.17
   (package
     (name "rust-tracy-client")
     (version "0.17.4")
@@ -8744,7 +8776,7 @@ wrappers for the new DXC HLSL compiler and validator.")
      "This package provides High level bindings to the client libraries for the Tracy profiler.")
     (license (list license:expat license:asl2.0))))
 
-(define rust-tracy-client-sys-0.24
+(define-public rust-tracy-client-sys-0.24
   (package
     (name "rust-tracy-client-sys")
     (version "0.24.1")
@@ -8774,7 +8806,7 @@ wrappers for the new DXC HLSL compiler and validator.")
       ;; unknown-license!
       license:bsd-3))))
 
-(define rust-typenum-1
+(define-public rust-typenum-1
   (package
     (name "rust-typenum")
     (version "1.17.0")
@@ -8796,7 +8828,7 @@ wrappers for the new DXC HLSL compiler and validator.")
      "This package provides Typenum is a Rust library for type-level numbers evaluated at compile time.  It\ncurrently supports bits, unsigned integers, and signed integers.  It also\nprovides a type-level array of type-level numbers, but its implementation is\nincomplete.")
     (license (list license:expat license:asl2.0))))
 
-(define rust-udev-0.9
+(define-public rust-udev-0.9
   (package
     (name "rust-udev")
     (version "0.9.1")
@@ -8824,7 +8856,7 @@ wrappers for the new DXC HLSL compiler and validator.")
      "This package provides libudev bindings for Rust.")
     (license license:expat)))
 
-(define rust-unicode-ident-1
+(define-public rust-unicode-ident-1
   (package
     (name "rust-unicode-ident")
     (version "1.0.13")
@@ -8852,7 +8884,7 @@ wrappers for the new DXC HLSL compiler and validator.")
      #f
      )))
 
-(define rust-unicode-linebreak-0.1
+(define-public rust-unicode-linebreak-0.1
   (package
     (name "rust-unicode-linebreak")
     (version "0.1.5")
@@ -8875,7 +8907,7 @@ wrappers for the new DXC HLSL compiler and validator.")
      "This package provides Implementation of the Unicode Line Breaking Algorithm.")
     (license license:asl2.0)))
 
-(define rust-unicode-segmentation-1
+(define-public rust-unicode-segmentation-1
   (package
     (name "rust-unicode-segmentation")
     (version "1.12.0")
@@ -8898,7 +8930,7 @@ wrappers for the new DXC HLSL compiler and validator.")
      "This crate provides Grapheme Cluster, Word and Sentence boundaries according to\nUnicode Standard Annex #29 rules.")
     (license (list license:expat license:asl2.0))))
 
-(define rust-unicode-width-0.1
+(define-public rust-unicode-width-0.1
   (package
     (name "rust-unicode-width")
     (version "0.1.14")
@@ -8921,7 +8953,7 @@ wrappers for the new DXC HLSL compiler and validator.")
      "This package provides Determine displayed width of `char` and `str` types according to Unicode\nStandard Annex #11 rules.")
     (license (list license:expat license:asl2.0))))
 
-(define rust-url-2
+(define-public rust-url-2
   (package
     (name "rust-url")
     (version "2.5.3")
@@ -8950,7 +8982,7 @@ wrappers for the new DXC HLSL compiler and validator.")
      "This package provides URL library for Rust, based on the WHATWG URL Standard.")
     (license (list license:expat license:asl2.0))))
 
-(define rust-utf16-iter-1
+(define-public rust-utf16-iter-1
   (package
     (name "rust-utf16-iter")
     (version "1.0.5")
@@ -8972,7 +9004,7 @@ wrappers for the new DXC HLSL compiler and validator.")
      "This package provides Iterator by char over potentially-invalid UTF-16 in &[u16].")
     (license (list license:asl2.0 license:expat))))
 
-(define rust-utf8-iter-1
+(define-public rust-utf8-iter-1
   (package
     (name "rust-utf8-iter")
     (version "1.0.4")
@@ -8994,7 +9026,7 @@ wrappers for the new DXC HLSL compiler and validator.")
      "This package provides Iterator by char over potentially-invalid UTF-8 in &[u8].")
     (license (list license:asl2.0 license:expat))))
 
-(define rust-utf8parse-0.2
+(define-public rust-utf8parse-0.2
   (package
     (name "rust-utf8parse")
     (version "0.2.2")
@@ -9015,7 +9047,7 @@ wrappers for the new DXC HLSL compiler and validator.")
      "This package provides Table-driven UTF-8 parser.")
     (license (list license:asl2.0 license:expat))))
 
-(define rust-version-compare-0.2
+(define-public rust-version-compare-0.2
   (package
     (name "rust-version-compare")
     (version "0.2.0")
@@ -9038,7 +9070,7 @@ wrappers for the new DXC HLSL compiler and validator.")
      "This package provides Rust library to easily compare version numbers with no specific format, and test\nagainst various comparison operators.")
     (license license:expat)))
 
-(define rust-version-check-0.9
+(define-public rust-version-check-0.9
   (package
     (name "rust-version-check")
     (version "0.9.5")
@@ -9061,7 +9093,7 @@ wrappers for the new DXC HLSL compiler and validator.")
      "This package provides Tiny crate to check the version of the installed/running rustc.")
     (license (list license:expat license:asl2.0))))
 
-(define rust-waker-fn-1
+(define-public rust-waker-fn-1
   (package
     (name "rust-waker-fn")
     (version "1.2.0")
@@ -9082,7 +9114,7 @@ wrappers for the new DXC HLSL compiler and validator.")
      "This package provides Convert closures into wakers.")
     (license (list license:asl2.0 license:expat))))
 
-(define rust-wasm-bindgen-0.2
+(define-public rust-wasm-bindgen-0.2
   (package
     (name "rust-wasm-bindgen")
     (version "0.2.95")
@@ -9111,7 +9143,7 @@ wrappers for the new DXC HLSL compiler and validator.")
      "This package provides Easy support for interacting between JS and Rust.")
     (license (list license:expat license:asl2.0))))
 
-(define rust-wasm-bindgen-backend-0.2
+(define-public rust-wasm-bindgen-backend-0.2
   (package
     (name "rust-wasm-bindgen-backend")
     (version "0.2.95")
@@ -9145,7 +9177,7 @@ wrappers for the new DXC HLSL compiler and validator.")
      "This package provides Backend code generation of the wasm-bindgen tool.")
     (license (list license:expat license:asl2.0))))
 
-(define rust-wasm-bindgen-futures-0.4
+(define-public rust-wasm-bindgen-futures-0.4
   (package
     (name "rust-wasm-bindgen-futures")
     (version "0.4.45")
@@ -9175,7 +9207,7 @@ wrappers for the new DXC HLSL compiler and validator.")
      "This package provides Bridging the gap between Rust Futures and @code{JavaScript} Promises.")
     (license (list license:expat license:asl2.0))))
 
-(define rust-wasm-bindgen-macro-0.2
+(define-public rust-wasm-bindgen-macro-0.2
   (package
     (name "rust-wasm-bindgen-macro")
     (version "0.2.95")
@@ -9204,7 +9236,7 @@ wrappers for the new DXC HLSL compiler and validator.")
      "This package provides Definition of the `#[wasm_bindgen]` attribute, an internal dependency.")
     (license (list license:expat license:asl2.0))))
 
-(define rust-wasm-bindgen-macro-support-0.2
+(define-public rust-wasm-bindgen-macro-support-0.2
   (package
     (name "rust-wasm-bindgen-macro-support")
     (version "0.2.95")
@@ -9237,7 +9269,7 @@ wrappers for the new DXC HLSL compiler and validator.")
      "This package provides The part of the implementation of the `#[wasm_bindgen]` attribute that is not in\nthe shared backend crate.")
     (license (list license:expat license:asl2.0))))
 
-(define rust-wasm-bindgen-shared-0.2
+(define-public rust-wasm-bindgen-shared-0.2
   (package
     (name "rust-wasm-bindgen-shared")
     (version "0.2.95")
@@ -9260,7 +9292,7 @@ wrappers for the new DXC HLSL compiler and validator.")
      "This package provides Shared support between wasm-bindgen and wasm-bindgen cli, an internal\ndependency.")
     (license (list license:expat license:asl2.0))))
 
-(define rust-wayland-backend-0.3
+(define-public rust-wayland-backend-0.3
   (package
     (name "rust-wayland-backend")
     (version "0.3.7")
@@ -9292,7 +9324,7 @@ wrappers for the new DXC HLSL compiler and validator.")
      "This package provides Low-level bindings to the Wayland protocol.")
     (license license:expat)))
 
-(define rust-wayland-client-0.31
+(define-public rust-wayland-client-0.31
   (package
     (name "rust-wayland-client")
     (version "0.31.7")
@@ -9324,7 +9356,7 @@ wrappers for the new DXC HLSL compiler and validator.")
      "This package provides Bindings to the standard C implementation of the wayland protocol, client side.")
     (license license:expat)))
 
-(define rust-wayland-cursor-0.31
+(define-public rust-wayland-cursor-0.31
   (package
     (name "rust-wayland-cursor")
     (version "0.31.7")
@@ -9352,7 +9384,7 @@ wrappers for the new DXC HLSL compiler and validator.")
      "This package provides Bindings to libwayland-cursor.")
     (license license:expat)))
 
-(define rust-wayland-egl-0.32
+(define-public rust-wayland-egl-0.32
   (package
     (name "rust-wayland-egl")
     (version "0.32.4")
@@ -9380,7 +9412,7 @@ wrappers for the new DXC HLSL compiler and validator.")
      "This package provides Bindings to libwayland-egl.")
     (license license:expat)))
 
-(define rust-wayland-protocols-0.32
+(define-public rust-wayland-protocols-0.32
   (package
     (name "rust-wayland-protocols")
     (version "0.32.5")
@@ -9413,7 +9445,7 @@ wrappers for the new DXC HLSL compiler and validator.")
      "This package provides Generated API for the officials wayland protocol extensions.")
     (license license:expat)))
 
-(define rust-wayland-protocols-misc-0.3
+(define-public rust-wayland-protocols-misc-0.3
   (package
     (name "rust-wayland-protocols-misc")
     (version "0.3.5")
@@ -9447,7 +9479,7 @@ wrappers for the new DXC HLSL compiler and validator.")
      "This package provides Generated API for misc and deprecated wayland protocol extensions.")
     (license license:expat)))
 
-(define rust-wayland-protocols-plasma-0.3
+(define-public rust-wayland-protocols-plasma-0.3
   (package
     (name "rust-wayland-protocols-plasma")
     (version "0.3.5")
@@ -9481,7 +9513,7 @@ wrappers for the new DXC HLSL compiler and validator.")
      "This package provides Generated API for the Plasma wayland protocol extensions.")
     (license license:expat)))
 
-(define rust-wayland-protocols-wlr-0.3
+(define-public rust-wayland-protocols-wlr-0.3
   (package
     (name "rust-wayland-protocols-wlr")
     (version "0.3.5")
@@ -9516,7 +9548,7 @@ wrappers for the new DXC HLSL compiler and validator.")
      "This package provides Generated API for the WLR wayland protocol extensions.")
     (license license:expat)))
 
-(define rust-wayland-scanner-0.31
+(define-public rust-wayland-scanner-0.31
   (package
     (name "rust-wayland-scanner")
     (version "0.31.5")
@@ -9545,7 +9577,7 @@ wrappers for the new DXC HLSL compiler and validator.")
      "This package provides Wayland Scanner for generating rust APIs from XML wayland protocol files.")
     (license license:expat)))
 
-(define rust-wayland-server-0.31
+(define-public rust-wayland-server-0.31
   (package
     (name "rust-wayland-server")
     (version "0.31.6")
@@ -9579,7 +9611,7 @@ wrappers for the new DXC HLSL compiler and validator.")
      "This package provides Bindings to the standard C implementation of the wayland protocol, server side.")
     (license license:expat)))
 
-(define rust-wayland-sys-0.31
+(define-public rust-wayland-sys-0.31
   (package
     (name "rust-wayland-sys")
     (version "0.31.5")
@@ -9611,7 +9643,7 @@ wrappers for the new DXC HLSL compiler and validator.")
      "This package provides FFI bindings to the various libwayland-*.so libraries.  You should only need\nthis crate if you are working on custom wayland protocol extensions.  Look at\nthe crate wayland-client for usable bindings.")
     (license license:expat)))
 
-(define rust-web-sys-0.3
+(define-public rust-web-sys-0.3
   (package
     (name "rust-web-sys")
     (version "0.3.72")
@@ -9639,7 +9671,7 @@ wrappers for the new DXC HLSL compiler and validator.")
      "This package provides Bindings for all Web APIs, a procedurally generated crate from @code{WebIDL}.")
     (license (list license:expat license:asl2.0))))
 
-(define rust-winapi-util-0.1
+(define-public rust-winapi-util-0.1
   (package
     (name "rust-winapi-util")
     (version "0.1.9")
@@ -9666,7 +9698,7 @@ wrappers for the new DXC HLSL compiler and validator.")
      "This package provides a dumping ground for high level safe wrappers over\nwindows-sys.")
     (license (list license:unlicense license:expat))))
 
-(define rust-windows-0.51
+(define-public rust-windows-0.51
   (package
     (name "rust-windows")
     (version "0.51.1")
@@ -9694,7 +9726,7 @@ wrappers for the new DXC HLSL compiler and validator.")
      "This package provides Rust for Windows.")
     (license (list license:expat license:asl2.0))))
 
-(define rust-windows-0.58
+(define-public rust-windows-0.58
   (package
     (name "rust-windows")
     (version "0.58.0")
@@ -9722,7 +9754,7 @@ wrappers for the new DXC HLSL compiler and validator.")
      "This package provides Rust for Windows.")
     (license (list license:expat license:asl2.0))))
 
-(define rust-windows-core-0.51
+(define-public rust-windows-core-0.51
   (package
     (name "rust-windows-core")
     (version "0.51.1")
@@ -9749,7 +9781,7 @@ wrappers for the new DXC HLSL compiler and validator.")
      "This package provides Rust for Windows.")
     (license (list license:expat license:asl2.0))))
 
-(define rust-windows-core-0.58
+(define-public rust-windows-core-0.58
   (package
     (name "rust-windows-core")
     (version "0.58.0")
@@ -9783,7 +9815,7 @@ wrappers for the new DXC HLSL compiler and validator.")
      "This package provides Rust for Windows.")
     (license (list license:expat license:asl2.0))))
 
-(define rust-windows-implement-0.58
+(define-public rust-windows-implement-0.58
   (package
     (name "rust-windows-implement")
     (version "0.58.0")
@@ -9812,7 +9844,7 @@ wrappers for the new DXC HLSL compiler and validator.")
      "This package provides The implement macro for the windows crate.")
     (license (list license:expat license:asl2.0))))
 
-(define rust-windows-interface-0.58
+(define-public rust-windows-interface-0.58
   (package
     (name "rust-windows-interface")
     (version "0.58.0")
@@ -9841,7 +9873,7 @@ wrappers for the new DXC HLSL compiler and validator.")
      "This package provides The interface macro for the windows crate.")
     (license (list license:expat license:asl2.0))))
 
-(define rust-windows-result-0.2
+(define-public rust-windows-result-0.2
   (package
     (name "rust-windows-result")
     (version "0.2.0")
@@ -9868,7 +9900,7 @@ wrappers for the new DXC HLSL compiler and validator.")
      "This package provides Windows error handling.")
     (license (list license:expat license:asl2.0))))
 
-(define rust-windows-strings-0.1
+(define-public rust-windows-strings-0.1
   (package
     (name "rust-windows-strings")
     (version "0.1.0")
@@ -9896,7 +9928,7 @@ wrappers for the new DXC HLSL compiler and validator.")
      "This package provides Rust for Windows.")
     (license (list license:expat license:asl2.0))))
 
-(define rust-windows-sys-0.59
+(define-public rust-windows-sys-0.59
   (package
     (name "rust-windows-sys")
     (version "0.59.0")
@@ -9923,7 +9955,7 @@ wrappers for the new DXC HLSL compiler and validator.")
      "This package provides Rust for Windows.")
     (license (list license:expat license:asl2.0))))
 
-(define rust-windows-targets-0.52
+(define-public rust-windows-targets-0.52
   (package
     (name "rust-windows-targets")
     (version "0.52.6")
@@ -9964,7 +9996,7 @@ wrappers for the new DXC HLSL compiler and validator.")
      "This package provides Import libs for Windows.")
     (license (list license:expat license:asl2.0))))
 
-(define rust-windows-aarch64-gnullvm-0.52
+(define-public rust-windows-aarch64-gnullvm-0.52
   (package
     (name "rust-windows-aarch64-gnullvm")
     (version "0.52.6")
@@ -9986,7 +10018,7 @@ wrappers for the new DXC HLSL compiler and validator.")
      "This package provides Import lib for Windows.")
     (license (list license:expat license:asl2.0))))
 
-(define rust-windows-aarch64-msvc-0.52
+(define-public rust-windows-aarch64-msvc-0.52
   (package
     (name "rust-windows-aarch64-msvc")
     (version "0.52.6")
@@ -10008,7 +10040,7 @@ wrappers for the new DXC HLSL compiler and validator.")
      "This package provides Import lib for Windows.")
     (license (list license:expat license:asl2.0))))
 
-(define rust-windows-i686-gnu-0.52
+(define-public rust-windows-i686-gnu-0.52
   (package
     (name "rust-windows-i686-gnu")
     (version "0.52.6")
@@ -10030,7 +10062,7 @@ wrappers for the new DXC HLSL compiler and validator.")
      "This package provides Import lib for Windows.")
     (license (list license:expat license:asl2.0))))
 
-(define rust-windows-i686-gnullvm-0.52
+(define-public rust-windows-i686-gnullvm-0.52
   (package
     (name "rust-windows-i686-gnullvm")
     (version "0.52.6")
@@ -10052,7 +10084,7 @@ wrappers for the new DXC HLSL compiler and validator.")
      "This package provides Import lib for Windows.")
     (license (list license:expat license:asl2.0))))
 
-(define rust-windows-i686-msvc-0.52
+(define-public rust-windows-i686-msvc-0.52
   (package
     (name "rust-windows-i686-msvc")
     (version "0.52.6")
@@ -10074,7 +10106,7 @@ wrappers for the new DXC HLSL compiler and validator.")
      "This package provides Import lib for Windows.")
     (license (list license:expat license:asl2.0))))
 
-(define rust-windows-x86-64-gnu-0.52
+(define-public rust-windows-x86-64-gnu-0.52
   (package
     (name "rust-windows-x86-64-gnu")
     (version "0.52.6")
@@ -10096,7 +10128,7 @@ wrappers for the new DXC HLSL compiler and validator.")
      "This package provides Import lib for Windows.")
     (license (list license:expat license:asl2.0))))
 
-(define rust-windows-x86-64-gnullvm-0.52
+(define-public rust-windows-x86-64-gnullvm-0.52
   (package
     (name "rust-windows-x86-64-gnullvm")
     (version "0.52.6")
@@ -10118,7 +10150,7 @@ wrappers for the new DXC HLSL compiler and validator.")
      "This package provides Import lib for Windows.")
     (license (list license:expat license:asl2.0))))
 
-(define rust-windows-x86-64-msvc-0.52
+(define-public rust-windows-x86-64-msvc-0.52
   (package
     (name "rust-windows-x86-64-msvc")
     (version "0.52.6")
@@ -10140,7 +10172,7 @@ wrappers for the new DXC HLSL compiler and validator.")
      "This package provides Import lib for Windows.")
     (license (list license:expat license:asl2.0))))
 
-(define rust-winit-0.30
+(define-public rust-winit-0.30
   (package
     (name "rust-winit")
     (version "0.30.5")
@@ -10221,7 +10253,7 @@ wrappers for the new DXC HLSL compiler and validator.")
      "This package provides Cross-platform window creation library.")
     (license license:asl2.0)))
 
-(define rust-winnow-0.6
+(define-public rust-winnow-0.6
   (package
     (name "rust-winnow")
     (version "0.6.20")
@@ -10247,7 +10279,7 @@ wrappers for the new DXC HLSL compiler and validator.")
      "This package provides a byte-oriented, zero-copy, parser combinators library.")
     (license license:expat)))
 
-(define rust-write16-1
+(define-public rust-write16-1
   (package
     (name "rust-write16")
     (version "1.0.0")
@@ -10268,7 +10300,7 @@ wrappers for the new DXC HLSL compiler and validator.")
      "This package provides a UTF-16 analog of the Write trait.")
     (license (list license:asl2.0 license:expat))))
 
-(define rust-writeable-0.5
+(define-public rust-writeable-0.5
   (package
     (name "rust-writeable")
     (version "0.5.5")
@@ -10291,7 +10323,7 @@ wrappers for the new DXC HLSL compiler and validator.")
      "This package provides a more efficient alternative to fmt::Display.")
     (license unknown-license!)))
 
-(define rust-x11rb-0.13
+(define-public rust-x11rb-0.13
   (package
     (name "rust-x11rb")
     (version "0.13.1")
@@ -10323,7 +10355,7 @@ wrappers for the new DXC HLSL compiler and validator.")
      "This package provides Rust bindings to X11.")
     (license (list license:expat license:asl2.0))))
 
-(define rust-x11rb-protocol-0.13
+(define-public rust-x11rb-protocol-0.13
   (package
     (name "rust-x11rb-protocol")
     (version "0.13.1")
@@ -10344,7 +10376,7 @@ wrappers for the new DXC HLSL compiler and validator.")
      "This package provides Rust bindings to X11.")
     (license (list license:expat license:asl2.0))))
 
-(define rust-xcursor-0.3
+(define-public rust-xcursor-0.3
   (package
     (name "rust-xcursor")
     (version "0.3.8")
@@ -10366,7 +10398,7 @@ wrappers for the new DXC HLSL compiler and validator.")
      "This package provides a library for loading XCursor themes.")
     (license license:expat)))
 
-(define rust-xdg-home-1
+(define-public rust-xdg-home-1
   (package
     (name "rust-xdg-home")
     (version "1.3.0")
@@ -10393,7 +10425,7 @@ wrappers for the new DXC HLSL compiler and validator.")
      "This package provides The user's home directory as per XDG Specification.")
     (license license:expat)))
 
-(define rust-xkbcommon-0.8
+(define-public rust-xkbcommon-0.8
   (package
     (name "rust-xkbcommon")
     (version "0.8.0")
@@ -10422,7 +10454,7 @@ wrappers for the new DXC HLSL compiler and validator.")
      "This package provides Rust bindings and wrappers for libxkbcommon.")
     (license license:expat)))
 
-(define rust-xkbcommon-dl-0.4
+(define-public rust-xkbcommon-dl-0.4
   (package
     (name "rust-xkbcommon-dl")
     (version "0.4.2")
@@ -10453,7 +10485,7 @@ wrappers for the new DXC HLSL compiler and validator.")
      "This package provides Dynamically loaded xkbcommon and xkbcommon-x11 Rust bindings.")
     (license license:expat)))
 
-(define rust-xkeysym-0.2
+(define-public rust-xkeysym-0.2
   (package
     (name "rust-xkeysym")
     (version "0.2.1")
@@ -10475,7 +10507,7 @@ wrappers for the new DXC HLSL compiler and validator.")
     (license
      (list license:expat license:asl2.0 license:zlib))))
 
-(define rust-xml-rs-0.8
+(define-public rust-xml-rs-0.8
   (package
     (name "rust-xml-rs")
     (version "0.8.22")
@@ -10496,7 +10528,7 @@ wrappers for the new DXC HLSL compiler and validator.")
      "This package provides An XML library in pure Rust.")
     (license license:expat)))
 
-(define rust-xshell-0.2
+(define-public rust-xshell-0.2
   (package
     (name "rust-xshell")
     (version "0.2.6")
@@ -10522,7 +10554,7 @@ wrappers for the new DXC HLSL compiler and validator.")
      "This package provides Utilities for quick shell scripting in Rust.")
     (license (list license:expat license:asl2.0))))
 
-(define rust-xshell-macros-0.2
+(define-public rust-xshell-macros-0.2
   (package
     (name "rust-xshell-macros")
     (version "0.2.6")
@@ -10544,7 +10576,7 @@ wrappers for the new DXC HLSL compiler and validator.")
      "This package provides Private implementation detail of xshell crate.")
     (license (list license:expat license:asl2.0))))
 
-(define rust-yansi-1
+(define-public rust-yansi-1
   (package
     (name "rust-yansi")
     (version "1.0.1")
@@ -10567,7 +10599,7 @@ wrappers for the new DXC HLSL compiler and validator.")
      "This package provides a dead simple ANSI terminal color painting library.")
     (license (list license:expat license:asl2.0))))
 
-(define rust-yoke-0.7
+(define-public rust-yoke-0.7
   (package
     (name "rust-yoke")
     (version "0.7.4")
@@ -10598,7 +10630,7 @@ wrappers for the new DXC HLSL compiler and validator.")
      "This package provides Abstraction allowing borrowed data to be carried along with the backing data it\nborrows from.")
     (license unknown-license!)))
 
-(define rust-yoke-derive-0.7
+(define-public rust-yoke-derive-0.7
   (package
     (name "rust-yoke-derive")
     (version "0.7.4")
@@ -10627,183 +10659,183 @@ wrappers for the new DXC HLSL compiler and validator.")
      "This package provides Custom derive for the yoke crate.")
     (license unknown-license!)))
 
-(define rust-zbus-3
-  (package
-    (name "rust-zbus")
-    (version "3.15.2")
-    (source
-     (origin
-       (method url-fetch)
-       (uri (crate-uri "zbus" version))
-       (file-name
-        (string-append name "-" version ".tar.gz"))
-       (sha256
-        (base32
-         "1ri5gklhh3kl9gywym95679xs7n3sw2j3ky80jcd8siacc5ifpb7"))))
-    (build-system cargo-build-system)
-    (arguments
-     `(#:skip-build?
-       #t
-       #:cargo-inputs
-       (("rust-async-broadcast"
-         ,rust-async-broadcast-0.5)
-        ("rust-async-executor" ,rust-async-executor-1)
-        ("rust-async-fs" ,rust-async-fs-1)
-        ("rust-async-io" ,rust-async-io-1)
-        ("rust-async-lock" ,rust-async-lock-2)
-        ("rust-async-process" ,rust-async-process-1)
-        ("rust-async-recursion" ,rust-async-recursion-1)
-        ("rust-async-task" ,rust-async-task-4)
-        ("rust-async-trait" ,rust-async-trait-0.1)
-        ("rust-blocking" ,rust-blocking-1)
-        ("rust-byteorder" ,rust-byteorder-1)
-        ("rust-derivative" ,rust-derivative-2)
-        ("rust-enumflags2" ,rust-enumflags2-0.7)
-        ("rust-event-listener" ,rust-event-listener-2)
-        ("rust-futures-core" ,rust-futures-core-0.3)
-        ("rust-futures-sink" ,rust-futures-sink-0.3)
-        ("rust-futures-util" ,rust-futures-util-0.3)
-        ("rust-hex" ,rust-hex-0.4)
-        ("rust-nix" ,rust-nix-0.26)
-        ("rust-once-cell" ,rust-once-cell-1)
-        ("rust-ordered-stream" ,rust-ordered-stream-0.2)
-        ("rust-rand" ,rust-rand-0.8)
-        ("rust-serde" ,rust-serde-1)
-        ("rust-serde-repr" ,rust-serde-repr-0.1)
-        ("rust-sha1" ,rust-sha1-0.10)
-        ("rust-static-assertions"
-         ,rust-static-assertions-1)
-        ("rust-tracing" ,rust-tracing-0.1)
-        ("rust-uds-windows" ,rust-uds-windows-1)
-        ("rust-winapi" ,rust-winapi-0.3)
-        ("rust-xdg-home" ,rust-xdg-home-1)
-        ("rust-zbus-macros" ,rust-zbus-macros-3)
-        ("rust-zbus-names" ,rust-zbus-names-2)
-        ("rust-zvariant" ,rust-zvariant-3))))
-    (home-page "https://github.com/dbus2/zbus/")
-    (synopsis "API for D-Bus communication")
-    (description
-     "This package provides API for D-Bus communication.")
-    (license license:expat)))
+;; (define-public rust-zbus-3
+;;   (package
+;;     (name "rust-zbus")
+;;     (version "3.15.2")
+;;     (source
+;;      (origin
+;;        (method url-fetch)
+;;        (uri (crate-uri "zbus" version))
+;;        (file-name
+;;         (string-append name "-" version ".tar.gz"))
+;;        (sha256
+;;         (base32
+;;          "1ri5gklhh3kl9gywym95679xs7n3sw2j3ky80jcd8siacc5ifpb7"))))
+;;     (build-system cargo-build-system)
+;;     (arguments
+;;      `(#:skip-build?
+;;        #t
+;;        #:cargo-inputs
+;;        (("rust-async-broadcast"
+;;          ,rust-async-broadcast-0.5)
+;;         ("rust-async-executor" ,rust-async-executor-1)
+;;         ("rust-async-fs" ,rust-async-fs-1)
+;;         ("rust-async-io" ,rust-async-io-1)
+;;         ("rust-async-lock" ,rust-async-lock-2)
+;;         ("rust-async-process" ,rust-async-process-1)
+;;         ("rust-async-recursion" ,rust-async-recursion-1)
+;;         ("rust-async-task" ,rust-async-task-4)
+;;         ("rust-async-trait" ,rust-async-trait-0.1)
+;;         ("rust-blocking" ,rust-blocking-1)
+;;         ("rust-byteorder" ,rust-byteorder-1)
+;;         ("rust-derivative" ,rust-derivative-2)
+;;         ("rust-enumflags2" ,rust-enumflags2-0.7)
+;;         ("rust-event-listener" ,rust-event-listener-2)
+;;         ("rust-futures-core" ,rust-futures-core-0.3)
+;;         ("rust-futures-sink" ,rust-futures-sink-0.3)
+;;         ("rust-futures-util" ,rust-futures-util-0.3)
+;;         ("rust-hex" ,rust-hex-0.4)
+;;         ("rust-nix" ,rust-nix-0.26)
+;;         ("rust-once-cell" ,rust-once-cell-1)
+;;         ("rust-ordered-stream" ,rust-ordered-stream-0.2)
+;;         ("rust-rand" ,rust-rand-0.8)
+;;         ("rust-serde" ,rust-serde-1)
+;;         ("rust-serde-repr" ,rust-serde-repr-0.1)
+;;         ("rust-sha1" ,rust-sha1-0.10)
+;;         ("rust-static-assertions"
+;;          ,rust-static-assertions-1)
+;;         ("rust-tracing" ,rust-tracing-0.1)
+;;         ("rust-uds-windows" ,rust-uds-windows-1)
+;;         ("rust-winapi" ,rust-winapi-0.3)
+;;         ("rust-xdg-home" ,rust-xdg-home-1)
+;;         ("rust-zbus-macros" ,rust-zbus-macros-3)
+;;         ("rust-zbus-names" ,rust-zbus-names-2)
+;;         ("rust-zvariant" ,rust-zvariant-3))))
+;;     (home-page "https://github.com/dbus2/zbus/")
+;;     (synopsis "API for D-Bus communication")
+;;     (description
+;;      "This package provides API for D-Bus communication.")
+;;     (license license:expat)))
 
-(define rust-zbus-macros-3
-  (package
-    (name "rust-zbus-macros")
-    (version "3.15.2")
-    (source
-     (origin
-       (method url-fetch)
-       (uri (crate-uri "zbus_macros" version))
-       (file-name
-        (string-append name "-" version ".tar.gz"))
-       (sha256
-        (base32
-         "19g0d7d4b8l8ycw498sz8pwkplv300j31i9hnihq0zl81xxljcbi"))))
-    (build-system cargo-build-system)
-    (arguments
-     `(#:skip-build?
-       #t
-       #:cargo-inputs
-       (("rust-proc-macro-crate"
-         ,rust-proc-macro-crate-1)
-        ("rust-proc-macro2" ,rust-proc-macro2-1)
-        ("rust-quote" ,rust-quote-1)
-        ("rust-regex" ,rust-regex-1)
-        ("rust-syn" ,rust-syn-1)
-        ("rust-zvariant-utils" ,rust-zvariant-utils-1))))
-    (home-page "https://github.com/dbus2/zbus/")
-    (synopsis "proc-macros for zbus")
-    (description
-     "This package provides proc-macros for zbus.")
-    (license license:expat)))
+;; (define-public rust-zbus-macros-3
+;;   (package
+;;     (name "rust-zbus-macros")
+;;     (version "3.15.2")
+;;     (source
+;;      (origin
+;;        (method url-fetch)
+;;        (uri (crate-uri "zbus_macros" version))
+;;        (file-name
+;;         (string-append name "-" version ".tar.gz"))
+;;        (sha256
+;;         (base32
+;;          "19g0d7d4b8l8ycw498sz8pwkplv300j31i9hnihq0zl81xxljcbi"))))
+;;     (build-system cargo-build-system)
+;;     (arguments
+;;      `(#:skip-build?
+;;        #t
+;;        #:cargo-inputs
+;;        (("rust-proc-macro-crate"
+;;          ,rust-proc-macro-crate-1)
+;;         ("rust-proc-macro2" ,rust-proc-macro2-1)
+;;         ("rust-quote" ,rust-quote-1)
+;;         ("rust-regex" ,rust-regex-1)
+;;         ("rust-syn" ,rust-syn-1)
+;;         ("rust-zvariant-utils" ,rust-zvariant-utils-1))))
+;;     (home-page "https://github.com/dbus2/zbus/")
+;;     (synopsis "proc-macros for zbus")
+;;     (description
+;;      "This package provides proc-macros for zbus.")
+;;     (license license:expat)))
 
-(define rust-zbus-names-2
-  (package
-    (name "rust-zbus-names")
-    (version "2.6.1")
-    (source
-     (origin
-       (method url-fetch)
-       (uri (crate-uri "zbus_names" version))
-       (file-name
-        (string-append name "-" version ".tar.gz"))
-       (sha256
-        (base32
-         "13achs6jbrp4l0jy5m6nn7v89clfgb63qhldkg5ddgjh6y6p6za3"))))
-    (build-system cargo-build-system)
-    (arguments
-     `(#:skip-build?
-       #t
-       #:cargo-inputs
-       (("rust-serde" ,rust-serde-1)
-        ("rust-static-assertions"
-         ,rust-static-assertions-1)
-        ("rust-zvariant" ,rust-zvariant-3))))
-    (home-page "https://github.com/dbus2/zbus/")
-    (synopsis "collection of D-Bus bus names types")
-    (description
-     "This package provides a collection of D-Bus bus names types.")
-    (license license:expat)))
+;; (define-public rust-zbus-names-2
+;;   (package
+;;     (name "rust-zbus-names")
+;;     (version "2.6.1")
+;;     (source
+;;      (origin
+;;        (method url-fetch)
+;;        (uri (crate-uri "zbus_names" version))
+;;        (file-name
+;;         (string-append name "-" version ".tar.gz"))
+;;        (sha256
+;;         (base32
+;;          "13achs6jbrp4l0jy5m6nn7v89clfgb63qhldkg5ddgjh6y6p6za3"))))
+;;     (build-system cargo-build-system)
+;;     (arguments
+;;      `(#:skip-build?
+;;        #t
+;;        #:cargo-inputs
+;;        (("rust-serde" ,rust-serde-1)
+;;         ("rust-static-assertions"
+;;          ,rust-static-assertions-1)
+;;         ("rust-zvariant" ,rust-zvariant-3))))
+;;     (home-page "https://github.com/dbus2/zbus/")
+;;     (synopsis "collection of D-Bus bus names types")
+;;     (description
+;;      "This package provides a collection of D-Bus bus names types.")
+;;     (license license:expat)))
 
-(define rust-zerocopy-0.7
-  (package
-    (name "rust-zerocopy")
-    (version "0.7.35")
-    (source
-     (origin
-       (method url-fetch)
-       (uri (crate-uri "zerocopy" version))
-       (file-name
-        (string-append name "-" version ".tar.gz"))
-       (sha256
-        (base32
-         "1w36q7b9il2flg0qskapgi9ymgg7p985vniqd09vi0mwib8lz6qv"))))
-    (build-system cargo-build-system)
-    (arguments
-     `(#:skip-build?
-       #t
-       #:cargo-inputs
-       (("rust-byteorder" ,rust-byteorder-1)
-        ("rust-zerocopy-derive"
-         ,rust-zerocopy-derive-0.7))))
-    (home-page "https://github.com/google/zerocopy")
-    (synopsis
-     "Zerocopy makes zero-cost memory manipulation effortless. We write \"unsafe\" so you don't have to")
-    (description
-     "This package provides Zerocopy makes zero-cost memory manipulation effortless.  We write \"unsafe\" so\nyou don't have to.")
-    (license
-     (list license:bsd-2 license:asl2.0 license:expat))))
+;; (define-public rust-zerocopy-0.7
+;;   (package
+;;     (name "rust-zerocopy")
+;;     (version "0.7.35")
+;;     (source
+;;      (origin
+;;        (method url-fetch)
+;;        (uri (crate-uri "zerocopy" version))
+;;        (file-name
+;;         (string-append name "-" version ".tar.gz"))
+;;        (sha256
+;;         (base32
+;;          "1w36q7b9il2flg0qskapgi9ymgg7p985vniqd09vi0mwib8lz6qv"))))
+;;     (build-system cargo-build-system)
+;;     (arguments
+;;      `(#:skip-build?
+;;        #t
+;;        #:cargo-inputs
+;;        (("rust-byteorder" ,rust-byteorder-1)
+;;         ("rust-zerocopy-derive"
+;;          ,rust-zerocopy-derive-0.7))))
+;;     (home-page "https://github.com/google/zerocopy")
+;;     (synopsis
+;;      "Zerocopy makes zero-cost memory manipulation effortless. We write \"unsafe\" so you don't have to")
+;;     (description
+;;      "This package provides Zerocopy makes zero-cost memory manipulation effortless.  We write \"unsafe\" so\nyou don't have to.")
+;;     (license
+;;      (list license:bsd-2 license:asl2.0 license:expat))))
 
-(define rust-zerocopy-derive-0.7
-  (package
-    (name "rust-zerocopy-derive")
-    (version "0.7.35")
-    (source
-     (origin
-       (method url-fetch)
-       (uri (crate-uri "zerocopy-derive" version))
-       (file-name
-        (string-append name "-" version ".tar.gz"))
-       (sha256
-        (base32
-         "0gnf2ap2y92nwdalzz3x7142f2b83sni66l39vxp2ijd6j080kzs"))))
-    (build-system cargo-build-system)
-    (arguments
-     `(#:skip-build?
-       #t
-       #:cargo-inputs
-       (("rust-proc-macro2" ,rust-proc-macro2-1)
-        ("rust-quote" ,rust-quote-1)
-        ("rust-syn" ,rust-syn-2))))
-    (home-page "https://github.com/google/zerocopy")
-    (synopsis
-     "Custom derive for traits from the zerocopy crate")
-    (description
-     "This package provides Custom derive for traits from the zerocopy crate.")
-    (license
-     (list license:bsd-2 license:asl2.0 license:expat))))
+;; (define-public rust-zerocopy-derive-0.7
+;;   (package
+;;     (name "rust-zerocopy-derive")
+;;     (version "0.7.35")
+;;     (source
+;;      (origin
+;;        (method url-fetch)
+;;        (uri (crate-uri "zerocopy-derive" version))
+;;        (file-name
+;;         (string-append name "-" version ".tar.gz"))
+;;        (sha256
+;;         (base32
+;;          "0gnf2ap2y92nwdalzz3x7142f2b83sni66l39vxp2ijd6j080kzs"))))
+;;     (build-system cargo-build-system)
+;;     (arguments
+;;      `(#:skip-build?
+;;        #t
+;;        #:cargo-inputs
+;;        (("rust-proc-macro2" ,rust-proc-macro2-1)
+;;         ("rust-quote" ,rust-quote-1)
+;;         ("rust-syn" ,rust-syn-2))))
+;;     (home-page "https://github.com/google/zerocopy")
+;;     (synopsis
+;;      "Custom derive for traits from the zerocopy crate")
+;;     (description
+;;      "This package provides Custom derive for traits from the zerocopy crate.")
+;;     (license
+;;      (list license:bsd-2 license:asl2.0 license:expat))))
 
-(define rust-zerofrom-0.1
+(define-public rust-zerofrom-0.1
   (package
     (name "rust-zerofrom")
     (version "0.1.4")
@@ -10830,7 +10862,7 @@ wrappers for the new DXC HLSL compiler and validator.")
      "This package provides @code{ZeroFrom} trait for constructing.")
     (license unknown-license!)))
 
-(define rust-zerofrom-derive-0.1
+(define-public rust-zerofrom-derive-0.1
   (package
     (name "rust-zerofrom-derive")
     (version "0.1.4")
@@ -10859,7 +10891,7 @@ wrappers for the new DXC HLSL compiler and validator.")
      "This package provides Custom derive for the zerofrom crate.")
     (license unknown-license!)))
 
-(define rust-zerovec-0.10
+(define-public rust-zerovec-0.10
   (package
     (name "rust-zerovec")
     (version "0.10.4")
@@ -10888,7 +10920,7 @@ wrappers for the new DXC HLSL compiler and validator.")
      "This package provides Zero-copy vector backed by a byte array.")
     (license unknown-license!)))
 
-(define rust-zerovec-derive-0.10
+(define-public rust-zerovec-derive-0.10
   (package
     (name "rust-zerovec-derive")
     (version "0.10.3")
@@ -10916,64 +10948,64 @@ wrappers for the new DXC HLSL compiler and validator.")
      "This package provides Custom derive for the zerovec crate.")
     (license unknown-license!)))
 
-(define rust-zvariant-3
-  (package
-    (name "rust-zvariant")
-    (version "3.15.2")
-    (source
-     (origin
-       (method url-fetch)
-       (uri (crate-uri "zvariant" version))
-       (file-name
-        (string-append name "-" version ".tar.gz"))
-       (sha256
-        (base32
-         "1nxj9x187jl32fd32zvq8hfn6lyq3kjadb2q7f6kb6x0igl2pvsf"))))
-    (build-system cargo-build-system)
-    (arguments
-     `(#:skip-build?
-       #t
-       #:cargo-inputs
-       (("rust-byteorder" ,rust-byteorder-1)
-        ("rust-enumflags2" ,rust-enumflags2-0.7)
-        ("rust-libc" ,rust-libc-0.2)
-        ("rust-serde" ,rust-serde-1)
-        ("rust-static-assertions"
-         ,rust-static-assertions-1)
-        ("rust-zvariant-derive" ,rust-zvariant-derive-3))))
-    (home-page "https://github.com/dbus2/zbus/")
-    (synopsis "D-Bus & GVariant encoding & decoding")
-    (description
-     "This package provides D-Bus & GVariant encoding & decoding.")
-    (license license:expat)))
+;; (define-public rust-zvariant-3
+;;   (package
+;;     (name "rust-zvariant")
+;;     (version "3.15.2")
+;;     (source
+;;      (origin
+;;        (method url-fetch)
+;;        (uri (crate-uri "zvariant" version))
+;;        (file-name
+;;         (string-append name "-" version ".tar.gz"))
+;;        (sha256
+;;         (base32
+;;          "1nxj9x187jl32fd32zvq8hfn6lyq3kjadb2q7f6kb6x0igl2pvsf"))))
+;;     (build-system cargo-build-system)
+;;     (arguments
+;;      `(#:skip-build?
+;;        #t
+;;        #:cargo-inputs
+;;        (("rust-byteorder" ,rust-byteorder-1)
+;;         ("rust-enumflags2" ,rust-enumflags2-0.7)
+;;         ("rust-libc" ,rust-libc-0.2)
+;;         ("rust-serde" ,rust-serde-1)
+;;         ("rust-static-assertions"
+;;          ,rust-static-assertions-1)
+;;         ("rust-zvariant-derive" ,rust-zvariant-derive-3))))
+;;     (home-page "https://github.com/dbus2/zbus/")
+;;     (synopsis "D-Bus & GVariant encoding & decoding")
+;;     (description
+;;      "This package provides D-Bus & GVariant encoding & decoding.")
+;;     (license license:expat)))
 
-(define rust-zvariant-derive-3
-  (package
-    (name "rust-zvariant-derive")
-    (version "3.15.2")
-    (source
-     (origin
-       (method url-fetch)
-       (uri (crate-uri "zvariant_derive" version))
-       (file-name
-        (string-append name "-" version ".tar.gz"))
-       (sha256
-        (base32
-         "1nbydrkawjwxan12vy79qsrn7gwc483mpfzqs685ybyppv04vhip"))))
-    (build-system cargo-build-system)
-    (arguments
-     `(#:skip-build?
-       #t
-       #:cargo-inputs
-       (("rust-proc-macro-crate"
-         ,rust-proc-macro-crate-1)
-        ("rust-proc-macro2" ,rust-proc-macro2-1)
-        ("rust-quote" ,rust-quote-1)
-        ("rust-syn" ,rust-syn-1)
-        ("rust-zvariant-utils" ,rust-zvariant-utils-1))))
-    (home-page "https://github.com/dbus2/zbus/")
-    (synopsis "D-Bus & GVariant encoding & decoding")
-    (description
-     "This package provides D-Bus & GVariant encoding & decoding.")
-    (license license:expat)))
-rust-niri-0.1
+;; (define-public rust-zvariant-derive-3
+;;   (package
+;;     (name "rust-zvariant-derive")
+;;     (version "3.15.2")
+;;     (source
+;;      (origin
+;;        (method url-fetch)
+;;        (uri (crate-uri "zvariant_derive" version))
+;;        (file-name
+;;         (string-append name "-" version ".tar.gz"))
+;;        (sha256
+;;         (base32
+;;          "1nbydrkawjwxan12vy79qsrn7gwc483mpfzqs685ybyppv04vhip"))))
+;;     (build-system cargo-build-system)
+;;     (arguments
+;;      `(#:skip-build?
+;;        #t
+;;        #:cargo-inputs
+;;        (("rust-proc-macro-crate"
+;;          ,rust-proc-macro-crate-1)
+;;         ("rust-proc-macro2" ,rust-proc-macro2-1)
+;;         ("rust-quote" ,rust-quote-1)
+;;         ("rust-syn" ,rust-syn-1)
+;;         ("rust-zvariant-utils" ,rust-zvariant-utils-1))))
+;;     (home-page "https://github.com/dbus2/zbus/")
+;;     (synopsis "D-Bus & GVariant encoding & decoding")
+;;     (description
+;;      "This package provides D-Bus & GVariant encoding & decoding.")
+;;     (license license:expat)))
+niri
