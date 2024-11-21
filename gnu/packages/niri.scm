@@ -112,79 +112,6 @@
      "This package provides Approximate floating point equality comparisons and assertions.")
     (license license:asl2.0)))
 
-(define-public rust-arrayvec-0.7
-  (package
-    (name "rust-arrayvec")
-    (version "0.7.6")
-    (source
-     (origin
-       (method url-fetch)
-       (uri (crate-uri "arrayvec" version))
-       (file-name
-        (string-append name "-" version ".tar.gz"))
-       (sha256
-        (base32
-         "0l1fz4ccgv6pm609rif37sl5nv5k6lbzi7kkppgzqzh1vwix20kw"))))
-    (build-system cargo-build-system)
-    (arguments `(#:skip-build? #t))
-    (home-page "https://github.com/bluss/arrayvec")
-    (synopsis
-     "vector with fixed capacity, backed by an array (it can be stored on the stack too). Implements fixed capacity ArrayVec and ArrayString.")
-    (description
-     "This package provides a vector with fixed capacity, backed by an array (it can\nbe stored on the stack too).  Implements fixed capacity @code{ArrayVec} and\n@code{ArrayString}.")
-    (license (list license:expat license:asl2.0))))
-
-(define-public rust-as-raw-xcb-connection-1
-  (package
-    (name "rust-as-raw-xcb-connection")
-    (version "1.0.1")
-    (source
-     (origin
-       (method url-fetch)
-       (uri (crate-uri "as-raw-xcb-connection" version))
-       (file-name
-        (string-append name "-" version ".tar.gz"))
-       (sha256
-        (base32
-         "0sqgpz2ymv5yx76r5j2npjq2x5qvvqnw0vrs35cyv30p3pfp2m8p"))))
-    (build-system cargo-build-system)
-    (arguments `(#:skip-build? #t))
-    (home-page
-     "https://github.com/psychon/as-raw-xcb-connection")
-    (synopsis
-     "Trait to facilitate interoperatibility with libxcb C API")
-    (description
-     "This package provides Trait to facilitate interoperatibility with libxcb C API.")
-    (license (list license:expat license:asl2.0))))
-
-(define-public rust-async-recursion-1
-  (package
-    (name "rust-async-recursion")
-    (version "1.1.1")
-    (source
-     (origin
-       (method url-fetch)
-       (uri (crate-uri "async-recursion" version))
-       (file-name
-        (string-append name "-" version ".tar.gz"))
-       (sha256
-        (base32
-         "04ac4zh8qz2xjc79lmfi4jlqj5f92xjvfaqvbzwkizyqd4pl4hrv"))))
-    (build-system cargo-build-system)
-    (arguments
-     `(#:skip-build?
-       #t
-       #:cargo-inputs
-       (("rust-proc-macro2" ,rust-proc-macro2-1)
-        ("rust-quote" ,rust-quote-1)
-        ("rust-syn" ,rust-syn-2))))
-    (home-page
-     "https://github.com/dcchut/async-recursion")
-    (synopsis "Recursion for async functions")
-    (description
-     "This package provides Recursion for async functions.")
-    (license (list license:expat license:asl2.0))))
-
 (define-public rust-async-signal-0.2
   (package
     (name "rust-async-signal")
@@ -243,143 +170,143 @@
      "This package provides Automatic cfg for Rust compiler features.")
     (license (list license:asl2.0 license:expat))))
 
-(define-public rust-backtrace-0.3
-  (package
-    (name "rust-backtrace")
-    (version "0.3.74")
-    (source
-     (origin
-       (method url-fetch)
-       (uri (crate-uri "backtrace" version))
-       (file-name
-        (string-append name "-" version ".tar.gz"))
-       (sha256
-        (base32
-         "06pfif7nwx66qf2zaanc2fcq7m64i91ki9imw9xd3bnz5hrwp0ld"))))
-    (build-system cargo-build-system)
-    (arguments
-     `(#:skip-build?
-       #t
-       #:cargo-inputs
-       (("rust-addr2line" ,rust-addr2line-0.24)
-        ("rust-cfg-if" ,rust-cfg-if-1)
-        ("rust-libc" ,rust-libc-0.2)
-        ("rust-miniz-oxide" ,rust-miniz-oxide-0.8)
-        ("rust-object" ,rust-object-0.36)
-        ("rust-rustc-demangle" ,rust-rustc-demangle-0.1)
-        ("rust-windows-targets"
-         ,rust-windows-targets-0.52))))
-    (home-page
-     "https://github.com/rust-lang/backtrace-rs")
-    (synopsis
-     "library to acquire a stack trace (backtrace) at runtime in a Rust program.")
-    (description
-     "This package provides a library to acquire a stack trace (backtrace) at runtime\nin a Rust program.")
-    (license (list license:expat license:asl2.0))))
+;; (define-public rust-backtrace-0.3
+;;   (package
+;;     (name "rust-backtrace")
+;;     (version "0.3.74")
+;;     (source
+;;      (origin
+;;        (method url-fetch)
+;;        (uri (crate-uri "backtrace" version))
+;;        (file-name
+;;         (string-append name "-" version ".tar.gz"))
+;;        (sha256
+;;         (base32
+;;          "06pfif7nwx66qf2zaanc2fcq7m64i91ki9imw9xd3bnz5hrwp0ld"))))
+;;     (build-system cargo-build-system)
+;;     (arguments
+;;      `(#:skip-build?
+;;        #t
+;;        #:cargo-inputs
+;;        (("rust-addr2line" ,rust-addr2line-0.24)
+;;         ("rust-cfg-if" ,rust-cfg-if-1)
+;;         ("rust-libc" ,rust-libc-0.2)
+;;         ("rust-miniz-oxide" ,rust-miniz-oxide-0.8)
+;;         ("rust-object" ,rust-object-0.36)
+;;         ("rust-rustc-demangle" ,rust-rustc-demangle-0.1)
+;;         ("rust-windows-targets"
+;;          ,rust-windows-targets-0.52))))
+;;     (home-page
+;;      "https://github.com/rust-lang/backtrace-rs")
+;;     (synopsis
+;;      "library to acquire a stack trace (backtrace) at runtime in a Rust program.")
+;;     (description
+;;      "This package provides a library to acquire a stack trace (backtrace) at runtime\nin a Rust program.")
+;;     (license (list license:expat license:asl2.0))))
 
-(define-public rust-block2-0.5
-  (package
-    (name "rust-block2")
-    (version "0.5.1")
-    (source
-     (origin
-       (method url-fetch)
-       (uri (crate-uri "block2" version))
-       (file-name
-        (string-append name "-" version ".tar.gz"))
-       (sha256
-        (base32
-         "0pyiha5his2grzqr3mynmq244laql2j20992i59asp0gy7mjw4rc"))))
-    (build-system cargo-build-system)
-    (arguments
-     `(#:skip-build?
-       #t
-       #:cargo-inputs
-       (("rust-objc2" ,rust-objc2-0.5))))
-    (home-page "https://github.com/madsmtm/objc2")
-    (synopsis
-     "Apple's C language extension of blocks")
-    (description
-     "This package provides Apple's C language extension of blocks.")
-    (license license:expat)))
+;; (define-public rust-block2-0.5
+;;   (package
+;;     (name "rust-block2")
+;;     (version "0.5.1")
+;;     (source
+;;      (origin
+;;        (method url-fetch)
+;;        (uri (crate-uri "block2" version))
+;;        (file-name
+;;         (string-append name "-" version ".tar.gz"))
+;;        (sha256
+;;         (base32
+;;          "0pyiha5his2grzqr3mynmq244laql2j20992i59asp0gy7mjw4rc"))))
+;;     (build-system cargo-build-system)
+;;     (arguments
+;;      `(#:skip-build?
+;;        #t
+;;        #:cargo-inputs
+;;        (("rust-objc2" ,rust-objc2-0.5))))
+;;     (home-page "https://github.com/madsmtm/objc2")
+;;     (synopsis
+;;      "Apple's C language extension of blocks")
+;;     (description
+;;      "This package provides Apple's C language extension of blocks.")
+;;     (license license:expat)))
 
-(define-public rust-bumpalo-3
-  (package
-    (name "rust-bumpalo")
-    (version "3.16.0")
-    (source
-     (origin
-       (method url-fetch)
-       (uri (crate-uri "bumpalo" version))
-       (file-name
-        (string-append name "-" version ".tar.gz"))
-       (sha256
-        (base32
-         "0b015qb4knwanbdlp1x48pkb4pm57b8gidbhhhxr900q2wb6fabr"))))
-    (build-system cargo-build-system)
-    (arguments `(#:skip-build? #t))
-    (home-page "https://github.com/fitzgen/bumpalo")
-    (synopsis "fast bump allocation arena for Rust.")
-    (description
-     "This package provides a fast bump allocation arena for Rust.")
-    (license (list license:expat license:asl2.0))))
+;; (define-public rust-bumpalo-3
+;;   (package
+;;     (name "rust-bumpalo")
+;;     (version "3.16.0")
+;;     (source
+;;      (origin
+;;        (method url-fetch)
+;;        (uri (crate-uri "bumpalo" version))
+;;        (file-name
+;;         (string-append name "-" version ".tar.gz"))
+;;        (sha256
+;;         (base32
+;;          "0b015qb4knwanbdlp1x48pkb4pm57b8gidbhhhxr900q2wb6fabr"))))
+;;     (build-system cargo-build-system)
+;;     (arguments `(#:skip-build? #t))
+;;     (home-page "https://github.com/fitzgen/bumpalo")
+;;     (synopsis "fast bump allocation arena for Rust.")
+;;     (description
+;;      "This package provides a fast bump allocation arena for Rust.")
+;;     (license (list license:expat license:asl2.0))))
 
-(define-public rust-bytemuck-1
-  (package
-    (name "rust-bytemuck")
-    (version "1.19.0")
-    (source
-     (origin
-       (method url-fetch)
-       (uri (crate-uri "bytemuck" version))
-       (file-name
-        (string-append name "-" version ".tar.gz"))
-       (sha256
-        (base32
-         "0ka96agz9kqmsd71q7xpr08bnh2g8x4hivxqpnks0674h5dj2d43"))))
-    (build-system cargo-build-system)
-    (arguments
-     `(#:skip-build?
-       #t
-       #:cargo-inputs
-       (("rust-bytemuck-derive" ,rust-bytemuck-derive-1))))
-    (home-page
-     "https://github.com/Lokathor/bytemuck")
-    (synopsis
-     "crate for mucking around with piles of bytes.")
-    (description
-     "This package provides a crate for mucking around with piles of bytes.")
-    (license
-     (list license:zlib license:asl2.0 license:expat))))
+;; (define-public rust-bytemuck-1
+;;   (package
+;;     (name "rust-bytemuck")
+;;     (version "1.19.0")
+;;     (source
+;;      (origin
+;;        (method url-fetch)
+;;        (uri (crate-uri "bytemuck" version))
+;;        (file-name
+;;         (string-append name "-" version ".tar.gz"))
+;;        (sha256
+;;         (base32
+;;          "0ka96agz9kqmsd71q7xpr08bnh2g8x4hivxqpnks0674h5dj2d43"))))
+;;     (build-system cargo-build-system)
+;;     (arguments
+;;      `(#:skip-build?
+;;        #t
+;;        #:cargo-inputs
+;;        (("rust-bytemuck-derive" ,rust-bytemuck-derive-1))))
+;;     (home-page
+;;      "https://github.com/Lokathor/bytemuck")
+;;     (synopsis
+;;      "crate for mucking around with piles of bytes.")
+;;     (description
+;;      "This package provides a crate for mucking around with piles of bytes.")
+;;     (license
+;;      (list license:zlib license:asl2.0 license:expat))))
 
-(define-public rust-bytemuck-derive-1
-  (package
-    (name "rust-bytemuck-derive")
-    (version "1.8.0")
-    (source
-     (origin
-       (method url-fetch)
-       (uri (crate-uri "bytemuck_derive" version))
-       (file-name
-        (string-append name "-" version ".tar.gz"))
-       (sha256
-        (base32
-         "1v5r33dgl12rqbvh440fdjxmxxr49qpzmg6vpw5jzdbcjk6w7z5w"))))
-    (build-system cargo-build-system)
-    (arguments
-     `(#:skip-build?
-       #t
-       #:cargo-inputs
-       (("rust-proc-macro2" ,rust-proc-macro2-1)
-        ("rust-quote" ,rust-quote-1)
-        ("rust-syn" ,rust-syn-2))))
-    (home-page
-     "https://github.com/Lokathor/bytemuck")
-    (synopsis "derive proc-macros for `bytemuck`")
-    (description
-     "This package provides derive proc-macros for `bytemuck`.")
-    (license
-     (list license:zlib license:asl2.0 license:expat))))
+;; (define-public rust-bytemuck-derive-1
+;;   (package
+;;     (name "rust-bytemuck-derive")
+;;     (version "1.8.0")
+;;     (source
+;;      (origin
+;;        (method url-fetch)
+;;        (uri (crate-uri "bytemuck_derive" version))
+;;        (file-name
+;;         (string-append name "-" version ".tar.gz"))
+;;        (sha256
+;;         (base32
+;;          "1v5r33dgl12rqbvh440fdjxmxxr49qpzmg6vpw5jzdbcjk6w7z5w"))))
+;;     (build-system cargo-build-system)
+;;     (arguments
+;;      `(#:skip-build?
+;;        #t
+;;        #:cargo-inputs
+;;        (("rust-proc-macro2" ,rust-proc-macro2-1)
+;;         ("rust-quote" ,rust-quote-1)
+;;         ("rust-syn" ,rust-syn-2))))
+;;     (home-page
+;;      "https://github.com/Lokathor/bytemuck")
+;;     (synopsis "derive proc-macros for `bytemuck`")
+;;     (description
+;;      "This package provides derive proc-macros for `bytemuck`.")
+;;     (license
+;;      (list license:zlib license:asl2.0 license:expat))))
 
 (define-public rust-bytes-1
   (package
@@ -403,90 +330,90 @@
      "This package provides Types and traits for working with bytes.")
     (license license:expat)))
 
-(define-public rust-cairo-rs-0.20
-  (package
-    (name "rust-cairo-rs")
-    (version "0.20.1")
-    (source
-     (origin
-       (method url-fetch)
-       (uri (crate-uri "cairo-rs" version))
-       (file-name
-        (string-append name "-" version ".tar.gz"))
-       (sha256
-        (base32
-         "0s9yafifi3pwf7jck0bhgwr4rlg483sqhlr32fb8q44lghafm878"))))
-    (build-system cargo-build-system)
-    (arguments
-     `(#:skip-build?
-       #t
-       #:cargo-inputs
-       (("rust-bitflags" ,rust-bitflags-2)
-        ("rust-cairo-sys-rs" ,rust-cairo-sys-rs-0.20)
-        ("rust-glib" ,rust-glib-0.20)
-        ("rust-libc" ,rust-libc-0.2))))
-    (home-page "https://gtk-rs.org/")
-    (synopsis "Rust bindings for the Cairo library")
-    (description
-     "This package provides Rust bindings for the Cairo library.")
-    (license license:expat)))
+;; (define-public rust-cairo-rs-0.20
+;;   (package
+;;     (name "rust-cairo-rs")
+;;     (version "0.20.1")
+;;     (source
+;;      (origin
+;;        (method url-fetch)
+;;        (uri (crate-uri "cairo-rs" version))
+;;        (file-name
+;;         (string-append name "-" version ".tar.gz"))
+;;        (sha256
+;;         (base32
+;;          "0s9yafifi3pwf7jck0bhgwr4rlg483sqhlr32fb8q44lghafm878"))))
+;;     (build-system cargo-build-system)
+;;     (arguments
+;;      `(#:skip-build?
+;;        #t
+;;        #:cargo-inputs
+;;        (("rust-bitflags" ,rust-bitflags-2)
+;;         ("rust-cairo-sys-rs" ,rust-cairo-sys-rs-0.20)
+;;         ("rust-glib" ,rust-glib-0.20)
+;;         ("rust-libc" ,rust-libc-0.2))))
+;;     (home-page "https://gtk-rs.org/")
+;;     (synopsis "Rust bindings for the Cairo library")
+;;     (description
+;;      "This package provides Rust bindings for the Cairo library.")
+;;     (license license:expat)))
 
-(define-public rust-cairo-sys-rs-0.20
-  (package
-    (name "rust-cairo-sys-rs")
-    (version "0.20.0")
-    (source
-     (origin
-       (method url-fetch)
-       (uri (crate-uri "cairo-sys-rs" version))
-       (file-name
-        (string-append name "-" version ".tar.gz"))
-       (sha256
-        (base32
-         "13x85l52nl2izmdb48zzpkhhh1a4dsgqlp8gys4n1f5r2kwr10j2"))))
-    (build-system cargo-build-system)
-    (arguments
-     `(#:skip-build?
-       #t
-       #:cargo-inputs
-       (("rust-glib-sys" ,rust-glib-sys-0.20)
-        ("rust-libc" ,rust-libc-0.2)
-        ("rust-system-deps" ,rust-system-deps-7))))
-    (home-page "https://gtk-rs.org/")
-    (synopsis "FFI bindings to libcairo")
-    (description
-     "This package provides FFI bindings to libcairo.")
-    (license license:expat)))
+;; (define-public rust-cairo-sys-rs-0.20
+;;   (package
+;;     (name "rust-cairo-sys-rs")
+;;     (version "0.20.0")
+;;     (source
+;;      (origin
+;;        (method url-fetch)
+;;        (uri (crate-uri "cairo-sys-rs" version))
+;;        (file-name
+;;         (string-append name "-" version ".tar.gz"))
+;;        (sha256
+;;         (base32
+;;          "13x85l52nl2izmdb48zzpkhhh1a4dsgqlp8gys4n1f5r2kwr10j2"))))
+;;     (build-system cargo-build-system)
+;;     (arguments
+;;      `(#:skip-build?
+;;        #t
+;;        #:cargo-inputs
+;;        (("rust-glib-sys" ,rust-glib-sys-0.20)
+;;         ("rust-libc" ,rust-libc-0.2)
+;;         ("rust-system-deps" ,rust-system-deps-7))))
+;;     (home-page "https://gtk-rs.org/")
+;;     (synopsis "FFI bindings to libcairo")
+;;     (description
+;;      "This package provides FFI bindings to libcairo.")
+;;     (license license:expat)))
 
-(define-public rust-calloop-0.13
-  (package
-    (name "rust-calloop")
-    (version "0.13.0")
-    (source
-     (origin
-       (method url-fetch)
-       (uri (crate-uri "calloop" version))
-       (file-name
-        (string-append name "-" version ".tar.gz"))
-       (sha256
-        (base32
-         "1v5zgidnhsyml403rzr7vm99f8q6r5bxq5gxyiqkr8lcapwa57dr"))))
-    (build-system cargo-build-system)
-    (arguments
-     `(#:skip-build?
-       #t
-       #:cargo-inputs
-       (("rust-bitflags" ,rust-bitflags-2)
-        ("rust-log" ,rust-log-0.4)
-        ("rust-polling" ,rust-polling-3)
-        ("rust-rustix" ,rust-rustix-0.38)
-        ("rust-slab" ,rust-slab-0.4)
-        ("rust-thiserror" ,rust-thiserror-1))))
-    (home-page "https://github.com/Smithay/calloop")
-    (synopsis "callback-based event loop")
-    (description
-     "This package provides a callback-based event loop.")
-    (license license:expat)))
+;; (define-public rust-calloop-0.13
+;;   (package
+;;     (name "rust-calloop")
+;;     (version "0.13.0")
+;;     (source
+;;      (origin
+;;        (method url-fetch)
+;;        (uri (crate-uri "calloop" version))
+;;        (file-name
+;;         (string-append name "-" version ".tar.gz"))
+;;        (sha256
+;;         (base32
+;;          "1v5zgidnhsyml403rzr7vm99f8q6r5bxq5gxyiqkr8lcapwa57dr"))))
+;;     (build-system cargo-build-system)
+;;     (arguments
+;;      `(#:skip-build?
+;;        #t
+;;        #:cargo-inputs
+;;        (("rust-bitflags" ,rust-bitflags-2)
+;;         ("rust-log" ,rust-log-0.4)
+;;         ("rust-polling" ,rust-polling-3)
+;;         ("rust-rustix" ,rust-rustix-0.38)
+;;         ("rust-slab" ,rust-slab-0.4)
+;;         ("rust-thiserror" ,rust-thiserror-1))))
+;;     (home-page "https://github.com/Smithay/calloop")
+;;     (synopsis "callback-based event loop")
+;;     (description
+;;      "This package provides a callback-based event loop.")
+;;     (license license:expat)))
 
 (define-public rust-calloop-0.14
   (package
@@ -519,36 +446,36 @@
      "This package provides a callback-based event loop.")
     (license license:expat)))
 
-(define-public rust-calloop-wayland-source-0.3
-  (package
-    (name "rust-calloop-wayland-source")
-    (version "0.3.0")
-    (source
-     (origin
-       (method url-fetch)
-       (uri (crate-uri "calloop-wayland-source" version))
-       (file-name
-        (string-append name "-" version ".tar.gz"))
-       (sha256
-        (base32
-         "086x5mq16prrcwd9k6bw9an0sp8bj9l5daz4ziz5z4snf2c6m9lm"))))
-    (build-system cargo-build-system)
-    (arguments
-     `(#:skip-build?
-       #t
-       #:cargo-inputs
-       (("rust-calloop" ,rust-calloop-0.13)
-        ("rust-rustix" ,rust-rustix-0.38)
-        ("rust-wayland-backend"
-         ,rust-wayland-backend-0.3)
-        ("rust-wayland-client" ,rust-wayland-client-0.31))))
-    (home-page
-     "https://github.com/smithay/calloop-wayland-source")
-    (synopsis
-     "wayland-rs client event source for callloop")
-    (description
-     "This package provides a wayland-rs client event source for callloop.")
-    (license license:expat)))
+;; (define-public rust-calloop-wayland-source-0.3
+;;   (package
+;;     (name "rust-calloop-wayland-source")
+;;     (version "0.3.0")
+;;     (source
+;;      (origin
+;;        (method url-fetch)
+;;        (uri (crate-uri "calloop-wayland-source" version))
+;;        (file-name
+;;         (string-append name "-" version ".tar.gz"))
+;;        (sha256
+;;         (base32
+;;          "086x5mq16prrcwd9k6bw9an0sp8bj9l5daz4ziz5z4snf2c6m9lm"))))
+;;     (build-system cargo-build-system)
+;;     (arguments
+;;      `(#:skip-build?
+;;        #t
+;;        #:cargo-inputs
+;;        (("rust-calloop" ,rust-calloop-0.13)
+;;         ("rust-rustix" ,rust-rustix-0.38)
+;;         ("rust-wayland-backend"
+;;          ,rust-wayland-backend-0.3)
+;;         ("rust-wayland-client" ,rust-wayland-client-0.31))))
+;;     (home-page
+;;      "https://github.com/smithay/calloop-wayland-source")
+;;     (synopsis
+;;      "wayland-rs client event source for callloop")
+;;     (description
+;;      "This package provides a wayland-rs client event source for callloop.")
+;;     (license license:expat)))
 
 (define-public rust-cc-1
   (package
