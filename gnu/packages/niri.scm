@@ -2341,35 +2341,6 @@
       (description "")
       (license #f))))
 
-(define-public rust-synstructure-0.13
-  (package
-    (name "rust-synstructure")
-    (version "0.13.1")
-    (source
-     (origin
-       (method url-fetch)
-       (uri (crate-uri "synstructure" version))
-       (file-name
-        (string-append name "-" version ".tar.gz"))
-       (sha256
-        (base32
-         "0wc9f002ia2zqcbj0q2id5x6n7g1zjqba7qkg2mr0qvvmdk7dby8"))))
-    (build-system cargo-build-system)
-    (arguments
-     `(#:skip-build?
-       #t
-       #:cargo-inputs
-       (("rust-proc-macro2" ,rust-proc-macro2-1)
-        ("rust-quote" ,rust-quote-1)
-        ("rust-syn" ,rust-syn-2))))
-    (home-page
-     "https://github.com/mystor/synstructure")
-    (synopsis
-     "Helper methods and macros for custom derives")
-    (description
-     "This package provides Helper methods and macros for custom derives.")
-    (license license:expat)))
-
 (define-public rust-tauri-winrt-notification-0.1
   (package
     (name "rust-tauri-winrt-notification")
