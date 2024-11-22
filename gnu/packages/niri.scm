@@ -39,7 +39,7 @@
   #:use-module (gnu packages wm)
   #:use-module (gnu packages crates-io))
 
-(define-public unknown-license! #f)
+(define unknown-license! #f)
 
 (define-public rust-anyhow-1
   (package

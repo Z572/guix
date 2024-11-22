@@ -2137,11 +2137,14 @@ dist_patch_DATA =						\
   %D%/packages/patches/rust-1.78-unwinding-fix.patch		\
   %D%/packages/patches/rust-1.81-fix-riscv64-bootstrap.patch	\
   %D%/packages/patches/rust-cargo-edit-remove-ureq.patch	\
+  %D%/packages/patches/rust-libspa-0.8.0-unrelease.patch	\
+  %D%/packages/patches/rust-libspa-sys-0.8.0-unrelease.patch	\
   %D%/packages/patches/rust-ring-0.17-ring-core.patch		\
   %D%/packages/patches/rust-ndarray-remove-blas-src-dep.patch	\
   %D%/packages/patches/rust-ndarray-0.13-remove-blas-src.patch	\
   %D%/packages/patches/rust-ndarray-0.14-remove-blas-src.patch	\
   %D%/packages/patches/rust-nettle-disable-vendor.patch		 \
+  %D%/packages/patches/rust-pipewire-0.8.0-unrelease.patch	\
   %D%/packages/patches/rust-poem-1-fewer-deps.patch		\
   %D%/packages/patches/rust-rspec-1-remove-clippy.patch	\
   %D%/packages/patches/rust-trash-2-update-windows.patch	\
