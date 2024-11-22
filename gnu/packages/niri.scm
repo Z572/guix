@@ -5040,37 +5040,6 @@ wrappers for the new DXC HLSL compiler and validator.")
      "This package provides Rust bindings and wrappers for libxkbcommon.")
     (license license:expat)))
 
-(define-public rust-xkbcommon-dl-0.4
-  (package
-    (name "rust-xkbcommon-dl")
-    (version "0.4.2")
-    (source
-     (origin
-       (method url-fetch)
-       (uri (crate-uri "xkbcommon-dl" version))
-       (file-name
-        (string-append name "-" version ".tar.gz"))
-       (sha256
-        (base32
-         "1iai0r3b5skd9vbr8z5b0qixiz8jblzfm778ddm8ba596a0dwffh"))))
-    (build-system cargo-build-system)
-    (arguments
-     `(#:skip-build?
-       #t
-       #:cargo-inputs
-       (("rust-bitflags" ,rust-bitflags-2)
-        ("rust-dlib" ,rust-dlib-0.5)
-        ("rust-log" ,rust-log-0.4)
-        ("rust-once-cell" ,rust-once-cell-1)
-        ("rust-xkeysym" ,rust-xkeysym-0.2))))
-    (home-page
-     "https://github.com/rust-windowing/xkbcommon-dl")
-    (synopsis
-     "Dynamically loaded xkbcommon and xkbcommon-x11 Rust bindings")
-    (description
-     "This package provides Dynamically loaded xkbcommon and xkbcommon-x11 Rust bindings.")
-    (license license:expat)))
-
 (define-public rust-xkeysym-0.2
   (package
     (name "rust-xkeysym")
