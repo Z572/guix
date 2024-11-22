@@ -2342,60 +2342,6 @@ pipewire-rs.git\"")
      #f
      )))
 
-(define-public rust-toml-0.8
-  (package
-    (name "rust-toml")
-    (version "0.8.19")
-    (source
-     (origin
-       (method url-fetch)
-       (uri (crate-uri "toml" version))
-       (file-name
-        (string-append name "-" version ".tar.gz"))
-       (sha256
-        (base32
-         "0knjd3mkxyb87qcs2dark3qkpadidap3frqfj5nqvhpxwfc1zvd1"))))
-    (build-system cargo-build-system)
-    (arguments
-     `(#:skip-build?
-       #t
-       #:cargo-inputs
-       (("rust-serde" ,rust-serde-1)
-        ("rust-serde-spanned" ,rust-serde-spanned-0.6)
-        ("rust-toml-datetime" ,rust-toml-datetime-0.6)
-        ("rust-toml-edit" ,rust-toml-edit-0.22))))
-    (home-page "https://github.com/toml-rs/toml")
-    (synopsis
-     "native Rust encoder and decoder of TOML-formatted files and streams. Provides\nimplementations of the standard Serialize/Deserialize traits for TOML data to\nfacilitate deserializing and serializing Rust structures.")
-    (description
-     "This package provides a native Rust encoder and decoder of TOML-formatted files\nand streams.  Provides implementations of the standard Serialize/Deserialize\ntraits for TOML data to facilitate deserializing and serializing Rust\nstructures.")
-    (license (list license:expat license:asl2.0))))
-
-(define-public rust-toml-datetime-0.6
-  (package
-    (name "rust-toml-datetime")
-    (version "0.6.8")
-    (source
-     (origin
-       (method url-fetch)
-       (uri (crate-uri "toml_datetime" version))
-       (file-name
-        (string-append name "-" version ".tar.gz"))
-       (sha256
-        (base32
-         "0hgv7v9g35d7y9r2afic58jvlwnf73vgd1mz2k8gihlgrf73bmqd"))))
-    (build-system cargo-build-system)
-    (arguments
-     `(#:skip-build?
-       #t
-       #:cargo-inputs
-       (("rust-serde" ,rust-serde-1))))
-    (home-page "https://github.com/toml-rs/toml")
-    (synopsis "TOML-compatible datetime type")
-    (description
-     "This package provides a TOML-compatible datetime type.")
-    (license (list license:expat license:asl2.0))))
-
 (define-public rust-tracy-client-0.17
   (package
     (name "rust-tracy-client")
