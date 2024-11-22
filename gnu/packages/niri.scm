@@ -144,34 +144,6 @@
      "This package provides a callback-based event loop.")
     (license license:expat)))
 
-(define-public rust-cc-1
-  (package
-    (name "rust-cc")
-    (version "1.1.31")
-    (source
-     (origin
-       (method url-fetch)
-       (uri (crate-uri "cc" version))
-       (file-name
-        (string-append name "-" version ".tar.gz"))
-       (sha256
-        (base32
-         "0vscf59yxf665s4fv9yn3l39gfw99mgp6wnbc76cyv80ahmrdry2"))))
-    (build-system cargo-build-system)
-    (arguments
-     `(#:skip-build?
-       #t
-       #:cargo-inputs
-       (("rust-jobserver" ,rust-jobserver-0.1)
-        ("rust-libc" ,rust-libc-0.2)
-        ("rust-shlex" ,rust-shlex-1))))
-    (home-page "https://github.com/rust-lang/cc-rs")
-    (synopsis
-     "build-time dependency for Cargo build scripts to assist in invoking the native\nC compiler to compile native C code into a static archive to be linked into Rust\ncode.")
-    (description
-     "This package provides a build-time dependency for Cargo build scripts to assist\nin invoking the native C compiler to compile native C code into a static archive\nto be linked into Rust code.")
-    (license (list license:expat license:asl2.0))))
-
 (define-public rust-clang-sys-1
   (package
     (name "rust-clang-sys")
