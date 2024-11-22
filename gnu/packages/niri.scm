@@ -1528,14 +1528,6 @@
     (name "niri")
     (version "0.1.10")
     (source
-     ;; (origin
-     ;;   (method url-fetch)
-     ;;   (uri (crate-uri "niri" version))
-     ;;   (file-name
-     ;;    (string-append name "-" version ".tar.gz"))
-     ;;   (sha256
-     ;;    (base32
-     ;;     "0000000000000000000000000000000000000000000000000000")))
      (origin
        (method git-fetch)
        (uri (git-reference
@@ -1547,16 +1539,14 @@
        (modules '((guix build utils)))
        (snippet
         '(begin (substitute* "Cargo.toml"
-                  (("git = \"https://github.com/Smithay/smithay.git\"")
-                   "")
+                  (("git = \"https://github.com/Smithay/smithay.git\"") "")
                   (("# path = \"\\.\\./smithay\"")
                    "version = \"0.3.0\"")
                   (("# path = \"\\.\\./smithay/smithay-drm-extras\"")
                    "version = \"0.1.0\"")
-                  (("git = \"https://gitlab.freedesktop.org/pipewire/pipewire-rs.git\"")
-                   "version = \"0.8.0\"")))))
-
-     )
+                  (("git = \"https://gitlab.freedesktop.org/pipewire/\
+pipewire-rs.git\"")
+                   "version = \"0.8.0\""))))))
     (build-system cargo-build-system)
     (arguments
      (list
