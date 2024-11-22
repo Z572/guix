@@ -389,69 +389,6 @@
      "This package provides a simple and fast random number generator.")
     (license (list license:asl2.0 license:expat))))
 
-(define-public rust-futures-0.3
-  (package
-    (name "rust-futures")
-    (version "0.3.31")
-    (source
-     (origin
-       (method url-fetch)
-       (uri (crate-uri "futures" version))
-       (file-name
-        (string-append name "-" version ".tar.gz"))
-       (sha256
-        (base32
-         "0xh8ddbkm9jy8kc5gbvjp9a4b6rqqxvc8471yb2qaz5wm2qhgg35"))))
-    (build-system cargo-build-system)
-    (arguments
-     `(#:skip-build?
-       #t
-       #:cargo-inputs
-       (("rust-futures-channel"
-         ,rust-futures-channel-0.3)
-        ("rust-futures-core" ,rust-futures-core-0.3)
-        ("rust-futures-executor"
-         ,rust-futures-executor-0.3)
-        ("rust-futures-io" ,rust-futures-io-0.3)
-        ("rust-futures-sink" ,rust-futures-sink-0.3)
-        ("rust-futures-task" ,rust-futures-task-0.3)
-        ("rust-futures-util" ,rust-futures-util-0.3))))
-    (home-page
-     "https://rust-lang.github.io/futures-rs")
-    (synopsis
-     "An implementation of futures and streams featuring zero allocations,\ncomposability, and iterator-like interfaces.")
-    (description
-     "This package provides An implementation of futures and streams featuring zero allocations,\ncomposability, and iterator-like interfaces.")
-    (license (list license:expat license:asl2.0))))
-
-(define-public rust-futures-channel-0.3
-  (package
-    (name "rust-futures-channel")
-    (version "0.3.31")
-    (source
-     (origin
-       (method url-fetch)
-       (uri (crate-uri "futures-channel" version))
-       (file-name
-        (string-append name "-" version ".tar.gz"))
-       (sha256
-        (base32
-         "040vpqpqlbk099razq8lyn74m0f161zd0rp36hciqrwcg2zibzrd"))))
-    (build-system cargo-build-system)
-    (arguments
-     `(#:skip-build?
-       #t
-       #:cargo-inputs
-       (("rust-futures-core" ,rust-futures-core-0.3)
-        ("rust-futures-sink" ,rust-futures-sink-0.3))))
-    (home-page
-     "https://rust-lang.github.io/futures-rs")
-    (synopsis
-     "Channels for asynchronous communication using futures-rs.")
-    (description
-     "This package provides Channels for asynchronous communication using futures-rs.")
-    (license (list license:expat license:asl2.0))))
-
 (define-public rust-futures-core-0.3
   (package
     (name "rust-futures-core")
@@ -473,35 +410,6 @@
      "The core traits and types in for the `futures` library.")
     (description
      "This package provides The core traits and types in for the `futures` library.")
-    (license (list license:expat license:asl2.0))))
-
-(define-public rust-futures-executor-0.3
-  (package
-    (name "rust-futures-executor")
-    (version "0.3.31")
-    (source
-     (origin
-       (method url-fetch)
-       (uri (crate-uri "futures-executor" version))
-       (file-name
-        (string-append name "-" version ".tar.gz"))
-       (sha256
-        (base32
-         "17vcci6mdfzx4gbk0wx64chr2f13wwwpvyf3xd5fb1gmjzcx2a0y"))))
-    (build-system cargo-build-system)
-    (arguments
-     `(#:skip-build?
-       #t
-       #:cargo-inputs
-       (("rust-futures-core" ,rust-futures-core-0.3)
-        ("rust-futures-task" ,rust-futures-task-0.3)
-        ("rust-futures-util" ,rust-futures-util-0.3))))
-    (home-page
-     "https://rust-lang.github.io/futures-rs")
-    (synopsis
-     "Executors for asynchronous tasks based on the futures-rs library.")
-    (description
-     "This package provides Executors for asynchronous tasks based on the futures-rs library.")
     (license (list license:expat license:asl2.0))))
 
 (define-public rust-futures-io-0.3
@@ -526,38 +434,6 @@
     (description
      "This package provides The `@code{AsyncRead`}, `@code{AsyncWrite`}, `@code{AsyncSeek`}, and\n`@code{AsyncBufRead`} traits for the futures-rs library.")
     (license (list license:expat license:asl2.0))))
-
-(define-public rust-futures-lite-2
-  (package
-    (name "rust-futures-lite")
-    (version "2.3.0")
-    (source
-     (origin
-       (method url-fetch)
-       (uri (crate-uri "futures-lite" version))
-       (file-name
-        (string-append name "-" version ".tar.gz"))
-       (sha256
-        (base32
-         "19gk4my8zhfym6gwnpdjiyv2hw8cc098skkbkhryjdaf0yspwljj"))))
-    (build-system cargo-build-system)
-    (arguments
-     `(#:skip-build?
-       #t
-       #:cargo-inputs
-       (("rust-fastrand" ,rust-fastrand-2)
-        ("rust-futures-core" ,rust-futures-core-0.3)
-        ("rust-futures-io" ,rust-futures-io-0.3)
-        ("rust-parking" ,rust-parking-2)
-        ("rust-pin-project-lite"
-         ,rust-pin-project-lite-0.2))))
-    (home-page
-     "https://github.com/smol-rs/futures-lite")
-    (synopsis
-     "Futures, streams, and async I/O combinators")
-    (description
-     "This package provides Futures, streams, and async I/O combinators.")
-    (license (list license:asl2.0 license:expat))))
 
 (define-public rust-futures-macro-0.3
   (package
