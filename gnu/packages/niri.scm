@@ -21,6 +21,7 @@
   #:use-module (guix build-system cargo)
   #:use-module (guix download)
   #:use-module (guix git-download)
+  #:use-module (guix gexp)
   #:use-module (guix packages)
   #:use-module (gnu packages crates-gtk)
   #:use-module (gnu packages crates-windows)
@@ -1964,10 +1965,9 @@
      )
     (build-system cargo-build-system)
     (arguments
-     `(;; #:skip-build?
-       ;; #t
-       #:cargo-inputs
-       (("rust-anyhow" ,rust-anyhow-1)
+     (list
+      #:cargo-inputs
+      `(("rust-anyhow" ,rust-anyhow-1)
         ("rust-approx" ,rust-approx-0.5)
         ("rust-arrayvec" ,rust-arrayvec-0.7)
         ("rust-async-channel" ,rust-async-channel-2)
@@ -2020,22 +2020,37 @@
          ,rust-wayland-scanner-0.31)
         ("rust-xcursor" ,rust-xcursor-0.3)
         ("rust-xshell" ,rust-xshell-0.2)
-        ("rust-zbus" ,rust-zbus-3)
-
-        ;; xxx
-        ("rust-libadwaita" ,rust-libadwaita-0.7))
-       #:install-source? #f
-       ;; #:phases (modify-phases %standard-phases
-       ;;            (add-before 'package '))
-       ))
-    (native-inputs (list pkg-config))
+        ("rust-zbus" ,rust-zbus-3))
+      #:install-source? #f
+      #:phases
+      #~(modify-phases %standard-phases
+          (add-after 'unpack 'fix-niri.desktop
+            (lambda _
+              (substitute* "resources/niri.desktop"
+                (("Exec=niri-session")
+                 (string-append "Exec=" #$output "bin/niri --session")))))
+          (add-after 'unpack 'remove-niri-visual-tests
+            (lambda _
+              (substitute* "Cargo.toml"
+                (("\"niri-visual-tests\"") ""))
+              (delete-file-recursively "niri-visual-tests")))
+          (add-after 'install 'install-extra
+            (lambda _
+              (install-file
+               "resources/niri.desktop"
+               (string-append #$output "/share/wayland-sessions"))
+              (install-file
+               "resources/niri-portals.conf"
+               (string-append #$output "/share/xdg-desktop-portal")))))))
+    (native-inputs (list clang pkg-config))
     (inputs (list rust-smithay-0.3 rust-smithay-drm-extras-0.1
+
                   glib
                   cairo
                   pango
                   pipewire
-                  clang
-                  eudev libxkbcommon libseat libinput pixman mesa libdisplay-info))
+                  eudev libxkbcommon libseat libinput pixman mesa
+                  libdisplay-info))
     (home-page "")
     (synopsis "")
     (description "")
