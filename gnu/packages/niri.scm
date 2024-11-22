@@ -1413,16 +1413,11 @@
        (file-name
         (string-append name "-" version ".tar.gz"))
        (sha256
-        (base32
-         ;; "0000000000000000000000000000000000000000000000000000"
-         "044qs48yl0llp2dmrgwxj9y1pgfy09i6fhq661zqqb9a3fwa9wv5"
-         ))
+        (base32 "044qs48yl0llp2dmrgwxj9y1pgfy09i6fhq661zqqb9a3fwa9wv5"))
        (patches (search-patches "rust-libspa-0.8.0-unrelease.patch"))))
     (build-system cargo-build-system)
     (arguments
-     `(#:skip-build?
-       #t
-       #:cargo-inputs
+     `(#:cargo-inputs
        (("rust-bitflags" ,rust-bitflags-2)
         ("rust-cc" ,rust-cc-1)
         ("rust-convert-case" ,rust-convert-case-0.6)
@@ -1450,9 +1445,7 @@
         (string-append name "-" version ".tar.gz"))
        (sha256
         (base32
-         ;; "0000000000000000000000000000000000000000000000000000"
-         "07yh4i5grzbxkchg6dnxlwbdw2wm5jnd7ffbhl77jr0388b9f3dz"
-         ))
+         "07yh4i5grzbxkchg6dnxlwbdw2wm5jnd7ffbhl77jr0388b9f3dz"))
        (patches (search-patches "rust-libspa-sys-0.8.0-unrelease.patch"))))
     (build-system cargo-build-system)
     (arguments
@@ -1645,14 +1638,6 @@ pipewire-rs.git\"")
     (name "rust-niri-config")
     (version "0.1.10")
     (source
-     ;; (origin
-     ;;   (method url-fetch)
-     ;;   (uri (crate-uri "niri-config" version))
-     ;;   (file-name
-     ;;    (string-append name "-" version ".tar.gz"))
-     ;;   (sha256
-     ;;    (base32
-     ;;     "0000000000000000000000000000000000000000000000000000")))
      (origin
        (method git-fetch)
        (uri (git-reference
@@ -1660,8 +1645,7 @@ pipewire-rs.git\"")
              (commit (string-append "v" version))))
        (file-name (git-file-name name version))
        (sha256
-        (base32 "11sjz3ckk8qw74h1ahgkx5yxjzndjzawqdg5d5s6y0l0rz3pkbbr")))
-     )
+        (base32 "11sjz3ckk8qw74h1ahgkx5yxjzndjzawqdg5d5s6y0l0rz3pkbbr"))))
     (build-system cargo-build-system)
     (arguments
      `(#:skip-build?
@@ -1696,9 +1680,7 @@ pipewire-rs.git\"")
         (string-append name "-" version ".tar.gz"))
        (sha256
         (base32
-         ;; "0000000000000000000000000000000000000000000000000000"
-         "0hj2yxs90xcs14mnj36q2y51n2n2s5qvlr97nwdds9mlsg5439aa"
-         ))))
+         "0hj2yxs90xcs14mnj36q2y51n2n2s5qvlr97nwdds9mlsg5439aa"))))
     (build-system cargo-build-system)
     (arguments
      `(#:skip-build?
@@ -1835,54 +1817,38 @@ pipewire-rs.git\"")
     (license license:expat)))
 
 (define-public rust-pipewire-0.8
-  (let ((commit "86df39190c0ab67444666a42908f7e8c1344e24a")
-        (revision "0"))
-    (package
-      (name "rust-pipewire")
-      (version "0.8.0"
-               ;; (git-version "0.8.0" revision commit)
-               )
-      (source
-       (origin
-         (method url-fetch)
-         (uri (crate-uri "pipewire" version))
-         (file-name
-          (string-append name "-" version ".tar.gz"))
-         (sha256
-          (base32
-           ;; "0000000000000000000000000000000000000000000000000000"
-           "1nldg1hz4v0qr26lzdxqpvrac4zbc3pb6436sl392425bjx4brh8"
-           ))
-         (patches (search-patches "rust-pipewire-0.8.0-unrelease.patch"))
-         )
-       ;; (origin
-       ;;   (method git-fetch)
-       ;;   (uri (git-reference
-       ;;         (url "https://gitlab.freedesktop.org/pipewire/pipewire-rs.git")
-       ;;         (commit commit)))
-       ;;   (file-name (git-file-name name version))
-       ;;   (sha256
-       ;;    (base32 "1n8ngihd75i3vgbfnfhpj8mi6shlrhbhvwfyms14m03613jp37lj")))
-       )
-      (build-system cargo-build-system)
-      (arguments
-       `(#:skip-build?
-         #t
-         #:cargo-inputs
-         (("rust-anyhow" ,rust-anyhow-1)
-          ("rust-bitflags" ,rust-bitflags-2)
-          ("rust-libc" ,rust-libc-0.2)
-          ("rust-libspa" ,rust-libspa-0.8)
-          ("rust-libspa-sys" ,rust-libspa-sys-0.8)
-          ("rust-nix" ,rust-nix-0.27)
-          ("rust-once-cell" ,rust-once-cell-1)
-          ("rust-pipewire-sys" ,rust-pipewire-sys-0.8)
-          ("rust-thiserror" ,rust-thiserror-1))))
-      (home-page "https://pipewire.org")
-      (synopsis "Rust bindings for PipeWire")
-      (description
-       "This package provides Rust bindings for @code{PipeWire}.")
-      (license license:expat))))
+  (package
+    (name "rust-pipewire")
+    (version "0.8.0")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "pipewire" version))
+       (file-name
+        (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32
+         "1nldg1hz4v0qr26lzdxqpvrac4zbc3pb6436sl392425bjx4brh8"))
+       (patches (search-patches "rust-pipewire-0.8.0-unrelease.patch"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:skip-build?
+       #t
+       #:cargo-inputs
+       (("rust-anyhow" ,rust-anyhow-1)
+        ("rust-bitflags" ,rust-bitflags-2)
+        ("rust-libc" ,rust-libc-0.2)
+        ("rust-libspa" ,rust-libspa-0.8)
+        ("rust-libspa-sys" ,rust-libspa-sys-0.8)
+        ("rust-nix" ,rust-nix-0.27)
+        ("rust-once-cell" ,rust-once-cell-1)
+        ("rust-pipewire-sys" ,rust-pipewire-sys-0.8)
+        ("rust-thiserror" ,rust-thiserror-1))))
+    (home-page "https://pipewire.org")
+    (synopsis "Rust bindings for PipeWire")
+    (description
+     "This package provides Rust bindings for @code{PipeWire}.")
+    (license license:expat)))
 
 (define-public rust-pipewire-sys-0.8
   (package
@@ -1896,9 +1862,7 @@ pipewire-rs.git\"")
         (string-append name "-" version ".tar.gz"))
        (sha256
         (base32
-         ;; "0000000000000000000000000000000000000000000000000000"
-         "04hiy3rl8v3j2dfzp04gr7r8l5azzqqsvqdzwa7sipdij27ii7l4"
-         ))))
+         "04hiy3rl8v3j2dfzp04gr7r8l5azzqqsvqdzwa7sipdij27ii7l4"))))
     (build-system cargo-build-system)
     (arguments
      `(#:skip-build?
@@ -2290,27 +2254,16 @@ pipewire-rs.git\"")
          (modules '((guix build utils)))
          (snippet
           '(begin (substitute* "Cargo.toml"
-                                        ;(("    \"smithay-drm-extras\",") "")
                     (("    \"smallvil\",") "")
                     (("    \"anvil\",") "")
                     (("    \"wlcs_anvil\",") "")
                     (("    \"test_clients\",") ""))
                   (substitute* "smithay-drm-extras/Cargo.toml"
                     (("path = \"\\.\\./\"")
-                     "version = \"0.3.0\""))))
-         ;; (method git-fetch)
-         ;; (uri (git-reference
-         ;;       (url "https://github.com/Smithay/smithay")
-         ;;       (commit commit)))
-         ;; (file-name (git-file-name name version))
-         ;; (sha256
-         ;;  (base32 "0iak8l19x5bjbv7mpzgi7dhc4i1n8lmfdcz5v6kys70nx4p3n8wx"))
-         ))
+                     "version = \"0.3.0\""))))))
       (build-system cargo-build-system)
       (arguments
        `(#:tests? #f ;; doc file
-         ;; #:skip-build?
-         ;; #t
          #:cargo-inputs
          (("rust-drm" ,rust-drm-0.14)
           ("rust-libdisplay-info"
