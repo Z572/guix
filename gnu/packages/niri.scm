@@ -2557,34 +2557,6 @@ pipewire-rs.git\"")
      "This package provides Iterator by char over potentially-invalid UTF-8 in &[u8].")
     (license (list license:asl2.0 license:expat))))
 
-(define-public rust-wayland-cursor-0.31
-  (package
-    (name "rust-wayland-cursor")
-    (version "0.31.7")
-    (source
-     (origin
-       (method url-fetch)
-       (uri (crate-uri "wayland-cursor" version))
-       (file-name
-        (string-append name "-" version ".tar.gz"))
-       (sha256
-        (base32
-         "0k4yijr0rxlqw15clzbh6a3jd760l1xz3zg0gxg07c7xmb1qpc1j"))))
-    (build-system cargo-build-system)
-    (arguments
-     `(#:skip-build?
-       #t
-       #:cargo-inputs
-       (("rust-rustix" ,rust-rustix-0.38)
-        ("rust-wayland-client" ,rust-wayland-client-0.31)
-        ("rust-xcursor" ,rust-xcursor-0.3))))
-    (home-page
-     "https://github.com/smithay/wayland-rs")
-    (synopsis "Bindings to libwayland-cursor")
-    (description
-     "This package provides Bindings to libwayland-cursor.")
-    (license license:expat)))
-
 (define-public rust-wayland-egl-0.32
   (package
     (name "rust-wayland-egl")
@@ -2611,39 +2583,6 @@ pipewire-rs.git\"")
     (synopsis "Bindings to libwayland-egl")
     (description
      "This package provides Bindings to libwayland-egl.")
-    (license license:expat)))
-
-(define-public rust-wayland-protocols-0.32
-  (package
-    (name "rust-wayland-protocols")
-    (version "0.32.5")
-    (source
-     (origin
-       (method url-fetch)
-       (uri (crate-uri "wayland-protocols" version))
-       (file-name
-        (string-append name "-" version ".tar.gz"))
-       (sha256
-        (base32
-         "13pmq788d2w9c7sqpjjxi1344bzq1g1ja4vlaa4rlvjfgkjsvl3w"))))
-    (build-system cargo-build-system)
-    (arguments
-     `(#:skip-build?
-       #t
-       #:cargo-inputs
-       (("rust-bitflags" ,rust-bitflags-2)
-        ("rust-wayland-backend"
-         ,rust-wayland-backend-0.3)
-        ("rust-wayland-client" ,rust-wayland-client-0.31)
-        ("rust-wayland-scanner"
-         ,rust-wayland-scanner-0.31)
-        ("rust-wayland-server" ,rust-wayland-server-0.31))))
-    (home-page
-     "https://github.com/smithay/wayland-rs")
-    (synopsis
-     "Generated API for the officials wayland protocol extensions")
-    (description
-     "This package provides Generated API for the officials wayland protocol extensions.")
     (license license:expat)))
 
 (define-public rust-wayland-protocols-misc-0.3
@@ -2678,107 +2617,6 @@ pipewire-rs.git\"")
      "Generated API for misc and deprecated wayland protocol extensions")
     (description
      "This package provides Generated API for misc and deprecated wayland protocol extensions.")
-    (license license:expat)))
-
-(define-public rust-wayland-protocols-plasma-0.3
-  (package
-    (name "rust-wayland-protocols-plasma")
-    (version "0.3.5")
-    (source
-     (origin
-       (method url-fetch)
-       (uri (crate-uri "wayland-protocols-plasma" version))
-       (file-name
-        (string-append name "-" version ".tar.gz"))
-       (sha256
-        (base32
-         "1g8jxv1k3zdbcqmhr4fpghgibp2940hz45sm2pmwfs7f92swlccv"))))
-    (build-system cargo-build-system)
-    (arguments
-     `(#:skip-build?
-       #t
-       #:cargo-inputs
-       (("rust-bitflags" ,rust-bitflags-2)
-        ("rust-wayland-backend"
-         ,rust-wayland-backend-0.3)
-        ("rust-wayland-client" ,rust-wayland-client-0.31)
-        ("rust-wayland-protocols"
-         ,rust-wayland-protocols-0.32)
-        ("rust-wayland-scanner"
-         ,rust-wayland-scanner-0.31))))
-    (home-page
-     "https://github.com/smithay/wayland-rs")
-    (synopsis
-     "Generated API for the Plasma wayland protocol extensions")
-    (description
-     "This package provides Generated API for the Plasma wayland protocol extensions.")
-    (license license:expat)))
-
-(define-public rust-wayland-protocols-wlr-0.3
-  (package
-    (name "rust-wayland-protocols-wlr")
-    (version "0.3.5")
-    (source
-     (origin
-       (method url-fetch)
-       (uri (crate-uri "wayland-protocols-wlr" version))
-       (file-name
-        (string-append name "-" version ".tar.gz"))
-       (sha256
-        (base32
-         "08j0xfpfqv6kzbfzmdv6crfzalxbxc2n5m9hc4qkqg4jrpv14bkq"))))
-    (build-system cargo-build-system)
-    (arguments
-     `(#:skip-build?
-       #t
-       #:cargo-inputs
-       (("rust-bitflags" ,rust-bitflags-2)
-        ("rust-wayland-backend"
-         ,rust-wayland-backend-0.3)
-        ("rust-wayland-client" ,rust-wayland-client-0.31)
-        ("rust-wayland-protocols"
-         ,rust-wayland-protocols-0.32)
-        ("rust-wayland-scanner"
-         ,rust-wayland-scanner-0.31)
-        ("rust-wayland-server" ,rust-wayland-server-0.31))))
-    (home-page
-     "https://github.com/smithay/wayland-rs")
-    (synopsis
-     "Generated API for the WLR wayland protocol extensions")
-    (description
-     "This package provides Generated API for the WLR wayland protocol extensions.")
-    (license license:expat)))
-
-(define-public rust-wayland-sys-0.31
-  (package
-    (name "rust-wayland-sys")
-    (version "0.31.5")
-    (source
-     (origin
-       (method url-fetch)
-       (uri (crate-uri "wayland-sys" version))
-       (file-name
-        (string-append name "-" version ".tar.gz"))
-       (sha256
-        (base32
-         "02cyl94ydazgjdjf7asm2phni8h62j4cg4pwr6sy7lwfiq6sra7g"))))
-    (build-system cargo-build-system)
-    (arguments
-     `(#:skip-build?
-       #t
-       #:cargo-inputs
-       (("rust-dlib" ,rust-dlib-0.5)
-        ("rust-libc" ,rust-libc-0.2)
-        ("rust-log" ,rust-log-0.4)
-        ("rust-memoffset" ,rust-memoffset-0.9)
-        ("rust-once-cell" ,rust-once-cell-1)
-        ("rust-pkg-config" ,rust-pkg-config-0.3))))
-    (home-page
-     "https://github.com/smithay/wayland-rs")
-    (synopsis
-     "FFI bindings to the various libwayland-*.so libraries. You should only need this crate if you are working on custom wayland protocol extensions. Look at the crate wayland-client for usable bindings")
-    (description
-     "This package provides FFI bindings to the various libwayland-*.so libraries.  You should only need\nthis crate if you are working on custom wayland protocol extensions.  Look at\nthe crate wayland-client for usable bindings.")
     (license license:expat)))
 
 (define-public rust-windows-0.51
