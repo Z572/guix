@@ -299,32 +299,6 @@
      "This package provides a simple to use, efficient, and full-featured Command Line\nArgument Parser.")
     (license (list license:expat license:asl2.0))))
 
-(define-public rust-cpufeatures-0.2
-  (package
-    (name "rust-cpufeatures")
-    (version "0.2.14")
-    (source
-     (origin
-       (method url-fetch)
-       (uri (crate-uri "cpufeatures" version))
-       (file-name
-        (string-append name "-" version ".tar.gz"))
-       (sha256
-        (base32
-         "1q3qd9qkw94vs7n5i0y3zz2cqgzcxvdgyb54ryngwmjhfbgrg1k0"))))
-    (build-system cargo-build-system)
-    (arguments
-     `(#:skip-build?
-       #t
-       #:cargo-inputs
-       (("rust-libc" ,rust-libc-0.2))))
-    (home-page "https://github.com/RustCrypto/utils")
-    (synopsis
-     "Lightweight runtime CPU feature detection for aarch64, loongarch64, and x86/x86_64 targets, \nwith no_std support and support for mobile targets including Android and iOS")
-    (description
-     "This package provides Lightweight runtime CPU feature detection for aarch64, loongarch64, and\nx86/x86_64 targets, with no_std support and support for mobile targets including\nAndroid and @code{iOS}.")
-    (license (list license:expat license:asl2.0))))
-
 (define-public rust-csscolorparser-0.7
   (package
     (name "rust-csscolorparser")
@@ -373,28 +347,6 @@
 (description
 "This package provides Trait object downcasting support using only safe Rust.  It supports type\nparameters, associated types, and type constraints.")
 (license (list license:expat license:asl2.0))))
-
-(define-public rust-dpi-0.1
-  (package
-    (name "rust-dpi")
-    (version "0.1.1")
-    (source
-     (origin
-       (method url-fetch)
-       (uri (crate-uri "dpi" version))
-       (file-name
-        (string-append name "-" version ".tar.gz"))
-       (sha256
-        (base32
-         "0lzz48gpgbwdrw0s8vib0589ij9jizv1vzsphm4xd9kw58lhwp7j"))))
-    (build-system cargo-build-system)
-    (arguments `(#:skip-build? #t))
-    (home-page
-     "https://github.com/rust-windowing/winit")
-    (synopsis "Types for handling UI scaling")
-    (description
-     "This package provides Types for handling UI scaling.")
-    (license license:asl2.0)))
 
 (define-public rust-drm-0.14
   (package
