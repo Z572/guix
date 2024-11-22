@@ -2456,28 +2456,6 @@ pipewire-rs.git\"")
       ;; unknown-license!
       license:bsd-3))))
 
-(define-public rust-typenum-1
-  (package
-    (name "rust-typenum")
-    (version "1.17.0")
-    (source
-     (origin
-       (method url-fetch)
-       (uri (crate-uri "typenum" version))
-       (file-name
-        (string-append name "-" version ".tar.gz"))
-       (sha256
-        (base32
-         "09dqxv69m9lj9zvv6xw5vxaqx15ps0vxyy5myg33i0kbqvq0pzs2"))))
-    (build-system cargo-build-system)
-    (arguments `(#:skip-build? #t))
-    (home-page "https://github.com/paholg/typenum")
-    (synopsis
-     "Typenum is a Rust library for type-level numbers evaluated at\n    compile time. It currently supports bits, unsigned integers, and signed\n    integers. It also provides a type-level array of type-level numbers, but its\n    implementation is incomplete")
-    (description
-     "This package provides Typenum is a Rust library for type-level numbers evaluated at compile time.  It\ncurrently supports bits, unsigned integers, and signed integers.  It also\nprovides a type-level array of type-level numbers, but its implementation is\nincomplete.")
-    (license (list license:expat license:asl2.0))))
-
 (define-public rust-udev-0.9
   (package
     (name "rust-udev")
@@ -2505,103 +2483,6 @@ pipewire-rs.git\"")
     (description
      "This package provides libudev bindings for Rust.")
     (license license:expat)))
-
-(define-public rust-unicode-ident-1
-  (package
-    (name "rust-unicode-ident")
-    (version "1.0.13")
-    (source
-     (origin
-       (method url-fetch)
-       (uri (crate-uri "unicode-ident" version))
-       (file-name
-        (string-append name "-" version ".tar.gz"))
-       (sha256
-        (base32
-         "1zm1xylzsdfvm2a5ib9li3g5pp7qnkv4amhspydvgbmd9k6mc6z9"))))
-    (build-system cargo-build-system)
-    (arguments `(#:skip-build? #t))
-    (home-page
-     "https://github.com/dtolnay/unicode-ident")
-    (synopsis
-     "Determine whether characters have the XID_Start or XID_Continue properties according to Unicode Standard Annex #31")
-    (description
-     "This package provides Determine whether characters have the XID_Start or XID_Continue properties\naccording to Unicode Standard Annex #31.")
-    (license
-     ;; (list unknown-license!
-     ;;       unknown-license!
-     ;;       unknown-license!)
-     #f
-     )))
-
-(define-public rust-unicode-linebreak-0.1
-  (package
-    (name "rust-unicode-linebreak")
-    (version "0.1.5")
-    (source
-     (origin
-       (method url-fetch)
-       (uri (crate-uri "unicode-linebreak" version))
-       (file-name
-        (string-append name "-" version ".tar.gz"))
-       (sha256
-        (base32
-         "07spj2hh3daajg335m4wdav6nfkl0f6c0q72lc37blr97hych29v"))))
-    (build-system cargo-build-system)
-    (arguments `(#:skip-build? #t))
-    (home-page
-     "https://github.com/axelf4/unicode-linebreak")
-    (synopsis
-     "Implementation of the Unicode Line Breaking Algorithm")
-    (description
-     "This package provides Implementation of the Unicode Line Breaking Algorithm.")
-    (license license:asl2.0)))
-
-(define-public rust-unicode-segmentation-1
-  (package
-    (name "rust-unicode-segmentation")
-    (version "1.12.0")
-    (source
-     (origin
-       (method url-fetch)
-       (uri (crate-uri "unicode-segmentation" version))
-       (file-name
-        (string-append name "-" version ".tar.gz"))
-       (sha256
-        (base32
-         "14qla2jfx74yyb9ds3d2mpwpa4l4lzb9z57c6d2ba511458z5k7n"))))
-    (build-system cargo-build-system)
-    (arguments `(#:skip-build? #t))
-    (home-page
-     "https://github.com/unicode-rs/unicode-segmentation")
-    (synopsis
-     "This crate provides Grapheme Cluster, Word and Sentence boundaries\naccording to Unicode Standard Annex #29 rules.")
-    (description
-     "This crate provides Grapheme Cluster, Word and Sentence boundaries according to\nUnicode Standard Annex #29 rules.")
-    (license (list license:expat license:asl2.0))))
-
-(define-public rust-unicode-width-0.1
-  (package
-    (name "rust-unicode-width")
-    (version "0.1.14")
-    (source
-     (origin
-       (method url-fetch)
-       (uri (crate-uri "unicode-width" version))
-       (file-name
-        (string-append name "-" version ".tar.gz"))
-       (sha256
-        (base32
-         "1bzn2zv0gp8xxbxbhifw778a7fc93pa6a1kj24jgg9msj07f7mkx"))))
-    (build-system cargo-build-system)
-    (arguments `(#:skip-build? #t))
-    (home-page
-     "https://github.com/unicode-rs/unicode-width")
-    (synopsis
-     "Determine displayed width of `char` and `str` types\naccording to Unicode Standard Annex #11 rules.")
-    (description
-     "This package provides Determine displayed width of `char` and `str` types according to Unicode\nStandard Annex #11 rules.")
-    (license (list license:expat license:asl2.0))))
 
 (define-public rust-url-2
   (package
