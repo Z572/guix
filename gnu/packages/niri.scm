@@ -3549,21 +3549,19 @@ wrappers for the new DXC HLSL compiler and validator.")
                (commit commit)))
          (file-name (git-file-name name version))
          (sha256
-          (base32 "0iak8l19x5bjbv7mpzgi7dhc4i1n8lmfdcz5v6kys70nx4p3n8wx")))
-       ;; (origin
-       ;;   (method url-fetch)
-       ;;   (uri (crate-uri "smithay" version))
-       ;;   (file-name
-       ;;    (string-append name "-" version ".tar.gz"))
-       ;;   (sha256
-       ;;    (base32
-       ;;     "1pym4gwp8fgh1ffcj9n3cniqjpy941v3bgan7fdcmg6dj79p0jjj")))
-       )
+          (base32 "0iak8l19x5bjbv7mpzgi7dhc4i1n8lmfdcz5v6kys70nx4p3n8wx"))
+
+         (modules '((guix build utils)))
+         (snippet
+          '(begin (substitute* "Cargo.toml"
+                    (("    \"smithay-drm-extras\",") "")
+                    (("    \"smallvil\",") "")
+                    (("    \"anvil\",") "")
+                    (("    \"wlcs_anvil\",") "")
+                    (("    \"test_clients\",") ""))))))
       (build-system cargo-build-system)
       (arguments
-       `(;; #:skip-build?
-         ;; #t
-         #:cargo-inputs
+       `(#:cargo-inputs
          (("rust-appendlist" ,rust-appendlist-1)
           ("rust-bitflags" ,rust-bitflags-2)
           ("rust-calloop" ,rust-calloop-0.14)
@@ -3609,16 +3607,10 @@ wrappers for the new DXC HLSL compiler and validator.")
           ("rust-winit" ,rust-winit-0.30)
           ("rust-xkbcommon" ,rust-xkbcommon-0.8)
 
-
-          ("rust-libdisplay-info" ,rust-libdisplay-info-0.1)
           ("rust-ash" ,rust-ash-0.38)
           ("rust-glow" ,rust-glow-0.14)
           ("rust-criterion" ,rust-criterion-0.5)
           ("rust-image" ,rust-image-0.25)
-          ("rust-fps-ticker" ,rust-fps-ticker-1)
-          ("rust-puffin-http" ,rust-puffin-http-0.13)
-          ("rust-renderdoc" ,rust-renderdoc-0.11)
-          ("rust-wlcs" ,rust-wlcs-0.1)
           ("rust-xkbcommon" ,rust-xkbcommon-0.7))))
       (native-inputs (list pkg-config))
       (inputs (list eudev libxkbcommon libseat libinput pixman mesa))
@@ -3682,27 +3674,31 @@ wrappers for the new DXC HLSL compiler and validator.")
   (let ((commit "5e137dcebc9f2de4d026180dfc4ce81282f7f14f")
         (revision "1"))
     (package
+      (inherit rust-smithay-0.3)
       (name "rust-smithay-drm-extras")
       (version (git-version "0.1.0" revision commit))
       (source
        (origin
-         (method git-fetch)
-         (uri (git-reference
-               (url "https://github.com/Smithay/smithay")
-               (commit commit)))
-         (file-name (git-file-name name version))
-         (sha256
-          (base32 "0iak8l19x5bjbv7mpzgi7dhc4i1n8lmfdcz5v6kys70nx4p3n8wx")))
-       ;; (origin
-       ;;   (method url-fetch)
-       ;;   (uri (crate-uri "smithay-drm-extras" version))
-       ;;   (file-name
-       ;;    (string-append name "-" version ".tar.gz"))
-       ;;   (sha256
-       ;;    (base32
-       ;;     "0000000000000000000000000000000000000000000000000000")))
-
-       )
+         (inherit (package-source rust-smithay-0.3))
+         (modules '((guix build utils)))
+         (snippet
+          '(begin (substitute* "Cargo.toml"
+                                        ;(("    \"smithay-drm-extras\",") "")
+                    (("    \"smallvil\",") "")
+                    (("    \"anvil\",") "")
+                    (("    \"wlcs_anvil\",") "")
+                    (("    \"test_clients\",") ""))
+                  (substitute* "smithay-drm-extras/Cargo.toml"
+                    (("path = \"\\.\\./\"")
+                     "version = \"0.3.0\""))))
+         ;; (method git-fetch)
+         ;; (uri (git-reference
+         ;;       (url "https://github.com/Smithay/smithay")
+         ;;       (commit commit)))
+         ;; (file-name (git-file-name name version))
+         ;; (sha256
+         ;;  (base32 "0iak8l19x5bjbv7mpzgi7dhc4i1n8lmfdcz5v6kys70nx4p3n8wx"))
+         ))
       (build-system cargo-build-system)
       (arguments
        `(#:tests? #f ;; doc file
@@ -3714,21 +3710,15 @@ wrappers for the new DXC HLSL compiler and validator.")
            ,rust-libdisplay-info-0.1))
          #:cargo-development-inputs
          (("rust-smithay" ,rust-smithay-0.3))
-         ;; #:cargo-package-flags '("--no-metadata"
-         ;;                         "--no-verify"
-         ;;                         "--package"
-         ;;                         "smithay-drm-extras")
          #:phases (modify-phases %standard-phases
                     (add-after 'unpack 'chdir
                       (lambda _ (chdir "smithay-drm-extras")))
                     (add-before 'install 'chdir
-                      (lambda _ (chdir "..")))
-                    ;; (add-after 'compress-documentation 'fail
-                    ;;   (lambda _
-                    ;;     (error "a")))
-                    )))
+                      (lambda _ (chdir ".."))))))
       (native-inputs (list pkg-config))
-      (inputs (list eudev libxkbcommon libseat libinput pixman mesa libdisplay-info))
+      (inputs (list
+               rust-smithay-0.3
+               eudev libxkbcommon libseat libinput pixman mesa libdisplay-info))
       (home-page "")
       (synopsis "")
       (description "")
