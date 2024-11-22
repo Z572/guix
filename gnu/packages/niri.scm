@@ -2769,28 +2769,6 @@ pipewire-rs.git\"")
      "This package provides Rust bindings and wrappers for libxkbcommon.")
     (license license:expat)))
 
-(define-public rust-xkeysym-0.2
-  (package
-    (name "rust-xkeysym")
-    (version "0.2.1")
-    (source
-     (origin
-       (method url-fetch)
-       (uri (crate-uri "xkeysym" version))
-       (file-name
-        (string-append name "-" version ".tar.gz"))
-       (sha256
-        (base32
-         "0mksx670cszyd7jln6s7dhkw11hdfv7blwwr3isq98k22ljh1k5r"))))
-    (build-system cargo-build-system)
-    (arguments `(#:skip-build? #t))
-    (home-page "https://github.com/notgull/xkeysym")
-    (synopsis "library for working with X11 keysyms")
-    (description
-     "This package provides a library for working with X11 keysyms.")
-    (license
-     (list license:expat license:asl2.0 license:zlib))))
-
 (define-public rust-xshell-0.2
   (package
     (name "rust-xshell")
