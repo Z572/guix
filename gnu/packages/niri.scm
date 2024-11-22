@@ -389,33 +389,6 @@
      "This package provides a simple and fast random number generator.")
     (license (list license:asl2.0 license:expat))))
 
-(define-public rust-fdeflate-0.3
-  (package
-    (name "rust-fdeflate")
-    (version "0.3.6")
-    (source
-     (origin
-       (method url-fetch)
-       (uri (crate-uri "fdeflate" version))
-       (file-name
-        (string-append name "-" version ".tar.gz"))
-       (sha256
-        (base32
-         "1nxymhm74g9fmqmdd80ypp2kgk5xbqvgfrj43h8s6cqx9k3g9ih7"))))
-    (build-system cargo-build-system)
-    (arguments
-     `(#:skip-build?
-       #t
-       #:cargo-inputs
-       (("rust-simd-adler32" ,rust-simd-adler32-0.3))))
-    (home-page
-     "https://github.com/image-rs/fdeflate")
-    (synopsis
-     "Fast specialized deflate implementation")
-    (description
-     "This package provides Fast specialized deflate implementation.")
-    (license (list license:expat license:asl2.0))))
-
 (define-public rust-futures-0.3
   (package
     (name "rust-futures")
