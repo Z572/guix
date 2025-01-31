@@ -16,7 +16,7 @@
 ;;; Copyright © 2023 Steve George <steve@futurile.net>
 ;;; Copyright © 2023 VÖRÖSKŐI András <voroskoi@gmail.com>
 ;;; Copyright © 2024 Wilko Meyer <w@wmeyer.eu>
-;;; Copyright © 2024 Herman Rimm <herman@rimm.ee>
+;;; Copyright © 2024, 2025 Herman Rimm <herman@rimm.ee>
 ;;;
 ;;; This file is part of GNU Guix.
 ;;;
@@ -4545,7 +4545,13 @@ Digital Signature Algorithm} (ECDSA).")
               #~(begin (use-modules (guix build utils))
                        ;; It turns out Guix's yasm works just fine here.
                        (substitute* "build.rs"
-                         (("yasm.exe") "yasm"))
+                         (("yasm.exe") "yasm")
+                         ;; cc >=1.2 does not accept the cast.
+                         (("(\"-Wl,--gc-sections\").into\\(\\)" _ match)
+                          match))
+                       (substitute* '("src/test.rs" "src/rsa/bigint.rs")
+                         ;; Lint `box_pointers` has been removed.
+                         (("#!?\\[allow\\(box_pointers\\)\\]") ""))
                        ;; These files are pregenerated:
                        (delete-file "third_party/fiat/curve25519_tables.h")
                        (delete-file "crypto/fipsmodule/ec/ecp_nistz256_table.inl")
