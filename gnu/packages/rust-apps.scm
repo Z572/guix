@@ -4993,6 +4993,13 @@ minimum contrast levels, and more.")
      (list #:install-source? #f
            #:phases
            #~(modify-phases %standard-phases
+               (add-after 'unpack 'patch-references
+                 (lambda _
+                   (substitute* (find-files "templates")
+                     (("zoxide (add|query)" all)
+                      (string-append #$output "/bin/" all))
+                     (("(zoxide = \")(zoxide)" _ prefix suffix)
+                      (string-append prefix #$output "/bin/" suffix)))))
                (add-after 'install 'install-more
                  (lambda _
                    (let* ((out #$output)
