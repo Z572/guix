@@ -23054,34 +23054,51 @@ experimentation.")
        (sha256
         (base32 "0dkggq0qwv140y2kjfd4spp77zi3v7vnpm4bfy7s7r4cla7xqi49"))))))
 
+(define-public rust-encode-unicode-1
+  (package
+    (name "rust-encode-unicode")
+    (version "1.0.0")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (crate-uri "encode_unicode" version))
+       (file-name (string-append name "-" version ".tar.gz"))
+       (sha256
+        (base32 "1h5j7j7byi289by63s3w4a8b3g6l5ccdrws7a67nn07vdxj77ail"))))
+    (build-system cargo-build-system)
+    (arguments
+     `(#:cargo-inputs (("rust-ascii" ,rust-ascii-1))
+       #:cargo-development-inputs (("rust-lazy-static" ,rust-lazy-static-1)
+                                   ("rust-minreq" ,rust-minreq-2))))
+    (native-inputs (list pkg-config))
+    (inputs (list openssl))
+    (home-page "https://github.com/tormol/encode_unicode")
+    (synopsis "UTF-8 and UTF-16 support for char, u8 and u16")
+    (description
+     "This package provides UTF-8 and UTF-16 character types, iterators and
+related methods for char, u8 and u16.")
+    (license (list license:asl2.0 license:expat))))
+
 (define-public rust-encode-unicode-0.3
   (package
+    (inherit rust-encode-unicode-1)
     (name "rust-encode-unicode")
     (version "0.3.6")
     (source
      (origin
        (method url-fetch)
        (uri (crate-uri "encode_unicode" version))
-       (file-name
-        (string-append name "-" version ".tar.gz"))
+       (file-name (string-append name "-" version ".tar.gz"))
        (sha256
         (base32
          "07w3vzrhxh9lpjgsg2y5bwzfar2aq35mdznvcp3zjl0ssj7d4mx3"))))
-    (build-system cargo-build-system)
     (arguments
      `(#:skip-build? #t
-       #:cargo-inputs
-       (("rust-ascii" ,rust-ascii-1)
-        ("rust-clippy" ,rust-clippy-0.0.302))
-       #:cargo-development-inputs
-       (("rust-lazy-static" ,rust-lazy-static-1))))
-    (home-page "https://github.com/tormol/encode_unicode")
-    (synopsis
-     "UTF-8 and UTF-16 support for char, u8 and u16")
-    (description
-     "UTF-8 and UTF-16 character types, iterators and related methods for
-char, u8 and u16.")
-    (license (list license:expat license:asl2.0))))
+       #:cargo-inputs (("rust-ascii" ,rust-ascii-1)
+                       ("rust-clippy" ,rust-clippy-0.0.302))
+       #:cargo-development-inputs (("rust-lazy-static" ,rust-lazy-static-1))))
+    (native-inputs '())
+    (inputs '())))
 
 (define-public rust-encoding-0.2
   (package
