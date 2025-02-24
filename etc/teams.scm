@@ -389,6 +389,7 @@ asdf-build-system."
                       "guix/build/cargo-utils.scm"
                       "guix/build-system/cargo.scm"
                       "guix/import/crate.scm"
+                      "guix/import/crate/cargo-lock.scm"
                       "guix/scripts/import/crate.scm"
                       "tests/crate.scm")))
 
