@@ -31,6 +31,7 @@
   #:use-module (guix gexp)
   #:use-module (guix monads)
   #:use-module (guix packages)
+  #:use-module (guix download)
   #:use-module (guix platform)
   #:use-module (guix build-system)
   #:use-module (guix build-system gnu)
@@ -45,7 +46,9 @@
             crate-url
             crate-url?
             crate-uri
-            crate-name->package-name))
+            crate-name->package-name
+            crate-source
+            cargo-inputs))
 
 (define %crate-base-url
   (make-parameter "https://crates.io"))
@@ -61,6 +64,49 @@ to NAME and VERSION."
 
 (define (crate-name->package-name name)
   (downstream-package-name "rust-" name))
+
+;; NOTE: Only use this procedure in (gnu packages rust-crates).
+(define* (crate-source name version hash #:key (patches '()) (snippet #f))
+  (origin
+    (method url-fetch)
+    (uri (crate-uri name version))
+    (file-name
+     (string-append (crate-name->package-name name) "-" version ".tar.gz"))
+    (sha256 (base32 hash))
+    (modules '((guix build utils)))
+    (patches patches)
+    (snippet snippet)))
+
+(define* (cargo-inputs name #:key (crates-module '(gnu packages rust-crates))
+                       (sources-module '(gnu packages rust-sources)))
+
+  "Given symbol NAME, resolve variable 'NAME-cargo-inputs', an input list, in
+CRATES-MODULE, return its copy with #f removed and symbols resolved to
+variables defined in SOURCES-MODULE if the input list exists, otherwise return
+an empty list."
+  (let loop ((inputs
+              (catch #t
+                (lambda ()
+                  (module-ref (resolve-interface crates-module)
+                              (symbol-append name '-cargo-inputs)))
+                (const '())))
+             (result '()))
+    (if (null? inputs)
+        result
+        (match inputs
+          ((input . rest)
+           (loop rest
+                 (cond
+                  ;; #f, remove it.
+                  ((not input)
+                   result)
+                  ;; Symbol, resolve it in SOURCES-MODULE.
+                  ((symbol? input)
+                   (cons (module-ref (resolve-interface sources-module) input)
+                         result))
+                  ;; Else: keep it.
+                  (else
+                   (cons input result)))))))))
 
 (define (default-rust target)
   "Return the default Rust package."
