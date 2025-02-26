@@ -31,6 +31,7 @@
   #:use-module (guix utils)
   #:use-module (srfi srfi-1)
   #:use-module (srfi srfi-26)
+  #:use-module (srfi srfi-37)
   #:use-module (ice-9 format)
   #:use-module (ice-9 match)
   #:export (%standard-import-options
@@ -41,7 +42,12 @@
 ;;; Command line options.
 ;;;
 
-(define %standard-import-options '())
+(define %standard-import-options
+  (list
+   ;; Hidden option for importer-specific file preprocessing.
+   (option '("file-to-insert") #f #t
+           (lambda (opt name arg result)
+             (alist-cons 'file-to-insert arg result)))))
 
 
 ;;;
@@ -151,7 +157,10 @@ PROC callback."
                         (newline port)
                         (newline port)
                         (close-port port)))))))))
-       (import-as-definitions importer args find-and-insert)))
+       (import-as-definitions importer
+                              (cons (string-append "--file-to-insert=" file)
+                                    args)
+                              find-and-insert)))
     ((importer args ...)
      (let ((print (lambda (expr)
                     (leave-on-EPIPE
