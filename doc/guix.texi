@@ -14833,6 +14833,20 @@ version instead instead of aborting.
 If a crate dependency is not (yet) packaged, make the corresponding
 input in @code{#:cargo-inputs} or @code{#:cargo-development-inputs} into
 a comment.
+@item --lockfile=@var{file}
+@itemx -f @var{file}
+When @option{--lockfile} is specified, the importer will ignore other options
+and won't output package definitions, instead generating source definitions for
+all dependencies in @var{file}, a @file{Cargo.lock} file.  For example:
+
+@example
+guix import crate --lockfile=/path/to/Cargo.lock my-package
+@end example
+
+generates sources from @file{/path/to/Cargo.lock} and a list
+@code{my-package-cargo-inputs} referencing these sources.  The generated list is
+intended for the package's @code{inputs}, replacing @code{#:cargo-inputs} and
+@code{#:cargo-development-inputs}.
 @end table
 
 @item elm
