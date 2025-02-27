@@ -96,6 +96,7 @@ to NAME and VERSION."
                       (cargo-test-flags ''())
                       (cargo-package-crates ''())
                       (cargo-package-flags ''("--no-metadata" "--no-verify"))
+                      (cargo-install-paths ''())
                       (features ''())
                       (skip-build? #f)
                       (parallel-build? #t)
@@ -125,6 +126,7 @@ to NAME and VERSION."
                        #:cargo-test-flags #$(sexp->gexp cargo-test-flags)
                        #:cargo-package-crates #$(sexp->gexp cargo-package-crates)
                        #:cargo-package-flags #$(sexp->gexp cargo-package-flags)
+                       #:cargo-install-paths #$(sexp->gexp cargo-install-paths)
                        #:cargo-target #$(cargo-triplet system)
                        #:features #$(sexp->gexp features)
                        #:skip-build? #$skip-build?
@@ -158,6 +160,7 @@ to NAME and VERSION."
                             (cargo-test-flags ''())
                             (cargo-package-crates ''())
                             (cargo-package-flags ''("--no-metadata" "--no-verify"))
+                            (cargo-install-paths ''())
                             (cargo-target (cargo-triplet (or target system)))
                             (features ''())
                             (skip-build? #f)
@@ -190,6 +193,7 @@ to NAME and VERSION."
                        #:cargo-test-flags #$(sexp->gexp cargo-test-flags)
                        #:cargo-package-crates #$(sexp->gexp cargo-package-crates)
                        #:cargo-package-flags #$(sexp->gexp cargo-package-flags)
+                       #:cargo-install-paths #$(sexp->gexp cargo-install-paths)
                        #:cargo-target #$(cargo-triplet (or target system))
                        #:features #$(sexp->gexp features)
                        #:skip-build? #$skip-build?
