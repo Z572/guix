@@ -94,6 +94,7 @@ to NAME and VERSION."
                       (vendor-dir "guix-vendor")
                       (cargo-build-flags ''("--release"))
                       (cargo-test-flags ''())
+                      (cargo-package-crates ''())
                       (cargo-package-flags ''("--no-metadata" "--no-verify"))
                       (features ''())
                       (skip-build? #f)
@@ -122,6 +123,7 @@ to NAME and VERSION."
                        #:vendor-dir #$vendor-dir
                        #:cargo-build-flags #$(sexp->gexp cargo-build-flags)
                        #:cargo-test-flags #$(sexp->gexp cargo-test-flags)
+                       #:cargo-package-crates #$(sexp->gexp cargo-package-crates)
                        #:cargo-package-flags #$(sexp->gexp cargo-package-flags)
                        #:cargo-target #$(cargo-triplet system)
                        #:features #$(sexp->gexp features)
@@ -154,6 +156,7 @@ to NAME and VERSION."
                             (vendor-dir "guix-vendor")
                             (cargo-build-flags ''("--release"))
                             (cargo-test-flags ''())
+                            (cargo-package-crates ''())
                             (cargo-package-flags ''("--no-metadata" "--no-verify"))
                             (cargo-target (cargo-triplet (or target system)))
                             (features ''())
@@ -185,6 +188,7 @@ to NAME and VERSION."
                        #:vendor-dir #$vendor-dir
                        #:cargo-build-flags #$(sexp->gexp cargo-build-flags)
                        #:cargo-test-flags #$(sexp->gexp cargo-test-flags)
+                       #:cargo-package-crates #$(sexp->gexp cargo-package-crates)
                        #:cargo-package-flags #$(sexp->gexp cargo-package-flags)
                        #:cargo-target #$(cargo-triplet (or target system))
                        #:features #$(sexp->gexp features)
