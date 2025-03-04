@@ -4650,6 +4650,14 @@
         rust-zip-2.6.1
         rust-zopfli-0.8.1))
 
+;; TODO: Maintain this automatically too.
+(define-public mesa-cargo-inputs
+  `(("paste" ,rust-paste-1.0.15)
+    ("proc-macro2" ,rust-proc-macro2-1.0.94)
+    ("quote" ,rust-quote-1.0.40)
+    ("syn" ,rust-syn-2.0.100)
+    ("unicode-ident" ,rust-unicode-ident-1.0.18)))
+
 (define-public python-cryptography-cargo-inputs
   (list rust-asn1-0.20.0
         rust-asn1-derive-0.20.0
