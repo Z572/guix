@@ -483,43 +483,11 @@ license of dependencies.")
        (uri (crate-uri "codeberg-cli" version))
        (file-name (string-append name "-" version ".tar.gz"))
        (sha256
-        (base32 "0b06jz5nh8pcgpbsfbgw1cjkpn1px3snj9p3k63gxcdp05cy0zgw"))
-       (snippet
-        #~(begin (use-modules (guix build utils))
-                 ;; Edition 2024 isn't supported until rust-1.85.
-                 ;; This was reverted upstream.
-                 (substitute* "Cargo.toml"
-                   (("2024") "2021"))))))
+        (base32 "0b06jz5nh8pcgpbsfbgw1cjkpn1px3snj9p3k63gxcdp05cy0zgw"))))
     (build-system cargo-build-system)
     (arguments
      (list
        #:install-source? #f
-       #:cargo-inputs
-       (list rust-anyhow-1
-             rust-chrono-0.4
-             rust-clap-4
-             rust-clap-complete-4
-             rust-comfy-table-7
-             rust-config-0.14
-             rust-derive-new-0.7
-             rust-dirs-5
-             rust-forgejo-api-0.4
-             rust-git2-0.19
-             rust-indicatif-0.17
-             rust-inquire-0.7
-             rust-itertools-0.13
-             rust-serde-1
-             rust-serde-json-1
-             rust-strum-0.26
-             rust-termsize-0.1
-             rust-time-0.3
-             rust-tokio-1
-             rust-toml-0.8
-             rust-tracing-0.1
-             rust-tracing-subscriber-0.3
-             rust-url-2
-             rust-webbrowser-1)
-       #:cargo-development-inputs (list rust-insta-1)
        #:phases
        #~(modify-phases %standard-phases
            (add-after 'install 'install-extras
@@ -560,7 +528,8 @@ license of dependencies.")
            (list this-package)
            '())
       (list pkg-config)))
-    (inputs (list libgit2-1.8 libssh2 openssl zlib))
+    (inputs
+     (cons* libgit2-1.8 libssh2 openssl zlib (cargo-inputs 'codeberg-cli)))
     (home-page "https://codeberg.org/Aviac/codeberg-cli")
     (synopsis "CLI Tool for codeberg similar to gh and glab")
     (description
