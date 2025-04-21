@@ -30344,6 +30344,9 @@
         rust-windows-x86-64-gnullvm-0.52.6
         rust-windows-x86-64-msvc-0.52.6))
 
+(define-public rtss-cargo-inputs
+  (list rust-libc-0.2.172 rust-memchr-2.7.4))
+
 (define-public rust-bindgen-cli-cargo-inputs
   (list rust-aho-corasick-1.1.3
         rust-annotate-snippets-0.11.5
