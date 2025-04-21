@@ -33206,6 +33206,9 @@
         rust-windows-x86-64-gnullvm-0.52.6
         rust-windows-x86-64-msvc-0.52.6))
 
+(define-public rust-rustc-demangle-capi-0.1-cargo-inputs
+  (list rust-rustc-demangle-0.1.24))
+
 (define-public rust-smithay-for-niri-cargo-inputs
   (list rust-adler2-2.0.0
         rust-ahash-0.8.11
