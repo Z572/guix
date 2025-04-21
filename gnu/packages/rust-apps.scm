@@ -10,7 +10,7 @@
 ;;; Copyright © 2020 Arun Isaac <arunisaac@systemreboot.net>
 ;;; Copyright © 2021 Tobias Geerinckx-Rice <me@tobias.gr>
 ;;; Copyright © 2021 Sharlatan Hellseher <sharlatanus@gmail.ccom>
-;;; Copyright © 2021, 2022 Zheng Junjie <873216071@qq.com>
+;;; Copyright © 2021, 2022, 2025 Zheng Junjie <z572@z572.online>
 ;;; Copyright © 2021 Alexandru-Sergiu Marton <brown121407@posteo.ro>
 ;;; Copyright © 2021, 2023, 2024 Maxim Cournoyer <maxim.cournoyer@gmail.com>
 ;;; Copyright © 2021, 2022 Petr Hodina <phodina@protonmail.com>
@@ -107,6 +107,7 @@
   #:use-module (gnu packages python)
   #:use-module (gnu packages python-build)
   #:use-module (gnu packages python-xyz)
+  #:use-module (gnu packages ruby)
   #:use-module (gnu packages rust)
   #:use-module (gnu packages sqlite)
   #:use-module (gnu packages textutils)
@@ -1762,6 +1763,95 @@ decompressing files and directories.")
     (description
      "This package provides a sampling profiler for Python programs.")
     (license license:expat)))
+
+(define-public radicle
+  (let ((commit "c847a16e141a57a803b270841d5af38ab56719eb")
+        (revision "0"))
+    (package
+      (name "radicle")
+      (version (git-version "1.1.0" revision commit))
+      (source
+       (origin
+         (method git-fetch)
+         (uri (git-reference
+               (url "https://seed.radicle.xyz/z3gqcJUoA1n9HaHKufZs5FCSGazv5.git")
+               (commit commit)))
+         (file-name (git-file-name name version))
+         (sha256
+          (base32 "0w8j1hg11h0kbzl69gyb0lwgm03ddmy40cb82m887qjbijmcpy80"))
+         (modules '((guix build utils)))
+         (snippet
+          '(begin (substitute* (find-files "." "^Cargo\\.toml$")
+                    (("\"vendored-libgit2\"")
+                     ""))))))
+      (build-system cargo-build-system)
+      (arguments
+       (list
+        #:install-source? #f
+        #:cargo-test-flags
+        ;; These tests require networking
+        ''("--"
+           "--skip=rad_clone_partial_fail"
+           "--skip=rad_issue"
+           "--skip=rad_init_sync_and_clone"
+           "--skip=rad_init_private_seed"
+           "--skip=rad_id_conflict"
+           "--skip=git_push_diverge"
+           "--skip=rad_merge_no_ff"
+           "--skip=rad_init_sync_preferred"
+           "--skip=rad_merge_after_update"
+           "--skip=rad_node"
+           "--skip=rad_push_and_pull_patches"
+           "--skip=rad_remote"
+           "--skip=rad_patch_fetch_1"
+           "--skip=rad_watch"
+           "--skip=rad_patch_open_explore"
+           "--skip=git_push_converge"
+           "--skip=rad_workflow"
+           "--skip=rad_patch_delete"
+           "--skip=rad_id_threshold"
+           "--skip=git_push_and_fetch"
+           "--skip=rad_id_multi_delegate"
+           "--skip=git_push_rollback"
+           "--skip=rad_inbox")
+        #:cargo-install-paths ''("radicle-cli"
+                                 "radicle-node"
+                                 "radicle-remote-helper")
+        #:phases
+        #~(modify-phases %standard-phases
+            (add-after 'unpack 'setenv
+              (lambda _
+                (setenv "RADICLE_VERSION" #$version)
+                (setenv "GIT_HEAD" #$commit)
+                (setenv "LIBGIT2_NO_VENDOR" "1")
+                (setenv "TMPDIR" "/tmp")))
+            #$@(if (this-package-native-input "ruby-asciidoctor")
+                   #~((add-before 'build 'build-doc
+                        (lambda _
+                          (apply invoke "scripts/build-man-pages.sh" "."
+                                 (find-files "." "\\.adoc$"))
+                          (let ((man1 (string-append #$output "/share/man/man1")))
+                            (mkdir-p man1)
+                            (for-each (lambda (file)
+                                        (install-file file man1))
+                                      (find-files "." "\\.1$"))))))
+                   #~()))))
+      (native-inputs (append
+                      (if (supported-package? ruby-asciidoctor)
+                          (list ruby-asciidoctor)
+                          (list))
+                      (list pkg-config
+                            ;; for test
+                            git)))
+      (inputs (cons* libgit2-1.8 sqlite (cargo-inputs 'radicle)))
+      (home-page "https://radicle.xyz/")
+      (synopsis "Peer-to-peer code collaboration stack built on Git")
+      (description "Radicle is an open source, peer-to-peer code collaboration
+stack built on Git.  Unlike centralized code hosting platforms, there is no
+single entity controlling the network.  Repositories are replicated across peers
+in a decentralized manner, and users are in full control of their data and
+workflow.")
+      (license (list license:asl2.0 license:expat)))))
 
 (define-public ripgrep
   (package
