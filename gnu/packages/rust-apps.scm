@@ -1939,6 +1939,39 @@ associated input devices using the built-in accelerometer; handy for convertible
 touchscreen devices.")
     (license license:expat)))
 
+(define-public jujutsu
+  (package
+    (name "jujutsu")
+    (version "0.28.2")
+    (source
+     (origin
+       (method git-fetch)
+       (uri (git-reference
+             (url "https://github.com/jj-vcs/jj")
+             (commit (string-append "v" version))))
+       (file-name (git-file-name name version))
+       (sha256
+        (base32 "0lbfwls5dinyb345x978w0w61ib1fqy67bnkqfw55sbbjv8zh00h"))))
+    (build-system cargo-build-system)
+    (arguments (list
+                #:install-source? #f
+                #:cargo-install-paths ''("cli")
+                #:phases
+                #~(modify-phases %standard-phases
+                    (add-after 'unpack 'setenv
+                      (lambda _
+                        (setenv "LIBGIT2_NO_VENDOR" "1"))))))
+    (native-inputs (list pkg-config
+                         ;; use for test
+                         openssh
+                         git))
+    (inputs (cons* zlib openssl libssh2 libgit2-1.9 (cargo-inputs 'jujutsu)))
+    (home-page "https://github.com/jj-vcs/jj")
+    (synopsis "Jujutsu - an experimental version control system")
+    (description
+     "This package provides Jujutsu - an experimental version control system.")
+    (license license:asl2.0)))
+
 (define-public rust-swc
   (package
     (name "rust-swc")
